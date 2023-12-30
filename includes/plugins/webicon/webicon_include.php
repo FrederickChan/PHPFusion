@@ -13,6 +13,7 @@ function get_webicons() {
                  * @uses register_fa6
                  * @uses register_bootstrap_icons
                  * @uses register_phpfusion_icons
+                 * @uses register_octicons
                  */
                 fusion_add_hook( 'fusion_header_include', 'register_' . str_replace('-', '_', $ico_set ));
             }

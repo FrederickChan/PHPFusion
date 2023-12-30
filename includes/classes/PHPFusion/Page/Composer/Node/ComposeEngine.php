@@ -346,7 +346,7 @@ class ComposeEngine extends PageAdmin {
                             <div class='panel panel-default'>
                                 <div class='panel-body'>
                                     <img style='width:40px; margin:15px;'
-                                         src='<?php echo self::getWidgetIcon(WIDGETS.$widget['widget_folder'].'/'.$widget['widget_icon']) ?>' alt="icon"/>
+                                         src='<?php echo self::getWidgetIcon(WIDGETS.$widget['widget_folder'].'/'.$widget['widshow_icon']) ?>' alt="icon"/>
                                     <h5 class='m-t-0 m-b-0'><?php echo $widget['widget_title'] ?></h5>
                                     <?php echo $widget['widget_description'] ?>
                                 </div>
@@ -551,14 +551,14 @@ class ComposeEngine extends PageAdmin {
     /**
      * Get widget icon
      *
-     * @param string $widget_icon_path
+     * @param string $widshow_icon_path
      *
      * @return string
      */
-    protected static function getWidgetIcon($widget_icon_path) {
+    protected static function getWidgetIcon($widshow_icon_path) {
         $default_widget = ADMIN.'images/widget.svg';
 
-        return file_exists($widget_icon_path) && !is_dir($widget_icon_path) ? $widget_icon_path : $default_widget;
+        return file_exists($widshow_icon_path) && !is_dir($widshow_icon_path) ? $widshow_icon_path : $default_widget;
     }
 
     /**
@@ -569,8 +569,8 @@ class ComposeEngine extends PageAdmin {
     protected static function drawCols($colData) {
         if ($colData['page_content_id']) :
             $widget_path = '';
-            if (isset(self::$widgets[$colData['page_widget']]['widget_icon'])) {
-                $widget_path = WIDGETS.$colData['page_widget'].'/'.self::$widgets[$colData['page_widget']]['widget_icon'];
+            if (isset(self::$widgets[$colData['page_widget']]['widshow_icon'])) {
+                $widget_path = WIDGETS.$colData['page_widget'].'/'.self::$widgets[$colData['page_widget']]['widshow_icon'];
             }
             $widget_img_path = self::getWidgetIcon($widget_path);
             $edit_link = clean_request('compose=configure_col&col_id='.$colData['page_content_id'].'&row_id='.$colData['page_grid_id'].'&widget_type='.$colData['page_widget'], self::$composer_exclude, FALSE);

@@ -15,7 +15,7 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
-defined('IN_FUSION') || exit;
+defined( 'IN_FUSION' ) || exit;
 
 /**
  * Automatic consolidator to be used to send_email within PHPFusion CMS
@@ -27,47 +27,48 @@ defined('IN_FUSION') || exit;
  *
  * @return bool
  */
-function fusion_sendmail($template_key, $recipient_name, $recipient_email, array $options = []) {
+function fusion_sendmail( $template_key, $recipient_name, $recipient_email, array $options = [] ) {
 
     $options += [
         'subject'      => '',
         'message'      => '',
         'user_name'    => $recipient_name, // any given username
-        'sender_name'  => fusion_get_settings('sitename'),
-        'sender_email' => fusion_get_settings('siteemail'),
+        'sender_name'  => fusion_get_settings( 'sitename' ),
+        'sender_email' => fusion_get_settings( 'siteemail' ),
         'replace'      => [],
         'language'     => LANGUAGE,
     ];
 
     try {
-        $result = dbquery("SELECT template_key, template_active FROM ".DB_EMAIL_TEMPLATES." WHERE template_key=:key AND template_language=:lang LIMIT 1", [
+        $result = dbquery( "SELECT template_key, template_active FROM " . DB_EMAIL_TEMPLATES . " WHERE template_key=:key AND template_language=:lang LIMIT 1", [
             ':key'  => $template_key,
             ':lang' => $options['language']
-        ]);
+        ] );
 
-        if (dbrows($result)) {
-            $data = dbarray($result);
+        if ( dbrows( $result ) ) {
+            $data = dbarray( $result );
 
-            if ($data['template_active'] == "1") {
-                return sendmail_template($template_key, $recipient_name, $recipient_email, $options['sender_name'], $options['sender_email'], $options['replace']);
+            if ( $data['template_active'] == "1" ) {
+                return sendmail_template( $template_key, $recipient_name, $recipient_email, $options['sender_name'], $options['sender_email'], $options['replace'] );
             }
         }
 
         // Fallback
-        if (!empty($options['replace'])) {
-            $options['subject'] = strtr($options['subject'], $options['replace']);
-            $options['message'] = strtr($options['message'], $options['replace']);
+        if ( !empty( $options['replace'] ) ) {
+            $options['subject'] = strtr( $options['subject'], $options['replace'] );
+            $options['message'] = strtr( $options['message'], $options['replace'] );
         }
 
-        return sendemail($recipient_name, $recipient_email, $options['sender_name'], $options['sender_email'], $options['subject'], $options['message']);
-    } catch (Exception $e) {
-        set_error(E_USER_NOTICE, $e->getMessage(), $e->getFile(), $e->getLine());
+        return sendemail( $recipient_name, $recipient_email, $options['sender_name'], $options['sender_email'], $options['subject'], $options['message'] );
+
+    } catch ( Exception $e ) {
+        set_error( E_USER_NOTICE, $e->getMessage(), $e->getFile(), $e->getLine() );
     }
     return FALSE;
 }
 
 
-if (!function_exists('sendemail')) {
+if ( !function_exists( 'sendemail' ) ) {
     /**
      * Send email via PHPMailer Class
      *
@@ -85,22 +86,22 @@ if (!function_exists('sendemail')) {
      * @return bool
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    function sendemail($toname, $toemail, $fromname, $fromemail, $subject, $message, $type = "html", $cc = "", $bcc = "") {
+    function sendemail( $toname, $toemail, $fromname, $fromemail, $subject, $message, $type = "html", $cc = "", $bcc = "" ) {
         $settings = fusion_get_settings();
         $locale = fusion_get_locale();
 
-        require_once CLASSES.'PHPMailer/PHPMailer.php';
-        require_once CLASSES.'PHPMailer/Exception.php';
-        require_once CLASSES.'PHPMailer/SMTP.php';
+        require_once CLASSES . 'PHPMailer/PHPMailer.php';
+        require_once CLASSES . 'PHPMailer/Exception.php';
+        require_once CLASSES . 'PHPMailer/SMTP.php';
 
         $mail = new PHPMailer\PHPMailer\PHPMailer();
 
-        if (file_exists(LOCALE.LOCALESET."includes/classes/PHPMailer/language/phpmailer.lang-".$locale['phpmailer'].".php")) {
-            $mail->setLanguage($locale['phpmailer'], LOCALE.LOCALESET."includes/classes/PHPMailer/language/");
+        if ( file_exists( LOCALE . LOCALESET . "includes/classes/PHPMailer/language/phpmailer.lang-" . $locale['phpmailer'] . ".php" ) ) {
+            $mail->setLanguage( $locale['phpmailer'], LOCALE . LOCALESET . "includes/classes/PHPMailer/language/" );
         } else {
-            $mail->setLanguage("en", LOCALE.LOCALESET."includes/classes/PHPMailer/language/");
+            $mail->setLanguage( "en", LOCALE . LOCALESET . "includes/classes/PHPMailer/language/" );
         }
-        if (!$settings['smtp_host']) {
+        if ( !$settings['smtp_host'] ) {
             $mail->isMAIL();
         } else {
             $mail->isSMTP();
@@ -113,42 +114,37 @@ if (!function_exists('sendemail')) {
         $mail->CharSet = $locale['charset'];
         $mail->From = $fromemail;
         $mail->FromName = $fromname;
-        $mail->addAddress($toemail, $toname);
-        $mail->addReplyTo($fromemail, $fromname);
-        if ($cc) {
-            $cc = explode(", ", $cc);
-            foreach ($cc as $ccaddress) {
-                $mail->addCC($ccaddress);
+        $mail->addAddress( $toemail, $toname );
+        $mail->addReplyTo( $fromemail, $fromname );
+        if ( $cc ) {
+            $cc = explode( ", ", $cc );
+            foreach ( $cc as $ccaddress ) {
+                $mail->addCC( $ccaddress );
             }
         }
-        if ($bcc) {
-            $bcc = explode(", ", $bcc);
-            foreach ($bcc as $bccaddress) {
-                $mail->addBCC($bccaddress);
+        if ( $bcc ) {
+            $bcc = explode( ", ", $bcc );
+            foreach ( $bcc as $bccaddress ) {
+                $mail->addBCC( $bccaddress );
             }
         }
-        if ($type == "plain") {
-            $mail->isHTML(FALSE);
+        if ( $type == "plain" ) {
+            $mail->isHTML( FALSE );
         } else {
-            $mail->isHTML(TRUE);
+            $mail->isHTML( TRUE );
         }
         $mail->Subject = $subject;
         $mail->Body = $message;
-        if (!$mail->send()) {
-            $mail->clearAllRecipients();
-            $mail->clearReplyTos();
+        $mailsend = $mail->send();
 
-            return FALSE;
-        } else {
-            $mail->clearAllRecipients();
-            $mail->clearReplyTos();
+        $mail->clearAllRecipients();
+        $mail->clearReplyTos();
 
-            return TRUE;
-        }
+        return $mailsend;
     }
 }
 
-if (!function_exists('sendmail_template')) {
+if ( !function_exists( 'sendmail_template' ) ) {
     /**
      * @param        $template_key
      * @param        $name
@@ -159,9 +155,9 @@ if (!function_exists('sendmail_template')) {
      *
      * @return bool
      */
-    function sendmail_template($template_key, $name, $email, string $sender_name = "", string $sender_email = "", array $replace = []) {
+    function sendmail_template( $template_key, $name, $email, string $sender_name = "", string $sender_email = "", array $replace = [] ) {
         $settings = fusion_get_settings();
-        $data = dbarray(dbquery("SELECT * FROM ".DB_EMAIL_TEMPLATES." WHERE template_key=:template AND template_language=:lang LIMIT 1", [':template' => $template_key, ':lang' => LANGUAGE]));
+        $data = dbarray( dbquery( "SELECT * FROM " . DB_EMAIL_TEMPLATES . " WHERE template_key=:template AND template_language=:lang LIMIT 1", [':template' => $template_key, ':lang' => LANGUAGE] ) );
 
         $replace += [
             "[SITENAME]" => $settings['sitename'],
@@ -170,17 +166,17 @@ if (!function_exists('sendmail_template')) {
             "[RECEIVER]" => $name,
         ];
 
-        $message_subject = strtr($data['template_subject'], $replace);
-        $message_content = strtr($data['template_content'], $replace);
+        $message_subject = strtr( $data['template_subject'], $replace );
+        $message_content = strtr( $data['template_content'], $replace );
         $template_format = $data['template_format'];
-        $sender_name = ($_sender ?? $data['template_sender_name']);
-        $sender_email = ($_sender_email ?? $data['template_sender_email']);
+        $sender_name = ( $_sender ?? $data['template_sender_name'] );
+        $sender_email = ( $_sender_email ?? $data['template_sender_email'] );
 
-        if ($template_format == "html") {
-            $message_content = nl2br(html_entity_decode($message_content));
+        if ( $template_format == "html" ) {
+            $message_content = nl2br( html_entity_decode( $message_content ) );
         }
 
-        if (sendemail($name, $email, $sender_name, $sender_email, $message_subject, $message_content, $template_format)) {
+        if ( sendemail( $name, $email, $sender_name, $sender_email, $message_subject, $message_content, $template_format ) ) {
             return TRUE;
         } else {
             return FALSE;
@@ -189,7 +185,7 @@ if (!function_exists('sendmail_template')) {
 }
 
 
-if (!function_exists('sendemail_template')) {
+if ( !function_exists( 'sendemail_template' ) ) {
 
     // We need to refactor the parameters
     /**
@@ -208,15 +204,15 @@ if (!function_exists('sendemail_template')) {
      * @return bool
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    function sendemail_template($template_key, $subject, $message, $user, $receiver, $thread_url, $toemail, $_sender = "", $_sender_email = "") {
+    function sendemail_template( $template_key, $subject, $message, $user, $receiver, $thread_url, $toemail, $_sender = "", $_sender_email = "" ) {
         $settings = fusion_get_settings();
 
-        $data = dbarray(dbquery("SELECT * FROM ".DB_EMAIL_TEMPLATES." WHERE template_key='".$template_key."' LIMIT 1"));
+        $data = dbarray( dbquery( "SELECT * FROM " . DB_EMAIL_TEMPLATES . " WHERE template_key='" . $template_key . "' LIMIT 1" ) );
         $message_subject = $data['template_subject'];
         $message_content = $data['template_content'];
         $template_format = $data['template_format'];
-        $sender_name = ($_sender ?? $data['template_sender_name']);
-        $sender_email = ($_sender_email ?? $data['template_sender_email']);
+        $sender_name = ( $_sender ?? $data['template_sender_name'] );
+        $sender_email = ( $_sender_email ?? $data['template_sender_email'] );
         // da fuck is this limitations?
 
         $subject_search_replace = [
@@ -237,16 +233,16 @@ if (!function_exists('sendemail_template')) {
             "[RECEIVER]"   => $receiver,
             "[THREAD_URL]" => $thread_url
         ];
-        foreach ($subject_search_replace as $search => $replace) {
-            $message_subject = str_replace($search, $replace, $message_subject);
+        foreach ( $subject_search_replace as $search => $replace ) {
+            $message_subject = str_replace( $search, $replace, $message_subject );
         }
-        foreach ($message_search_replace as $search => $replace) {
-            $message_content = str_replace($search, $replace, $message_content);
+        foreach ( $message_search_replace as $search => $replace ) {
+            $message_content = str_replace( $search, $replace, $message_content );
         }
-        if ($template_format == "html") {
-            $message_content = nl2br(html_entity_decode($message_content));
+        if ( $template_format == "html" ) {
+            $message_content = nl2br( html_entity_decode( $message_content ) );
         }
-        if (sendemail($receiver, $toemail, $sender_name, $sender_email, $message_subject, $message_content, $template_format)) {
+        if ( sendemail( $receiver, $toemail, $sender_name, $sender_email, $message_subject, $message_content, $template_format ) ) {
             return TRUE;
         } else {
             return FALSE;

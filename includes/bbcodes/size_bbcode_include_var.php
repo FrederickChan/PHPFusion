@@ -39,6 +39,6 @@ $__BBCODE__[] = [
     //                      <input type='button' value='32 px' class='button btn btn-link btn-block btn-xs' onclick=\"addText('".$textarea_name."', '[size=32]', '[/size]', '".$inputform_name."');return false;\"/>",
     'dropdown'       => TRUE,
     'dropdown_style' => 'min-width: 50px;',
-    "svg"            => "<i class='fa fa-heading fa-lg'></i>",
+    "svg"            => show_icon('font-size'),
 ];
 

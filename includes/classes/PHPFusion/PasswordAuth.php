@@ -80,36 +80,37 @@ class PasswordAuth {
             //$currentPassCheckLength
             $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE);
             if (!preg_match('/'.$regex.'/', $value)) {
-                $this->error = $locale['u303'];
-                return FALSE;
+                $pass_errors[] = $locale['u303'];
             }
 
             if ($this->currentPassCheckNum) {
                 // Check contains number
                 $regex = self::passwordStrengthOpts($this->currentPassCheckLength, $this->currentPassCheckNum);
                 if (!preg_match('/'.$regex.'/', $value)) {
-                    $this->error = $locale['u302'];
-                    return FALSE;
+                    $pass_errors[] = $locale['u302'];
                 }
             }
 
             if ($this->currentPassCheckCase) {
                 // Check contains at least 1 upper and 1 lowercase
-                $regex = self::passwordStrengthOpts($this->currentPassCheckLength, $this->currentPassCheckNum, $this->currentPassCheckCase);
+                $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE, $this->currentPassCheckCase);
                 if (!preg_match('/'.$regex.'/', $value)) {
-                    $this->error = $locale['u301'];
-                    return FALSE;
+                    $pass_errors[] = $locale['u301'];
                 }
             }
 
             if ($this->currentPassCheckSpecialchar) {
                 // Must contain at least 1 special char
-                $regex = self::passwordStrengthOpts($this->currentPassCheckLength, $this->currentPassCheckNum, $this->currentPassCheckCase, $this->currentPassCheckSpecialchar);
-
+                $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE, FALSE, $this->currentPassCheckSpecialchar);
                 if (!preg_match('/'.$regex.'/', $value)) {
-                    $this->error = $locale['u300'];
-                    return FALSE;
+                    $pass_errors[] = $locale['u300'];
                 }
+            }
+
+            if (!empty($pass_errors)) {
+                $this->error = nl2br(implode("\n", $pass_errors));
+
+                return FALSE;
             }
         }
 

@@ -21,7 +21,7 @@ $widget_locale = fusion_get_locale('', $lang);
 /**
  * Widget SDK
  * $widget_title - The title of the widget
- * $widget_icon - You can use anything. Image, Glyphs
+ * $widshow_icon - You can use anything. Image, Glyphs
  * $widget_description - The description of the widget
  * $widget_admin_file - The administration class file
  * $widget_display_file - The display class file
@@ -29,7 +29,7 @@ $widget_locale = fusion_get_locale('', $lang);
  * $widget_display_callback - The class name in the display file
  */
 $widget_title = $widget_locale['SLDW_0100'];
-$widget_icon = 'slider.svg';
+$widshow_icon = 'slider.svg';
 $widget_description = $widget_locale['SLDW_0101'];
 $widget_admin_file = "slider_admin.php";
 $widget_display_file = "slider.php";

@@ -26,45 +26,45 @@
  *
  * @return string
  */
-function openform($form_name, $method, $action_url = FORM_REQUEST, array $options = []) {
+function openform( $form_name, $method, $action_url = FORM_REQUEST, array $options = [] ) {
 
-    $method = (strtolower($method) == 'post') ? 'post' : 'get';
+    $method = ( strtolower( $method ) == 'post' ) ? 'post' : 'get';
 
     $options += [
         'form_id'    => $form_name,
         'class'      => '', // CSS class properties.
         'enctype'    => FALSE, // Set true for allowing multipart.
-        'max_tokens' => fusion_get_settings('form_tokens'),
+        'max_tokens' => fusion_get_settings( 'form_tokens' ),
         'inline'     => FALSE, // Set true for making form inline.
         'on_submit'  => '', // Adds javascript function on form submit.
         'honeypot'   => TRUE, // Enables honeypots to counter botting.
     ];
 
-    if (!$action_url) {
+    if ( !$action_url ) {
         $action_url = FORM_REQUEST;
     }
 
     $class = $options['class'];
 
-    if (!fusion_safe()) {
+    if ( !fusion_safe() ) {
         $class .= " warning";
     }
 
-    $html = "<form name='".$form_name."' id='".$options['form_id']."' method='".$method."' action='".$action_url."' role='form' class='needs-validation ".($options['inline'] ? "form-inline " : '').(!empty($class) ? $class : 'm-0')."'".($options['enctype'] ? " enctype='multipart/form-data'" : '').($options['on_submit'] ? " onSubmit='".$options['on_submit']."'" : '')." novalidate>\n";
+    $html = "<form name='" . $form_name . "' id='" . $options['form_id'] . "' method='" . $method . "' action='" . $action_url . "' role='form' class='needs-validation " . ( $options['inline'] ? "form-inline " : '' ) . ( !empty( $class ) ? $class : 'm-0' ) . "'" . ( $options['enctype'] ? " enctype='multipart/form-data'" : '' ) . ( $options['on_submit'] ? " onSubmit='" . $options['on_submit'] . "'" : '' ) . " novalidate>\n";
 
-    if ($method == 'post') {
-        $token = fusion_get_token($options['form_id'], $options['max_tokens']);
-        $html .= "<input type='hidden' name='fusion_token' value='".$token."' />\n";
-        $html .= "<input type='hidden' name='form_id' value='".$options['form_id']."' />\n";
-        if ($options['honeypot']) {
-            $input_name = 'fusion_'.random_string();
+    if ( $method == 'post' ) {
+        $token = fusion_get_token( $options['form_id'], $options['max_tokens'] );
+        $html .= "<input type='hidden' name='fusion_token' value='" . $token . "' />\n";
+        $html .= "<input type='hidden' name='form_id' value='" . $options['form_id'] . "' />\n";
+        if ( $options['honeypot'] ) {
+            $input_name = 'fusion_' . random_string();
             $html .= "<input type='hidden' name='$input_name' value=''>\n";
-            Defender::getInstance()->addHoneypot([
-                'honeypot'   => $options['form_id'].'_honeypot',
+            Defender::getInstance()->addHoneypot( [
+                'honeypot'   => $options['form_id'] . '_honeypot',
                 'input_name' => $input_name,
                 'form_name'  => $form_name,
                 'type'       => 'honeypot',
-            ]);
+            ] );
         }
     }
 
@@ -83,19 +83,20 @@ function closeform() {
  *
  * @return array|string
  */
-function clean_input_name($value) {
+function clean_input_name( $value ) {
     $re = '/\[(.*?)\]/m';
-    return preg_replace($re, '', $value);
+    return preg_replace( $re, '', $value );
 }
 
 /**
  * @param mixed $value
  * 'input_id[]' becomes 'input_id-', due to foreach has multiple options, and these DOM selectors are needed
+ *
  * @return array|string
  */
-function clean_input_id($value, $replace = '_') {
+function clean_input_id( $value, $replace = '_' ) {
     $re = '/\[(.*?)\]/m';
-    return preg_replace($re, $replace, $value);
+    return preg_replace( $re, $replace, $value );
 }
 
 /**
@@ -103,13 +104,22 @@ function clean_input_id($value, $replace = '_') {
  *
  * @return array|string
  */
-function clean_input_value($value) {
-    if (!is_float($value)) {
-        if (is_string($value)) {
-            return stripinput($value);
+function clean_input_value( $value, $input_name = '') {
+
+    if (!empty($input_name) && check_post($input_name)) {
+        if (is_array($input_name)) {
+            $value = post([$input_name]);
+        } else {
+            $value = post($input_name);
         }
-        if (is_array($value)) {
-            return array_map('stripinput', $value);
+    }
+
+    if ( !is_float( $value ) ) {
+        if ( is_string( $value ) ) {
+            return stripinput( $value );
+        }
+        if ( is_array( $value ) ) {
+            return array_map( 'stripinput', $value );
         }
     }
 
@@ -121,26 +131,39 @@ function clean_input_value($value) {
  */
 function load_select2_script() {
     static $loaded = FALSE;
-    if ($loaded === FALSE) {
+    if ( $loaded === FALSE ) {
         /**
          * @return string
          * @see load_select2_script()
          */
         function select2csspath() {
-            return DYNAMICS."assets/select2/select2.css";
+            return DYNAMICS . "assets/select2/select2.min.css";
         }
 
-        $select2_locale_path = LOCALE.LOCALESET."includes/dynamics/assets/select2/select2_locale_".fusion_get_locale('select2').".js";
-        fusion_load_script(DYNAMICS."assets/select2/select2.js");
+        $select2_locale_path = LOCALE . LOCALESET . "includes/dynamics/assets/select2/i18n/" . fusion_get_locale( 'select2' ) . ".min.js";
 
-        if (is_file($select2_locale_path)) {
-            fusion_load_script($select2_locale_path);
+        fusion_load_script( DYNAMICS . "assets/select2/select2.full.min.js" );
+
+        if ( is_file( $select2_locale_path ) ) {
+            fusion_load_script( $select2_locale_path );
         }
 
         /**
          * @uses select2csspath()
          */
-        fusion_add_hook("fusion_core_styles", "select2csspath");
+        fusion_add_hook( "fusion_core_styles", "select2csspath" );
+
+        if ( defined( 'BOOTSTRAP' ) && BOOTSTRAP == 5 ) {
+
+            function select2BS5() {
+                return DYNAMICS . 'assets/select2/select2-bootstrap-5-theme.min.css';
+            }
+
+            /**
+             * @see select2BS5
+             */
+            fusion_add_hook( "fusion_core_styles", "select2BS5" );
+        }
 
         $loaded = TRUE;
     }

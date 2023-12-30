@@ -75,7 +75,7 @@
         {% set tabAction = (tb['link'] ?? '#'~ tb['id']) %}
         <li class="dropdown{{ whitespace(tb['active'] ? 'active' : '' ) }}" role="presentation">
             <a class="dropdown-toggle dropdown-toggle-split pointer" data-toggle="dropdown" href="{{ tabAction }}" aria-expanded="false">
-                {{ get_icon("caret-down") }}
+                {{ show_icon("caret-down") }}
             </a>
             <ul class="dropdown-menu">
                 {% for dp in tb["dropdown"] %}

@@ -61,7 +61,7 @@ if (!function_exists("display_auth_form")) {
                     </div>
                     <div class="m-t-20 text-center">
                         <h5>
-                            <a href="  <?php echo $info["restart_login_link"] ?>"><?php echo get_icon("reset", "m-r-5 fa-fw") ?>Restart Login</a>
+                            <a href="  <?php echo $info["restart_login_link"] ?>"><?php echo show_icon("reset", "m-r-5 fa-fw") ?>Restart Login</a>
                         </h5>
                     </div>
                     <div class="m-t-20 text-sm text-center">

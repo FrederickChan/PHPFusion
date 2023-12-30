@@ -33,7 +33,7 @@
                             {% if user_admin %}
                                 <a href="{{ user_admin.user_edit_link|raw }}" class="btn btn-primary">{{ user_admin.user_edit_title }}</a>
                                 <div class="dropdown">
-                                    <a href="" class="dropdown-toggle btn btn-default" data-bs-toggle="dropdown" data-toggle="dropdown">{{ get_icon('more') }}</a>
+                                    <a href="" class="dropdown-toggle btn btn-default" data-bs-toggle="dropdown" data-toggle="dropdown">{{ show_icon('more') }}</a>
                                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-end">
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ user_admin.user_susp_link|raw }}">{{ user_admin.user_susp_title }}</a>
@@ -62,27 +62,27 @@
             <p class="text-muted text-smaller text-lighter text-uppercase">About</p>
             <ul class="list-unstyled mb-4 mt-3">
                 <li class="d-flex align-items-center mb-3">
-                    {{ get_icon("user", "fa-fw me-1") }}
+                    {{ show_icon("user", "fa-fw me-1") }}
                     <span class="mx-1"><strong>{{ profile["user_name"]["title"] }}:</strong></span>
                     <span>{{ profile["user_name"]["value"]|raw }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-3">
-                    {{ get_icon("apply", "fa-fw me-1") }}
+                    {{ show_icon("apply", "fa-fw me-1") }}
                     <span class="mx-1"><strong>{{ profile["user_status"]["title"] }}:</strong></span>
                     <span>{{ profile["user_status"]["value"]|raw }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-3">
-                    {{ get_icon("star", "fa-fw me-1") }}
+                    {{ show_icon("star", "fa-fw me-1") }}
                     <span class="mx-1"><strong>{{ profile["user_level"]["title"] }}:</strong></span>
                     <span>{{ profile["user_level"]["value"]|raw }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-3">
-                    {{ get_icon("flag", "fa-fw me-1") }}
+                    {{ show_icon("flag", "fa-fw me-1") }}
                     <span class="mx-1"><strong>{{ profile["user_language"]["title"] }}:</strong></span>
                     <span>{{ profile["user_language"]["value"]|raw }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-3">
-                    {{ get_icon("location", "fa-fw me-1") }}
+                    {{ show_icon("location", "fa-fw me-1") }}
                     <span class="mx-1"><strong>{{ profile["user_ip"]["title"] }}:</strong></span>
                     <span>{{ profile["user_ip"]["value"]|raw }}</span>
                 </li>

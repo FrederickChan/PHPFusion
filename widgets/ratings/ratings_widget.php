@@ -20,7 +20,7 @@ $lang = file_exists(WIDGETS."ratings/locale/".LANGUAGE.".php") ? WIDGETS."rating
 $widget_locale = fusion_get_locale('', $lang);
 
 $widget_title = $widget_locale['RTW_0100'];
-$widget_icon = 'ratings.svg';
+$widshow_icon = 'ratings.svg';
 $widget_description = $widget_locale['RTW_0101'];
 $widget_admin_file = 'ratings_admin.php';
 $widget_display_file = 'ratings.php';

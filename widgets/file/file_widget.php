@@ -22,7 +22,7 @@ $widget_locale = fusion_get_locale('', $lang);
 
 $widget_title = $widget_locale['f0107'];
 $widget_description = $widget_locale['f0106'];
-$widget_icon = 'file.svg';
+$widshow_icon = 'file.svg';
 $widget_admin_file = "file_admin.php";
 $widget_display_file = "file.php";
 $widget_admin_callback = "fileWidgetAdmin";

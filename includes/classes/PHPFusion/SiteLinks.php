@@ -436,7 +436,7 @@ class SiteLinks {
                         'append_button'      => TRUE,
                         'append_type'        => "submit",
                         "append_form_value"  => $locale['search'],
-                        "append_value"       => get_icon( 'search' ) . " " . $locale['search'],
+                        "append_value"       => show_icon( 'search' ) . " " .$locale['search'],
                         "append_button_name" => "search",
                         "append_class"       => self::getMenuParam( 'searchbar_btn_class' ),
                         'class'              => 'm-0',
@@ -723,7 +723,7 @@ class SiteLinks {
                         // has bootstrap elements
                         $l_1 .= (empty( $id ) && $has_child ? " data-submenu " : "");
 
-                        $l_2 = (empty( $id ) ? "<i class='" . self::getMenuParam( 'caret_icon' ) . "'></i>" : get_icon( 'caret-down' ));
+                        $l_2 = (empty( $id ) ? "<i class='" . self::getMenuParam( 'caret_icon' ) . "'></i>" : show_icon( 'caret-down' ));
                         // has bootstrap elements
                         $li_class[] = (!empty( $id ) ? "dropdown-submenu" : "dropdown");
                         $itemlink = " href='#'";

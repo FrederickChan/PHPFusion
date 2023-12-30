@@ -25,23 +25,30 @@ use PHPFusion\Userfields\UserFieldsForm;
 
 class PrivacyForm extends UserFieldsForm {
 
+    /**
+     * @return array
+     */
     public function displayInputFields() {
 
-        if (check_get( 'd' )) {
+        if (check_get('d')) {
 
-            return match (get( 'd' )) {
-                default => [],
-                'twostep' => $this->getTwoStep(),
-                'records' => $this->getLogin(),
-                'data' => $this->getLogs(),
-            };
+            switch (get('d')) {
+                case 'twostep':
+                    return $this->getTwoStep();
+                case 'records':
+                    return $this->getLogin();
+                case 'data':
+                    return $this->getLogs();
+                default:
+                    return [];
+            }
         }
 
         return [
-            'twostep_url' => clean_request( 'd=twostep', ['d'], FALSE ),
-            'records_url' => clean_request( 'd=records', ['d'], FALSE ),
-            'data_url'    => clean_request( 'd=data', ['d'], FALSE ),
-            'login_url'   => clean_request( 'd=login', ['d'], FALSE ),
+            'twostep_url' => clean_request('d=twostep', ['d'], FALSE),
+            'records_url' => clean_request('d=records', ['d'], FALSE),
+            'data_url'    => clean_request('d=data', ['d'], FALSE),
+            'login_url'   => clean_request('d=login', ['d'], FALSE),
         ];
     }
 
@@ -56,18 +63,18 @@ class PrivacyForm extends UserFieldsForm {
 
         return [
             'email_display' => $this->userFields->userData['user_email'],
-            'user_code'     => form_text( '2fa_code', '', '', ['placeholder' => $locale['u608'], 'max_length' => 6, 'mask' => '9-9-9-9-9-9'] ),
-            'get_auth'      => form_button( 'auth', $locale['u605'], $locale['u605'], ['class' => 'btn-primary'] ),
-            'button'        => form_button( 'submit_2fa', $locale['submit'], $locale['submit'], ['class' => 'btn-primary'] ),
+            'user_code'     => form_text('2fa_code', '', '', ['placeholder' => $locale['u608'], 'max_length' => 6, 'mask' => '9-9-9-9-9-9']),
+            'get_auth'      => form_button('auth', $locale['u605'], $locale['u605'], ['class' => 'btn-primary']),
+            'button'        => form_button('submit_2fa', $locale['submit'], $locale['submit'], ['class' => 'btn-primary']),
         ];
     }
 
     private function getLogin() {
 
-        $res = dbquery( "SELECT * FROM " . DB_USER_SESSIONS . " WHERE user_id=:uid ORDER BY user_logintime DESC", [':uid' => $this->userFields->userData['user_id']] );
+        $res = dbquery("SELECT * FROM ".DB_USER_SESSIONS." WHERE user_id=:uid ORDER BY user_logintime DESC", [':uid' => $this->userFields->userData['user_id']]);
 
-        if (dbrows( $res )) {
-            while ($rows = dbarray( $res )) {
+        if (dbrows($res)) {
+            while ($rows = dbarray($res)) {
                 $info['user_logins'][$rows['user_session_id']] = $rows;
             }
         }
@@ -77,6 +84,7 @@ class PrivacyForm extends UserFieldsForm {
 
     /**
      * User log information
+     *
      * @return array
      */
     private function getLogs() {
@@ -95,23 +103,23 @@ class PrivacyForm extends UserFieldsForm {
             'user_level'          => $locale['u063'],
         ];
 
-        $res = dbquery( "SELECT field_title, field_name FROM " . DB_USER_FIELDS );
-        if (dbrows( $res )) {
-            while ($rows = dbarray( $res )) {
-                $field_names[$rows['field_name']] = parse_label( $rows['field_title'] );
+        $res = dbquery("SELECT field_title, field_name FROM ".DB_USER_FIELDS);
+        if (dbrows($res)) {
+            while ($rows = dbarray($res)) {
+                $field_names[$rows['field_name']] = parse_label($rows['field_title']);
             }
         }
 
-        $res = dbquery( "SELECT * FROM " . DB_USER_LOG . " WHERE userlog_user_id=:uid ORDER BY userlog_timestamp DESC", [':uid' => (int)$this->userFields->userData['user_id']] );
-        if (dbrows( $res )) {
-            while ($rows = dbarray( $res )) {
+        $res = dbquery("SELECT * FROM ".DB_USER_LOG." WHERE userlog_user_id=:uid ORDER BY userlog_timestamp DESC", [':uid' => (int)$this->userFields->userData['user_id']]);
+        if (dbrows($res)) {
+            while ($rows = dbarray($res)) {
 
                 $rows['title'] = $locale['u075'];
 
-                if (isset( $field_names[$rows['userlog_field']] )) {
-                    $log = sprintf( $locale['u076'], '<strong>'.$field_names[$rows['userlog_field']].'</strong>', $rows['userlog_value_old'], $rows['userlog_value_new'] );
+                if (isset($field_names[$rows['userlog_field']])) {
+                    $log = sprintf($locale['u076'], '<strong>'.$field_names[$rows['userlog_field']].'</strong>', $rows['userlog_value_old'], $rows['userlog_value_new']);
                 } else {
-                    $log = sprintf( $locale['u077'], $rows['userlog_value_old'], $rows['userlog_value_new'] );
+                    $log = sprintf($locale['u077'], $rows['userlog_value_old'], $rows['userlog_value_new']);
                 }
 
                 $rows['description'] = $log;

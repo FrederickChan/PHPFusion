@@ -136,9 +136,9 @@ function display_bbcodes( $width, $textarea_name = "message", $inputform_name = 
             $bbcodes .= substr( $bbdata['value'],
                 0,
                 1 ) != "!" && isset( $input_content ) ?
-                "<button type='button' class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" . $input_content . $dropdown_caret . "\n</button>\n<span class='sr-only'>" . $bbdata['description'] . "</span>\n" : "";
+                "<button type='button' class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" . $input_content . $dropdown_caret . "\n</button>\n" : "";
         } else {
-            $bbcodes .= substr( $bbdata['value'],0, 1 ) != "!" ? "<input " . $type . " class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n<span class='sr-only'>" . $bbdata['description'] . "</span>\n" : "";
+            $bbcodes .= substr( $bbdata['value'],0, 1 ) != "!" ? "<input " . $type . " class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" : "";
         }
 
         if (isset( $bbdata['dropdown'] ) && $bbdata['dropdown'] == TRUE) {

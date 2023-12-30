@@ -24,7 +24,7 @@ use PHPFusion\UserFields;
 
 abstract class UserFieldsForm {
 
-    protected UserFields $userFields;
+    protected $userFields;
 
     /**
      * UserFieldsInput constructor.
@@ -34,6 +34,4 @@ abstract class UserFieldsForm {
     public function __construct( $class ) {
         $this->userFields = $class;
     }
-
-
 }

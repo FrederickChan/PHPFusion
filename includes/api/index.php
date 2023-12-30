@@ -42,7 +42,8 @@ $endpoints = [
         "username-check" => "username_validation.php",
         "userpass-check" => "userpass_validation.php",
         'calling-codes'  => 'calling_codes.php', //get
-        'geomap-states'  => 'states.php' //get
+        'geomap-states'  => 'states.php', //get
+        'email_code' => 'email_code.php', // post
     ]
     + get_extended_endpoints();
 
@@ -53,10 +54,10 @@ if ($api = get("api")) {
         require $endpoints[$api];
 
         fusion_apply_hook("fusion_filters");
-        
+
         // Close connection
         DatabaseFactory::getConnection()->close();
-        
+
     } else {
         die("End point is faulty");
     }

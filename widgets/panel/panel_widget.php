@@ -20,7 +20,7 @@ $lang = file_exists(WIDGETS."panel/locale/".LANGUAGE.".php") ? WIDGETS."panel/lo
 $widget_locale = fusion_get_locale('', $lang);
 
 $widget_title = $widget_locale['PW_0100'];
-$widget_icon = 'panel.svg';
+$widshow_icon = 'panel.svg';
 $widget_description = $widget_locale['PW_0101'];
 $widget_admin_file = 'panel_admin.php';
 $widget_display_file = 'panel.php';

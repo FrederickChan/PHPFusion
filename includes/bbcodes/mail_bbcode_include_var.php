@@ -21,5 +21,5 @@ $__BBCODE__[] = [
     "description" => $locale['bb_mail_description'],
     "value"       => "mail", "bbcode_start" => "[mail]", "bbcode_end" => "[/mail]",
     "usage"       => "[mail(=" . $locale['bb_mail'] . ")]" . $locale['bb_mail_usage'] . "[/mail]",
-    'svg'         => '<i class="fa fa-envelope-circle-check fa-lg"></i>'
+    "svg"         => get_image( 'bbcode_mail', $locale['bb_mail_usage'] ),
 ];

@@ -174,7 +174,7 @@ function twig_cache_functions() {
         'showcopyright'                => ['type' => 'string'],
         'showFooterErrors'             => ['type' => 'string'],
         'get_image'                    => ['type' => 'string'],
-        'get_icon'                     => ['type' => 'string'],
+        'show_icon'                     => ['type' => 'string'],
         'lorem_ipsum'                  => ['type' => 'string'],
         'parse_textarea'               => ['type' => 'string'],
         'schema'                       => ['type' => 'string'],

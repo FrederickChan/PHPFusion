@@ -167,7 +167,7 @@ class ImageRepo {
      * Fetch and cache all off the imagepaths
      */
     private static function cache() {
-        if (self::$cached) {
+        if ( self::$cached ) {
             return;
         }
 
@@ -179,93 +179,112 @@ class ImageRepo {
         // You need to + sign it, so setImage will work.
         self::$image_paths += [
             //A
+            "app_store"      => IMAGES . "icons/apple.svg",
             //B
+            'bbcode_bold'    => INCLUDES . 'bbcodes/images/b.svg',
+            'bbcode_big'     => INCLUDES . 'bbcodes/images/big.svg',
+            'bbcode_i'       => INCLUDES . 'bbcodes/images/i.svg',
+            'bbcode_u'       => INCLUDES . 'bbcodes/images/u.svg',
+            'bbcode_smiley'  => INCLUDES . 'bbcodes/images/smiley.svg',
+            'bbcode_url'     => INCLUDES . 'bbcodes/images/url.svg',
+            'bbcode_small'   => INCLUDES . 'bbcodes/images/small.svg',
+            'bbcode_mail'    => INCLUDES . 'bbcodes/images/mail.svg',
+            'bbcode_img'     => INCLUDES . 'bbcodes/images/img.svg',
+            'bbcode_aleft'   => INCLUDES . 'bbcodes/images/left.svg',
+            'bbcode_acenter' => INCLUDES . 'bbcodes/images/center.svg',
+            'bbcode_aright'  => INCLUDES . 'bbcodes/images/right.svg',
+            'bbcode_code'    => INCLUDES . 'bbcodes/images/code.svg',
+            'bbcode_quote'   => INCLUDES . 'bbcodes/images/quote.svg',
             //C
             //D
-            "down"          => IMAGES."icons/down.png",
+            "down"           => IMAGES . "icons/down.png",
             //E
             //F
             //G
+            "google_play"    => IMAGES . "icons/google-play.svg",
+
             //H
             //I
-            "imagenotfound" => IMAGES."imagenotfound.jpg",
+            "imagenotfound"  => IMAGES . "imagenotfound.jpg",
             //J
             //K
             //L
-            "left"          => IMAGES."icons/left.png",
-            "logo"          => $settings['sitebanner'],
+            "left"           => IMAGES . "icons/left.png",
+            "logo"           => $settings['sitebanner'],
             //M
             //N
-            "noavatar"      => IMAGES."avatars/no-avatar.jpg",
-            "no-avatar"     => IMAGES."avatars/no-avatar.jpg",
-            "no-cover"      => IMAGES."covers/no-cover.png",
+            "noavatar"       => IMAGES . "avatars/no-avatar.jpg",
+            "no-avatar"      => IMAGES . "avatars/no-avatar.jpg",
+            "no-cover"       => IMAGES . "covers/no-cover.png",
             //O
             //P
-            "panel_on"      => IMAGES."icons/panel_on.gif",
-            "panel_off"     => IMAGES."icons/panel_off.gif",
+            "panel_on"       => IMAGES . "icons/panel_on.gif",
+            "panel_off"      => IMAGES . "icons/panel_off.gif",
             //Q
+            "qrcode"             => IMAGES . "icons/qr.svg",
             //R
-            "right"         => IMAGES."icons/right.png",
+            "right"          => IMAGES . "icons/right.png",
             //S
             //T
             //U
-            "up"            => IMAGES."icons/up.png",
+            "up"             => IMAGES . "icons/up.png",
             //V
             //W
+            'warning'        => IMAGES . 'icons/warning.svg',
             //X
             //Y
             //Z
         ];
         //</editor-fold>
         $installedTables = [
-            'blog' => defined('BLOG_EXISTS'),
-            'news' => defined('NEWS_EXISTS')
+            'blog' => defined( 'BLOG_EXISTS' ),
+            'news' => defined( 'NEWS_EXISTS' )
         ];
 
-        $selects = "SELECT admin_image as image, admin_rights as name, 'ac_' as prefix FROM ".DB_ADMIN;
-        $result = dbquery($selects);
-        if (dbrows($result)) {
-            while ($data = dbarray($result)) {
-                $image = file_exists(ADMIN."images/".$data['image']) ? ADMIN."images/".$data['image'] : (file_exists(INFUSIONS.$data['image']) ? INFUSIONS.$data['image'] : ADMIN."images/infusion_panel.png");
-                if (empty(self::$image_paths[$data['prefix'].$data['name']])) {
-                    self::$image_paths[$data['prefix'].$data['name']] = $image;
+        $selects = "SELECT admin_image as image, admin_rights as name, 'ac_' as prefix FROM " . DB_ADMIN;
+        $result = dbquery( $selects );
+        if ( dbrows( $result ) ) {
+            while ( $data = dbarray( $result ) ) {
+                $image = file_exists( ADMIN . "images/" . $data['image'] ) ? ADMIN . "images/" . $data['image'] : ( file_exists( INFUSIONS . $data['image'] ) ? INFUSIONS . $data['image'] : ADMIN . "images/infusion_panel.png" );
+                if ( empty( self::$image_paths[$data['prefix'] . $data['name']] ) ) {
+                    self::$image_paths[$data['prefix'] . $data['name']] = $image;
                 }
             }
         }
 
         //smiley
-        foreach (cache_smileys() as $smiley) {
+        foreach ( cache_smileys() as $smiley ) {
             // set image
-            if (empty(self::$image_paths["smiley_".$smiley['smiley_text']])) {
-                self::$image_paths["smiley_".$smiley['smiley_text']] = IMAGES."smiley/".$smiley['smiley_image'];
+            if ( empty( self::$image_paths["smiley_" . $smiley['smiley_text']] ) ) {
+                self::$image_paths["smiley_" . $smiley['smiley_text']] = IMAGES . "smiley/" . $smiley['smiley_image'];
             }
         }
 
         $selects_ = [];
-        if ($installedTables['blog']) {
-            $selects_[] = "SELECT blog_cat_image as image, blog_cat_name as name, 'bl_' as prefix FROM ".DB_BLOG_CATS." ".(multilang_table("BL") ? " where ".in_group('blog_cat_language', LANGUAGE) : "");
+        if ( $installedTables['blog'] ) {
+            $selects_[] = "SELECT blog_cat_image as image, blog_cat_name as name, 'bl_' as prefix FROM " . DB_BLOG_CATS . " " . ( multilang_table( "BL" ) ? " where " . in_group( 'blog_cat_language', LANGUAGE ) : "" );
         }
 
-        if ($installedTables['news']) {
-            $selects_[] = "SELECT news_cat_image as image, news_cat_name as name, 'nc_' as prefix FROM ".DB_NEWS_CATS." ".(multilang_table("NS") ? " where ".in_group('news_cat_language', LANGUAGE) : "");
+        if ( $installedTables['news'] ) {
+            $selects_[] = "SELECT news_cat_image as image, news_cat_name as name, 'nc_' as prefix FROM " . DB_NEWS_CATS . " " . ( multilang_table( "NS" ) ? " where " . in_group( 'news_cat_language', LANGUAGE ) : "" );
         }
 
-        if (!empty($selects_)) {
-            $union = implode(' union ', $selects_);
-            $result = dbquery($union);
-            while ($data = dbarray($result)) {
-                switch ($data['prefix']) {
+        if ( !empty( $selects_ ) ) {
+            $union = implode( ' union ', $selects_ );
+            $result = dbquery( $union );
+            while ( $data = dbarray( $result ) ) {
+                switch ( $data['prefix'] ) {
                     case 'nc_':
                     default :
-                        $image = file_exists(INFUSIONS.'news/news_cats/'.$data['image']) ? INFUSIONS.'news/news_cats/'.$data['image'] : IMAGES."imagenotfound.jpg";
+                        $image = file_exists( INFUSIONS . 'news/news_cats/' . $data['image'] ) ? INFUSIONS . 'news/news_cats/' . $data['image'] : IMAGES . "imagenotfound.jpg";
                         break;
                     case 'bl_':
-                        $image = file_exists(INFUSIONS.'blog/blog_cats/'.$data['image']) ? INFUSIONS.'blog/blog_cats/'.$data['image'] : IMAGES."imagenotfound.jpg";
+                        $image = file_exists( INFUSIONS . 'blog/blog_cats/' . $data['image'] ) ? INFUSIONS . 'blog/blog_cats/' . $data['image'] : IMAGES . "imagenotfound.jpg";
                         break;
                 }
                 // Set image
-                if (empty(self::$image_paths[$data['prefix'].$data['name']])) {
-                    self::$image_paths[$data['prefix'].$data['name']] = $image;
+                if ( empty( self::$image_paths[$data['prefix'] . $data['name']] ) ) {
+                    self::$image_paths[$data['prefix'] . $data['name']] = $image;
                 }
             }
         }
@@ -301,18 +320,18 @@ class ImageRepo {
      * @return string The path of the image if the first argument is given,
      * but others not. Otherwise, the html "img" tag
      */
-    public static function getImage($image, $alt = "", $style = "", $title = "", $atts = "") {
+    public static function getImage( $image, $alt = "", $style = "", $title = "", $atts = "" ) {
         self::cache();
-        $url = self::$image_paths[$image] ?? IMAGES."imagenotfound.jpg";
-        if ($style) {
+        $url = self::$image_paths[$image] ?? IMAGES . "imagenotfound.jpg";
+        if ( $style ) {
             $style = " style='$style'";
         }
-        if ($title) {
-            $title = " title='".$title."'";
+        if ( $title ) {
+            $title = " title='" . $title . "'";
         }
 
-        return ($alt or $style or $title or $atts)
-            ? "<img src='".$url."' alt='".$alt."'".$style.$title." ".$atts." />" :
+        return ( $alt or $style or $title or $atts )
+            ? "<img src='" . $url . "' alt='" . $alt . "'" . $style . $title . " " . $atts . " />" :
             $url;
     }
 
@@ -322,14 +341,14 @@ class ImageRepo {
      *
      * @return string
      */
-    public static function getIcon(string $name, string $class = "", string $tooltip = "") {
-        $icon = (self::$glyphicons[$name]) ?? $name;
-        $tooltip = $tooltip ? 'data-toggle="tooltip" title="'.$tooltip.'"' : '';
+    public static function showIcon( string $name, string $class = "", string $tooltip = "" ) {
+        $icon = ( self::$glyphicons[$name] ) ?? $name;
+        $tooltip = $tooltip ? 'data-toggle="tooltip" title="' . $tooltip . '"' : '';
 
-        return '<i class="'.$icon.whitespace($class).'" '.$tooltip.'></i>';
+        return '<i class="' . $icon . whitespace( $class ) . '" ' . $tooltip . '></i>';
     }
 
-    public static function setIcon($name, $value) {
+    public static function setIcon( $name, $value ) {
         self::$glyphicons[$name] = $value;
     }
 
@@ -340,7 +359,7 @@ class ImageRepo {
      * @param string $name
      * @param string $path
      */
-    public static function setImage($name, $path) {
+    public static function setImage( $name, $path ) {
         self::$image_paths[$name] = $path;
     }
 
@@ -350,10 +369,10 @@ class ImageRepo {
      * @param string $source
      * @param string $target
      */
-    public static function replaceInAllPath($source, $target) {
+    public static function replaceInAllPath( $source, $target ) {
         self::cache();
-        foreach (self::$image_paths as $name => $path) {
-            self::$image_paths[$name] = str_replace($source, $target, $path);
+        foreach ( self::$image_paths as $name => $path ) {
+            self::$image_paths[$name] = str_replace( $source, $target, $path );
         }
     }
 
@@ -364,11 +383,11 @@ class ImageRepo {
      *
      * @return array
      */
-    public static function getFileList($path) {
+    public static function getFileList( $path ) {
         $image_list = [];
-        if (is_dir($path)) {
-            $image_files = makefilelist($path, ".|..|index.php", TRUE);
-            foreach ($image_files as $image) {
+        if ( is_dir( $path ) ) {
+            $image_files = makefilelist( $path, ".|..|index.php", TRUE );
+            foreach ( $image_files as $image ) {
                 $image_list[$image] = $image;
             }
         }
@@ -377,10 +396,10 @@ class ImageRepo {
     }
 
     public static function cacheSmileys() {
-        if (self::$smiley_cache === NULL) {
+        if ( self::$smiley_cache === NULL ) {
             self::$smiley_cache = [];
-            $result = cdquery('smileys_cache', "SELECT smiley_code, smiley_image, smiley_text FROM ".DB_SMILEYS);
-            while ($data = cdarray($result)) {
+            $result = cdquery( 'smileys_cache', "SELECT smiley_code, smiley_image, smiley_text FROM " . DB_SMILEYS );
+            while ( $data = cdarray( $result ) ) {
                 self::$smiley_cache[] = [
                     'smiley_code'  => $data['smiley_code'],
                     'smiley_image' => $data['smiley_image'],

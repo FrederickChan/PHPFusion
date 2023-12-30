@@ -20,7 +20,7 @@ $lang = file_exists(WIDGETS."block/locale/".LANGUAGE.".php") ? WIDGETS."block/lo
 $widget_locale = fusion_get_locale('', $lang);
 
 $widget_title = $widget_locale['BLKW_0100'];
-$widget_icon = 'block.svg';
+$widshow_icon = 'block.svg';
 $widget_description = $widget_locale['BLKW_0101'];
 $widget_admin_file = "block_admin.php";
 $widget_display_file = "block.php";

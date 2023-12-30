@@ -674,6 +674,12 @@ class CoreTables {
                 'type'   => 'VARCHAR',
                 'length' => 100,
             ], //user_email VARCHAR(100) NOT NULL,
+            'user_authtype'  => [
+                'type'     => 'TINYINT',
+                'length'   => 1,
+                'unsigned' => TRUE,
+                'default'  => 0,// 0 for authorization, 1 for changes
+            ],
             'user_datestamp' => [
                 'type'     => 'INT',
                 'length'   => 10,
@@ -1521,197 +1527,227 @@ class CoreTables {
         ];
 
         $table_package['users'] = [
-            'user_id'              => [
+            'user_id'                     => [
                 'type'           => 'BIGINT',
                 'length'         => 20,
                 'auto_increment' => TRUE,
                 'key'            => 1, //PRIMARY KEY (user_id),
                 'unsigned'       => TRUE,
             ], // user_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-            'user_name'            => [
+            'user_name'                   => [
                 'type'      => 'VARCHAR',
                 'length'    => 30,
                 'key'       => 2, //KEY user_name (user_name),
                 'full_text' => TRUE, // FULLTEXT (user_name ASC)
                 'default'   => ''
             ], //user_name VARCHAR(30) NOT NULL DEFAULT '',
-            'user_firstname'       => [
+            'user_firstname'              => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'key'     => 2,
                 'default' => '',
             ],
-            'user_lastname'        => [
+            'user_lastname'               => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'key'     => 2,
                 'default' => '',
             ],
-            'user_addname'         => [
+            'user_addname'                => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'key'     => 2,
                 'default' => '',
             ],
-            'user_algo'            => [
+            'user_displayname'            => [
+                'type'     => 'TINYINT',
+                'length'   => 1,
+                'key'      => 2,
+                'unsigned' => TRUE,
+                'default'  => '0',
+            ],
+            'user_algo'                   => [
                 'type'    => 'VARCHAR',
                 'length'  => 10,
                 'default' => 'sha256'
             ], //user_algo VARCHAR(10) NOT NULL DEFAULT 'sha256',
-            'user_salt'            => [
+            'user_salt'                   => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => ''
             ], //user_salt VARCHAR(40) NOT NULL DEFAULT '',
-            'user_password'        => [
+            'user_password'               => [
                 'type'    => 'VARCHAR',
                 'length'  => 64,
                 'default' => ''
             ], //user_password VARCHAR(64) NOT NULL DEFAULT '',
-            'user_admin_algo'      => [
+            'user_password_changed'       => [
+                'type'     => 'INT',
+                'length'   => 10,
+                'unsigned' => TRUE,
+                'default'  => '0'
+            ],
+            'user_admin_algo'             => [
                 'type'    => 'VARCHAR',
                 'length'  => 10,
                 'default' => 'sha256'
             ], //user_admin_algo VARCHAR(10) NOT NULL DEFAULT 'sha256',
-            'user_admin_salt'      => [
+            'user_admin_salt'             => [
                 'type'    => 'VARCHAR',
                 'length'  => 40,
                 'default' => ''
             ], //user_admin_salt VARCHAR(40) NOT NULL DEFAULT '',
-            'user_admin_password'  => [
+            'user_admin_password'         => [
                 'type'    => 'VARCHAR',
                 'length'  => 64,
                 'default' => ''
             ],
-            'user_phone'           => [
+            'user_admin_password_changed' => [
+                'type'     => 'INT',
+                'length'   => 10,
+                'unsigned' => TRUE,
+                'default'  => '0'
+            ],
+            'user_phonecode'              => [
+                'type'    => 'VARCHAR',
+                'length'  => 10,
+                'default' => ''
+            ],
+            'user_phone'                  => [
                 'type'    => 'VARCHAR',
                 'length'  => 30,
                 'key'     => 2,
                 'default' => ''
             ],
-            'user_email'           => [
+            'user_email'                  => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'key'     => 2,
                 'default' => ''
             ], //user_email VARCHAR(100) NOT NULL DEFAULT '',
-            'user_bio'             => [
-                'type'    => 'VARCHAR',
-                'length'  => 255,
-                'default' => '',
-            ],
-            'user_avatar'          => [
+            'user_avatar'                 => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'default' => '',
             ], //user_avatar VARCHAR(100) NOT NULL DEFAULT '',
-            'user_posts'           => [
+            'user_posts'                  => [
                 'type'     => 'SMALLINT',
                 'length'   => 5,
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_posts SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0',
-            'user_threads'         => [
+            'user_threads'                => [
                 'type' => 'TEXT'
             ], //user_threads TEXT NOT NULL,
-            'user_joined'          => [
+            'user_joined'                 => [
                 'type'     => 'INT',
                 'length'   => 10,
                 'unsigned' => TRUE,
                 'key'      => 2, //KEY user_joined (user_joined),
                 'default'  => '0'
             ], //user_joined INT(10) UNSIGNED NOT NULL DEFAULT '0',
-            'user_lastvisit'       => [
+            'user_lastvisit'              => [
                 'type'     => 'INT',
                 'length'   => 10,
                 'unsigned' => TRUE,
                 'key'      => 2, //KEY user_lastvisit (user_lastvisit)
                 'default'  => '0'
             ], //user_lastvisit INT(10) UNSIGNED NOT NULL DEFAULT '0',
-            'user_ip'              => [
+            'user_ip'                     => [
                 'type'    => 'VARCHAR',
                 'length'  => 45,
                 'default' => '0.0.0.0'
             ], //user_ip VARCHAR(45) NOT NULL DEFAULT '0.0.0.0',
-            'user_ip_type'         => [
+            'user_ip_type'                => [
                 'type'     => 'TINYINT',
                 'length'   => 1,
                 'default'  => 4,
                 'unsigned' => TRUE,
             ], //user_ip_type TINYINT(1) UNSIGNED NOT NULL DEFAULT '4',
-            'user_rights'          => [
+            'user_rights'                 => [
                 'type' => 'TEXT'
             ], //user_rights TEXT NOT NULL,
-            'user_groups'          => [
+            'user_groups'                 => [
                 'type' => 'TEXT'
             ], //user_groups TEXT NOT NULL,
-            'user_level'           => [
+            'user_level'                  => [
                 'type'    => 'TINYINT',
                 'length'  => 4,
                 'default' => -101
             ], //user_level TINYINT(4) NOT NULL DEFAULT '-101',
-            'user_status'          => [
+            'user_status'                 => [
                 'type'     => 'TINYINT',
                 'length'   => 1,
                 'unsigned' => TRUE,
                 'key'      => 2,
                 'default'  => '0'
             ], //user_status TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-            'user_actiontime'      => [
+            'user_actiontime'             => [
                 'type'     => 'INT',
                 'length'   => 10,
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_actiontime INT(10) UNSIGNED NOT NULL DEFAULT '0',
-            'user_session'         => [
+            // Secret key generated for the user.
+            'user_totp'                   => [
+                'type'    => 'VARCHAR',
+                'length'  => 100,
+                'default' => ''
+            ],
+            // these 3 can just go away to another tables
+            'user_session'                => [
                 'type'    => 'VARCHAR',
                 'length'  => 170,
                 'default' => ''
             ],
-            'user_auth_pin'        => [
+            'user_auth_pin'               => [
                 'type'    => 'VARCHAR',
                 'length'  => 10,
                 'default' => "",
             ],
-            'user_auth_actiontime' => [
+            'user_auth_actiontime'        => [
                 'type'     => 'INT',
                 'length'   => 10,
                 'unsigned' => TRUE,
                 'default'  => 0,
             ],
-            'user_theme'           => [
+
+            'user_theme'     => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'default' => 'Default'
             ], //user_theme VARCHAR(100) NOT NULL DEFAULT 'Default',
-            'user_location'        => [
+            'user_location'  => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => ''
             ], //user_location VARCHAR(50) NOT NULL DEFAULT '',
-            'user_birthdate'       => [
+            'user_birthdate' => [
                 'type'    => 'DATE',
                 'default' => '1900-01-01'
             ], //user_birthdate DATE NOT NULL DEFAULT '1900-01-01',
-            'user_skype'           => [
+            'user_skype'     => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'default' => '',
             ], //user_skype VARCHAR(100) NOT NULL DEFAULT '',
-            'user_icq'             => [
+            'user_icq'       => [
                 'type'    => 'VARCHAR',
                 'length'  => 15,
                 'default' => '',
             ], //user_icq VARCHAR(15) NOT NULL DEFAULT '',
-            'user_web'             => [
+            'user_web'       => [
                 'type'    => 'VARCHAR',
                 'length'  => 200,
                 'default' => '',
             ], //user_web VARCHAR(200) NOT NULL DEFAULT '',
-            'user_sig'             => [
+            'user_bio'       => [
+                'type' => 'TEXT'
+            ],
+            'user_sig'       => [
                 'type' => 'TEXT'
             ], //user_sig TEXT NOT NULL,
-            'user_timezone'        => [
+            'user_timezone'  => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => 'Europe/London'
@@ -1719,40 +1755,33 @@ class CoreTables {
         ];
 
         $table_package['user_sessions'] = [
-            'user_session_id' => [
-                'type'           => 'BIGINT',
-                'length'         => 20,
-                'auto_increment' => TRUE,
-                'key'            => 1,
-                'unsigned'       => TRUE,
-            ],
-            'user_id'      => [
-                'type'           => 'BIGINT',
-                'length'         => 20,
-                'key'            => 2,
-                'unsigned'       => TRUE,
+            'user_id'        => [
+                'type'     => 'BIGINT',
+                'length'   => 20,
+                'key'      => 2,
+                'unsigned' => TRUE,
             ], // user_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-            'user_session'         => [
+            'user_session'   => [
                 'type'    => 'VARCHAR',
                 'length'  => 170,
                 'default' => ''
             ],
-            'user_ip'      => [
+            'user_ip'        => [
                 'type'    => 'VARCHAR',
                 'length'  => 45,
                 'default' => '0.0.0.0'
             ], //user_name VARCHAR(30) NOT NULL DEFAULT '',
-            'user_device' => [
+            'user_device'    => [
                 'type'    => 'VARCHAR',
                 'length'  => 70,
                 'default' => '',
             ],
-            'user_os'      => [
+            'user_os'        => [
                 'type'    => 'VARCHAR',
                 'length'  => 70,
                 'default' => '',
             ],
-            'user_browser' => [
+            'user_browser'   => [
                 'type'    => 'VARCHAR',
                 'length'  => 70,
                 'default' => '',

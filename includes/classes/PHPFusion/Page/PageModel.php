@@ -214,7 +214,7 @@ class PageModel {
             $file_list = makefilelist(WIDGETS, ".|..|.htaccess|.DS_Store|config.php|config.temp.php|.gitignore|LICENSE|README.md|robots.txt", TRUE, "folders");
             foreach ($file_list as $folder) {
                 $widget_title = '';
-                $widget_icon = '';
+                $widshow_icon = '';
                 $widget_description = '';
                 $widget_admin_file = '';
                 $widget_display_file = '';
@@ -246,7 +246,7 @@ class PageModel {
                         'widget_name'        => $folder,
                         'widget_title'       => ucfirst($widget_title),
                         'widget_folder'      => $folder,
-                        'widget_icon'        => $widget_icon,
+                        'widshow_icon'        => $widshow_icon,
                         'widget_description' => $widget_description,
                         'admin_instance'     => $adminObj,
                         'display_instance'   => $displayObj,

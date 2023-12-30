@@ -49,6 +49,8 @@ class Panels {
     private static $available_panels = [];
     private static $hide_all = FALSE;
 
+    private $panel_data;
+
     /**
      * @param bool $set_info
      *
@@ -71,22 +73,24 @@ class Panels {
      * @return array
      */
     public static function cachePanels() {
-        $panel_query = "SELECT * FROM ".DB_PANELS." WHERE panel_status=:panel_status ORDER BY panel_side, panel_order";
-        $param = [
-            ':panel_status' => 1,
-        ];
-        $p_result = dbquery($panel_query, $param);
+
+        $p_result = dbquery("SELECT * FROM ".DB_PANELS." WHERE panel_status=:panel_status ORDER BY panel_side, panel_order", [
+            ':panel_status' => 1
+        ]);
 
         if (dbrows($p_result)) {
             $panel_side = 0;
             $panel_order = 0;
             while ($panel_data = dbarray($p_result)) {
+
                 if ($panel_data['panel_side'] !== $panel_side) {
                     $panel_data['panel_order'] = 0;
                 }
+
                 $panel_side = $panel_data['panel_side'];
                 $panel_order = $panel_order + 1;
                 $panel_data['panel_order'] = $panel_order;
+
                 if (multilang_table('PN')) {
                     $p_langs = explode('.', $panel_data['panel_languages']);
                     if (checkgroup($panel_data['panel_access']) && in_array(LANGUAGE, $p_langs)) {
@@ -236,6 +240,60 @@ class Panels {
     }
 
     /**
+     * @return bool
+     */
+    private function checkPanelVisibility() {
+        $settings = fusion_get_settings();
+
+        $url_arr = explode("\r\n", $this->panel_data['panel_url_list']);
+        $url = [];
+        $script_url = '/'.PERMALINK_CURRENT_PATH;
+        if ($settings['site_seo']) {
+            $params = http_build_query(Router::getRouterInstance()->getFileParams());
+            $path = Router::getRouterInstance()->getFilePath();
+            $script_url = '/'.(!empty($path) ? $path : PERMALINK_CURRENT_PATH).($params ? "?" : '').$params;
+        }
+
+        foreach ($url_arr as $url_list) {
+            $url[] = $url_list;
+            if ($this->wildcardMatch($script_url, $url_list)) {
+                $url[] = $script_url;
+            }
+        }
+
+        switch ($this->panel_data['panel_restriction']) {
+            case 0: // Include on these pages only
+                //  url_list is set, and panel_restriction set to 0 (Include) and current page matches url_list.
+                if (!empty($this->panel_data['panel_url_list']) && in_array($script_url, $url)) {
+                    return TRUE;
+                }
+                break;
+            case 1: // Exclude on these pages only
+                //  url_list is set, and panel_restriction set to 1 (Exclude) and current page does not match url_list.
+                if (!empty($this->panel_data['panel_url_list']) && !in_array($script_url, $url)) {
+                    return TRUE;
+                }
+                break;
+            case 2: // Display on Opening Page only
+                if ($settings['opening_page'] == 'index.php' && $script_url == '/' || $script_url == '/'.$settings['opening_page']) {
+                    return TRUE;
+                } else if (PERMALINK_CURRENT_PATH === $settings['opening_page']) {
+                    return TRUE;
+                }
+                break;
+            case 3: // Display panel on all pages
+                //  url_list must be blank
+                if (empty($p_data['panel_url_list'])) {
+                    return TRUE;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return FALSE;
+    }
+    /**
      * Cache and generate Panel Constants
      */
     public function getSitePanel() {
@@ -248,10 +306,10 @@ class Panels {
         }
 
         $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
 
         // Add admin message
         $admin_mess = "<noscript><div class='alert alert-danger noscript-message admin-message'><strong>".$locale['global_303']."</strong></div>\n</noscript>\n<!--error_handler-->\n";
+
         add_to_head($admin_mess);
 
         // Optimize this part to cache_panels
@@ -262,102 +320,57 @@ class Panels {
 
                 if (!defined("ADMIN_PANEL")) {
 
+                    // reorder panel
+                    self::$panels_cache[$p_key + 1] = sorter(self::$panels_cache[$p_key + 1], 'panel_order');
+
                     if (self::checkPanelStatus($p_side['side']) && !isset(self::$panel_excluded[$p_key + 1])) {
 
-                        foreach (self::$panels_cache[$p_key + 1] as $p_data) {
+                        foreach (self::$panels_cache[$p_key + 1] as $this->panel_data) {
 
-                            $show_panel = FALSE;
-                            $url_arr = explode("\r\n", $p_data['panel_url_list']);
-                            $url = [];
+                            if ($this->checkPanelVisibility() === TRUE) { // Prevention of rendering unnecessary files
 
-                            if ($settings['site_seo']) {
-                                $params = http_build_query(Router::getRouterInstance()->getFileParams());
-                                $path = Router::getRouterInstance()->getFilePath();
-                                $script_url = '/'.(!empty($path) ? $path : PERMALINK_CURRENT_PATH).($params ? "?" : '').$params;
-                            } else {
-                                $script_url = '/'.PERMALINK_CURRENT_PATH;
-                            }
+                                if ($this->panel_data['panel_type'] == "file") {
 
-                            foreach ($url_arr as $url_list) {
-                                $url[] = $url_list;
-                                if ($this->wildcardMatch($script_url, $url_list)) {
-                                    $url[] = $script_url;
-                                }
-                            }
+                                    $file_path = INFUSIONS.$this->panel_data['panel_filename']."/".$this->panel_data['panel_filename'].".php";
 
-                            switch ($p_data['panel_restriction']) {
-                                case 0: // Include on these pages only
-                                    //  url_list is set, and panel_restriction set to 0 (Include) and current page matches url_list.
-                                    if (!empty($p_data['panel_url_list']) && in_array($script_url, $url)) {
-                                        $show_panel = TRUE;
-                                    }
-                                    break;
-                                case 1: // Exclude on these pages only
-                                    //  url_list is set, and panel_restriction set to 1 (Exclude) and current page does not match url_list.
-                                    if (!empty($p_data['panel_url_list']) && !in_array($script_url, $url)) {
-                                        $show_panel = TRUE;
-                                    }
-                                    break;
-                                case 2: // Display on Opening Page only
-                                    $opening_page = $settings['opening_page'];
-                                    if ($opening_page == 'index.php' && $script_url == '/' || $script_url == '/'.$opening_page) {
-                                        $show_panel = TRUE;
-                                    } else if (PERMALINK_CURRENT_PATH === $opening_page) {
-                                        $show_panel = TRUE;
-                                    }
-                                    break;
-                                case 3: // Display panel on all pages
-                                    //  url_list must be blank
-                                    if (empty($p_data['panel_url_list'])) {
-                                        $show_panel = TRUE;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            if ($show_panel === TRUE) { // Prevention of rendering unnecessary files
-                                if ($p_data['panel_type'] == "file") {
-                                    $file_path = INFUSIONS.$p_data['panel_filename']."/".$p_data['panel_filename'].".php";
                                     if (is_file($file_path)) {
                                         include $file_path;
                                     } else {
                                         if (iADMIN) {
-                                            addnotice('warning', sprintf($locale['global_130'], $p_data['panel_name']));
+                                            addnotice('warning', sprintf($locale['global_130'], $this->panel_data['panel_name']));
                                         }
                                     }
                                 } else {
-                                    if ($p_data['panel_php_exe']) {
+                                    if ($this->panel_data['panel_php_exe']) {
                                         // This is slowest of em all.
                                         $panelStart = '';
                                         $panelEnd = '';
-                                        if ($p_data['panel_type'] == 'custom') {
-                                            if (!strpos($p_data['panel_content'], '<?php')) {
+                                        if ($this->panel_data['panel_type'] == 'custom') {
+                                            if (!strpos($this->panel_data['panel_content'], '<?php')) {
                                                 //$panelContent .= "<?php ".PHP_EOL;
                                                 $panelStart .= "echo \"".PHP_EOL;
                                             }
-                                            if (!strpos($p_data['panel_content'], '?>')) {
+                                            if (!strpos($this->panel_data['panel_content'], '?>')) {
                                                 $panelEnd .= "\";".PHP_EOL;
                                             }
-                                            $p_data['panel_content'] = str_replace("\"", "\\'", $p_data['panel_content']);
+                                            $this->panel_data['panel_content'] = str_replace("\"", "\\'", $this->panel_data['panel_content']);
                                         }
-                                        $panelContent = $panelStart.stripslashes($p_data['panel_content']).$panelEnd;
+                                        $panelContent = $panelStart.stripslashes($this->panel_data['panel_content']).$panelEnd;
                                         eval($panelContent);
 
                                     } else {
-                                        echo stripslashes($p_data['panel_content']);
+                                        echo stripslashes($this->panel_data['panel_content']);
                                     }
                                 }
                             }
                         }
 
-                        unset($p_data);
+                        unset($this->panel_data);
+
                         if (multilang_table("PN")) {
                             unset($p_langs);
                         }
-
                     }
-
                 }
 
                 $content = ob_get_contents();

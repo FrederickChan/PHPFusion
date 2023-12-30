@@ -36,7 +36,7 @@
                                 </svg>
                             </button>
                         {% else %}
-                            <button type="button" class="btn btn-default btn-sm m-l-a" data-dismiss="modal">{{ get_icon("cancel", "m-r-10 fa-fw") }}{{ locale["close"] }}</button>
+                            <button type="button" class="btn btn-default btn-sm m-l-a" data-dismiss="modal">{{ show_icon("cancel", "m-r-10 fa-fw") }}{{ locale["close"] }}</button>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -50,9 +50,9 @@
 
                     {% if dismiss_length > 1 %}
                         {% if constant("BOOTSTRAP5") is defined %}
-                            <a class="btn btn-secondary me-auto" href="{{ dismiss|raw }}" aria-label="{{ locale["close"] }}">{{ get_icon('cancel', 'me-2') }}{{ locale['close'] }}</a>
+                            <a class="btn btn-secondary me-auto" href="{{ dismiss|raw }}" aria-label="{{ locale["close"] }}">{{ show_icon('cancel', 'me-2') }}{{ locale['close'] }}</a>
                         {% else %}
-                            <a class="btn btn-secondary m-r-a">{{ get_icon("cancel", "m-r-10 fa-fw") }}{{ locale["close"] }}</a>
+                            <a class="btn btn-secondary m-r-a">{{ show_icon("cancel", "m-r-10 fa-fw") }}{{ locale["close"] }}</a>
                         {% endif %}
                     {% else %}
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" data-bs-dismiss="modal">{{ locale["close"] }}</button>

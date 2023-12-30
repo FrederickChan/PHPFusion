@@ -99,12 +99,13 @@ unset( $db_host, $db_user, $db_pass );
 @session_start();
 
 if (empty( $settings )) {
-    if (file_exists( BASEDIR . 'install.php' )) {
-        if (file_exists( BASEDIR . 'config.php' )) {
-            @rename( BASEDIR . 'config.php', BASEDIR . 'config_backup_' . time() . '.php' );
-        }
-        redirect( BASEDIR . 'install.php' );
-    }
+    //if (file_exists( BASEDIR . 'install.php' )) {
+    //    if (file_exists( BASEDIR . 'config.php' )) {
+    //        @rename( BASEDIR . 'config.php', BASEDIR . 'config_backup_' . time() . '.php' );
+    //    }
+    //    redirect( BASEDIR . 'install.php' );
+    //}
+
     die( "Website configurations do not exist, please check your config.php file or run install.php again." );
 }
 

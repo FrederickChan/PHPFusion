@@ -140,7 +140,7 @@
                                     {# {{ translate_lang_names(constant(LANGUAGE)) }} #}
                                     <a id="ddlangs{{ options['id'] }}" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" title="{{ xx }}">
                                         <img src="{{ currentLanguage['language_icon_s'] }}" alt="xx">
-                                        {{ get_icon('caret') }}
+                                        {{ show_icon('caret') }}
                                     </a>
                                     {% if languageSwitch|length >0 %}
                                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="ddlangs{{ options['id'] }}" role="menu">

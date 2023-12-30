@@ -721,7 +721,7 @@ class Authenticate {
                     ]
                 ] );
 
-                addnotice( "success", "We have resent the One Time Passcode to your registered email address" );
+                addnotice( "success", "Authorization code has been sent to your registered email address." );
 
             } else if ($user["user_auth_actiontime"] <= time()) {
 
@@ -742,11 +742,11 @@ class Authenticate {
                     ]
                 ] );
 
-                addnotice( 'success', 'We have sent a One Time Passcode to your registered email address for the authentication' );
+                addnotice( 'success', 'We have sent an authorization passcode to your current registered email address for the authentication.  Please check your spam folder if the email is still missing from your inbox.' );
 
             } else {
                 // this one is to extend the validity of the shit.
-                addnotice( 'danger', 'You cannot request for another OTP until the time has expired' );
+                addnotice( 'danger', 'You cannot request for another authorization pin code until the time has expired' );
             }
 
             redirect( BASEDIR . 'login.php?auth=security_pin' );
@@ -755,14 +755,20 @@ class Authenticate {
     }
 
     /**
-     * @throws \Exception
+     * @param $keyLength
+     *
+     * @return string
      */
     public static function generateOTP( $keyLength ) {
         // Set a blank variable to store the key in
         $key = "";
         for ($x = 1; $x <= $keyLength; $x++) {
             // Set each digit
-            $key .= random_int( 0, 9 );
+            try {
+                $key .= random_int( 0, 9 );
+            } catch (\Exception $e) {
+                $key .= rand(0, 9);
+            }
         }
         return $key;
     }

@@ -880,7 +880,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'PM',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['setup_3801'],
                     'template_subject'      => $locale['setup_3802'],
                     'template_content'      => $locale['setup_3803'],
@@ -891,7 +891,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'POST',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['setup_3804'],
                     'template_subject'      => $locale['setup_3805'],
                     'template_content'      => $locale['setup_3806'],
@@ -902,7 +902,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'CONTACT',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['setup_3807'],
                     'template_subject'      => $locale['setup_3808'],
                     'template_content'      => $locale['setup_3809'],
@@ -913,7 +913,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'L_2FA', // login group-2fa
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_2fa_name'],
                     'template_subject'      => $locale['email_2fa_subject'],
                     'template_content'      => $locale['email_2fa_message'],
@@ -925,7 +925,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_CREATE',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_create_name'],
                     'template_subject'      => $locale['email_create_subject'],
                     'template_content'      => $locale['email_create_message'],
@@ -937,7 +937,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_VERIFY',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_verify_name'],
                     'template_subject'      => $locale['email_verify_subject'],
                     'template_content'      => $locale['email_verify_message'],
@@ -949,7 +949,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_ACTIVE',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_activate_name'],
                     'template_subject'      => $locale['email_activate_subject'],
                     'template_content'      => $locale['email_activate_message'],
@@ -961,7 +961,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_LOSTP',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_pass_name'],
                     'template_subject'      => $locale['email_pass_subject'],
                     'template_content'      => $locale['email_pass_message'],
@@ -973,7 +973,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_SENDP',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_pass_name'],
                     'template_subject'      => $locale['email_pass_subject'],
                     'template_content'      => $locale['email_pass_notify'],
@@ -985,7 +985,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_EMAIL',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_change_name'],
                     'template_subject'      => $locale['email_change_subject'],
                     'template_content'      => $locale['email_change_message'],
@@ -997,7 +997,7 @@ class CoreSettings {
                 [
                     'template_key'          => 'U_PASS',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_passchange_name'],
                     'template_subject'      => $locale['email_passchange_subject'],
                     'template_content'      => $locale['email_passchange_message'],
@@ -1005,10 +1005,11 @@ class CoreSettings {
                     'template_sender_email' => '',
                     'template_language'     => $localeset
                 ],
+                // Security ban notice
                 [
                     'template_key'          => 'U_SECBAN',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_secban_name'],
                     'template_subject'      => $locale['email_secban_subject'],
                     'template_content'      => $locale['email_secban_message'],
@@ -1016,10 +1017,11 @@ class CoreSettings {
                     'template_sender_email' => '',
                     'template_language'     => $localeset
                 ],
+                // Account reactivation
                 [
                     'template_key'          => 'U_REACTIVATED',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_reactivated_name'],
                     'template_subject'      => $locale['email_reactivated_subject'],
                     'template_content'      => $locale['email_reactivated_message'],
@@ -1027,10 +1029,11 @@ class CoreSettings {
                     'template_sender_email' => '',
                     'template_language'     => $localeset
                 ],
+                // Account suspend
                 [
                     'template_key'          => 'U_UNSUSPEND',
                     'template_format'       => 'html',
-                    'template_active'       => '0',
+                    'template_active'       => '1',
                     'template_name'         => $locale['email_unsuspend_name'],
                     'template_subject'      => $locale['email_unsuspend_subject'],
                     'template_content'      => $locale['email_unsuspend_message'],
@@ -1038,6 +1041,28 @@ class CoreSettings {
                     'template_sender_email' => '',
                     'template_language'     => $localeset
                 ],
+                [
+                    'template_key'          => 'E_AUTH',
+                    'template_format'       => 'html',
+                    'template_active'       => '1',
+                    'template_name'         => $locale['email_auth_name'],
+                    'template_subject'      => $locale['email_auth_subject'],
+                    'template_content'      => $locale['email_auth_message'],
+                    'template_sender_name'  => '',
+                    'template_sender_email' => '',
+                    'template_language'     => $localeset
+                ],
+                [
+                    'template_key'          => 'E_CHANGE',
+                    'template_format'       => 'html',
+                    'template_active'       => '1',
+                    'template_name'         => $locale['email_change_name'],
+                    'template_subject'      => $locale['email_change_subject'],
+                    'template_content'      => $locale['email_change_message'],
+                    'template_sender_name'  => '',
+                    'template_sender_email' => '',
+                    'template_language'     => $localeset
+                ]
             ]
         ];
         $table_settings['policies'] = [

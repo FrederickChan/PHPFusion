@@ -51,6 +51,24 @@ class Geomap {
         }, $countries);
     }
 
+    public function callingCodesOpts($country = NULL) {
+        $countries = [];
+
+        require_once INCLUDES.'geomap/geo.countries.php';
+        if ($country !== NULL) {
+            foreach ($countries as $country_arr) {
+                if ($country_arr['code'] == $country) {
+                    return $country_arr['prefix'];
+                }
+            }
+            return NULL;
+        }
+
+        return array_map(function ($value) {
+            return '('.$value['prefix'].') '.$value['name'];
+        }, $countries);
+    }
+
     /**
      * @return mixed|string
      * @todo: countries.json information to geo.countries.php

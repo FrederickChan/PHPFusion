@@ -68,7 +68,7 @@ function form_select( $input_name, $label, $input_value, $options = [] ) {
 
     $title = $label ? stripinput( $label ) : ucfirst( strtolower( str_replace( "_", " ", $input_name ) ) );
 
-    $input_value = clean_input_value( $input_value );
+    $input_value = clean_input_value( $input_value, $input_name );
 
     $list = [];
 
@@ -474,6 +474,7 @@ function form_select( $input_name, $label, $input_value, $options = [] ) {
                 add_to_jquery( "
                 if ($('#" . $options['input_id'] . "').select2('val')) { $('dummy-" . $options['input_id'] . "').val($('#" . $options['input_id'] . "').select2('val'));} else { $('dummy-" . $options['input_id'] . "').val('');}
                 $('#" . $options['input_id'] . "').select2({
+                    theme: 'bootstrap-5',
                     " . ($options['placeholder'] ? "placeholder: '" . $options['placeholder'] . "'," : '') . "
                     minimumResultsForSearch: " . $options['display_search_count'] . ",
                     " . $max_js . "
@@ -484,6 +485,7 @@ function form_select( $input_name, $label, $input_value, $options = [] ) {
             } else {
                 add_to_jquery( "
                 $('#" . $options['input_id'] . "').select2({
+                       theme: 'bootstrap-5',
                     " . ($options['placeholder'] ? "placeholder: '" . $options['placeholder'] . "'," : '') . "
                     minimumResultsForSearch: " . $options['display_search_count'] . ",
                     " . $max_js . "
@@ -494,10 +496,12 @@ function form_select( $input_name, $label, $input_value, $options = [] ) {
             }
 
         } else {
+
             // json mode
             add_to_jquery( "
                 var this_data = [{id:0, text: '" . $options['placeholder'] . "'}];
                 $('#" . $options['input_id'] . "').select2({
+                   theme: 'bootstrap-5',
                 placeholder: '" . $options['placeholder'] . "',
                 data: this_data
                 });

@@ -53,8 +53,8 @@ function set_image($name, $path) {
  *
  * @return string
  */
-function get_icon($icon, string $class = "", $tooltip = "") {
-    return ImageRepo::getIcon($icon, $class, $tooltip);
+function show_icon($icon, string $class = "", $tooltip = "") {
+    return ImageRepo::showIcon($icon, $class, $tooltip);
 }
 
 /**
@@ -76,4 +76,20 @@ function set_icon($name, $value) {
  */
 function redirect_img_dir($source, $target) {
     ImageRepo::replaceInAllPath($source, $target);
+}
+
+/**
+ * Displays a QR code from qrserver.com
+ * Note: To change server source if the service is discontinued.
+ * @param     $link
+ * @param int $size
+ *
+ * @return string
+ */
+function show_qrcode($link, $size=200) {
+    return "<img src='".sprintf(
+        'https://api.qrserver.com/v1/create-qr-code/?size=%1$dx%1$d&data=%2$s&ecc=M',
+        $size,
+        urlencode($link)
+    )."'>";
 }

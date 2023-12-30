@@ -21,5 +21,5 @@ $__BBCODE__[] = [
     "description" => $locale['bb_left_description'],
     "value"       => "left", "bbcode_start" => "[left]", "bbcode_end" => "[/left]",
     "usage"       => "[left]".$locale['bb_left_usage']."[/left]",
-    'svg'         => '<i class="fas fa-align-left fa-lg"></i>'
+    "svg"         => get_image( 'bbcode_aleft', $locale['bb_left_usage'] ),
 ];

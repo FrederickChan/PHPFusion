@@ -109,6 +109,16 @@ class UserFields extends QuantumFields {
     public $defaultInputOptions = [];
 
     /**
+     * @var int|mixed|string
+     */
+    private $refURI;
+
+    /**
+     * @var int|mixed|string
+     */
+    private $sectionURI;
+
+    /**
      * Display Input Fields
      */
     public function displayProfileInput() {
@@ -116,20 +126,40 @@ class UserFields extends QuantumFields {
         $this->method = 'input';
         $this->options += $this->defaultInputOptions;
 
-        $this->info = match (get( 'section' )) {
-            default => $this->displayAccountInput(),
-            'notifications' => $this->getEmptyInputInfo() + $this->displayNotificationInput(),
-            'privacy' => $this->getEmptyInputInfo() + $this->displayPrivacyInput(),
-        };
+        $this->sectionURI = get( 'section' );
+        $this->refURI = get( 'ref' );
+
+        $this->info = $this->getEmptyInputInfo();
+
+        $this->info['section'] = $this->getProfileSections();
+
+        // Seperate template for each
+        if ( $this->registration ) {
+
+        } else {
+
+            switch ( $this->sectionURI ) {
+                case 'notifications':
+                    return $this->displayNotificationInput();
+
+                case 'privacy':
+                    return $this->displayPrivacyInput();
+
+                default:
+                    return $this->displayAccountInput();
+            }
+        }
+
 
         /*
          * Template Output
          */
-        $this->registration ? display_register_form( $this->info ) : display_profile_form( $this->info );
+        //$this->registration ? display_register_form( $this->info ) : display_userprofile_home( $this->info );
     }
 
     /**
      * Notification input
+     *
      * @return array
      */
     private function displayNotificationInput() {
@@ -137,11 +167,11 @@ class UserFields extends QuantumFields {
         $locale = fusion_get_locale();
 
         return [
-            'user_comments_notify'    => form_checkbox( 'n_comments', $locale['u502'], $this->userData['user_comments_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u503'], 'class' => 'form-check-lg'] ),
-            'user_tag_notify'        => form_checkbox( 'n_tags', $locale['u504'], $this->userData['user_tag_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u505'], 'class' => 'form-check-lg'] ),
-            'user_newsletter_notify' => form_checkbox( 'n_newsletter', $locale['u506'], $this->userData['user_newsletter_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u507'], 'class' => 'form-check-lg'] ),
-            'user_follow_notify'     => form_checkbox( 'n_follow', $locale['u508'], $this->userData['user_follow_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u509'], 'class' => 'form-check-lg'] ),
-            'user_pm_notify'         => form_checkbox( 'n_pm', $locale['u510'], $this->userData['user_pm_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u511'], 'class' => 'form-check-lg'] ),
+            'user_comments_notify'   => form_checkbox( 'n_comments', $locale['u502'], $this->userData['user_comments_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u503']] ),
+            'user_tag_notify'        => form_checkbox( 'n_tags', $locale['u504'], $this->userData['user_tag_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u505']] ),
+            'user_newsletter_notify' => form_checkbox( 'n_newsletter', $locale['u506'], $this->userData['user_newsletter_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u507']] ),
+            'user_follow_notify'     => form_checkbox( 'n_follow', $locale['u508'], $this->userData['user_follow_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u509']] ),
+            'user_pm_notify'         => form_checkbox( 'n_pm', $locale['u510'], $this->userData['user_pm_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u511']] ),
             'user_pm_email'          => form_checkbox( 'e_pm', $locale['u510'], $this->userData['user_pm_email'] ),
             'user_follow_email'      => form_checkbox( 'e_follow', $locale['u514'], $this->userData['user_follow_email'] ),
             'user_feedback_email'    => form_checkbox( 'e_feedback', $locale['u515'], $this->userData['user_feedback_email'] ),
@@ -152,9 +182,7 @@ class UserFields extends QuantumFields {
                     '2' => $locale['u518'],
                     '3' => $locale['u519'],
                     '0' => $locale['u520'],
-                ],
-                'class'   => 'form-check-lg'
-            ] ),
+                ]] ),
             'notify_button'          => form_button( 'save_notify', $locale['save_changes'], 'save_notify', ['class' => 'btn-primary'] ),
         ];
     }
@@ -165,36 +193,25 @@ class UserFields extends QuantumFields {
      * @return array
      */
     private function displayPrivacyInput() {
-        $input = new PrivacyForm($this);
+        $input = new PrivacyForm( $this );
         return $input->displayInputFields();
     }
 
     private function getEmptyInputInfo() {
         return [
-            'section'   => $this->getProfileSections(),
-            'userdata'  => $this->userData,
-            'user_id'   => form_hidden( 'user_id', '', $this->userData["user_id"] ),
-            'user_hash' => form_hidden( 'user_hash', '', $this->userData['user_password'] ),
+            //'section'   => $this->getProfileSections(),
+            'userdata' => $this->userData,
         ];
     }
 
-
-
     /**
-     * Account Input
-     *
-     * @return array|string[]
+     * Empty inputs vars
      */
-    private function displayAccountInput() {
-
-        $input = new AccountsForm( $this );
-        $locale = fusion_get_locale();
-
+    private function setEmptyInput() {
         $this->info = [
-            'section'             => $this->getProfileSections(),
-            'show_avatar'         => $this->showAvatarInput,
             'user_id'             => form_hidden( 'user_id', '', $this->userData["user_id"] ),
-            'user_hash'           => form_hidden( 'user_hash', '', '' ),
+            'user_hash'           => form_hidden( 'user_hash', '', $this->userData['user_password'] ),
+            'show_avatar'         => $this->showAvatarInput,
             'user_name'           => '',
             'user_firstname'      => '',
             'user_lastname'       => '',
@@ -209,26 +226,102 @@ class UserFields extends QuantumFields {
             'validate'            => '',
             'terms'               => '',
         ];
+    }
+
+    /**
+     * Account Input
+     *
+     * @return array|string[]
+     */
+    private function displayAccountInput() {
+
+        $input = new AccountsForm( $this );
+
+        $locale = fusion_get_locale();
+
+        $ref = get( 'ref' );
+
+        // we go with email first
+        $this->setEmptyInput();
+
+        $this->info['section'] = $this->getProfileSections();
 
         $this->info['user_name'] = $input->usernameInputField();
-        $this->info['user_firstname'] = form_text( 'user_firstname', $locale['u010'], $this->userData['user_firstname'], ['inline' => $this->inputInline] );
-        $this->info['user_lastname'] = form_text( 'user_lastname', $locale['u011'], $this->userData['user_lastname'], ['inline' => $this->inputInline] );
-        $this->info['user_addname'] = form_text( 'user_addname', $locale['u012'], $this->userData['user_addname'], ['inline' => $this->inputInline] );
-        $this->info['user_phone'] = form_text( 'user_phone', $locale['u013'], $this->userData['user_phone'], ['inline' => $this->inputInline, 'placeholder' => '(678) 3241521'] );
-        $this->info['user_hide_phone'] = $input->phoneHideInputField();
-        $this->info['user_bio'] = form_textarea( 'user_bio', $locale['u015'], $this->userData['user_bio'], ['inline' => $this->inputInline, 'wordcount' => TRUE, 'maxlength' => 255] );
-        //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
-        $this->info['user_password'] = $input->passwordInputField();
-        //$this->info['user_admin_password'] = $locale['u131'];
-        $this->info['user_admin_password'] = $input->adminpasswordInputField();
-        $this->info['user_email'] = $input->emailInputField();
-        $this->info['user_hide_email'] = $input->emailHideInputField();
-        $this->info['user_avatar'] = $input->avatarInput();
-        $this->info['validate'] = $input->captchaInput();
-        $this->info['terms'] = $input->termInput();
-        $this->info['button'] = $input->renderButton();
+        $this->info['user_totp_status'] = !empty($this->userData['user_totp']);
+        $this->info['user_password_changed'] = $this->userData['user_password_changed'];
+        $this->info['user_admin_password_changed'] = $this->userData['user_admin_password_changed'];
 
-        if ($this->method == 'validate_update') {
+        $this->info['link']['details'] = BASEDIR . 'edit_profile.php?ref=details';
+        $this->info['link']['totp'] = BASEDIR . 'edit_profile.php?ref=authenticator';
+        $this->info['link']['password'] = BASEDIR . 'edit_profile.php?ref=password';
+        $this->info['link']['admin_password'] = BASEDIR . 'edit_profile.php?ref=admin_password';
+
+        $this->info['link']['appstore'] = 'https://apps.apple.com/au/app/google-authenticator/id388497605';
+        $this->info['link']['playstore'] = 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US';
+
+        $this->info['ref'] = $ref;
+
+        if ( $ref == 'details' ) {
+
+            $this->info['page_title'] = 'Details';
+            $this->info = array_merge( $this->info, $input->profileInputField() );
+
+        }elseif ($ref == 'password') {
+
+            $this->info['page_title'] = 'Password management';
+            $this->info = array_merge($this->info, $input->profilePasswordField());
+
+        } elseif ($ref == 'authenticator') {
+
+            $this->info['page_title'] = 'Two factor authentication';
+            $this->info = $this->info + $input->profileTOTPField();
+
+        } else {
+
+            $this->info = array_merge( $this->info, $input->emailInputField() );
+            $this->info['user_password'] = $input->passwordInputField();
+            $this->info['user_admin_password'] = $input->adminpasswordInputField();
+            $this->info['user_avatar'] = $input->avatarInput();
+        }
+
+        add_to_jquery( "
+        var mailButtonId = $('#email_code-append-btn');        
+        mailButtonId.on('click', function() {
+            mailButtonId.addClass('disabled');
+            var sendVerificationCode = $.post('" . INCLUDES . "api/?api=email_code', {
+            'user_id': '" . $this->userData['user_id'] . "',
+            'user_hash': '" . $this->userData['user_password'] . "',
+            });
+            sendVerificationCode.done(function( data ) {
+                var json_response = $.parseJSON(data);
+                var cssClass = '';
+                if (json_response.response > 200) {
+                    cssClass = 'error';
+                }
+                addNotice(json_response.title, json_response.text, cssClass);
+            });
+            var sec = 30
+            var timer = setInterval(function() {
+               mailButtonId.text(sec-- + 's').removeClass('text-primary');
+               if (sec == -1) {
+                  mailButtonId.text('Second Code').removeClass('disabled').addClass('text-primary');
+                  clearInterval(timer);
+               }
+            }, 1000);
+        });
+        " );
+
+        // show the template
+        display_user_settings_home( $this->info );
+
+        //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
+        //$this->info['user_admin_password'] = $locale['u131'];
+
+        $this->info['validate'] = $input->captchaInput();
+
+        $this->info['terms'] = $input->termInput();
+
+        if ( $this->method == 'validate_update' ) {
             // User Password Verification for Email Change
             $footer = openmodal( 'verifyPassword', 'Verify password', ['hidden' => TRUE] )
                 . '<p class="small">Your password is required to proceed. Please enter your current password to update your profile.</p>'
@@ -272,82 +365,37 @@ class UserFields extends QuantumFields {
             " );
         }
 
-        $this->info = $this->info + $this->getUserFields();
-
-        /*
-         * Template
-         */
-        $this->info['user_custom'] = $this->getCustomFields();
-
         return $this->info;
     }
-
-    public function getCustomFields() {
-        $user_fields = '';
-        if (!empty( $this->info['user_field'] ) && is_array( $this->info['user_field'] )) {
-            foreach ($this->info['user_field'] as $catID => $fieldData) {
-                if (!empty( $fieldData['title'] )) {
-                    $user_fields .= form_para( $fieldData['title'], 'fieldcat' . $catID );
-                }
-                if (!empty( $fieldData['fields'] )) {
-                    $user_fields .= implode( '', $fieldData['fields'] );
-                }
-            }
-        }
-
-        return $user_fields;
-    }
-
-    /**
-     * @return array
-     */
-    private function getProfileSections() {
-
-        $link_prefix = BASEDIR . 'edit_profile.php?section=';
-        if ($this->moderation) {
-            $link_prefix = ADMIN . 'members.php?lookup=' . $this->userData['user_id'] . '&action=edit&';
-        }
-
-        return [
-            'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account'],
-            'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications'],
-            'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety'],
-            'communications' => ['link' => $link_prefix . 'communications', 'title' => 'Communications'],
-            'message'        => ['link' => $link_prefix . 'message', 'title' => 'Messaging'],
-            'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account']
-        ];
-
-    }
-
 
     /**
      * Fetch User Fields Array to templates
      * Toggle with class string method - input or display
      * output to array
      */
-    private function getUserFields() {
+    public function getUserFields() {
         $fields = [];
         $category = [];
         $item = [];
 
         $this->callback_data = $this->userData;
 
-        switch ($this->method) {
+        switch ( $this->method ) {
             case 'input':
-                if ($this->registration == FALSE) {
-                    if (isset( $this->info['user_field'][0]['fields']['user_name'] )) {
+                if ( $this->registration == FALSE ) {
+                    if ( isset( $this->info['user_field'][0]['fields']['user_name'] ) ) {
                         $this->info['user_field'][0]['fields']['user_name'] = form_hidden( 'user_name', '', $this->callback_data['user_name'] );
                     }
                 }
                 break;
             case 'display':
-                $this->info['user_field'] = [];
+                $info['user_field'] = [];
         }
 
         $index_page_id = isset( $_GET['section'] ) && isnum( $_GET['section'] ) && isset( $this->getProfileSections()[$_GET['section']] ) ? intval( $_GET['section'] ) : 1;
 
-        $registration_cond = ($this->registration == TRUE ? ' AND field.field_registration=:field_register' : '');
-        $registration_bind = ($this->registration == TRUE ? [':field_register' => 1] : []);
+        $registration_cond = ( $this->registration == TRUE ? ' AND field.field_registration=:field_register' : '' );
+        $registration_bind = ( $this->registration == TRUE ? [':field_register' => 1] : [] );
 
         $query = "SELECT field.*, cat.field_cat_id, cat.field_cat_name, cat.field_parent, root.field_cat_id as page_id, root.field_cat_name as page_name, root.field_cat_db, root.field_cat_index
                   FROM " . DB_USER_FIELDS . " field
@@ -363,34 +411,35 @@ class UserFields extends QuantumFields {
         $bind = $bind + $registration_bind;
         $result = dbquery( $query, $bind );
         $rows = dbrows( $result );
-        if ($rows != '0') {
-            while ($data = dbarray( $result )) {
-                if ($data['field_cat_id']) {
+        if ( $rows != '0' ) {
+            while ( $data = dbarray( $result ) ) {
+                if ( $data['field_cat_id'] ) {
                     $category[$data['field_parent']][$data['field_cat_id']] = self::parseLabel( $data['field_cat_name'] );
                 }
-                if ($data['field_cat']) {
+                if ( $data['field_cat'] ) {
                     $item[$data['field_cat']][] = $data;
                 }
             }
-            if (isset( $category[$index_page_id] )) {
-                foreach ($category[$index_page_id] as $cat_id => $cat) {
+            if ( isset( $category[$index_page_id] ) ) {
 
-                    if ($this->registration || $this->method == 'input') {
+                foreach ( $category[$index_page_id] as $cat_id => $cat ) {
 
-                        if (isset( $item[$cat_id] )) {
+                    if ( $this->registration || $this->method == 'input' ) {
+
+                        if ( isset( $item[$cat_id] ) ) {
 
                             $fields['user_field'][$cat_id]['title'] = $cat;
 
-                            foreach ($item[$cat_id] as $field) {
+                            foreach ( $item[$cat_id] as $field ) {
                                 $options = [
                                     'show_title' => TRUE,
                                     'inline'     => $this->inputInline,
                                     'required'   => (bool)$field['field_required']
                                 ];
-                                if ($field['field_type'] == 'file') {
+                                if ( $field['field_type'] == 'file' ) {
                                     $options += [
-                                        'plugin_folder'        => $this->plugin_folder,
-                                        'plugin_locale_folder' => $this->plugin_locale_folder
+                                        'plugin_folder'        => [INCLUDES . "user_fields/", INFUSIONS],
+                                        'plugin_locale_folder' => LOCALE . LOCALESET . "user_fields/"
                                     ];
                                 }
 
@@ -404,19 +453,19 @@ class UserFields extends QuantumFields {
 
                         // Display User Fields
 
-                        if (isset( $item[$cat_id] )) {
+                        if ( isset( $item[$cat_id] ) ) {
 
                             $fields['user_field'][$cat_id]['title'] = $cat;
 
-                            foreach ($item[$cat_id] as $field) {
+                            foreach ( $item[$cat_id] as $field ) {
 
                                 // Outputs array
-                                $field_output = $this->displayFields( $field, $this->callback_data, $this->method );
+                                $field_output = $this->displayFields( $field, $this->callback_data, $this->userFields->method );
 
                                 //$fields['user_field'][$cat_id]['fields'][$field['field_id']] = $field_output; // relational to the category
                                 $fields['extended_field'][$field['field_name']] = $field_output; // for the gets
 
-                                if (!empty( $field_output )) {
+                                if ( !empty( $field_output ) ) {
                                     $fields['user_field'][$cat_id]['fields'][$field['field_id']] = array_merge( $field, $field_output );
                                 }
                             }
@@ -429,6 +478,29 @@ class UserFields extends QuantumFields {
         return $fields;
     }
 
+
+    /**
+     * @return array
+     */
+    private function getProfileSections() {
+
+        $link_prefix = BASEDIR . 'edit_profile.php?section=';
+        if ( $this->moderation ) {
+            $link_prefix = ADMIN . 'members.php?lookup=' . $this->userData['user_id'] . '&action=edit&';
+        }
+
+        return [
+            'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account'],
+            'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications'],
+            'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety'],
+            'communications' => ['link' => $link_prefix . 'communications', 'title' => 'Communications'],
+            'message'        => ['link' => $link_prefix . 'message', 'title' => 'Messaging'],
+            'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account']
+        ];
+
+    }
+
+
     /***
      * Fetch profile output data
      * Display Profile (View)
@@ -440,11 +512,11 @@ class UserFields extends QuantumFields {
         $lookup = get( 'lookup', FILTER_VALIDATE_INT );
 
         // Add User to Groups
-        if (iADMIN && checkrights( "UG" ) && get( 'lookup', FILTER_VALIDATE_INT ) !== fusion_get_userdata( 'user_id' )) {
+        if ( iADMIN && checkrights( "UG" ) && get( 'lookup', FILTER_VALIDATE_INT ) !== fusion_get_userdata( 'user_id' ) ) {
 
-            if (check_post( 'add_to_group' ) && $user_group = post( 'user_group', FILTER_VALIDATE_INT )) {
+            if ( check_post( 'add_to_group' ) && $user_group = post( 'user_group', FILTER_VALIDATE_INT ) ) {
 
-                if (!preg_match( "(^\.$user_group$|\.$user_group\.|\.$user_group$)", $this->userData['user_groups'] )) {
+                if ( !preg_match( "(^\.$user_group$|\.$user_group\.|\.$user_group$)", $this->userData['user_groups'] ) ) {
                     $userdata = [
                         'user_groups' => $this->userData['user_groups'] . "." . $user_group,
                         'user_id'     => $lookup
@@ -452,7 +524,7 @@ class UserFields extends QuantumFields {
                     dbquery_insert( DB_USERS, $userdata, 'update' );
                 }
 
-                if (defined( 'ADMIN_PANEL' ) && get( 'step' ) === 'view') {
+                if ( defined( 'ADMIN_PANEL' ) && get( 'step' ) === 'view' ) {
                     redirect( ADMIN . "members.php" . fusion_get_aidlink() . "&amp;step=view&amp;user_id=" . $this->userData['user_id'] );
                 } else {
                     redirect( BASEDIR . "profile.php?lookup=" . $lookup );
@@ -468,13 +540,13 @@ class UserFields extends QuantumFields {
         $this->info['user_name'] = $this->userData['user_name'];
 
         $current_section = ['id' => 1];
-        if (!empty( $this->info['section'] )) {
+        if ( !empty( $this->info['section'] ) ) {
             $current_section = current( $this->info['section'] );
         }
 
         $_GET['section'] = isset( $_GET['section'] ) && isset( $this->info['section'][$_GET['section']] ) ? $_GET['section'] : $current_section['id'];
 
-        if (empty( $this->userData['user_avatar'] ) && !file_exists( IMAGES . "avatars/" . $this->userData['user_avatar'] )) {
+        if ( empty( $this->userData['user_avatar'] ) && !file_exists( IMAGES . "avatars/" . $this->userData['user_avatar'] ) ) {
             $this->userData['user_avatar'] = get_image( 'noavatar' );
         }
 
@@ -497,7 +569,7 @@ class UserFields extends QuantumFields {
         ];
 
         // user email
-        if (iADMIN || $this->userData['user_hide_email'] == 0) {
+        if ( iADMIN || $this->userData['user_hide_email'] == 0 ) {
             $this->info['core_field']['profile_user_email'] = [
                 'title' => $locale['u064'],
                 'value' => hide_email( $this->userData['user_email'], fusion_get_locale( "UM061a" ) )
@@ -517,13 +589,13 @@ class UserFields extends QuantumFields {
         ];
 
         // user status
-        if (iADMIN && $this->userData['user_status'] > 0) {
+        if ( iADMIN && $this->userData['user_status'] > 0 ) {
             $this->info['core_field']['profile_user_status'] = [
                 'title' => $locale['u055'],
                 'value' => getuserstatus( $this->userData['user_status'], $this->userData['user_lastvisit'] )
             ];
 
-            if ($this->userData['user_status'] == 3) {
+            if ( $this->userData['user_status'] == 3 ) {
                 $this->info['core_field']['profile_user_reason'] = [
                     'title' => $locale['u056'],
                     'value' => $this->userData['suspend_reason']
@@ -533,7 +605,7 @@ class UserFields extends QuantumFields {
 
         // IP
         //$this->info['core_field']['profile_user_ip'] = [];
-        if (iADMIN && checkrights( "M" )) {
+        if ( iADMIN && checkrights( "M" ) ) {
             $this->info['core_field']['profile_user_ip'] = [
                 'title' => $locale['u049'],
                 'value' => $this->userData['user_ip']
@@ -548,9 +620,9 @@ class UserFields extends QuantumFields {
         $user_groups = (array)array_filter( $user_groups );
 
         $group_info = [];
-        if (!empty( $user_groups )) {
-            for ($i = 0; $i < count( $user_groups ); $i++) {
-                if ($group_name = getgroupname( $user_groups[$i] )) {
+        if ( !empty( $user_groups ) ) {
+            for ( $i = 0; $i < count( $user_groups ); $i++ ) {
+                if ( $group_name = getgroupname( $user_groups[$i] ) ) {
                     $group_info[] = [
                         'group_url'  => BASEDIR . "profile.php?group_id=" . $user_groups[$i],
                         'group_name' => $group_name
@@ -562,21 +634,21 @@ class UserFields extends QuantumFields {
 
         $this->info = $this->info + $this->getUserFields();
 
-        if (iMEMBER && fusion_get_userdata( 'user_id' ) != $this->userData['user_id']) {
+        if ( iMEMBER && fusion_get_userdata( 'user_id' ) != $this->userData['user_id'] ) {
 
             $this->info['buttons'] = [
                 'user_pm_title' => $locale['u043'],
                 'user_pm_link'  => BASEDIR . "messages.php?msg_send=" . $this->userData['user_id']
             ];
 
-            if (checkrights( 'M' ) && fusion_get_userdata( 'user_level' ) <= USER_LEVEL_ADMIN && $this->userData['user_id'] != '1') {
+            if ( checkrights( 'M' ) && fusion_get_userdata( 'user_level' ) <= USER_LEVEL_ADMIN && $this->userData['user_id'] != '1' ) {
                 $groups_cache = cache_groups();
                 $user_groups_opts = [];
                 $this->info['user_admin'] = [
                     'user_edit_title'     => $locale['edit'],
                     'user_edit_link'      => ADMIN . "members.php" . $aidlink . "&amp;ref=edit&amp;lookup=" . $this->userData['user_id'],
                     'user_ban_title'      => $this->userData['user_status'] == 1 ? $locale['u074'] : $locale['u070'],
-                    'user_ban_link'       => ADMIN . "members.php" . $aidlink . "&amp;action=" . ($this->userData['user_status'] == 1 ? 2 : 1) . "&amp;lookup=" . $this->userData['user_id'],
+                    'user_ban_link'       => ADMIN . "members.php" . $aidlink . "&amp;action=" . ( $this->userData['user_status'] == 1 ? 2 : 1 ) . "&amp;lookup=" . $this->userData['user_id'],
                     'user_suspend_title'  => $locale['u071'],
                     'user_suspend_link'   => ADMIN . "members.php" . $aidlink . "&amp;action=3&amp;lookup=" . $this->userData['user_id'],
                     'user_delete_title'   => $locale['delete'],
@@ -585,15 +657,15 @@ class UserFields extends QuantumFields {
                     'user_susp_title'     => $locale['u054'],
                     'user_susp_link'      => ADMIN . "members.php" . $aidlink . "&amp;ref=log&amp;lookup=" . $this->userData['user_id']
                 ];
-                if (count( $groups_cache ) > 0) {
-                    foreach ($groups_cache as $group) {
-                        if (!preg_match( "(^{$group['group_id']}|\.{$group['group_id']}\.|\.{$group['group_id']}$)", $this->userData['user_groups'] )) {
+                if ( count( $groups_cache ) > 0 ) {
+                    foreach ( $groups_cache as $group ) {
+                        if ( !preg_match( "(^{$group['group_id']}|\.{$group['group_id']}\.|\.{$group['group_id']}$)", $this->userData['user_groups'] ) ) {
                             $user_groups_opts[$group['group_id']] = $group['group_name'];
                         }
                     }
-                    if (iADMIN && checkrights( "UG" ) && !empty( $user_groups_opts )) {
+                    if ( iADMIN && checkrights( "UG" ) && !empty( $user_groups_opts ) ) {
                         $submit_link = BASEDIR . "profile.php?lookup=" . $this->userData['user_id'];
-                        if (defined( 'ADMIN_PANEL' ) && isset( $_GET['step'] ) && $_GET['step'] == "view") {
+                        if ( defined( 'ADMIN_PANEL' ) && isset( $_GET['step'] ) && $_GET['step'] == "view" ) {
                             $submit_link = ADMIN . "members.php" . $aidlink . "&amp;step=view&amp;user_id=" . $this->userData['user_id'] . "&amp;lookup=" . $this->userData['user_id'];
                         }
                         $this->info['group_admin']['ug_openform'] = openform( "admin_grp_form", "post", $submit_link );

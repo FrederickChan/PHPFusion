@@ -32,5 +32,5 @@ $__BBCODE__[] = [
     ],
     'dropdown'       => TRUE,
     'dropdown_style' => 'min-width: 50px;',
-    'svg'            => '<i class="fas fa-list-ol fa-lg"></i>'
+    'svg'            => show_icon('list-options'),
 ];

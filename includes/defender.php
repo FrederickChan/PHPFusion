@@ -55,7 +55,7 @@ class Defender {
      * @return null|static
      */
     public static function getInstance() {
-        if (self::$defender_instance === NULL) {
+        if ( self::$defender_instance === NULL ) {
             self::$defender_instance = new static();
         }
 
@@ -71,7 +71,7 @@ class Defender {
      */
     public static function serialize( array $array = [] ) {
         $return_default = '';
-        if (is_array( $array )) {
+        if ( is_array( $array ) ) {
             return base64_encode( serialize( $array ) );
         }
 
@@ -106,9 +106,9 @@ class Defender {
     public static function unserialize( $string ) {
 
         $return_default = [];
-        if (!empty( $string )) {
+        if ( !empty( $string ) ) {
             $array = unserialize( base64_decode( $string ) );
-            if (!empty( $array )) {
+            if ( !empty( $array ) ) {
                 return $array;
             }
         }
@@ -129,11 +129,11 @@ class Defender {
      * @return string
      */
     public static function pageHash() {
-        if (!defined( 'SECRET_KEY' )) {
+        if ( !defined( 'SECRET_KEY' ) ) {
             $chars = ['abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ', '123456789'];
-            $count = [(strlen( $chars[0] ) - 1), (strlen( $chars[1] ) - 1)];
+            $count = [( strlen( $chars[0] ) - 1 ), ( strlen( $chars[1] ) - 1 )];
             $key = '';
-            for ($i = 0; $i < 32; $i++) {
+            for ( $i = 0; $i < 32; $i++ ) {
                 $type = mt_rand( 0, 1 );
                 $key .= substr( $chars[$type], mt_rand( 0, $count[$type] ), 1 );
             }
@@ -141,7 +141,7 @@ class Defender {
             define( 'SECRET_KEY', $key );
         }
 
-        if (empty( self::$page_hash )) {
+        if ( empty( self::$page_hash ) ) {
             self::$page_hash = md5( SECRET_KEY );
         }
 
@@ -158,7 +158,7 @@ class Defender {
      * @return array
      */
     static function sanitize_array( $array ) {
-        foreach ($array as $name => $value) {
+        foreach ( $array as $name => $value ) {
             $array[stripinput( $name )] = trim( stripinput( $value ) );
         }
 
@@ -206,7 +206,7 @@ class Defender {
      * @return null
      */
     public static function getErrorText( $input_name ) {
-        if (self::inputHasError( $input_name )) {
+        if ( self::inputHasError( $input_name ) ) {
             return self::$input_error_text[$input_name] ?? NULL;
         }
 
@@ -219,7 +219,7 @@ class Defender {
      * @return bool
      */
     public static function inputHasError( $input_name ) {
-        if (isset( self::$input_errors[$input_name] )) {
+        if ( isset( self::$input_errors[$input_name] ) ) {
             return TRUE;
         }
 
@@ -247,7 +247,7 @@ class Defender {
     /**
      * Encrypts a string securely with a private key
      *
-     * @param string $string The text to encrypt
+     * @param string $string      The text to encrypt
      * @param string $private_key For better security use \Defender::get_encrypt_key to generate your private key
      *
      * Does not support array encrypt.
@@ -266,7 +266,7 @@ class Defender {
 
     /**
      * @param string $data
-     * @param int $size
+     * @param int    $size
      *
      * @return string
      */
@@ -278,7 +278,7 @@ class Defender {
     /**
      * Decrypts a string securely with a private key
      *
-     * @param string $string The string to decrypt
+     * @param string $string      The string to decrypt
      * @param string $private_key For better security use \Defender::get_encrypt_key to generate your private key
      *
      * @return null|string
@@ -293,14 +293,14 @@ class Defender {
         $string = self::pkcs7_unpad( $string );
         $calcmac = hash_hmac( 'sha256', $ciphertext_raw, $private_key, TRUE );
 
-        if (!function_exists( 'hash_equals' )) {
+        if ( !function_exists( 'hash_equals' ) ) {
             function hash_equals( $str1, $str2 ) {
-                if (strlen( $str1 ) != strlen( $str2 )) {
+                if ( strlen( $str1 ) != strlen( $str2 ) ) {
                     return FALSE;
                 } else {
                     $res = $str1 ^ $str2;
                     $ret = 0;
-                    for ($i = strlen( $res ) - 1; $i >= 0; $i--) {
+                    for ( $i = strlen( $res ) - 1; $i >= 0; $i-- ) {
                         $ret |= ord( $res[$i] );
                     }
 
@@ -308,7 +308,7 @@ class Defender {
                 }
             }
         }
-        if (hash_equals( $hmac, $calcmac )) {//PHP 5.6+ timing attack safe comparison
+        if ( hash_equals( $hmac, $calcmac ) ) {//PHP 5.6+ timing attack safe comparison
             return $string;
         }
 
@@ -324,11 +324,11 @@ class Defender {
 
         $pad = ord( $value[strlen( $value ) - 1] );
 
-        if ($pad > strlen( $value )) {
+        if ( $pad > strlen( $value ) ) {
             return FALSE;
         }
 
-        if (strspn( $value, chr( $pad ), strlen( $value ) - $pad ) != $pad) {
+        if ( strspn( $value, chr( $pad ), strlen( $value ) - $pad ) != $pad ) {
             return FALSE;
         }
 
@@ -344,11 +344,11 @@ class Defender {
      * @return mixed
      */
     public function get_current_field_session( $input_name = '' ) {
-        if ($input_name && isset( $_SESSION['form_fields'][self::pageHash()][$input_name] )) {
+        if ( $input_name && isset( $_SESSION['form_fields'][self::pageHash()][$input_name] ) ) {
             //return $_SESSION['form_fields'][self::pageHash()][$input_name];
             return session_get( ['form_fields', self::pageHash(), $input_name] );
         } else {
-            if ($input_name) {
+            if ( $input_name ) {
                 return FALSE;
             } else {
                 //return $_SESSION['form_fields'];
@@ -365,7 +365,7 @@ class Defender {
      * @return bool
      */
     public static function safe() {
-        if (!defined( 'FUSION_NULL' )) {
+        if ( !defined( 'FUSION_NULL' ) ) {
             return TRUE;
         }
 
@@ -385,10 +385,10 @@ class Defender {
      * @return string
      */
     public function getHoneypot( $honeypot = '' ) {
-        if ($honeypot && isset( $_SESSION['honeypots'][self::pageHash()][$honeypot] )) {
+        if ( $honeypot && isset( $_SESSION['honeypots'][self::pageHash()][$honeypot] ) ) {
             return $_SESSION['honeypots'][self::pageHash()][$honeypot];
         } else {
-            if ($honeypot) {
+            if ( $honeypot ) {
                 return 'This form contains no honeypots';
             } else {
                 return $_SESSION['honeypots'][self::pageHash()];
@@ -408,8 +408,8 @@ class Defender {
      *
      * @param string $key
      * @param string $default
-     * @param bool $input_name
-     * @param bool $is_multiLang
+     * @param bool   $input_name
+     * @param bool   $is_multiLang
      *
      * @return string
      */
@@ -428,7 +428,7 @@ class Defender {
     public function filterPostArray( $key ) {
         $flag = FILTER_FLAG_NONE;
         $input_key = $key;
-        if (is_array( $key )) {
+        if ( is_array( $key ) ) {
             // always use key 0 for filter var
             $input_key = $key[0];
             $flag = FILTER_REQUIRE_ARRAY;
@@ -436,7 +436,7 @@ class Defender {
 
         $filtered = post( $input_key, FILTER_DEFAULT, $flag );
 
-        if (is_array( $key )) {
+        if ( is_array( $key ) ) {
             $input_ref = $key;
             unset( $input_ref[0] );
 
@@ -445,7 +445,7 @@ class Defender {
                 $input_ref,
                 function ( $value, $key ) {
 
-                    return (!empty( $value[$key] ) ? $value[$key] : '');
+                    return ( !empty( $value[$key] ) ? $value[$key] : '' );
                 },
                 $filtered
             );
@@ -458,9 +458,9 @@ class Defender {
      * Sanitize
      *
      * @param string|array $value
-     * @param string $default
-     * @param bool|FALSE $input_name
-     * @param bool|FALSE $is_multiLang
+     * @param string       $default
+     * @param bool|FALSE   $input_name
+     * @param bool|FALSE   $is_multiLang
      *
      * @return string
      */
@@ -468,14 +468,14 @@ class Defender {
         $val = [];
         $page_hash = self::pageHash();
 
-        if ($input_name) {
+        if ( $input_name ) {
 
-            if ($is_multiLang) {
+            if ( $is_multiLang ) {
                 $language = array_keys( fusion_get_enabled_languages() );
-                foreach ($language as $lang) {
+                foreach ( $language as $lang ) {
                     $iname = $input_name . '[' . $lang . ']';
 
-                    if ($this->field_config = $this->get_current_field_session( $input_name )) {
+                    if ( $this->field_config = $this->get_current_field_session( $input_name ) ) {
                         //$this->field_config = $_SESSION['form_fields'][$page_hash][$iname];
                         $this->field_name = $iname;
                         $this->field_value = $value[$lang];
@@ -483,7 +483,7 @@ class Defender {
                         $val[$lang] = $this->validate();
                     }
                 }
-                if (!empty( $this->field_config['required'] ) && (!$value[LANGUAGE])) {
+                if ( !empty( $this->field_config['required'] ) && ( !$value[LANGUAGE] ) ) {
 
                     fusion_stop();
                     $iname = $input_name . '[' . LANGUAGE . ']';
@@ -494,7 +494,7 @@ class Defender {
                 } else {
                     $val_ = [];
 
-                    foreach ($val as $lang => $value) {
+                    foreach ( $val as $lang => $value ) {
                         $val_[$lang] = $value;
                     }
 
@@ -502,7 +502,7 @@ class Defender {
                 }
             } else {
                 // Make sure that the input was actually defined in code. AND there must be a value to worth the processing power expense!
-                if ($this->field_config = $this->get_current_field_session( $input_name )) {
+                if ( $this->field_config = $this->get_current_field_session( $input_name ) ) {
 
                     $this->field_config = $_SESSION['form_fields'][$page_hash][$input_name];
                     $this->field_name = $input_name;
@@ -520,28 +520,28 @@ class Defender {
                     $secured = $this->validate();
 
                     // If truly FALSE the check failed
-                    if ($secured === FALSE || ($this->field_config['required'] == 1 && $secured == '') ||
-                        ($secured != '' && $regex && !preg_match( '@^' . $regex . '$@i', $secured )) || // regex will fail for an imploded array, maybe move this check
-                        (is_callable( $callback ) && !$callback( $secured ))
+                    if ( $secured === FALSE || ( $this->field_config['required'] == 1 && $secured == '' ) ||
+                        ( $secured != '' && $regex && !preg_match( '@^' . $regex . '$@i', $secured ) ) || // regex will fail for an imploded array, maybe move this check
+                        ( is_callable( $callback ) && !$callback( $secured ) )
                     ) {
 
                         fusion_stop();
                         self::setInputError( $input_name );
 
                         // Add regex error message.
-                        if ($secured != '' && $regex && !preg_match( '@^' . $regex . '$@i', $secured )) {
+                        if ( $secured != '' && $regex && !preg_match( '@^' . $regex . '$@i', $secured ) ) {
                             addnotice( 'danger', sprintf( fusion_get_locale( 'regex_error' ), $this->field_config['title'] ) );
                         }
                         // Add a notice
-                        if (self::$debug) {
-                            addnotice( 'warning', '<strong>' . $input_name . ':</strong>' . ($this->field_config['safemode'] ? ' is in SAFEMODE and the' : '') . ' check failed' );
+                        if ( self::$debug ) {
+                            addnotice( 'warning', '<strong>' . $input_name . ':</strong>' . ( $this->field_config['safemode'] ? ' is in SAFEMODE and the' : '' ) . ' check failed' );
                         }
 
                         // Return user's input for correction
                         return $this->field_value;
                     } else {
-                        if (self::$debug) {
-                            addnotice( 'info', $input_name . ' = ' . (is_array( $secured ) ? 'array' : $secured) );
+                        if ( self::$debug ) {
+                            addnotice( 'info', $input_name . ' = ' . ( is_array( $secured ) ? 'array' : $secured ) );
                         }
 
                         return $secured;
@@ -551,17 +551,17 @@ class Defender {
                 }
             }
         } else {
-            if ($value) {
-                if (!is_array( $value )) {
-                    if (intval( $value )) {
+            if ( $value ) {
+                if ( !is_array( $value ) ) {
+                    if ( intval( $value ) ) {
                         return stripinput( $value ); // numbers
                     } else {
                         return stripinput( trim( preg_replace( '/ +/i', ' ', $value ) ) );
                     }
                 } else {
                     $secured = [];
-                    foreach ($value as $unsecured) {
-                        if ((int)$unsecured) {
+                    foreach ( $value as $unsecured ) {
+                        if ( (int)$unsecured ) {
                             $secured[] = stripinput( $unsecured ); // numbers
                         } else {
                             $secured[] = stripinput( trim( preg_replace( '/ +/i', ' ', $unsecured ) ) );
@@ -587,7 +587,7 @@ class Defender {
         Validation::inputValue( $this->field_value );
         Validation::inputConfig( $this->field_config );
 
-        if (defined( 'LOCALESET' )) {
+        if ( defined( 'LOCALESET' ) ) {
             $locale = fusion_get_locale( LOCALE . LOCALESET . 'defender.php' );
         } else {
             $locale = fusion_get_locale( LOCALE . 'English/defender.php' );
@@ -608,9 +608,9 @@ class Defender {
 
         // execute sanitisation rules at point-blank precision using switch
         try {
-            if (!empty( $this->field_config['type'] )) {
+            if ( !empty( $this->field_config['type'] ) ) {
 
-                if (empty( $this->field_value ) && ($this->field_config['type'] !== 'number')) {
+                if ( empty( $this->field_value ) && ( $this->field_config['type'] !== 'number' ) ) {
                     return $this->field_default;
                 }
 
@@ -620,7 +620,7 @@ class Defender {
                 self::stop();
                 addnotice( 'danger', sprintf( $locale['df_406'], self::$input_name ) );
             }
-        } catch (Exception $e) {
+        } catch ( Exception $e ) {
             self::stop();
             addnotice( 'danger', $e->getMessage() );
         }
@@ -637,9 +637,9 @@ class Defender {
      */
     public static function stop( $notice = '' ) {
         //debug_print_backtrace();
-        if (!defined( 'FUSION_NULL' )) {
+        if ( !defined( 'FUSION_NULL' ) ) {
             define( 'FUSION_NULL', TRUE );
-            if ($notice) {
+            if ( $notice ) {
                 addnotice( 'danger', $notice );
                 define( 'STOP_REDIRECT', TRUE );
             }
@@ -658,13 +658,13 @@ class Defender {
     /**
      * @param string $key
      * @param string $default
-     * @param false $input_name
+     * @param false  $input_name
      *
      * @return array
      */
     public function fileSanitizer( $key, $default = '', $input_name = FALSE ) {
         $upload = (array)$this->formSanitizer( $_FILES[$key], $default, $input_name );
-        if (isset( $upload['error'] ) && $upload['error'] == 0) {
+        if ( isset( $upload['error'] ) && $upload['error'] == 0 ) {
             return $upload;
         }
 
@@ -678,8 +678,8 @@ class Defender {
  *
  * @param string $value
  * @param string $default
- * @param bool $input_name
- * @param bool $is_multiLang
+ * @param bool   $input_name
+ * @param bool   $is_multiLang
  *
  * @return string|array
  */
@@ -691,10 +691,10 @@ function form_sanitizer( $value, $default = '', $input_name = FALSE, $is_multiLa
  * Verify and Sanitize Inputs with input_name
  * A more secured method
  *
- * @param mixed $value input_name
+ * @param mixed  $value input_name
  * @param string $default
- * @param bool $input_name
- * @param bool $is_multiLang
+ * @param bool   $input_name
+ * @param bool   $is_multiLang
  *
  * @return string
  */
@@ -718,7 +718,7 @@ function sanitize_array( $array = [] ) {
  *
  * @param string $value input_name
  * @param string $default
- * @param bool $input_name
+ * @param bool   $input_name
  *
  * @return array
  */
@@ -734,9 +734,9 @@ function file_sanitizer( $value, $default = '', $input_name = FALSE ) {
  * @return bool
  */
 function check_get( $key ) {
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         return !empty( array_reduce( $key, function ( $carry, $item ) {
-            return (!empty( $carry[$item] ) ? $carry[$item] : '');
+            return ( !empty( $carry[$item] ) ? $carry[$item] : '' );
         }, $_GET ) );
     }
     return isset( $_GET[$key] );
@@ -750,9 +750,9 @@ function check_get( $key ) {
  * @return bool
  */
 function check_post( $key ) {
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         return !empty( array_reduce( $key, function ( $carry, $item ) {
-            return (!empty( $carry[$item] ) ? $carry[$item] : '');
+            return ( !empty( $carry[$item] ) ? $carry[$item] : '' );
         }, $_POST ) );
     }
     return isset( $_POST[$key] );
@@ -760,14 +760,14 @@ function check_post( $key ) {
 
 /**
  * @param mixed $key
- * @param int $type
+ * @param int   $type
  * @param mixed $flags
  *
  * @return mixed
  */
 function get( $key = NULL, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
 
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         // always use key 0 for filter var
         $input_key = $key[0];
         $flag = FILTER_REQUIRE_ARRAY;
@@ -783,7 +783,7 @@ function get( $key = NULL, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
             $input_ref,
             function ( $value, $key ) {
 
-                return (!empty( $value[$key] ) ? $value[$key] : '');
+                return ( !empty( $value[$key] ) ? $value[$key] : '' );
             },
             $filtered
         );
@@ -792,16 +792,16 @@ function get( $key = NULL, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
         return (string)stripinput( $filtered );
     }
 
-    if ($flags == FILTER_VALIDATE_INT) {
+    if ( $flags == FILTER_VALIDATE_INT ) {
 
-        if (isset( $_GET[$key] ) && isnum( $_GET[$key] ) && ($_GET[$key] > PHP_INT_MAX)) {
+        if ( isset( $_GET[$key] ) && isnum( $_GET[$key] ) && ( $_GET[$key] > PHP_INT_MAX ) ) {
             return (int)$_GET[$key];
         }
 
         return 0;
     }
 
-    if (filter_has_var( INPUT_GET, $key )) {
+    if ( filter_has_var( INPUT_GET, $key ) ) {
         $filtered_input = filter_input( INPUT_GET, $key, $type, $flags );
     } else {
         $filtered_input = isset( $_GET[$key] ) ? filter_var( $_GET[$key], $type, $flags ) : NULL;
@@ -814,13 +814,13 @@ function get( $key = NULL, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
  * Sanitizes $_POST by name
  *
  * @param mixed $key input_name
- * @param int $type
+ * @param int   $type
  * @param mixed $flags
  *
  * @return mixed
  */
 function post( $key, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         // always use key 0 for filter var
         $post_key = $key[0];
         $flag = FILTER_REQUIRE_ARRAY;
@@ -833,7 +833,7 @@ function post( $key, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
             $input_ref,
             function ( $value, $key ) {
 
-                return (!empty( $value[$key] ) ? $value[$key] : '');
+                return ( !empty( $value[$key] ) ? $value[$key] : '' );
             },
             $filtered
         );
@@ -842,15 +842,15 @@ function post( $key, $type = FILTER_DEFAULT, $flags = FILTER_FLAG_NONE ) {
         return (string)stripinput( $filtered );
     }
 
-    if ($flags == FILTER_VALIDATE_INT) {
+    if ( $flags == FILTER_VALIDATE_INT ) {
 
-        if (isset( $_POST[$key] ) && isnum( $_POST[$key] ) && ($_POST[$key] > PHP_INT_MAX)) {
+        if ( isset( $_POST[$key] ) && isnum( $_POST[$key] ) && ( $_POST[$key] > PHP_INT_MAX ) ) {
 
             return (int)$_POST[$key];
         }
     }
 
-    if (filter_has_var( INPUT_POST, $key )) {
+    if ( filter_has_var( INPUT_POST, $key ) ) {
         return filter_input( INPUT_POST, $key, $type, $flags );
     } else {
         return isset( $_POST[$key] ) ? filter_var( $_POST[$key], $type, $flags ) : NULL;
@@ -872,12 +872,12 @@ function post_array( $key ) {
  * Gets server array
  *
  * @param string $key
- * @param int $type
+ * @param int    $type
  *
  * @return mixed
  */
 function server( $key, $type = FILTER_DEFAULT ) {
-    if (filter_has_var( INPUT_SERVER, $key )) {
+    if ( filter_has_var( INPUT_SERVER, $key ) ) {
         return filter_input( INPUT_SERVER, $key, $type );
     } else {
         return isset( $_SERVER[$key] ) ? filter_var( $_SERVER[$key], $type ) : NULL;
@@ -892,10 +892,10 @@ function server( $key, $type = FILTER_DEFAULT ) {
  * @return bool
  */
 function file_uploaded( $key ) {
-    if (!empty( $_FILES )) {
-        if (is_array( $key )) {
+    if ( !empty( $_FILES ) ) {
+        if ( is_array( $key ) ) {
             $files =& $_FILES;
-            foreach ($key as $pkey) {
+            foreach ( $key as $pkey ) {
                 $files =& $files[$pkey];
             }
 
@@ -910,12 +910,12 @@ function file_uploaded( $key ) {
 
 /**
  * @param string $key
- * @param int $type
+ * @param int    $type
  *
  * @return mixed
  */
 function environment( $key, $type = FILTER_DEFAULT ) {
-    if (filter_has_var( INPUT_ENV, $key )) {
+    if ( filter_has_var( INPUT_ENV, $key ) ) {
         return filter_input( INPUT_ENV, $key, $type );
     } else {
         return isset( $_ENV[$key] ) ? filter_var( $_ENV[$key], $type ) : NULL;
@@ -926,15 +926,15 @@ function environment( $key, $type = FILTER_DEFAULT ) {
  * Sets a $_COOKIE
  *
  * @param string $key
- * @param int $type
+ * @param int    $type
  *
  * @return string|string[]
  */
 function cookie( $key, $type = FILTER_DEFAULT ) {
-    if (filter_has_var( INPUT_COOKIE, $key )) {
+    if ( filter_has_var( INPUT_COOKIE, $key ) ) {
         $filtered_input = filter_input( INPUT_COOKIE, $key, $type );
     } else {
-        $filtered_input = (isset( $_COOKIE[$key] ) ? filter_var( $_COOKIE[$key], $type ) : NULL);
+        $filtered_input = ( isset( $_COOKIE[$key] ) ? filter_var( $_COOKIE[$key], $type ) : NULL );
     }
 
     return stripinput( $filtered_input );
@@ -963,16 +963,16 @@ function session_clean() {
  * Add a value to $_SESSION
  *
  * @param string $key
- * @param mixed $value
+ * @param mixed  $value
  *
  * @return mixed
  */
 function session_add( $key, $value ) {
     //global $_SESSION;
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         //  print_p($_SESSION);
         $session =& $_SESSION;
-        foreach ($key as $pkey) {
+        foreach ( $key as $pkey ) {
             $session =& $session[$pkey];
         }
         $session = $value;
@@ -991,16 +991,16 @@ function session_add( $key, $value ) {
  * @return mixed
  */
 function session_get( $key ) {
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         $session =& $_SESSION;
-        foreach ($key as $i) {
+        foreach ( $key as $i ) {
             $session =& $session[$i];
         }
 
         return $session;
     }
 
-    return (isset( $_SESSION[$key] ) ? $_SESSION[$key] : NULL);
+    return ( isset( $_SESSION[$key] ) ? $_SESSION[$key] : NULL );
 }
 
 /**
@@ -1009,11 +1009,11 @@ function session_get( $key ) {
  * @return mixed
  */
 function session_remove( $key ) {
-    if (is_array( $key )) {
+    if ( is_array( $key ) ) {
         $temp = &$_SESSION;
         $counter = 1;
-        foreach ($key as $nkey) {
-            if ($counter == count( $key )) {
+        foreach ( $key as $nkey ) {
+            if ( $counter == count( $key ) ) {
                 unset( $temp[$nkey] );
             }
             $temp = &$temp[$nkey];
@@ -1114,6 +1114,17 @@ function input_error_text( $input_name ) {
 }
 
 /**
+ * @param        $input_name
+ * @param string $error_text
+ */
+function set_input_error( $input_name, $error_text = '' ) {
+    Defender::setInputError( $input_name );
+    if ( !empty( $error_text ) ) {
+        Defender::setErrorText( $input_name, $error_text );
+    }
+}
+
+/**
  * @param $options
  *
  * @return array [error_class, error_text]
@@ -1124,29 +1135,29 @@ function form_errors( $options ) {
     $class = '';
     // Error messages based on settings
     $text = empty( $options['error_text'] ) ? $locale['error_input_default'] : $options['error_text'];
-    if ($options['template_type'] == 'text') {
-        if ($options['type'] == 'password') {
+    if ( $options['template_type'] == 'text' ) {
+        if ( $options['type'] == 'password' ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_password'] : $options['error_text'];
-        } else if ($options['type'] == 'email') {
+        } else if ( $options['type'] == 'email' ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_email'] : $options['error_text'];
-        } else if ($options['type'] == 'number') {
+        } else if ( $options['type'] == 'number' ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_number'] : $options['error_text'];
-        } else if ($options['type'] == 'url') {
+        } else if ( $options['type'] == 'url' ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_url'] : $options['error_text'];
-        } else if ($options['regex']) {
+        } else if ( $options['regex'] ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_regex'] : $options['error_text'];
-        } else if ($options['safemode']) {
+        } else if ( $options['safemode'] ) {
             $text = empty( $options['error_text'] ) ? $locale['error_input_safemode'] : $options['error_text'];
         } else {
             $text = empty( $options['error_text'] ) ? $locale['error_input_default'] : $options['error_text'];
         }
     }
 
-    if (input_has_error( $options['input_name'] )) {
+    if ( input_has_error( $options['input_name'] ) ) {
         $class = " has-error";
-        if (!empty( $options['error_text'] )) {
+        if ( !empty( $options['error_text'] ) ) {
             $text = input_error_text( $options['input_name'] );
-            if ($options['add_error_notice']) {
+            if ( $options['add_error_notice'] ) {
                 addnotice( "danger", $text );
             }
         }

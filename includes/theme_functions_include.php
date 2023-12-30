@@ -389,32 +389,38 @@ if (!function_exists( 'openmodal' ) &&
                 ";
 
             if (defined( 'BOOTSTRAP5' )) {
-                $_js = "new bootstrap.Modal('#$id-Modal', {backdrop: 'static', keyboard: false}).show();
+                $_js = "new bootstrap.Modal.getOrCreateInstance('#$id-Modal', {backdrop: 'static', keyboard: false}).show();
                  e.preventDefault();
                 ";
             }
 
             $script = "$(document).on('click', '" . $modal_trigger . "', function(e) { $_js });";
 
-        } else if ($options['static'] && empty( $options['button_id'] )) {
+        }
+        else if ($options['static'] && empty( $options['button_id'] )) {
             // No click, just show right away
             $script = "$('#" . $id . "-Modal').modal({	backdrop: 'static',	keyboard: false }).modal('show');";
+
             if (defined( "BOOTSTRAP5" )) {
-                $script = "new bootstrap.Modal('#" . $id . "-Modal', {	backdrop: 'static',	keyboard: false }).show();";
+                $script = "new bootstrap.Modal.getOrCreateInstance('#" . $id . "-Modal', {	backdrop: 'static',	keyboard: false }).show();";
             }
 
         } else if ($modal_trigger && empty( $options['static'] )) {
+
             $_js = "$('#" . $id . "-Modal').modal('show'); e.preventDefault();";
+
             if (defined( "BOOTSTRAP5" )) {
-                $_js = "new bootstrap.Modal('#" . $id . "-Modal').show(); e.preventDefault();";
+                $_js = "new bootstrap.Modal.getOrCreateInstance('#" . $id . "-Modal').show(); e.preventDefault();";
             }
 
             $script = "$(document).on('click', '" . $modal_trigger . "', function(e) { $_js });";
 
         } else if (!$options['hidden']) {
+
             $script = "$('#" . $id . "-Modal').modal('show');";
+
             if (defined( "BOOTSTRAP5" )) {
-                $script = "new bootstrap.Modal('#" . $id . "-Modal').show();";
+                $script = "new bootstrap.Modal.getOrCreateInstance('#" . $id . "-Modal').show();";
             }
         }
 
@@ -792,6 +798,24 @@ if (!function_exists( 'display_avatar' )) {
 }
 
 /**
+ * Display the user name
+ * @param        $userdata
+ * @param string $class
+ * @param false  $display_link
+ *
+ * @return string
+ */
+function display_name($userdata, $class = '', $display_link = FALSE) {
+
+    $username = $userdata['user_name'];
+    if (!empty($userdata['user_firstname']) && !empty($userdata['user_lastname']) && $userdata['user_displayname'] == 1) {
+        $username = $userdata['user_firstname'] .' '.$userdata['user_lastname'];
+    }
+
+    return profile_link($userdata['user_id'], $username, $userdata['user_status'], $class, $display_link);
+}
+
+/**
  * Generate HEX color code from string.
  *
  * @param string $text Any string.
@@ -1115,7 +1139,7 @@ function show_dropdown( array $item, array $menu_items ) {
         echo whitespace( $item['class'] ) ?> dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <?php
             if ($item["icon"]) :
-                echo get_icon( $item["icon"], "fa-fw mr-1" );
+                echo show_icon($item["icon"], "fa-fw mr-1" );
             endif ?>
             <?php
             echo $item['title'] ?>
@@ -1455,7 +1479,7 @@ if (!function_exists( 'tab_active' )
                 $info['tab'][$arr] = [
                     'id'       => $tab_title['id'][$arr],
                     'title'    => $v,
-                    'icon'     => (isset( $tab_title['icon'][$arr] ) ? get_icon( $tab_title['icon'][$arr] ) : ""),
+                    'icon'     => (isset( $tab_title['icon'][$arr] ) ? show_icon($tab_title['icon'][$arr] ) : ""),
                     'url'      => '#',
                     'active'   => FALSE,
                     'dropdown' => (isset( $tab_title["dropdown"][$arr] )) ? array_filter( $tab_title["dropdown"][$arr] ) : [], // item array must contain 'link', 'title' key,

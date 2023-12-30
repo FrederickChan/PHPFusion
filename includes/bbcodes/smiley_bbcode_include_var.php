@@ -26,6 +26,6 @@ $__BBCODE__[] = [
     'php_function'      => 'display_smiley_options',
     'php_function_args' => [$textarea_name, $inputform_name],
     'dropdown'          => TRUE,
-    'svg'               => "<i class='far fa-smile fa-lg'></i>",
+  "svg"          => get_image('bbcode_smiley', $locale['bb_smiley_usage']),
     'calljscript'        => "$('textarea[name=\"" . $textarea_name . "\"]').smileys();",
 ];

@@ -30,10 +30,10 @@
                 });
                 cDOM.text(initStr);
             } else {
-                console.log(dom + ' does not have character count container');
+                console.log('Dom does not have character count container');
             }
         } else {
-            console.log(dom + ' does not exists.');
+            console.log('Dom does not exists.');
         }
     };
 
@@ -49,7 +49,7 @@
                 addText(domName, '', smileyCode, formName)
             });
         } else {
-            console.log(dom + ' does not exists.');
+            console.log('Dom does not exists.');
         }
     }
 

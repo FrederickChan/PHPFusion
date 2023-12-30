@@ -22,5 +22,5 @@ $__BBCODE__[] = [
     "description" => $locale['bb_i_description'],
     "value"       => "i", "bbcode_start" => "[i]", "bbcode_end" => "[/i]",
     "usage"       => "[i]".$locale['bb_i_usage']."[/i]",
-    'svg'         => '<i class="fa fa-italic fa-lg"></i>'
+    "svg"          => get_image('bbcode_i', $locale['bb_u_usage']),
 ];

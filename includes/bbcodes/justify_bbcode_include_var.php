@@ -22,5 +22,5 @@ $__BBCODE__[] = [
     "description" => $locale['bb_justify_description'],
     "value"       => "justify", "bbcode_start" => "[justify]", "bbcode_end" => "[/justify]",
     "usage"       => "[justify]".$locale['bb_justify_usage']."[/justify]",
-    'svg'         => '<svg width="24" height="24" focusable="false"><path d="M5 5h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 110-2zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 110-2zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 010-2zm0 4h14c.6 0 1 .4 1 1s-.4 1-1 1H5a1 1 0 010-2z" fill-rule="evenodd"></path></svg>'
-];
+    'svg'         => show_icon('align-justified'),
+    ];

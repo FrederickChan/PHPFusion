@@ -20,7 +20,7 @@ $widget_locale = fusion_get_locale('', $lang);
 
 // Path Definitions
 $widget_title = $widget_locale['CMW_0100'];
-$widget_icon = 'comments.svg';
+$widshow_icon = 'comments.svg';
 $widget_description = $widget_locale['CMW_0101'];
 $widget_admin_file = "comments_admin.php";
 $widget_display_file = "comments.php";

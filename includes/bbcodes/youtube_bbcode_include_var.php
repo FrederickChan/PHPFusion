@@ -21,5 +21,5 @@ $__BBCODE__[] = [
     "description" => $locale["bb_youtube_description"],
     "value"       => "youtube", "bbcode_start" => "[youtube]", "bbcode_end" => "[/youtube]",
     "usage"       => "[youtube]".$locale["bb_youtube_usage"]."[/youtube]",
-    'svg'         => '<i class="fab fa-youtube"></i>'
+    'svg'         => show_icon('youtube'),
 ];

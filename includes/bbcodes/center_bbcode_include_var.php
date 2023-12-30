@@ -21,5 +21,5 @@ $__BBCODE__[] = [
     "description" => $locale['bb_center_description'],
     "value"       => "center", "bbcode_start" => "[center]", "bbcode_end" => "[/center]",
     "usage"       => "[center]".$locale['bb_center_usage']."[/center]",
-    'svg'         => '<i class="fa fa-align-center fa-lg"></i>'
-];
+    "svg"         => get_image( 'bbcode_acenter', $locale['bb_center_usage'] ),
+    ];

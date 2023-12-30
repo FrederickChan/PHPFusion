@@ -24,5 +24,5 @@ $__BBCODE__[] = [
     "bbcode_start" => "[right]",
     "bbcode_end"   => "[/right]",
     "usage"        => "[right]".$locale['bb_right_usage']."[/right]",
-    'svg'          => '<i class="fas fa-align-right fa-lg"></i>'
+    "svg"         => get_image( 'bbcode_aright', $locale['bb_right_usage'] ),
 ];

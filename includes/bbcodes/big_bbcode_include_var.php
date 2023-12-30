@@ -24,5 +24,5 @@ $__BBCODE__[] = [
     "bbcode_start" => "[big]",
     "bbcode_end"   => "[/big]",
     "usage"        => "[big]".$locale['bb_big_usage']."[/big]",
-    "svg"          => "<i class='fa fa-text-height fa-lg'></i>"
+    "svg"          => get_image('bbcode_big', $locale['bb_big_description']),
 ];

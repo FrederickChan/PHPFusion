@@ -39,8 +39,7 @@ function form_text( $input_name, $label = "", $input_value = "", array $options 
 
     $input_id = trim( str_replace( "[", "-", $input_name ), "]" );
 
-    $input_value = clean_input_value( $input_value );
-
+    $input_value = clean_input_value( $input_value, $input_name );
     $options += [
         'input_name'         => clean_input_name( $input_name ),
         'type'               => 'text', // Possible value: text, number, price, password, email, url, color, date, datetime, datetime-local, month, range, search, tel, time, week, ip.
@@ -73,7 +72,7 @@ function form_text( $input_name, $label = "", $input_value = "", array $options 
         'append_form_value'  => '',
         'append_size'        => '',
         'append_class'       => 'btn-default',
-        'append_type'        => 'submit',
+        'append_type'        => 'submit', // button or submit
         'prepend_id'         => "p-" . $input_id . "-prepend",
         'append_id'          => "p-" . $input_id . "-append",
         'prepend_button'     => '',

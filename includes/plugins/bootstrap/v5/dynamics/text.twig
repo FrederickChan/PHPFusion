@@ -13,7 +13,7 @@
 {% endmacro %}
 
 {% macro input_prepend(options) %}
-    {% if (options['prepend_button'] and options['prepend_type'] and options['prepend_form_value'] and options['prepend_class'] and options['prepend_value']) %}
+    {% if (options['prepend_button'] and options['prepend_type'] and options['prepend_form_value'] and options['prepend_value']) %}
         <span class="input-group-text">
             <button id="{{ options['prepend_button_id'] }}" name="{{ options['prepend_button_name'] }}" type="{{ options['prepend_type'] }}" value="{{ options['prepend_form_value'] }}" class="btn {{ options['prepend_size'] ~ whitespace(options['prepend_class']) }}">
                 {{ options['prepend_value']|raw }}
@@ -27,7 +27,7 @@
 {% endmacro %}
 
 {% macro input_append(options) %}
-     {% if (options['append_button'] and options['append_type'] and options['append_form_value'] and options['append_class'] and options['append_value']) %}
+     {% if (options['append_button'] and options['append_type'] and options['append_form_value'] and options['append_value']) %}
          <span class="input-group-text">
              <button id="{{ options['append_button_id'] }}" name="{{ options['append_button_name'] }}" type="{{ options['append_type'] }}" value="{{ options['append_form_value'] }}" class="btn {{ options['append_size'] ~ whitespace(options['append_class']) }}">
                 {{ options['append_value']|raw }}

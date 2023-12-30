@@ -6,7 +6,7 @@ use PHPFusion\UserFieldsInput;
 
 abstract class UserFieldsValidate {
 
-    protected UserFieldsInput $userFieldsInput;
+    protected $userFieldsInput;
 
     /**
      * UserFieldsValidate constructor.
@@ -16,6 +16,5 @@ abstract class UserFieldsValidate {
     public function __construct( UserFieldsInput $userFieldsInput ) {
         $this->userFieldsInput = $userFieldsInput;
     }
-
 
 }

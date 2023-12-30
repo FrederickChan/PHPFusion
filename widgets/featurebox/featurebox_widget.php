@@ -20,7 +20,7 @@ $lang = file_exists(WIDGETS."featurebox/locale/".LANGUAGE.".php") ? WIDGETS."fea
 $widget_locale = fusion_get_locale('', $lang);
 
 $widget_title = $widget_locale['FBW_0100'];
-$widget_icon = 'featurebox.svg';
+$widshow_icon = 'featurebox.svg';
 $widget_description = $widget_locale['FBW_0101'];
 $widget_admin_file = "featurebox_admin.php";
 $widget_display_file = "featurebox.php";

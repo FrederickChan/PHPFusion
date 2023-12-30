@@ -21,5 +21,5 @@ $__BBCODE__[] = [
     "description" => $locale["bb_url_description"],
     "value"       => "url", "bbcode_start" => "[url]", "bbcode_end" => "[/url]",
     "usage"       => "[url(=" . $locale['bb_url_displayas'] . ")]" . $locale["bb_url_usage"] . "[/url]",
-    'svg'         => '<i class="fa fa-link fa-lg"></i>'
+    "svg"          => get_image('bbcode_url', $locale['bb_url_usage']),
 ];

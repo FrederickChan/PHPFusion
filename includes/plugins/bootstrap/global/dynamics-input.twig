@@ -23,7 +23,7 @@
 
 {% macro _daterange(input_name, label, input_value, options) %}
     <button type="button" data-type="text" {{ whitespace(options['data'])|raw }} class="btn{{ whitespace(options['inner_class'] ?? '') ~ whitespace(options['input_error'] ? 'btn-outline-danger' : 'btn-default') }}" name="{{ input_name }}" value="{{ input_value }}" id="{{ options['input_id'] }}">
-        {{ get_icon(options['icon'], 'me-1') }}<span id="{{ input_name }}_date">{{ input_value|raw }}</span>
+        {{ show_icon(options['icon'], 'me-1') }}<span id="{{ input_name }}_date">{{ input_value|raw }}</span>
         <input type="hidden" name="{{ input_name }}[start]" id="{{ options['input_id'] }}_start" value="{{ options['range_value'][0] }}"/>
         <input type="hidden" name="{{ input_name }}[end]" id="{{ options['input_id'] }}_end" value="{{ options['range_value'][1] }}"/>
     </button>

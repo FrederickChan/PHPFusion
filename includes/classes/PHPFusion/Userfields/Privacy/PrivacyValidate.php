@@ -41,7 +41,7 @@ class PrivacyValidate extends UserFieldsValidate {
 
         elseif (check_post( 'auth' ) && check_post( 'user_hash' )) {
 
-            if ($this->userFieldsInput->getAccess()) {
+            if ($this->userFieldsInput->checkUpdateAccess()) {
 
                 $settings = fusion_get_settings();
 
