@@ -60,7 +60,7 @@ class CoreSettings {
                 ['settings_name' => 'opening_page', 'settings_value' => 'index.php'],
                 ['settings_name' => 'locale', 'settings_value' => $_GET['localeset'] ?? 'English'],
                 ['settings_name' => 'enabled_languages', 'settings_value' => $_GET['localeset'] ?? 'English'],
-                ['settings_name' => 'theme', 'settings_value' => 'Magazine'],
+                ['settings_name' => 'theme', 'settings_value' => 'Luna'],
                 ['settings_name' => 'admin_theme', 'settings_value' => 'AdminLTE'],
                 ['settings_name' => 'default_search', 'settings_value' => 'all'],
                 ['settings_name' => 'exclude_left', 'settings_value' => ''],
@@ -1029,7 +1029,7 @@ class CoreSettings {
                     'template_sender_email' => '',
                     'template_language'     => $localeset
                 ],
-                // Account suspend
+                // Account unsuspend
                 [
                     'template_key'          => 'U_UNSUSPEND',
                     'template_format'       => 'html',
@@ -1037,6 +1037,28 @@ class CoreSettings {
                     'template_name'         => $locale['email_unsuspend_name'],
                     'template_subject'      => $locale['email_unsuspend_subject'],
                     'template_content'      => $locale['email_unsuspend_message'],
+                    'template_sender_name'  => '',
+                    'template_sender_email' => '',
+                    'template_language'     => $localeset
+                ],
+                [
+                    'template_key'          => 'U_UDEACTIVATE',
+                    'template_format'       => 'html',
+                    'template_active'       => '1',
+                    'template_name'         => $locale['email_user_deactivate_name'],
+                    'template_subject'      => $locale['email_user_deactivate_subject'],
+                    'template_content'      => $locale['email_user_deactivate_message'],
+                    'template_sender_name'  => '',
+                    'template_sender_email' => '',
+                    'template_language'     => $localeset
+                ],
+                [
+                    'template_key'          => 'U_CLOSED',
+                    'template_format'       => 'html',
+                    'template_active'       => '1',
+                    'template_name'         => $locale['email_user_close_name'],
+                    'template_subject'      => $locale['email_user_close_subject'],
+                    'template_content'      => $locale['email_user_close_message'],
                     'template_sender_name'  => '',
                     'template_sender_email' => '',
                     'template_language'     => $localeset

@@ -15,72 +15,72 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
-defined('IN_FUSION') || exit;
+defined( 'IN_FUSION' ) || exit;
 
 use PHPFusion\Admins;
 
 // Locales
-define('ARTICLE_LOCALE', fusion_get_inf_locale_path('articles.php', INFUSIONS.'articles/locale/'));
-define('ARTICLE_ADMIN_LOCALE', fusion_get_inf_locale_path('article_admin.php', INFUSIONS.'articles/locale/'));
+define( 'ARTICLE_LOCALE', fusion_get_inf_locale_path( 'articles.php', INFUSIONS . 'articles/locale/' ) );
+define( 'ARTICLE_ADMIN_LOCALE', fusion_get_inf_locale_path( 'article_admin.php', INFUSIONS . 'articles/locale/' ) );
 
 // Paths
-const ARTICLES = INFUSIONS.'articles/';
-const ARTICLE_CLASSES = INFUSIONS.'articles/classes/';
-const IMAGES_A = INFUSIONS.'articles/images/';
-const IMAGES_A_T = INFUSIONS.'articles/images/thumbs/';
+const ARTICLES = INFUSIONS . 'articles/';
+const ARTICLE_CLASSES = INFUSIONS . 'articles/classes/';
+const IMAGES_A = INFUSIONS . 'articles/images/';
+const IMAGES_A_T = INFUSIONS . 'articles/images/thumbs/';
 
 // Database
-const DB_ARTICLES = DB_PREFIX.'articles';
-const DB_ARTICLE_CATS = DB_PREFIX.'article_cats';
+const DB_ARTICLES = DB_PREFIX . 'articles';
+const DB_ARTICLE_CATS = DB_PREFIX . 'article_cats';
 
 // Admin Settings
-Admins::getInstance()->setAdminPageIcons("A", "<i class='admin-ico fa fa-fw fa-book'></i>");
-Admins::getInstance()->setCommentType("A", fusion_get_locale("A", LOCALE.LOCALESET."admin/main.php"));
-Admins::getInstance()->setLinkType("A", fusion_get_settings("siteurl")."infusions/articles/articles.php?article_id=%s");
+Admins::getInstance()->setAdminPageIcons( "A", "<i class='admin-ico fa fa-fw fa-book'></i>" );
+Admins::getInstance()->setCommentType( "A", fusion_get_locale( "A", LOCALE . LOCALESET . "admin/main.php" ) );
+Admins::getInstance()->setLinkType( "A", fusion_get_settings( "siteurl" ) . "infusions/articles/articles.php?article_id=%s" );
 
-$inf_settings = get_settings('articles');
+$inf_settings = get_settings( 'articles' );
 if (
-    (!empty($inf_settings['article_allow_submission']) && $inf_settings['article_allow_submission']) &&
-    (!empty($inf_settings['article_submission_access']) && checkgroup($inf_settings['article_submission_access']))
+    ( !empty( $inf_settings['article_allow_submission'] ) && $inf_settings['article_allow_submission'] ) &&
+    ( !empty( $inf_settings['article_submission_access'] ) && checkgroup( $inf_settings['article_submission_access'] ) )
 ) {
-    Admins::getInstance()->setSubmitData('a', [
+    Admins::getInstance()->setSubmitData( 'a', [
         'infusion_name' => 'articles',
-        'link'          => INFUSIONS."articles/article_submit.php",
+        'link'          => INFUSIONS . "articles/article_submit.php",
         'submit_link'   => "submit.php?stype=a",
-        'submit_locale' => fusion_get_locale('A', LOCALE.LOCALESET."admin/main.php"),
-        'title'         => fusion_get_locale('article_submit', LOCALE.LOCALESET."submissions.php"),
-        'admin_link'    => INFUSIONS."articles/articles_admin.php".fusion_get_aidlink()."&section=submissions&submit_id=%s"
-    ]);
+        'submit_locale' => fusion_get_locale( 'A', LOCALE . LOCALESET . "admin/main.php" ),
+        'title'         => fusion_get_locale( 'article_submit', LOCALE . LOCALESET . "submissions.php" ),
+        'admin_link'    => INFUSIONS . "articles/articles_admin.php" . fusion_get_aidlink() . "&section=submissions&submit_id=%s"
+    ] );
 }
 
-Admins::getInstance()->setFolderPermissions('articles', [
+Admins::getInstance()->setFolderPermissions( 'articles', [
     'infusions/articles/images/'        => TRUE,
     'infusions/articles/images/thumbs/' => TRUE
-]);
+] );
 
-Admins::getInstance()->setCustomFolder('A', [
+Admins::getInstance()->setCustomFolder( 'A', [
     [
         'path'  => IMAGES_A,
-        'URL'   => fusion_get_settings('siteurl').'infusions/articles/images/',
+        'URL'   => fusion_get_settings( 'siteurl' ) . 'infusions/articles/images/',
         'alias' => 'articles'
     ]
-]);
+] );
 
-if (defined('ARTICLES_EXISTS')) {
-    function articles_home_module($limit) {
+if ( defined( 'ARTICLES_EXISTS' ) ) {
+    function articles_home_module( $limit ) {
         $locale = fusion_get_locale();
 
-        if (fusion_get_settings('comments_enabled') == 1) {
-            $comments_query = "(SELECT COUNT(c1.comment_id) FROM ".DB_COMMENTS." c1
+        if ( fusion_get_settings( 'comments_enabled' ) == 1 ) {
+            $comments_query = "(SELECT COUNT(c1.comment_id) FROM " . DB_COMMENTS . " c1
                 WHERE c1.comment_item_id = ar.article_id AND c1.comment_type = 'A') AS comments_count,";
         }
 
-        if (fusion_get_settings('ratings_enabled') == 1) {
-            $ratings_query = "(SELECT COUNT(r1.rating_id) FROM ".DB_RATINGS." r1
+        if ( fusion_get_settings( 'ratings_enabled' ) == 1 ) {
+            $ratings_query = "(SELECT COUNT(r1.rating_id) FROM " . DB_RATINGS . " r1
                 WHERE r1.rating_item_id = ar.article_id AND r1.rating_type = 'A') AS ratings_count,";
         }
 
-        $result = dbquery("SELECT
+        $result = dbquery( "SELECT
             ar.article_id AS id,
             ar.article_subject AS title,
             ar.article_snippet AS content,
@@ -89,31 +89,31 @@ if (defined('ARTICLES_EXISTS')) {
             ac.article_cat_id AS cat_id,
             ac.article_cat_name AS cat_name,
             ar.article_thumbnail AS image_main,
-            ".(!empty($comments_query) ? $comments_query : '')."
-            ".(!empty($ratings_query) ? $ratings_query : '')."
+            " . ( !empty( $comments_query ) ? $comments_query : '' ) . "
+            " . ( !empty( $ratings_query ) ? $ratings_query : '' ) . "
             u.user_id, u.user_name, u.user_status
-            FROM ".DB_ARTICLES." AS ar
-            LEFT JOIN ".DB_ARTICLE_CATS." AS ac ON ac.article_cat_id = ar.article_cat
-            LEFT JOIN ".DB_USERS." AS u ON u.user_id = ar.article_name
+            FROM " . DB_ARTICLES . " AS ar
+            LEFT JOIN " . DB_ARTICLE_CATS . " AS ac ON ac.article_cat_id = ar.article_cat
+            LEFT JOIN " . DB_USERS . " AS u ON u.user_id = ar.article_name
             WHERE ar.article_draft = 0
-            AND ".groupaccess('ar.article_visibility')." ".(multilang_table("AR") ? "
-            AND ".in_group('ac.article_cat_language', LANGUAGE) : "")."
-            ORDER BY ar.article_datestamp DESC LIMIT ".$limit
+            AND " . groupaccess( 'ar.article_visibility' ) . " " . ( multilang_table( "AR" ) ? "
+            AND " . in_group( 'ac.article_cat_language', LANGUAGE ) : "" ) . "
+            ORDER BY ar.article_datestamp DESC LIMIT " . $limit
         );
 
         $module = [];
         $module[DB_ARTICLES]['blockTitle'] = $locale['home_0001'];
-        $module[DB_ARTICLES]['inf_settings'] = get_settings('articles');
+        $module[DB_ARTICLES]['inf_settings'] = get_settings( 'articles' );
 
-        if (dbrows($result) > 0) {
-            while ($data = dbarray($result)) {
-                $data['content'] = parse_text($data['content'], ['parse_smileys' => FALSE, 'default_image_folder' => NULL]);
-                $data['url'] = INFUSIONS.'articles/articles.php?article_id='.$data['id'];
-                $data['category_link'] = INFUSIONS.'articles/articles.php?cat_id='.$data['cat_id'];
-                $data['views'] = format_word($data['views_count'], $locale['fmt_read']);
+        if ( dbrows( $result ) > 0 ) {
+            while ( $data = dbarray( $result ) ) {
+                $data['content'] = parse_text( $data['content'], ['parse_smileys' => FALSE, 'default_image_folder' => NULL] );
+                $data['url'] = INFUSIONS . 'articles/articles.php?article_id=' . $data['id'];
+                $data['category_link'] = INFUSIONS . 'articles/articles.php?cat_id=' . $data['cat_id'];
+                $data['views'] = format_word( $data['views_count'], $locale['fmt_read'] );
 
-                if (!empty($data['image_main']) && file_exists(IMAGES_A_T.$data['image_main'])) {
-                    $data['image'] = IMAGES_A_T.$data['image_main'];
+                if ( !empty( $data['image_main'] ) && file_exists( IMAGES_A_T . $data['image_main'] ) ) {
+                    $data['image'] = IMAGES_A_T . $data['image_main'];
                 }
 
                 $module[DB_ARTICLES]['data'][] = $data;
@@ -128,14 +128,28 @@ if (defined('ARTICLES_EXISTS')) {
     /**
      * @uses articles_home_module()
      */
-    fusion_add_hook('home_modules', 'articles_home_module');
+    fusion_add_hook( 'home_modules', 'articles_home_module' );
 
-    function articles_cron_job24h_users_data($data) {
-        dbquery("DELETE FROM ".DB_ARTICLES." WHERE article_name=:user_id", [':user_id' => $data['user_id']]);
+    function articles_cron_job24h_users_data( $data ) {
+        dbquery( "DELETE FROM " . DB_ARTICLES . " WHERE article_name=:user_id", [':user_id' => $data['user_id']] );
     }
 
     /**
      * @uses articles_cron_job24h_users_data()
      */
-    fusion_add_hook('cron_job24h_users_data', 'articles_cron_job24h_users_data');
+    fusion_add_hook( 'cron_job24h_users_data', 'articles_cron_job24h_users_data' );
+
+    function articles_user_action_hook( $action, $user_id ) {
+        if ( $action == 'delete_user' ) {
+            dbquery( "DELETE FROM " . DB_ARTICLES . " WHERE article_name=:uid", [':uid' => $user_id] );
+
+            dbquery( "DELETE FROM " . DB_SUBMISSIONS . " WHERE submit_type=:submit AND submit_user=:uid", [
+                ':submit' => 'a', ':uid' => $user_id] );
+        }
+    }
+
+    /**
+     * @see articles_user_action_hook()
+     */
+    fusion_add_hook( 'fusion_user_action', 'articles_user_actions_hook', 10, [], 2 );
 }

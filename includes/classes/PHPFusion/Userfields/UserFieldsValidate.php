@@ -17,4 +17,6 @@ abstract class UserFieldsValidate {
         $this->userFieldsInput = $userFieldsInput;
     }
 
+
+
 }

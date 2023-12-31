@@ -340,6 +340,7 @@ class AccountsValidate extends UserFieldsValidate {
      * Email
      */
     public function setUserEmail() {
+
         $locale = fusion_get_locale();
         $settings = fusion_get_settings();
         // has email posted
@@ -438,6 +439,7 @@ class AccountsValidate extends UserFieldsValidate {
 
     /**
      * Handle User Password Input and Validation
+     * This one only left for registration only , no longer applicable to edit profile
      *
      * @return array|false
      */
@@ -559,12 +561,16 @@ class AccountsValidate extends UserFieldsValidate {
                                             ':p3'  => $_newUserPasswordSalt,
                                         ] );
 
-                                        addnotice( 'success', "Password has been changed successfuly.\n As a security measure please log in again with your new password.");
+                                        addnotice( 'success', "Password has been changed successfuly.\n As a security measure please log in again with your new password." );
 
+                                        require_once INCLUDES . 'sendmail_include.php';
                                         // Send Email
                                         fusion_sendmail( 'U_PASS', display_name( $this->userFieldsInput->userData ), $this->userFieldsInput->userData['user_email'], [
                                             'subject' => $locale['email_passchange_subject'],
                                             'message' => $locale['email_passchange_message'],
+                                            'replace' => [
+                                                '[PASSWORD]' => $user_password
+                                            ]
                                         ] );
 
                                         // Reset cookie for current session and logs out user
@@ -613,7 +619,6 @@ class AccountsValidate extends UserFieldsValidate {
                     if ( isset( $response['title'] ) && isset( $response['text'] ) ) {
                         addnotice( 'danger', $response['title'] . "\n" . $response['text'] );
                     }
-
                 }
             }
         }

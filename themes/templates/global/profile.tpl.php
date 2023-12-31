@@ -94,20 +94,49 @@ if ( !function_exists( 'display_profile_form' ) ) {
     }
 }
 
-if ( !function_exists( 'display_user_profile_settings' ) ) {
-    /**
-     * Edit profile
-     *
-     * @param array $info
-     */
-    function display_user_settings_home( array $info ) {
+
+// New User Profile Proposals
+if ( !function_exists( 'display_up_settings' ) ) {
+
+    function navigation_panel( $info ) {
+
+        if ( !empty( $info ) ) {
+            $menu = '';
+            $_get = get( 'section' );
+            $i = 0;
+            foreach ( $info as $key => $rows ) {
+
+                $active = ( !$i && !$_get || $_get == $key ? ' active' : '' );
+
+                $menu .= '<li class="nav-item" data-bs-dismiss="offcanvas" role="presentation">'
+                    . '<a class="nav-link d-flex mb-0' . $active . '" href="' . $rows['link'] . '" aria-selected="true" role="tab">' . $rows['title'] . '</a>'
+                    . '</li>';
+
+                $i++;
+            }
+        }
+
+        return fusion_get_function( 'openside', '' )
+            . '<ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0" role="tablist">'
+            . ( $menu ?? '' )
+            . '</ul>'
+            . fusion_get_function( 'closeside' );
+    }
+
+    // Edit profile account settings
+    function display_up_settings( array $info ) {
         // Bootstrap 5 notion
         $userdata = fusion_get_userdata();
         $settings = fusion_get_settings();
 
+        Panels::getInstance()->hidePanel( 'RIGHT' );
+        Panels::addPanel( 'navigation_panel', navigation_panel( $info['section'] ), 1, USER_LEVEL_MEMBER, 1 );
+
+
         echo '<!--editprofile_pre_idx-->';
         ?>
         <?php if ( empty( $info['ref'] ) ) : ?>
+
             <div class="profile-idx pt-3 mb-5">
                 <div class="row align-items-center">
                     <div class="col-xs-12 col-sm-8 col-md-8">
@@ -294,7 +323,9 @@ if ( !function_exists( 'display_user_profile_settings' ) ) {
             </div>
             <?php closeside() ?>
         <?php endif ?>
+
         <?php elseif ( $info['ref'] == 'password' ) : ?>
+
         <!--    Password_page-->
         <?php openside( 'Change password' ) ?>
         <div class="row">
@@ -306,7 +337,28 @@ if ( !function_exists( 'display_user_profile_settings' ) ) {
                 <?php echo $info['password_submit_button'] ?>
             </div>
             <?php echo $info['password_form_close'] ?>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="border border-start border-top-0 border-bottom-0 border-end-0 p-3">
+                <h5>Notes:</h5>
+                <?php echo $info['password_text'] ?>
+            </div>
+        </div>
+        <?php closeside() ?>
 
+        <?php elseif ( $info['ref'] == 'admin_password' ) : ?>
+
+        <!--    Admin_password_page-->
+        <?php openside( 'Change admin password' ) ?>
+        <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-9">
+            <?php echo $info['password_form_open'] ?>
+            <?php echo $info['password_field'] ?>
+            <?php echo $info['password_email_field'] ?>
+            <div class="text-end">
+                <?php echo $info['password_submit_button'] ?>
+            </div>
+            <?php echo $info['password_form_close'] ?>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3">
             <div class="border border-start border-top-0 border-bottom-0 border-end-0 p-3">
@@ -357,6 +409,7 @@ if ( !function_exists( 'display_user_profile_settings' ) ) {
                 $info['user_email_form_close'] .
                 closemodal();
             ?>
+
             <!--            Profile Info-->
             <div class="list-group-item py-3 mb-3">
                 <div class="row align-items-center">
@@ -433,7 +486,7 @@ if ( !function_exists( 'display_user_profile_settings' ) ) {
                             <?php echo show_icon( 'verified', 'icon-lg' ) ?>
                             <h6>Account Management</h6>
                             <div class="text-smaller">Freeze or delete account</div>
-                            <a href="<?php echo $info['link']['close'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
+                            <a href="<?php echo $info['section']['close']['link'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
                         </div>
                     </div>
                 </div>
@@ -490,41 +543,44 @@ if ( !function_exists( 'display_user_profile_settings' ) ) {
             </div>
         </div>
     <?php endif; ?>
-
-
         <!--editprofile_sub_idx-->
         <?php
-        function navigation_panel( $info ) {
-
-            if ( !empty( $info ) ) {
-                $menu = '';
-                $_get = get( 'section' );
-                $i = 0;
-                foreach ( $info as $key => $rows ) {
-
-                    $active = ( !$i && !$_get || $_get == $key ? ' active' : '' );
-
-                    $menu .= '<li class="nav-item" data-bs-dismiss="offcanvas" role="presentation">'
-                        . '<a class="nav-link d-flex mb-0' . $active . '" href="' . $rows['link'] . '" aria-selected="true" role="tab">' . $rows['title'] . '</a>'
-                        . '</li>';
-
-                    $i++;
-                }
-            }
-
-            return fusion_get_function( 'openside', '' )
-                . '<ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0" role="tablist">'
-                . ( $menu ?? '' )
-                . '</ul>'
-                . fusion_get_function( 'closeside' );
-        }
-
-        Panels::getInstance()->hidePanel( 'RIGHT' );
-        Panels::addPanel( 'navigation_panel', navigation_panel( $info['section'] ), 1, USER_LEVEL_MEMBER, 1 );
     }
 
-    function display_userprofile_details() {
+    // Close account template
+    function display_up_close( array $info ) {
+        $settings = fusion_get_settings();
+        // we need a template storage and store it to db.
+        Panels::getInstance()->hidePanel( 'RIGHT' );
+        Panels::addPanel( 'navigation_panel', navigation_panel( $info['section'] ), 1, USER_LEVEL_MEMBER, 1 );
 
+        opentable( 'Deactivating or deleting your account' );
+        ?>
+        <div class="text-start">If you wish to take a break from <?php echo $settings['sitename'] ?> you can temporarily deactivate this account. If you want to permanently delete your account, please take note that all data will be permanently lost and cannot be recovered once you confirm your deletion.</div>.
+        <h6 class="strong">Before you go</h6>
+        <ol>
+        <li>Download a backup of your data <a href="" class="strong">here</a></li>
+        <li>All your data will be <strong>permanently erased</strong> and you will lose all your data as a result</li>
+        </ol>
+        <?php echo $info['close_openform'] ?>
+        <div class="list-group">
+        <?php echo $info['close_options'] ?>
+        </div>
+        <div class="spacer-sm">
+        <a href="<?php echo BASEDIR.'edit_profile.php' ?>" class="btn btn-default">Cancel</a>
+        <?php echo $info['close_button'] ?>
+        </div>
+        <?php echo $info['close_closeform'] ?>
+
+        <?php
+        closetable();
+    }
+
+    function display_up_privacy( array $info ) {
+        $settings = fusion_get_settings();
+        // we need a template storage and store it to db.
+        Panels::getInstance()->hidePanel( 'RIGHT' );
+        Panels::addPanel( 'navigation_panel', navigation_panel( $info['section'] ), 1, USER_LEVEL_MEMBER, 1 );
     }
 
 }

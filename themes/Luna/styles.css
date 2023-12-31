@@ -192,6 +192,26 @@ a {
   top: 40px;
   left: 4px;
 }
+.list-group.check-group .form-check {
+  background: var(--bs-list-group-item-bg);
+  position: relative;
+  display: block;
+  padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+  color: var(--bs-list-group-color);
+  text-decoration: none;
+  background-color: var(--bs-list-group-bg);
+  border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+}
+.list-group.check-group .form-check label {
+  padding-right: 40px;
+  position: relative;
+}
+.list-group.check-group .form-check label input {
+  float: right;
+  right: 15px;
+  top: 15px;
+  position: absolute;
+}
 .card {
   --bs-card-spacer-y: 1.25rem;
   --bs-card-spacer-x: 1.25rem;
@@ -900,4 +920,3 @@ div[data-fusion="true"] strong {
 .panel-txtarea button:hover img {
   filter: opacity(1);
 }
-/*# sourceMappingURL=styles.css.map */

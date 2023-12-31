@@ -160,10 +160,11 @@ if ( !function_exists( 'sendmail_template' ) ) {
         $data = dbarray( dbquery( "SELECT * FROM " . DB_EMAIL_TEMPLATES . " WHERE template_key=:template AND template_language=:lang LIMIT 1", [':template' => $template_key, ':lang' => LANGUAGE] ) );
 
         $replace += [
-            "[SITENAME]" => $settings['sitename'],
-            "[SITEURL]"  => $settings['siteurl'],
-            "[SENDER]"   => $sender_name,
-            "[RECEIVER]" => $name,
+            "[SITENAME]"     => $settings['sitename'],
+            "[SITEURL]"      => $settings['siteurl'],
+            '[SITEUSERNAME]' => $settings['siteusername'],
+            "[SENDER]"       => $sender_name,
+            "[RECEIVER]"     => $name,
         ];
 
         $message_subject = strtr( $data['template_subject'], $replace );

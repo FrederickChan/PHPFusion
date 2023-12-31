@@ -26,7 +26,7 @@ use PHPFusion\Hooks;
  * @param int    $que           Optional, values 1-10, where 1 runs first and 10 runs last.
  * @param array  $default_args  Optional, the default state of parameter during adding hook.
  * @param int    $accepted_args Optional, the limitation of the hook parameters the hook can accept.
- *
+ * @see $function
  * @return bool
  */
 function fusion_add_hook($name, $function, $que = 10, $default_args = [], $accepted_args = 1) {

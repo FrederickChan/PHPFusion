@@ -3,9 +3,7 @@ namespace PHPFusion\Userfields\Accounts;
 
 use GoogleAuthenticator\GoogleAuthenticator;
 use GoogleAuthenticator\GoogleQrUrl;
-use PHPFusion\Geomap;
 use PHPFusion\LegalDocs;
-use PHPFusion\PasswordAuth;
 use PHPFusion\Userfields\UserFieldsForm;
 
 /**
@@ -16,67 +14,141 @@ use PHPFusion\Userfields\UserFieldsForm;
  */
 class AccountsForm extends UserFieldsForm {
 
-    /**
-     * User Name input field
-     *
-     * @return string
-     */
-    public function usernameInputField() {
+    public function displayInputFields() {
 
         $locale = fusion_get_locale();
 
-        if ( iADMIN || $this->userFields->username_change ) {
+        $ref = get( 'ref' );
 
-            return form_text( 'user_name', $locale['u127'], $this->userFields->userData['user_name'], [
-                'max_length'     => 30,
-                'required'       => TRUE,
-                'floating_label' => defined( 'FLOATING_LABEL' ),
-                'placeholder'    => defined( 'FLOATING_LABEL' ) ? $locale['u127'] : '',
-                'error_text'     => $locale['u122'],
-            ] );
+        // we go with email first
+        //$this->info = $this->setEmptyInput() + $this->info;
+
+        $info = [
+            'ref'                         => $ref,
+            'user_name'                   => $this->accountUsername()->usernameInputField(),
+            'user_totp_status'            => !empty( $this->userData['user_totp'] ),
+            'user_password_changed'       => $this->userFields->userData['user_password_changed'],
+            'user_admin_password_changed' => $this->userFields->userData['user_admin_password_changed'],
+            'link'                        => [
+                'details'        => BASEDIR . 'edit_profile.php?ref=details',
+                'totp'           => BASEDIR . 'edit_profile.php?ref=authenticator',
+                'password'       => BASEDIR . 'edit_profile.php?ref=password',
+                'admin_password' => BASEDIR . 'edit_profile.php?ref=admin_password',
+                'google'         => BASEDIR . 'edit_profile.php?ref=google',
+                // Authenticator download links
+                'appstore'       => 'https://apps.apple.com/au/app/google-authenticator/id388497605',
+                'playstore'      => 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US',
+            ]
+        ];
+
+        if ( $ref == 'details' ) {
+
+            $info = array_merge( $info, $this->accountProfile()->profileInputField() );
+
+        } else if ( $ref == 'password' ) {
+
+            $info = array_merge( $info, $this->accountPassword()->profilePasswordField() );
+
+        } else if ( $ref == 'admin_password' ) {
+
+            $info = array_merge( $info, $this->accountPassword()->adminprofilePasswordField() );
+
+        } else if ( $ref == 'authenticator' ) {
+
+            $info = array_merge( $info, $this->accountTwoFactor()->profileTOTPField());
+
+        } else {
+
+            $info = array_merge( $info, $this->accountEmail()->emailInputField() );
+            //$this->info['user_password'] = $input->passwordInputField();
+            //$this->info['user_admin_password'] = $input->adminpasswordInputField();
+            //$this->info['user_avatar'] = $input->avatarInput();
         }
-        return form_hidden( "user_name", "", $this->userFields->userData["user_name"] );
+
+        add_to_jquery( "
+        var mailButtonId = $('#email_code-append-btn');        
+        mailButtonId.on('click', function() {
+            mailButtonId.addClass('disabled');
+            var sendVerificationCode = $.post('" . INCLUDES . "api/?api=email_code', {
+            'user_id': '" . $this->userFields->userData['user_id'] . "',
+            'user_hash': '" . $this->userFields->userData['user_password'] . "',
+            });
+            sendVerificationCode.done(function( data ) {
+                var json_response = $.parseJSON(data);
+                var cssClass = '';
+                if (json_response.response > 200) {
+                    cssClass = 'error';
+                }
+                addNotice(json_response.title, json_response.text, cssClass);
+            });
+            var sec = 30
+            var timer = setInterval(function() {
+               mailButtonId.text(sec-- + 's').removeClass('text-primary');
+               if (sec == -1) {
+                  mailButtonId.text('Second Code').removeClass('disabled').addClass('text-primary');
+                  clearInterval(timer);
+               }
+            }, 1000);
+        });
+        " );
+
+
+        //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
+        //$this->info['user_admin_password'] = $locale['u131'];
+
+
+        //if ( $this->method == 'validate_update' ) {
+        //    // User Password Verification for Email Change
+        //    $footer = openmodal( 'verifyPassword', 'Verify password', ['hidden' => TRUE] )
+        //        . '<p class="small">Your password is required to proceed. Please enter your current password to update your profile.</p>'
+        //        . form_text( 'user_verify_password', $locale['u135a'], '', ['required' => TRUE, 'type' => 'password', 'autocomplete_off' => TRUE, 'max_length' => 64, 'error_text' => $locale['u133'], 'placeholder' => $locale['u100'],] )
+        //        . modalfooter( form_button( 'confirm_password', $locale['save_changes'], 'confirm_password', ['id' => 'updateProfilePass', 'class' => 'btn-primary'] ) )
+        //        . closemodal();
+        //
+        //    add_to_footer( $footer );
+        //
+        //    // Port to edit profile.js
+        //    add_to_jquery( "
+        //    var submitCallModal = function(dom) {
+        //       var form = dom.closest('form'), hashInput = form.find('input[name=\"user_hash\"]');
+        //        $('button[name=\"" . $this->postName . "_btn\"]').on('click', function(e) {
+        //           e.preventDefault();
+        //           $(this).prop('disabled', true);
+        //           $('#verifyPassword-Modal').modal('show');
+        //           $('#user_verify_password').on('input propertychange paste', function() {
+        //                hashInput.val( $(this).val() );
+        //           });
+        //           $('button[name=\"confirm_password\"]').on('click', function() {
+        //                $('#verifyPassword-Modal').modal('hide');
+        //                form[0].submit();
+        //           });
+        //        });
+        //    };
+        //
+        //    var email = $('#user_email').val();
+        //    $('#user_email').on('input propertychange paste', function() {
+        //        var requireModal = false;
+        //        if ($(this).val() != email) {
+        //            requireModal = true;
+        //        } else {
+        //            requireModal = false;
+        //        }
+        //        if (requireModal) {
+        //            // when postname button is clicked, require the modal.
+        //            submitCallModal($(this));
+        //        }
+        //    });
+        //    " );
+        //
+        //} else {
+        //
+        //    //$info['validate'] = $input->captchaInput();
+        //    //$info['terms'] = $input->termInput();
+        //}
+
+        return $info;
     }
 
-    /**
-     * Shows password input field
-     *
-     * @return string
-     */
-    public function passwordInputField() {
-
-        $locale = fusion_get_locale();
-
-        $settings = fusion_get_settings();
-
-
-        if ( $this->userFields->registration || $this->userFields->moderation ) {
-
-            return form_text( 'user_password1', $locale['u134a'], '', [
-                    'type'             => 'password',
-                    'autocomplete_off' => TRUE,
-
-                    'max_length'        => 64,
-                    'error_text'        => $locale['u134'] . $locale['u143a'],
-                    'required'          => !$this->userFields->moderation,
-                    'password_strength' => TRUE,
-                    'ext_tip'           => $password_tip,
-                    'class'             => 'm-b-15'
-                ] ) .
-                form_text( 'user_password2', $locale['u134b'], '', [
-                    'type'             => 'password',
-                    'autocomplete_off' => TRUE,
-
-                    'max_length' => 64,
-                    'error_text' => $locale['u133'],
-                    'required'   => !$this->userFields->moderation
-                ] );
-        }
-
-
-        // form_hidden( 'user_hash', '', $this->userFields->userData['user_password'] );
-
-    }
 
     /**
      * Admin Password - not available for everyone except edit profile.
@@ -152,68 +224,6 @@ class AccountsForm extends UserFieldsForm {
         return '';
     }
 
-    /**
-     * Email input field modal
-     *
-     * @return array
-     */
-    public function emailInputField() {
-
-        $locale = fusion_get_locale();
-        $userdata = fusion_get_userdata();
-
-        $ext_tip = '';
-        if ( !$this->userFields->registration ) {
-
-            $ext_tip = ( iADMIN && checkrights( 'M' ) ) ? '' : $locale['u100'];
-
-            $info['user_email_form_open'] = openform( 'email_change_frm', 'POST' );
-            $info['user_email_form_close'] = closeform();
-            $info['user_email_change'] = form_text( 'email_code', 'Email verification code', '', [
-                'append'            => TRUE,
-                'append_id'         => 'SendEmailCode',
-                'append_class'      => 'btn-text text-primary',
-                'append_type'       => 'button',
-                'append_button'     => TRUE,
-                'append_form_value' => 'send_code',
-                'append_value'      => 'Send Code',
-                'required'          => TRUE,
-                'error_text'        => 'Validation code error'
-            ] );
-
-            $info['user_email_submit'] = form_button( 'user_email_submit', 'Confirm', 'confirm', [
-                'class' => 'btn-primary'
-            ] );
-
-        }
-
-        // now we need to add js code to send email
-        // need to prevent this from breaking from other broken js
-        $info['user_email'] = form_text( 'user_email', $locale['u128'], $this->userFields->userData['user_email'], [
-            'type'           => 'email',
-            "required"       => TRUE,
-            'floating_label' => defined( 'FLOATING_LABEL' ),
-            'max_length'     => '100',
-            'error_text'     => $locale['u126'],
-            'ext_tip'        => $ext_tip,
-            'placeholder'    => defined( 'FLOATING_LABEL' ) ? 'john.doe@mail.com' : '',
-        ] );
-
-        return $info;
-
-        /*
-        add_to_jquery("
-        var current_email = $('#user_email') . val();
-        $('#user_email') . on( 'input change propertyChange paste', function ( e){
-            if ( current_email !== $(this) . val() ) {
-                $('#user_password_verify-field') . removeClass( 'display-none' );
-            } else {
-                $('#user_password_verify-field') . addClass( 'display-none' );
-            }
-        } );
-        ");
-        */
-    }
 
     public function moveToPrivacy() {
         $info['user_hide_phone'] = form_checkbox( 'user_hide_phone', $locale['u107'], $this->userFields->userData['user_hide_phone'], [
@@ -227,191 +237,6 @@ class AccountsForm extends UserFieldsForm {
             'ext_tip' => $locale['u106']
         ] );
     }
-
-    /**
-     * User Fields field page
-     *
-     * @return array
-     */
-    public function profileInputField() {
-
-        $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
-
-        $info['user_firstname'] = form_text( 'user_firstname', $locale['u010'], $this->userFields->userData['user_firstname'], [
-        ] );
-        $info['user_lastname'] = form_text( 'user_lastname', $locale['u011'], $this->userFields->userData['user_lastname'], [
-        ] );
-        $info['user_addname'] = form_text( 'user_addname', $locale['u012'], $this->userFields->userData['user_addname'], [
-        ] );
-        $info['user_name_display'] = form_select( 'user_displayname', 'Display username', '1', [
-            'options' => [
-                0 => 'Display as Username',
-                1 => 'Display as Real name'
-            ]
-        ] );
-
-        $info['user_name'] = form_text( 'user_name', 'Username', $this->userFields->userData['user_name'], [
-            'deactivate' => !$settings['username_change'],
-            'required'   => $settings['username_change'],
-            'max_length' => 30,
-            'error_text' => $locale['u122'],
-        ] );
-
-        /*
-         *  const request = await fetch("https://ipinfo.io/json?token=you_token");
-            const jsonResponse = await request.json();
-            console.log(jsonResponse.ip, jsonResponse.country);
-         */
-        $info['user_phone'] = form_select( 'user_phonecode', $locale['u013'], '', [
-            'options' => ( new Geomap() )->callingCodesOpts(),
-            'stacked' => form_text( 'user_phone', '', $this->userFields->userData['user_phone'], [
-                'placeholder' => '',
-                'class'       => 'mb-0 ms-1 flex-fill',
-            ] )
-        ] );
-
-        $info['user_bio'] = form_textarea( 'user_bio', $locale['u015'], $this->userFields->userData['user_bio'], [
-            'wordcount' => TRUE, 'maxlength' => 255] );
-
-        $info['form_open'] = openform( 'userSettingsFrm', 'POST' );
-        $info['form_close'] = closeform();
-        $info['button'] = $this->renderButton();
-
-        return $info + $this->userFields->getUserFields();
-    }
-
-    /**
-     * @return array
-     */
-    public function profilePasswordField() {
-
-        $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
-
-        $info['password_form_open'] = openform( 'passwordSettings', 'POST' );
-
-        $info['password_form_close'] = closeform();
-
-
-        $password_strength[] = sprintf( $locale['u147'], (int)$settings['password_length'] );
-        if ( $settings['password_char'] or $settings['password_num'] or $settings['password_case'] ) {
-            $strength_test = [];
-            if ( $settings['password_case'] ) {
-                $strength_test[] = $locale['u147b'];
-            }
-            if ( $settings['password_num'] ) {
-                $strength_test[] = $locale['u147c'];
-            }
-            if ( $settings['password_char'] ) {
-                $strength_test[] = $locale['u147d'];
-            }
-            $password_strength[] = sprintf( $locale['u147a'], format_sentence( $strength_test ) );
-        }
-        $info['password_text'] = format_sentence( $password_strength );
-
-        $info['password_field'] = form_text( 'user_password', $locale['u135a'], '', [
-                'type'             => 'password',
-                'autocomplete_off' => TRUE,
-                'max_length'       => 64,
-                'error_text'       => $locale['u133'],
-                'class'            => 'm-b-15'
-            ] )
-            . form_text( 'user_password1', $locale['u134'], '', [
-                'type'              => 'password',
-                'autocomplete_off'  => TRUE,
-                'max_length'        => 64,
-                'error_text'        => $locale['u133'],
-                'tip'               => $locale['u147'],
-                'password_strength' => TRUE,
-                'class'             => 'm-b-15'
-            ] )
-            . form_text( 'user_password2', $locale['u134b'], '', [
-                'type'             => 'password',
-                'autocomplete_off' => TRUE,
-                'max_length'       => 64,
-                'error_text'       => $locale['u133'],
-                'class'            => 'm-b-15'
-            ] );
-
-        $info['password_email_field'] = form_text( 'email_code', 'Email verification code', '', [
-            'append'            => TRUE,
-            'append_id'         => 'SendEmailCode',
-            'append_class'      => 'btn-text text-primary',
-            'append_type'       => 'button',
-            'append_button'     => TRUE,
-            'append_form_value' => 'send_code',
-            'append_value'      => 'Send Code',
-            'required'          => TRUE,
-            'error_text'        => 'Validation code error',
-            'ext_tip'           => 'Send the verification code to ' . censortext( $this->userFields->userData['user_email'] ) . ' and the code will be valid for 10 minutes'
-        ] );
-
-        $info['password_submit_button'] = form_button( 'update_password_btn', 'Submit', 'update_password_btn', ['class' => 'btn-primary'] );
-
-        return $info;
-    }
-
-
-    public function profileTOTPField() {
-
-        $settings = fusion_get_settings();
-
-        $g = new GoogleAuthenticator();
-
-        $info['totp_form_open'] = openform( 'userTOTPSettings', 'POST' );
-        $info['totp_form_close'] = closeform();
-        $info['totp_submit_button'] = form_button( 'user_totp_submit', 'Submit', '', [
-            'class' => 'btn-primary'
-        ] );
-        $info['totp_email_field'] = form_text( 'email_code', 'Email verification code', '', [
-            'append'            => TRUE,
-            'append_id'         => 'SendEmailCode',
-            'append_class'      => 'btn-text text-primary',
-            'append_type'       => 'button',
-            'append_button'     => TRUE,
-            'append_form_value' => 'send_code',
-            'append_value'      => 'Send Code',
-            'required'          => TRUE,
-            'error_text'        => 'Validation code error',
-            'ext_tip'           => 'Send the verification code to ' . censortext( $this->userFields->userData['user_email'] ) . ' and the code will be valid for 10 minutes'
-        ] );
-
-        if ( !fusion_get_userdata( 'user_totp' ) ) {
-            // New setup
-            if ( empty( $_SESSION['totp_secret'] ) ) {
-
-                $user_secret = $g->generateSecret();
-                $_SESSION['totp_secret'] = $user_secret;
-
-            } else {
-
-                $user_secret = $_SESSION['totp_secret'];
-            }
-
-            //Optionally, you can use $g->generateSecret() to generate your secret
-            //$secret = $g->generateSecret();
-            $info['totp_key'] = $user_secret;
-            $info['totp_form_open'] = openform( 'userTOTPSettings', 'POST' );
-            $info['totp_form_close'] = closeform();
-            $info['totp_qr_image'] = GoogleQrUrl::generate( $this->userFields->userData['user_email'], $user_secret, $settings['sitename'] );
-
-
-            $info['totp_code_field'] = form_text( 'totp_code', 'Authenticator Code (TOTP)', '', [
-                    'required'    => TRUE,
-                    'placeholder' => 'Please enter',
-                    'ext_tip'     => '6 digits code on your google authenticator'
-                ] ) . form_hidden( 'user_totp', '', $user_secret );
-
-            $info['totp_submit_button'] = form_button( 'user_totp_submit', 'Submit', '', [
-                'class' => 'btn-primary'
-            ] );
-        }
-
-
-        return $info;
-    }
-
 
     public function getCustomFields() {
         $user_fields = '';
@@ -428,7 +253,6 @@ class AccountsForm extends UserFieldsForm {
 
         return $user_fields;
     }
-
 
     /**
      * Avatar input
@@ -574,25 +398,5 @@ class AccountsForm extends UserFieldsForm {
         return '';
     }
 
-    /**
-     * @return string
-     */
-    public function renderButton() {
 
-        $disabled = $this->userFields->displayTerms == 1;
-
-        $this->userFields->options += $this->userFields->defaultInputOptions;
-
-        //        $html = (!$this->userFields->skipCurrentPass) ? form_hidden( 'user_hash', '', $this->userFields->userData['user_password'] ) : '';
-
-        return
-            form_hidden( $this->userFields->postName, '', 'submit' ) .
-
-            form_button( $this->userFields->postName . '_btn', 'Save Profile', 'submit', [
-                    "deactivate" => $disabled,
-                    "class"      => $this->userFields->options['btn_post_class'] ?? 'btn-primary'
-                ]
-            );
-
-    }
 }

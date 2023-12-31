@@ -15,6 +15,9 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
+use PHPFusion\Admins;
+
 defined('IN_FUSION') || exit;
 
 // Locales
@@ -27,4 +30,20 @@ const SHOUTBOX = INFUSIONS.'shoutbox_panel/';
 const DB_SHOUTBOX = DB_PREFIX."shoutbox";
 
 // Admin Settings
-\PHPFusion\Admins::getInstance()->setAdminPageIcons("S", "<i class='admin-ico fa fa-fw fa-commenting'></i>");
+if (infusion_exists('shoutbox_panel')) {
+
+    Admins::getInstance()->setAdminPageIcons('S', "<i class='admin-ico fa fa-fw fa-commenting'></i>");
+
+    function shoutbox_user_action_hook($action, $user_id) {
+
+        if ($action == 'delete_user') {
+            dbquery("DELETE FROM ".DB_SHOUTBOX." WHERE shout_name=:uid", [':uid'=>$user_id]);
+        }
+    }
+
+    /**
+     * @see shoutbox_user_action_hook()
+     */
+    fusion_add_hook( 'fusion_user_action', 'shoutbox_user_action_hook', 10, [], 2 );
+
+}

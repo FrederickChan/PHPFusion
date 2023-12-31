@@ -255,6 +255,31 @@ a {
     }
 }
 
+.list-group.check-group {
+    .form-check {
+
+        background: var(--bs-list-group-item-bg);
+        position: relative;
+        display: block;
+        padding: var(--bs-list-group-item-padding-y) var(--bs-list-group-item-padding-x);
+        color: var(--bs-list-group-color);
+        text-decoration: none;
+        background-color: var(--bs-list-group-bg);
+        border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+
+        label {
+            padding-right:40px;
+            position: relative;
+            input {
+                float: right;
+                right:15px;
+                top: 15px;
+                position: absolute;
+            }
+        }
+    }
+}
+
 .card {
     --bs-card-spacer-y: 1.25rem;
     --bs-card-spacer-x: 1.25rem;
@@ -566,6 +591,7 @@ a.stretched:after {
 
 .form-control {
     border: 1px solid var(--input-border-color);
+
     &:focus {
         color: var(--bs-gray-700);
         background-color: #fff;
@@ -702,7 +728,7 @@ div[data-fusion="true"] {
 
 .select2-container--bootstrap-5.select2-container--focus .select2-selection, .select2-container--bootstrap-5.select2-container--open .select2-selection {
     border-color: var(--bs-primary);
-    box-shadow:none;
+    box-shadow: none;
 }
 
 // Textarea Editor
@@ -1127,7 +1153,7 @@ div[data-fusion="true"] {
         height: 32px;
         border-color: transparent;
         background: transparent;
-        transition:none;
+        transition: none;
 
         img {
             filter: opacity(.5);

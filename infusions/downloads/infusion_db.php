@@ -137,4 +137,42 @@ if (defined('DOWNLOADS_EXISTS')) {
      * @uses downloads_home_module()
      */
     fusion_add_hook('home_modules', 'downloads_home_module');
+
+    function downloads_user_action_hook($action, $user_id) {
+        if ($action == 'delete_user') {
+            dbquery( "DELETE FROM " . DB_DOWNLOADS . " WHERE download_name=:uid", [':uid' => $user_id] );
+
+            // Delete download submissions
+            $result = dbquery( "SELECT submit_criteria FROM " . DB_SUBMISSIONS . " WHERE submit_type=:submit AND submit_user=:uid", [
+                ':uid'    => $user_id,
+                ':submit' => 'd'
+            ] );
+            if ( dbrows( $result ) ) {
+                while ( $rows = dbarray( $result ) ) {
+                    $data = unserialize( stripslashes( $rows['submit_criteria'] ) );
+
+                    if ( !empty( $data['download_file'] ) && file_exists( INFUSIONS . 'downloads/files/' . $data['download_file'] ) ) {
+                        unlink( INFUSIONS . 'downloads/files/' . $data['download_file'] );
+                    }
+                    if ( !empty( $data['download_image'] ) && file_exists( INFUSIONS . 'downloads/images/' . $data['download_image'] ) ) {
+                        unlink( INFUSIONS . 'blog/images/' . $data['blog_image_t1'] );
+                    }
+                    if ( !empty( $data['download_thumb'] ) && file_exists( INFUSIONS . 'downloads/images/' . $data['download_thumb'] ) ) {
+                        unlink( INFUSIONS . 'download/images/' . $data['download_thumb'] );
+                    }
+                }
+            }
+
+            dbquery( "DELETE FROM " . DB_SUBMISSIONS . " WHERE submit_type=:submit AND submit_user=:uid", [
+                ':submit' => 'd',
+                ':uid' => $user_id
+            ] );
+
+        }
+    }
+
+    /**
+     * @see blog_user_action_hook()
+     */
+    fusion_add_hook('fusion_user_action', 'downloads_user_action_hook', 10, [], 2);
 }

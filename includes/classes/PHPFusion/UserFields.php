@@ -20,7 +20,9 @@
 namespace PHPFusion;
 
 use PHPFusion\Userfields\Accounts\AccountsForm;
+use PHPFusion\Userfields\Accounts\CloseAccount;
 use PHPFusion\Userfields\Privacy\PrivacyForm;
+use PHPFusion\Userfields\UserFieldsForm;
 
 /**
  * Class UserFields
@@ -124,14 +126,16 @@ class UserFields extends QuantumFields {
     public function displayProfileInput() {
 
         $this->method = 'input';
+
         $this->options += $this->defaultInputOptions;
 
         $this->sectionURI = get( 'section' );
+
         $this->refURI = get( 'ref' );
 
         $this->info = $this->getEmptyInputInfo();
 
-        $this->info['section'] = $this->getProfileSections();
+        $this->info['section'] = $this->upInputSections();
 
         // Seperate template for each
         if ( $this->registration ) {
@@ -140,17 +144,17 @@ class UserFields extends QuantumFields {
 
             switch ( $this->sectionURI ) {
                 case 'notifications':
-                    return $this->displayNotificationInput();
-
+                    return $this->showNotificationSection();
                 case 'privacy':
-                    return $this->displayPrivacyInput();
-
+                    display_up_privacy( ( $this->info + ( new PrivacyForm( $this ) )->displayInputFields() ) );
+                    break;
+                case 'close':
+                    display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );
+                    break;
                 default:
-                    return $this->displayAccountInput();
+                    display_up_settings( ( $this->info + ( new AccountsForm( $this ) )->displayInputFields() ) );
             }
         }
-
-
         /*
          * Template Output
          */
@@ -162,7 +166,7 @@ class UserFields extends QuantumFields {
      *
      * @return array
      */
-    private function displayNotificationInput() {
+    private function showNotificationSection() {
 
         $locale = fusion_get_locale();
 
@@ -187,16 +191,6 @@ class UserFields extends QuantumFields {
         ];
     }
 
-    /**
-     * Privacy Input
-     *
-     * @return array
-     */
-    private function displayPrivacyInput() {
-        $input = new PrivacyForm( $this );
-        return $input->displayInputFields();
-    }
-
     private function getEmptyInputInfo() {
         return [
             //'section'   => $this->getProfileSections(),
@@ -208,7 +202,8 @@ class UserFields extends QuantumFields {
      * Empty inputs vars
      */
     private function setEmptyInput() {
-        $this->info = [
+        // I do not think we need this.
+        return [
             'user_id'             => form_hidden( 'user_id', '', $this->userData["user_id"] ),
             'user_hash'           => form_hidden( 'user_hash', '', $this->userData['user_password'] ),
             'show_avatar'         => $this->showAvatarInput,
@@ -228,145 +223,6 @@ class UserFields extends QuantumFields {
         ];
     }
 
-    /**
-     * Account Input
-     *
-     * @return array|string[]
-     */
-    private function displayAccountInput() {
-
-        $input = new AccountsForm( $this );
-
-        $locale = fusion_get_locale();
-
-        $ref = get( 'ref' );
-
-        // we go with email first
-        $this->setEmptyInput();
-
-        $this->info['section'] = $this->getProfileSections();
-
-        $this->info['user_name'] = $input->usernameInputField();
-        $this->info['user_totp_status'] = !empty($this->userData['user_totp']);
-        $this->info['user_password_changed'] = $this->userData['user_password_changed'];
-        $this->info['user_admin_password_changed'] = $this->userData['user_admin_password_changed'];
-
-        $this->info['link']['details'] = BASEDIR . 'edit_profile.php?ref=details';
-        $this->info['link']['totp'] = BASEDIR . 'edit_profile.php?ref=authenticator';
-        $this->info['link']['password'] = BASEDIR . 'edit_profile.php?ref=password';
-        $this->info['link']['admin_password'] = BASEDIR . 'edit_profile.php?ref=admin_password';
-
-        $this->info['link']['appstore'] = 'https://apps.apple.com/au/app/google-authenticator/id388497605';
-        $this->info['link']['playstore'] = 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US';
-
-        $this->info['ref'] = $ref;
-
-        if ( $ref == 'details' ) {
-
-            $this->info['page_title'] = 'Details';
-            $this->info = array_merge( $this->info, $input->profileInputField() );
-
-        }elseif ($ref == 'password') {
-
-            $this->info['page_title'] = 'Password management';
-            $this->info = array_merge($this->info, $input->profilePasswordField());
-
-        } elseif ($ref == 'authenticator') {
-
-            $this->info['page_title'] = 'Two factor authentication';
-            $this->info = $this->info + $input->profileTOTPField();
-
-        } else {
-
-            $this->info = array_merge( $this->info, $input->emailInputField() );
-            $this->info['user_password'] = $input->passwordInputField();
-            $this->info['user_admin_password'] = $input->adminpasswordInputField();
-            $this->info['user_avatar'] = $input->avatarInput();
-        }
-
-        add_to_jquery( "
-        var mailButtonId = $('#email_code-append-btn');        
-        mailButtonId.on('click', function() {
-            mailButtonId.addClass('disabled');
-            var sendVerificationCode = $.post('" . INCLUDES . "api/?api=email_code', {
-            'user_id': '" . $this->userData['user_id'] . "',
-            'user_hash': '" . $this->userData['user_password'] . "',
-            });
-            sendVerificationCode.done(function( data ) {
-                var json_response = $.parseJSON(data);
-                var cssClass = '';
-                if (json_response.response > 200) {
-                    cssClass = 'error';
-                }
-                addNotice(json_response.title, json_response.text, cssClass);
-            });
-            var sec = 30
-            var timer = setInterval(function() {
-               mailButtonId.text(sec-- + 's').removeClass('text-primary');
-               if (sec == -1) {
-                  mailButtonId.text('Second Code').removeClass('disabled').addClass('text-primary');
-                  clearInterval(timer);
-               }
-            }, 1000);
-        });
-        " );
-
-        // show the template
-        display_user_settings_home( $this->info );
-
-        //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
-        //$this->info['user_admin_password'] = $locale['u131'];
-
-        $this->info['validate'] = $input->captchaInput();
-
-        $this->info['terms'] = $input->termInput();
-
-        if ( $this->method == 'validate_update' ) {
-            // User Password Verification for Email Change
-            $footer = openmodal( 'verifyPassword', 'Verify password', ['hidden' => TRUE] )
-                . '<p class="small">Your password is required to proceed. Please enter your current password to update your profile.</p>'
-                . form_text( 'user_verify_password', $locale['u135a'], '', ['required' => TRUE, 'type' => 'password', 'autocomplete_off' => TRUE, 'max_length' => 64, 'error_text' => $locale['u133'], 'placeholder' => $locale['u100'],] )
-                . modalfooter( form_button( 'confirm_password', $locale['save_changes'], 'confirm_password', ['id' => 'updateProfilePass', 'class' => 'btn-primary'] ) )
-                . closemodal();
-
-            add_to_footer( $footer );
-
-            // Port to edit profile.js
-            add_to_jquery( "            
-            var submitCallModal = function(dom) {
-               var form = dom.closest('form'), hashInput = form.find('input[name=\"user_hash\"]');                                   
-                $('button[name=\"" . $this->postName . "_btn\"]').on('click', function(e) {
-                   e.preventDefault();
-                   $(this).prop('disabled', true);                                    
-                   $('#verifyPassword-Modal').modal('show');
-                   $('#user_verify_password').on('input propertychange paste', function() {                        
-                        hashInput.val( $(this).val() );                                                
-                   });                 
-                   $('button[name=\"confirm_password\"]').on('click', function() {
-                        $('#verifyPassword-Modal').modal('hide');
-                        form[0].submit();
-                   });                                                    
-                });                           
-            };
-            
-            var email = $('#user_email').val();            
-            $('#user_email').on('input propertychange paste', function() {
-                var requireModal = false;
-                if ($(this).val() != email) {
-                    requireModal = true;
-                } else {
-                    requireModal = false;
-                }
-                if (requireModal) {
-                    // when postname button is clicked, require the modal.                    
-                    submitCallModal($(this));
-                }                                     
-            });           
-            " );
-        }
-
-        return $this->info;
-    }
 
     /**
      * Fetch User Fields Array to templates
@@ -392,7 +248,7 @@ class UserFields extends QuantumFields {
                 $info['user_field'] = [];
         }
 
-        $index_page_id = isset( $_GET['section'] ) && isnum( $_GET['section'] ) && isset( $this->getProfileSections()[$_GET['section']] ) ? intval( $_GET['section'] ) : 1;
+        $index_page_id = isset( $_GET['section'] ) && isnum( $_GET['section'] ) && isset( $this->upInputSections()[$_GET['section']] ) ? intval( $_GET['section'] ) : 1;
 
         $registration_cond = ( $this->registration == TRUE ? ' AND field.field_registration=:field_register' : '' );
         $registration_bind = ( $this->registration == TRUE ? [':field_register' => 1] : [] );
@@ -482,7 +338,7 @@ class UserFields extends QuantumFields {
     /**
      * @return array
      */
-    private function getProfileSections() {
+    private function upInputSections() {
 
         $link_prefix = BASEDIR . 'edit_profile.php?section=';
         if ( $this->moderation ) {
@@ -533,7 +389,7 @@ class UserFields extends QuantumFields {
             }
         }
 
-        $this->info['section'] = $this->getProfileSections();
+        $this->info['section'] = $this->upInputSections();
 
         $this->info['user_id'] = $this->userData['user_id'];
 

@@ -59,9 +59,9 @@ if (iMEMBER && $blog_settings['blog_allow_submission'] && checkgroup($blog_setti
                     $criteriaArray['blog_image_t1'] = $upload['thumb1_name'];
                     $criteriaArray['blog_image_t2'] = $upload['thumb2_name'];
                 } else {
-                    $criteriaArray['blog_image'] = (isset($_POST['blog_image']) ? $_POST['blog_image'] : "");
-                    $criteriaArray['blog_image_t1'] = (isset($_POST['blog_image_t1']) ? $_POST['blog_image_t1'] : "");
-                    $criteriaArray['blog_image_t2'] = (isset($_POST['blog_image_t2']) ? $_POST['blog_image_t2'] : "");
+                    $criteriaArray['blog_image'] = ( $_POST['blog_image'] ?? "" );
+                    $criteriaArray['blog_image_t1'] = ( $_POST['blog_image_t1'] ?? "" );
+                    $criteriaArray['blog_image_t2'] = ( $_POST['blog_image_t2'] ?? "" );
                 }
                 $criteriaArray['blog_ialign'] = (isset($_POST['blog_ialign']) ? form_sanitizer($_POST['blog_ialign'], "pull-left", "blog_ialign") : "pull-left");
             }

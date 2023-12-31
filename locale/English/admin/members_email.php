@@ -106,6 +106,13 @@ Username: USER_NAME<br/>Password: Hidden for security reasons<br/>
 If you have forgot your password you can reset it via the following link: LOST_PASSWORD<br/>
 Regards,<br/>[SITEUSERNAME]";
 
+
+$locale['email_user_deactivate_name'] = "Account deactivation Email";
+$locale['email_user_deactivate_subject'] = "Account deactivation at [SITENAME]";
+$locale['email_user_deactivate_message'] = "Hello [USER_NAME],<br>
+Your account has been successfully deactivated. Even though your account is marked as inactivated, all of your account details and content will still remain intact.<br/>
+To reactivate your account anytime before [DURATION], simply click the following link: [REACTIVATION_LINK]<br>Regards,<br>[SITEUSERNAME]";
+
 /**
  * * $locale['global_454'] = "Account reactivated at [SITENAME]";
  * $locale['global_452'] = "Hello USER_NAME,<br/>

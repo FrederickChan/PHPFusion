@@ -22,6 +22,7 @@ namespace PHPFusion;
 use Defender;
 
 use PHPFusion\Userfields\Accounts\AccountsValidate;
+use PHPFusion\Userfields\Accounts\CloseValidate;
 use PHPFusion\Userfields\Notifications\NotificationsValidate;
 use PHPFusion\Userfields\Privacy\PrivacyValidate;
 use PHPFusion\Userfields\UserFieldsValidate;
@@ -345,6 +346,8 @@ class UserFieldsInput {
                 return $this->updateNotifications();
             case 'privacy':
                 return ( new PrivacyValidate( $this ) )->validate();
+            case 'close':
+                return  (new CloseValidate($this))->validate();
             default:
                 return $this->updateAccount();
         }
@@ -400,14 +403,6 @@ class UserFieldsInput {
             //    $this->data['user_hide_email'] = (int)check_post( 'user_hide_email' );
             //}
 
-            // Set password
-            //if ( check_post( 'user_password1' ) ) {
-            //    if ( $pass = $userFieldsValidate->setPassword() ) {
-            //        if ( count( $pass ) === 3 ) {
-            //            [$this->data['user_algo'], $this->data['user_salt'], $this->data['user_password']] = $pass;
-            //        }
-            //    }
-            //}
 
             // Set admin password
             //if ( check_post( 'user_admin_password1' ) ) {
@@ -428,47 +423,12 @@ class UserFieldsInput {
             if ( $this->checkUpdateAccess() ) {
 
                 // Log username change
-                if ( $settings['username_change'] && $this->data['user_name'] !== $this->userData['user_name'] ) {
-                    save_user_log( $this->userData['user_id'], 'user_name', $this->data['user_name'], $this->userData['user_name'] );
-                    //                if ($this->moderation && !empty( $pass ) && $this->_newUserPassword && $this->_newUserPassword2) {
-                    //                    // inform user that password has changed. and tell him your new password
-                    //                    include INCLUDES . 'sendmail_include.php';
-                    //
-                    //                    $input = [
-                    //                        "mailname" => $this->userData['user_name'],
-                    //                        "email"    => $this->userData['user_email'],
-                    //                        "subject"  => str_replace( "[SITENAME]", $settings['sitename'], $locale['global_456'] ),
-                    //                        "message"  => str_replace(
-                    //                            [
-                    //                                "[SITENAME]",
-                    //                                "[SITEUSERNAME]",
-                    //                                "USER_NAME",
-                    //                                "[PASSWORD]"
-                    //                            ],
-                    //                            [
-                    //                                $settings['sitename'],
-                    //                                $settings['siteusername'],
-                    //                                $this->userData['user_name'],
-                    //                                $this->_newUserPassword,
-                    //                            ],
-                    //                            $locale['global_457']
-                    //                        )
-                    //                    ];
-                    //
-                    //                    if (!sendemail( $input['mailname'], $input['email'], $settings['siteusername'], $settings['siteemail'], $input['subject'],
-                    //                        $input['message'] )
-                    //                    ) {
-                    //                        addnotice( 'warning', str_replace( "USER_NAME", $this->userData['user_name'], $locale['global_459'] ) );
-                    //                    } else {
-                    //                        addnotice( "success", str_replace( "USER_NAME", $this->userData['user_name'], $locale['global_458'] ) );
-                    //                    }
-                    //                    return FALSE;
-                    //                }
+                if ( $settings['username_change'] && $this->_data['user_name'] !== $this->userData['user_name'] ) {
+                    save_user_log( $this->userData['user_id'], 'user_name', $this->_data['user_name'], $this->userData['user_name'] );
                 }
 
                 // Log all custom field changes
                 $this->_quantum->logUserAction( DB_USERS, 'user_id' );
-
 
                 // Update Table
                 dbquery_insert( DB_USERS, $this->_data, 'update' );
@@ -520,16 +480,14 @@ class UserFieldsInput {
      *
      * @return bool
      */
-    public
-    function checkUpdateAccess() {
+    public function checkUpdateAccess() {
         return fusion_safe() && ( ( iADMIN && checkrights( 'M' ) && ( $this->userData['user_password'] == sanitizer( 'user_hash', '', "user_hash" ) ) ) || ( $this->data['user_id'] == $this->userData['user_id'] ) );
     }
 
     /**
      * @return array
      */
-    private
-    function setCustomUserFields() {
+    private function setCustomUserFields() {
 
         $this->_quantum = new QuantumFields();
         $this->_quantum->setFieldDb( DB_USER_FIELDS );

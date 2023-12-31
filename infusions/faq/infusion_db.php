@@ -47,3 +47,26 @@ if (
         'admin_link'    => INFUSIONS."faq/faq_admin.php".fusion_get_aidlink()."&section=submissions&submit_id=%s"
     ]);
 }
+
+if (infusion_exists('faq')) {
+
+    function faq_user_action_hook( $action, $user_id ) {
+        if ( $action == 'delete_user' ) {
+
+            // Delete faq
+            dbquery( "DELETE FROM " . DB_FAQS . " WHERE faq_name=:uid", [':uid' => $user_id] );
+
+            // Delete faq submissions
+            dbquery( "DELETE FROM " . DB_SUBMISSIONS . " WHERE submit_type=:submit AND submit_user=:uid", [
+                ':submit' => 'q',
+                ':uid' => $user_id]
+            );
+        }
+    }
+
+    /**
+     * @see faq_user_action_hook()
+     */
+    fusion_add_hook( 'fusion_user_action', 'faq_user_action_hook', 10, [], 2 );
+
+}
