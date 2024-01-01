@@ -275,9 +275,9 @@ class Authenticate {
                 'user_id'        => $user_id,
                 'user_ip'        => USER_IP,
                 'user_session'   => $session,
-                'user_device'    => $device_type ?? 'n/a',
-                'user_os'        => $os ?? 'n/a',
-                'user_browser'   => $browser ?? 'n/a',
+                'user_device'    => $device_type ?? 'Unknown device',
+                'user_os'        => $os ?? 'Unknown OS',
+                'user_browser'   => $browser ?? 'Unknown browser',
                 'user_logintime' => time()
             ];
 

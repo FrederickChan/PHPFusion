@@ -28,11 +28,12 @@ class CoreSettings {
      * @return array[]|\array[][]|mixed|null
      */
     public static function get_table_rows( $table_name, $localeset = 'English' ) {
-        $locale = fusion_get_locale();
 
-        include BASEDIR . 'locale/' . $localeset . '/setup.php';
-        include BASEDIR . 'locale/' . $localeset . '/admin/members_email.php';
-        include BASEDIR . 'locale/' . $localeset . '/policies.php';
+        $locale = fusion_get_locale( '', [
+            BASEDIR . 'locale/' . $localeset . '/setup.php',
+            BASEDIR . 'locale/' . $localeset . '/admin/members_email.php',
+            BASEDIR . 'locale/' . $localeset . '/policies.php',
+        ] );
 
         $siteurl = rtrim( dirname( get_current_url() ), '/' ) . '/';
         $siteurl = str_replace( 'install/', '', $siteurl );
@@ -44,8 +45,8 @@ class CoreSettings {
                 ['settings_name' => 'siteurl', 'settings_value' => $siteurl],
                 ['settings_name' => 'site_protocol', 'settings_value' => $url['scheme']],
                 ['settings_name' => 'site_host', 'settings_value' => $url['host'],],
-                ['settings_name' => 'site_port', 'settings_value' => ($url['port'] ?? ''),],
-                ['settings_name' => 'site_path', 'settings_value' => ($url['path'] ?? ''),],
+                ['settings_name' => 'site_port', 'settings_value' => ( $url['port'] ?? '' ),],
+                ['settings_name' => 'site_path', 'settings_value' => ( $url['path'] ?? '' ),],
                 ['settings_name' => 'site_seo', 'settings_value' => 0],
                 ['settings_name' => 'domain_server', 'settings_value' => '',],
                 ['settings_name' => 'sitebanner', 'settings_value' => 'images/phpfusion-logo-d.svg'],

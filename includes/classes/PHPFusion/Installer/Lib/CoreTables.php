@@ -1711,49 +1711,81 @@ class CoreTables {
                 'unsigned' => TRUE,
                 'default'  => 0,
             ],
-
-            'user_theme'     => [
+            'user_theme'                  => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'default' => 'Default'
             ], //user_theme VARCHAR(100) NOT NULL DEFAULT 'Default',
-            'user_location'  => [
+            'user_location'               => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => ''
             ], //user_location VARCHAR(50) NOT NULL DEFAULT '',
-            'user_birthdate' => [
+            'user_hide_location'          => [
+                'type'     => 'TINYINT',
+                'length'   => 1,
+                'key'      => 2,
+                'unsigned' => TRUE,
+                'default'  => '0',
+            ],
+            'user_birthdate'              => [
                 'type'    => 'DATE',
                 'default' => '1900-01-01'
             ], //user_birthdate DATE NOT NULL DEFAULT '1900-01-01',
-            'user_skype'     => [
+            'user_hide_birthdate'         => [
+                'type'     => 'TINYINT',
+                'length'   => 1,
+                'key'      => 2,
+                'unsigned' => TRUE,
+                'default'  => '0',
+            ],
+            'user_skype'                  => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
                 'default' => '',
             ], //user_skype VARCHAR(100) NOT NULL DEFAULT '',
-            'user_icq'       => [
+            'user_icq'                    => [
                 'type'    => 'VARCHAR',
                 'length'  => 15,
                 'default' => '',
             ], //user_icq VARCHAR(15) NOT NULL DEFAULT '',
-            'user_web'       => [
+            'user_web'                    => [
                 'type'    => 'VARCHAR',
                 'length'  => 200,
                 'default' => '',
             ], //user_web VARCHAR(200) NOT NULL DEFAULT '',
-            'user_bio'       => [
+            'user_bio'                    => [
                 'type' => 'TEXT'
             ],
-            'user_sig'       => [
+            'user_sig'                    => [
                 'type' => 'TEXT'
             ], //user_sig TEXT NOT NULL,
-            'user_timezone'  => [
+            'user_timezone'               => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => 'Europe/London'
             ], //user_timezone VARCHAR(50) NOT NULL DEFAULT 'Europe/London',
         ];
-
+        $table_package['user_blacklist'] = [
+            'user_id'        => [
+                'type'     => 'BIGINT',
+                'length'   => 20,
+                'key'      => 2,
+                'unsigned' => TRUE,
+            ], // user_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+            'blacklist_uid' => [
+                'type'     => 'BIGINT',
+                'length'   => 20,
+                'key'      => 2,
+                'unsigned' => TRUE,
+            ],
+            'blacklist_time'   => [
+                'type'    => 'INT',
+                'length'  => 10,
+                'unsigned' => TRUE,
+                'default' => '0'
+            ],
+        ];
         $table_package['user_sessions'] = [
             'user_id'        => [
                 'type'     => 'BIGINT',

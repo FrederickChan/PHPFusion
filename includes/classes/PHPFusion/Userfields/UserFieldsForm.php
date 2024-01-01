@@ -22,6 +22,7 @@ namespace PHPFusion\Userfields;
 
 use PHPFusion\SiteLinks;
 use PHPFusion\UserFields;
+use PHPFusion\Userfields\Accounts\AccountPrivacy;
 use PHPFusion\Userfields\Accounts\Fields\AccountEmail;
 use PHPFusion\Userfields\Accounts\Fields\AccountPasswords;
 use PHPFusion\Userfields\Accounts\Fields\AccountProfile;
@@ -36,11 +37,13 @@ use PHPFusion\Userfields\Accounts\Fields\AccountUsername;
  */
 abstract class UserFieldsForm {
 
-    private static  $usernameInstance;
-    private static  $emailInstance;
-    private static  $passwordInstance;
+    private static $usernameInstance;
+    private static $emailInstance;
+    private static $passwordInstance;
     private static $profileInstance;
     private static $twofactorInstance;
+    private static $privacyInstance;
+    private static $sessionInstance;
 
     protected $userFields;
 
@@ -57,8 +60,8 @@ abstract class UserFieldsForm {
      * @return AccountUsername
      */
     public function accountUsername() {
-        if (!isset(self::$usernameInstance)) {
-            self::$usernameInstance = (new AccountUsername($this->userFields));
+        if ( !isset( self::$usernameInstance ) ) {
+            self::$usernameInstance = ( new AccountUsername( $this->userFields ) );
         }
         return self::$usernameInstance;
     }
@@ -67,8 +70,8 @@ abstract class UserFieldsForm {
      * @return AccountEmail
      */
     public function accountEmail() {
-        if (!isset(self::$emailInstance)) {
-            self::$emailInstance = (new AccountEmail($this->userFields));
+        if ( !isset( self::$emailInstance ) ) {
+            self::$emailInstance = ( new AccountEmail( $this->userFields ) );
         }
         return self::$emailInstance;
     }
@@ -78,8 +81,8 @@ abstract class UserFieldsForm {
      * @return AccountPasswords
      */
     public function accountPassword() {
-        if (!isset(self::$passwordInstance)) {
-            self::$passwordInstance = (new AccountPasswords($this->userFields));
+        if ( !isset( self::$passwordInstance ) ) {
+            self::$passwordInstance = ( new AccountPasswords( $this->userFields ) );
         }
         return self::$passwordInstance;
     }
@@ -88,8 +91,8 @@ abstract class UserFieldsForm {
      * @return AccountProfile
      */
     public function accountProfile() {
-        if (!isset(self::$profileInstance)) {
-            self::$profileInstance = (new AccountProfile($this->userFields));
+        if ( !isset( self::$profileInstance ) ) {
+            self::$profileInstance = ( new AccountProfile( $this->userFields ) );
         }
         return self::$profileInstance;
     }
@@ -98,9 +101,23 @@ abstract class UserFieldsForm {
      * @return AccountTwoFactor
      */
     public function accountTwoFactor() {
-        if (!isset(self::$twofactorInstance)) {
-            self::$twofactorInstance = (new AccountTwoFactor($this->userFields));
+        if ( !isset( self::$twofactorInstance ) ) {
+            self::$twofactorInstance = ( new AccountTwoFactor( $this->userFields ) );
         }
         return self::$twofactorInstance;
+    }
+
+    public function accountPrivacy() {
+        if ( !isset( self::$privacyInstance ) ) {
+            self::$privacyInstance = ( new AccountPrivacy( $this->userFields ) );
+        }
+        return self::$privacyInstance;
+    }
+
+    public function accountSessions() {
+        if ( !isset( self::$sessionInstance ) ) {
+            self::$sessionInstance = ( new \AccountSessions( $this->userFields ) );
+        }
+        return self::$sessionInstance;
     }
 }

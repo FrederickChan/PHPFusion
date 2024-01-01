@@ -20,74 +20,82 @@
 
 namespace PHPFusion\Userfields\Privacy;
 
+use PHPFusion\Authenticate;
 use PHPFusion\Quantum\QuantumFactory;
 use PHPFusion\Userfields\UserFieldsForm;
 
 class PrivacyForm extends UserFieldsForm {
 
     /**
+     * Deprecated
+     *
      * @return array
      */
     public function displayInputFields() {
 
-        if (check_get('d')) {
+        switch ( $this->userFields->info['ref'] ) {
 
-            switch (get('d')) {
-                case 'twostep':
-                    return $this->getTwoStep();
-                case 'records':
-                    return $this->getLogin();
-                case 'data':
-                    return $this->getLogs();
-                default:
-                    return [];
+            case 'login':
+                return $this->getLoginField();
+            case 'blacklist':
+                return $this->getBlacklistField();
+            default:
+                return [];
+        }
+
+    }
+
+    private function getLoginField() {
+
+        if ( $session = get( 'rm' ) ) {
+
+            dbquery( "DELETE FROM " . DB_USER_SESSIONS . " WHERE user_session=:session_name AND user_id=:uid", [
+                ':uid'          => $this->userFields->userData['user_id'],
+                ':session_name' => $session,
+            ] );
+
+            if ( $session == $this->userFields->userData['user_session'] ) {
+                Authenticate::logOut();
+                redirect( BASEDIR . fusion_get_settings( 'opening_page' ) );
+            } else {
+                redirect( FUSION_REQUEST );
             }
         }
 
-        return [
-            'twostep_url' => clean_request('d=twostep', ['d'], FALSE),
-            'records_url' => clean_request('d=records', ['d'], FALSE),
-            'data_url'    => clean_request('d=data', ['d'], FALSE),
-            'login_url'   => clean_request('d=login', ['d'], FALSE),
-        ];
-    }
+        $res = dbquery( "SELECT * FROM " . DB_USER_SESSIONS . " WHERE user_id=:uid ORDER BY user_logintime DESC", [':uid' => $this->userFields->userData['user_id']] );
 
-    /**
-     * Activate two step verification
-     *
-     * @return array
-     */
-    private function getTwoStep() {
-
-        $locale = fusion_get_locale();
-
-        return [
-            'email_display' => $this->userFields->userData['user_email'],
-            'user_code'     => form_text('2fa_code', '', '', ['placeholder' => $locale['u608'], 'max_length' => 6, 'mask' => '9-9-9-9-9-9']),
-            'get_auth'      => form_button('auth', $locale['u605'], $locale['u605'], ['class' => 'btn-primary']),
-            'button'        => form_button('submit_2fa', $locale['submit'], $locale['submit'], ['class' => 'btn-primary']),
-        ];
-    }
-
-    private function getLogin() {
-
-        $res = dbquery("SELECT * FROM ".DB_USER_SESSIONS." WHERE user_id=:uid ORDER BY user_logintime DESC", [':uid' => $this->userFields->userData['user_id']]);
-
-        if (dbrows($res)) {
-            while ($rows = dbarray($res)) {
-                $info['user_logins'][$rows['user_session_id']] = $rows;
+        if ( dbrows( $res ) ) {
+            while ( $rows = dbarray( $res ) ) {
+                $rows['remove'] = BASEDIR . 'edit_profile.php?section=privacy&ref=login&rm=' . $rows['user_session'];
+                $info['user_logins'][] = $rows;
             }
         }
 
         return $info;
     }
 
+    private function getBlacklistField() {
+
+        $result = dbquery( "SELECT * FROM " . DB_USER_BLACKLIST . " WHERE user_id=:uid ORDER BY blacklist_time DESC", [
+            ':uid' => $this->userFields->userData['user_id']
+        ] );
+        if ( dbrows( $result ) ) {
+            while ( $rows = dbarray( $result ) ) {
+                $rows['remove'] = BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist&rm=' . $rows['blacklist_uid'];
+                $data[] = $rows;
+            }
+        }
+
+        return [];
+    }
+
     /**
+     * In development
      * User log information
      *
      * @return array
      */
-    private function getLogs() {
+    private function getUserLogsField() {
 
         $locale = fusion_get_locale();
 
@@ -103,23 +111,23 @@ class PrivacyForm extends UserFieldsForm {
             'user_level'          => $locale['u063'],
         ];
 
-        $res = dbquery("SELECT field_title, field_name FROM ".DB_USER_FIELDS);
-        if (dbrows($res)) {
-            while ($rows = dbarray($res)) {
-                $field_names[$rows['field_name']] = parse_label($rows['field_title']);
+        $res = dbquery( "SELECT field_title, field_name FROM " . DB_USER_FIELDS );
+        if ( dbrows( $res ) ) {
+            while ( $rows = dbarray( $res ) ) {
+                $field_names[$rows['field_name']] = parse_label( $rows['field_title'] );
             }
         }
 
-        $res = dbquery("SELECT * FROM ".DB_USER_LOG." WHERE userlog_user_id=:uid ORDER BY userlog_timestamp DESC", [':uid' => (int)$this->userFields->userData['user_id']]);
-        if (dbrows($res)) {
-            while ($rows = dbarray($res)) {
+        $res = dbquery( "SELECT * FROM " . DB_USER_LOG . " WHERE userlog_user_id=:uid ORDER BY userlog_timestamp DESC", [':uid' => (int)$this->userFields->userData['user_id']] );
+        if ( dbrows( $res ) ) {
+            while ( $rows = dbarray( $res ) ) {
 
                 $rows['title'] = $locale['u075'];
 
-                if (isset($field_names[$rows['userlog_field']])) {
-                    $log = sprintf($locale['u076'], '<strong>'.$field_names[$rows['userlog_field']].'</strong>', $rows['userlog_value_old'], $rows['userlog_value_new']);
+                if ( isset( $field_names[$rows['userlog_field']] ) ) {
+                    $log = sprintf( $locale['u076'], '<strong>' . $field_names[$rows['userlog_field']] . '</strong>', $rows['userlog_value_old'], $rows['userlog_value_new'] );
                 } else {
-                    $log = sprintf($locale['u077'], $rows['userlog_value_old'], $rows['userlog_value_new']);
+                    $log = sprintf( $locale['u077'], $rows['userlog_value_old'], $rows['userlog_value_new'] );
                 }
 
                 $rows['description'] = $log;

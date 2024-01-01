@@ -347,7 +347,7 @@ class UserFieldsInput {
             case 'privacy':
                 return ( new PrivacyValidate( $this ) )->validate();
             case 'close':
-                return  (new CloseValidate($this))->validate();
+                return ( new CloseValidate( $this ) )->validate();
             default:
                 return $this->updateAccount();
         }
@@ -369,22 +369,30 @@ class UserFieldsInput {
 
             $userFieldsValidate->setUserEmailChange();
 
-        }elseif (check_post('user_totp_submit')) {
+        } else if ( check_post( 'user_totp_submit' ) ) {
 
             $userFieldsValidate->setUserTOTP();
 
-        } elseif (check_post('update_password_btn')) {
+        } else if ( check_post( 'user_pass_submit' ) ) {
 
             $userFieldsValidate->setUserPassword();
 
-        } elseif ( check_post( 'update_profile_btn' ) ) {
+        } else if ( check_post( 'user_adminpass_submit' ) ) {
+
+            $userFieldsValidate->setAdminPassword();
+
+        } else if ( check_post( 'user_privacy_submit' ) ) {
+
+            $userFieldsValidate->setAccountPrivacy();
+
+        } else if ( check_post( 'update_profile_btn' ) ) {
 
             $this->_data['user_id'] = $this->userData['user_id'];
             $this->_data['user_name'] = $userFieldsValidate->setUserName();
             $this->_data['user_firstname'] = sanitizer( 'user_firstname', '', 'user_firstname' );
             $this->_data['user_lastname'] = sanitizer( 'user_lastname', '', 'user_lastname' );
             $this->_data['user_addname'] = sanitizer( 'user_addname', '', 'user_addname' );
-            $this->_data['user_displayname'] = sanitizer( 'user_displayname', '0','user_displayname' );
+            $this->_data['user_displayname'] = sanitizer( 'user_displayname', '0', 'user_displayname' );
             $this->_data['user_phonecode'] = sanitizer( 'user_phonecode', '', 'user_phonecode' );
             $this->_data['user_phone'] = sanitizer( 'user_phone', '', 'user_phone' );
             $this->_data['user_bio'] = sanitizer( 'user_bio', '', 'user_bio' );
@@ -394,14 +402,6 @@ class UserFieldsInput {
                     $this->_data += $input_values;
                 }
             }
-
-            //if ( isset( $this->data['user_phone'] ) ) {
-            //    $this->data['user_hide_phone'] = (int)check_post( 'user_hide_phone' );
-            //}
-
-            //if ( isset( $this->data['user_email'] ) ) {
-            //    $this->data['user_hide_email'] = (int)check_post( 'user_hide_email' );
-            //}
 
 
             // Set admin password

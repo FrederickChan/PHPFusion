@@ -19,6 +19,7 @@
 
 namespace PHPFusion;
 
+use PHPFusion\Userfields\Accounts\AccountPrivacy;
 use PHPFusion\Userfields\Accounts\AccountsForm;
 use PHPFusion\Userfields\Accounts\CloseAccount;
 use PHPFusion\Userfields\Privacy\PrivacyForm;
@@ -101,7 +102,7 @@ class UserFields extends QuantumFields {
 
     public $username_change = TRUE;
 
-    private $info = [
+    public $info = [
         'terms'               => '',
         'validate'            => '',
         'user_avatar'         => '',
@@ -136,6 +137,22 @@ class UserFields extends QuantumFields {
         $this->info = $this->getEmptyInputInfo();
 
         $this->info['section'] = $this->upInputSections();
+        $this->info['ref'] = $this->refURI;
+
+        $this->info['link'] = [
+            'details'        => BASEDIR . 'edit_profile.php?ref=details',
+            'totp'           => BASEDIR . 'edit_profile.php?ref=authenticator',
+            'password'       => BASEDIR . 'edit_profile.php?ref=password',
+            'admin_password' => BASEDIR . 'edit_profile.php?ref=admin_password',
+            'google'         => BASEDIR . 'edit_profile.php?ref=google',
+            // privacy page
+            'privacy'        => BASEDIR . 'edit_profile.php?ref=privacy',
+            'login'          => BASEDIR . 'edit_profile.php?section=privacy&ref=login',
+            'blacklist'          => BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist',
+            // Authenticator download links
+            'appstore'       => 'https://apps.apple.com/au/app/google-authenticator/id388497605',
+            'playstore'      => 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US',
+        ];
 
         // Seperate template for each
         if ( $this->registration ) {
@@ -146,7 +163,7 @@ class UserFields extends QuantumFields {
                 case 'notifications':
                     return $this->showNotificationSection();
                 case 'privacy':
-                    display_up_privacy( ( $this->info + ( new PrivacyForm( $this ) )->displayInputFields() ) );
+                    display_up_privacy( ( $this->info + (new PrivacyForm($this))->displayInputFields()) );
                     break;
                 case 'close':
                     display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );

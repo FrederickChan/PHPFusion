@@ -48,6 +48,12 @@ function display_up_settings( array $info ) {
                     }
                     adminpassword_up_settings( $info );
                     break;
+                case 'privacy':
+                    if ( !function_exists( 'privacy_up_settings' ) ) {
+                        require_once __DIR__ . '/data_privacy.tpl.php';
+                    }
+                    privacy_up_settings( $info );
+                    break;
 
             }
             ?>

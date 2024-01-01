@@ -15,7 +15,7 @@ class AccountPasswords extends UserFieldsForm {
         $info['password_form_close'] = closeform();
         $info['password_field'] = $this->passwordInput();
         $info['password_email_field'] = $this->accountEmail()->emailVerificationInput();
-        $info['password_submit_button'] = form_button( 'update_password_btn', 'Submit', 'update_password_btn', ['class' => 'btn-primary'] );
+        $info['password_submit_button'] = form_button( 'user_pass_submit', 'Submit', 'user_pass_submit', ['class' => 'btn-primary'] );
 
         return $info;
     }
@@ -31,7 +31,7 @@ class AccountPasswords extends UserFieldsForm {
         $info['password_text'] = $this->accountPassword()->showPasswordTip();
         $info['password_field'] = $this->accountPassword()->adminPasswordInput();
         $info['password_email_field'] = $this->accountEmail()->emailVerificationInput();
-        $info['password_submit_button'] = form_button( 'update_admin_password_btn', 'Submit', 'update_admin_password_btn', ['class' => 'btn-primary'] );
+        $info['password_submit_button'] = form_button( 'user_adminpass_submit', 'Submit', 'user_adminpass_submit', ['class' => 'btn-primary'] );
 
         return $info;
     }

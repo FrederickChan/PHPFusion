@@ -546,6 +546,9 @@ div[data-fusion="true"] strong {
   padding-left: 0;
   margin-top: 0.8rem;
 }
+.checkbox-switch label {
+  font-weight: 700;
+}
 .checkbox-switch input[type=checkbox].form-check-input {
   background-color: var(--toggle-switch-bg);
   border: 1px solid var(--toggle-switch-border);

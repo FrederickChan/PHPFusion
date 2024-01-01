@@ -1,8 +1,6 @@
 <?php
 namespace PHPFusion\Userfields\Accounts;
 
-use GoogleAuthenticator\GoogleAuthenticator;
-use GoogleAuthenticator\GoogleQrUrl;
 use PHPFusion\LegalDocs;
 use PHPFusion\Userfields\UserFieldsForm;
 
@@ -16,8 +14,6 @@ class AccountsForm extends UserFieldsForm {
 
     public function displayInputFields() {
 
-        $locale = fusion_get_locale();
-
         $ref = get( 'ref' );
 
         // we go with email first
@@ -29,16 +25,6 @@ class AccountsForm extends UserFieldsForm {
             'user_totp_status'            => !empty( $this->userData['user_totp'] ),
             'user_password_changed'       => $this->userFields->userData['user_password_changed'],
             'user_admin_password_changed' => $this->userFields->userData['user_admin_password_changed'],
-            'link'                        => [
-                'details'        => BASEDIR . 'edit_profile.php?ref=details',
-                'totp'           => BASEDIR . 'edit_profile.php?ref=authenticator',
-                'password'       => BASEDIR . 'edit_profile.php?ref=password',
-                'admin_password' => BASEDIR . 'edit_profile.php?ref=admin_password',
-                'google'         => BASEDIR . 'edit_profile.php?ref=google',
-                // Authenticator download links
-                'appstore'       => 'https://apps.apple.com/au/app/google-authenticator/id388497605',
-                'playstore'      => 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US',
-            ]
         ];
 
         if ( $ref == 'details' ) {
@@ -56,6 +42,10 @@ class AccountsForm extends UserFieldsForm {
         } else if ( $ref == 'authenticator' ) {
 
             $info = array_merge( $info, $this->accountTwoFactor()->profileTOTPField());
+
+        } else if ( $ref == 'privacy' ) {
+
+            $info = array_merge( $info, $this->accountPrivacy()->profilePrivacyField());
 
         } else {
 
@@ -224,19 +214,6 @@ class AccountsForm extends UserFieldsForm {
         return '';
     }
 
-
-    public function moveToPrivacy() {
-        $info['user_hide_phone'] = form_checkbox( 'user_hide_phone', $locale['u107'], $this->userFields->userData['user_hide_phone'], [
-            'inline'  => FALSE,
-            'toggle'  => TRUE,
-            'ext_tip' => $locale['u108']
-        ] );
-        $info['user_hide_email'] = form_checkbox( 'user_hide_email', $locale['u051'], $this->userFields->userData['user_hide_email'], [
-            'inline'  => FALSE,
-            'toggle'  => TRUE,
-            'ext_tip' => $locale['u106']
-        ] );
-    }
 
     public function getCustomFields() {
         $user_fields = '';

@@ -174,46 +174,7 @@ function home_up_settings( $info ) {
             </div>
         </div>
     </div>
-    <div class="profile-settings mb-5">
-        <h5 class="mb-4">Login Status Management</h5>
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="small">
-                <tr>
-                    <th class="col-sm-2">Time</th>
-                    <th class="col-sm-3">Device</th>
-                    <th class="col-sm-2">IP</th>
-                    <th class="col-sm-3">Location</th>
-                    <th class="col-sm-2">Operation</th>
-                </tr>
-                </thead>
-                <tbody class="small">
-                <tr>
-                    <td>2013-12-07 09:53:46</td>
-                    <td>PC / Windows 10 / Edge 119.0.0</td>
-                    <td>175.137.171.150</td>
-                    <td>Malaysia Selangor Shah Alam</td>
-                    <td><a href="">Log out</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="profile-settings mb-5">
-        <h5 class="mb-4">Login History</h5>
-        <div class="table-responsive">
-            <table class="table">
-                <thead class="small">
-                <tr>
-                    <th class="col-sm-2">Time</th>
-                    <th class="col-sm-3">Device</th>
-                    <th class="col-sm-2">IP</th>
-                    <th class="col-sm-5">Location</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+
     <!--editprofile_sub_idx-->
     <?php
 }
