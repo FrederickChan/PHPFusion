@@ -2028,6 +2028,22 @@ function fusion_get_userdata( $key = NULL ) {
 }
 
 /**
+ * Fetch user settings preference from database
+ * @param null $key
+ *
+ * @return array|null
+ */
+function fusion_get_user_settings( $key = NULL ) {
+    $result = dbquery( "SELECT * FROM " . DB_USER_SETTINGS . " WHERE user_id=:uid", [
+        ':uid' => $key
+    ] );
+    if ( dbrows( $result ) ) {
+        return dbarray( $result );
+    }
+    return NULL;
+}
+
+/**
  * Get the data of any user by ID.
  *
  * @param int    $user_id The user ID.

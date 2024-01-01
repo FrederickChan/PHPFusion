@@ -22,7 +22,7 @@ body {
   --light-color: #87909f;
   --low-emphasis: #00000088;
   --lighter-color: #14191e;
-  --label-color: #000000bf;
+  --label-color: #000;
   --input-color: #000000bf;
   --input-border-color: #e1e4e6;
   --input-border-radius: 4px;
@@ -569,9 +569,8 @@ div[data-fusion="true"] strong {
   margin-top: 0;
 }
 .checkbox-switch .form-check-label p {
-  color: var(--light-color);
   font-weight: 400;
-  font-size: 0.8rem !important;
+  font-size: 0.9rem !important;
   margin-top: 0.2rem;
 }
 .checkbox-switch > div {

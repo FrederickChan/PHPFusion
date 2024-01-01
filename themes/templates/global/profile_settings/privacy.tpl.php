@@ -3,7 +3,7 @@
 use PHPFusion\Panels;
 
 function display_up_privacy( array $info ) {
-    $settings = fusion_get_settings();
+
     // we need a template storage and store it to db.
     Panels::getInstance()->hidePanel( 'RIGHT' );
     Panels::addPanel( 'navigation_panel', navigation_panel( $info['section'] ), 1, USER_LEVEL_MEMBER, 1 );

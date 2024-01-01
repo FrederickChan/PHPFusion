@@ -139,5 +139,4 @@ class PrivacyForm extends UserFieldsForm {
         return $info ?? [];
     }
 
-
 }

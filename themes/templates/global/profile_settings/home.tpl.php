@@ -78,7 +78,7 @@ function home_up_settings( $info ) {
                     <?php echo censortext( $userdata['user_email'] ) ?>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <button id="email_change" class="btn btn-sm btn-block btn-primary-soft">Change</button>
+                    <button id="email_change" class="btn  btn-block btn-primary-soft">Change</button>
                 </div>
             </div>
         </div>
@@ -98,7 +98,7 @@ function home_up_settings( $info ) {
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <a href="<?php echo $info['link']['details'] ?>" class="btn btn-sm btn-block btn-primary-soft">Change</a>
+                    <a href="<?php echo $info['link']['details'] ?>" class="btn  btn-block btn-primary-soft">Change</a>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@ function home_up_settings( $info ) {
                     <?php echo $info['user_totp_status'] ? 'Activated' : 'Not Set' ?>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <a href="<?php echo $info['link']['totp'] ?>" class="btn btn-sm btn-block btn-primary-soft">Change</a>
+                    <a href="<?php echo $info['link']['totp'] ?>" class="btn  btn-block btn-primary-soft">Change</a>
                 </div>
             </div>
         </div>
@@ -134,9 +134,9 @@ function home_up_settings( $info ) {
                     <div class="card-body d-flex flex-column">
                         <?php echo show_icon( 'lock', 'icon-lg' ) ?>
                         <h5>Password</h5>
-                        <div class="text-smaller">Login password management</div>
-                        <div class="text-smaller text-muted mb-3">Last change: <?php showdate( 'shortdate', $info['user_password_changed'] ) ?></div>
-                        <a href="<?php echo $info['link']['password'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
+                        <div class="small mb-3">Login password management</div>
+                        <div class="small mb-3">Last change: <?php showdate( 'shortdate', $info['user_password_changed'] ) ?></div>
+                        <a href="<?php echo $info['link']['password'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
                     </div>
                 </div>
             </div>
@@ -146,8 +146,9 @@ function home_up_settings( $info ) {
                         <div class="card-body d-flex flex-column">
                             <?php echo show_icon( 'lock', 'icon-lg' ) ?>
                             <h5>Admin password</h5>
-                            <div class="text-smaller">Admin password management</div>
-                            <a href="<?php echo $info['link']['admin_password'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
+                            <div class="small mb-3">Admin password management</div>
+                            <div class="small mb-3">Last change: <?php showdate( 'shortdate', $info['user_admin_password_changed'] ) ?></div>
+                            <a href="<?php echo $info['link']['admin_password'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
                         </div>
                     </div>
                 </div>
@@ -157,8 +158,8 @@ function home_up_settings( $info ) {
                     <div class="card-body d-flex flex-column">
                         <?php echo show_icon( 'verified', 'icon-lg' ) ?>
                         <h5>Account</h5>
-                        <div class="text-smaller">Freeze or delete account</div>
-                        <a href="<?php echo $info['section']['close']['link'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
+                        <div class="small mb-3">Freeze or delete account</div>
+                        <a href="<?php echo $info['section']['close']['link'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
                     </div>
                 </div>
             </div>
@@ -167,8 +168,8 @@ function home_up_settings( $info ) {
                     <div class="card-body d-flex flex-column">
                         <?php echo show_icon( 'secure', 'icon-lg' ) ?>
                         <h5>Social accounts</h5>
-                        <div class="text-smaller">Log in to <?php echo $settings['sitename'] ?> with a third-party account</div>
-                        <a href="<?php echo $info['link']['google'] ?>" class="btn btn-primary-soft btn-sm mt-auto">Change</a>
+                        <div class="small mb-3">Log in to <?php echo $settings['sitename'] ?> with a third-party account</div>
+                        <a href="<?php echo $info['link']['google'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
                     </div>
                 </div>
             </div>

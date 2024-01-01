@@ -10,25 +10,38 @@ use PHPFusion\Userfields\UserFieldsValidate;
  */
 class NotificationsValidate extends UserFieldsValidate {
 
-
     /**
-     * Validate notification input data
-     *
-     * Access with UserFieldsInput only
+     * Update notifications settings for users
      */
-    function validate() {
+    public function validate() {
 
-        return [
-            'user_comments_notify'    => check_post( 'n_comments' ) ?? '0',
-            'user_tag_notify'        => check_post( 'n_tags' ) ?? '0',
-            'user_newsletter_notify' => check_post( 'n_newsletter' ) ?? '0',
-            'user_follow_notify'     => check_post( 'n_follow' ) ?? '0',
-            'user_pm_notify'         => check_post( 'n_pm' ) ?? '0',
-            'user_pm_email'          => check_post( 'e_pm' ) ?? '0',
-            'user_follow_email'      => check_post( 'e_follow' ) ?? '0',
-            'user_feedback_email'    => check_post( 'e_feedback' ) ?? '0',
-            'user_email_duration'    => sanitizer( 'e_duration', '0', 'e_duration' ),
-        ];
+        $locale = fusion_get_locale();
+
+        if ( check_post( 'update_notify' ) ) {
+
+            $rows = [
+                'user_notify_comments'      => check_post( 'user_notify_comments' ) ?? '0',
+                'user_notify_mentions'      => check_post( 'user_notify_mentions' ) ?? '0',
+                'user_notify_subscriptions' => check_post( 'user_notify_subscriptions' ) ?? '0',
+                'user_notify_birthdays'     => check_post( 'user_notify_birthdays' ) ?? '0',
+                'user_notify_groups'        => check_post( 'user_notify_groups' ) ?? '0',
+                'user_notify_events'        => check_post( 'user_notify_events' ) ?? '0',
+                'user_notify_messages'      => check_post( 'user_notify_messages' ) ?? '0',
+                'user_notify_updates'       => check_post( 'user_notify_updates' ) ?? '0',
+            ];
+
+            if ( $this->userFieldsInput->checkUpdateAccess() ) {
+
+                if ( fusion_safe() ) {
+
+                    dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
+
+                    addnotice( 'success', $locale['u163']."\n".$locale['u521'] );
+
+                    redirect(BASEDIR.'edit_profile.php?section=notifications');
+                }
+            }
+        }
 
     }
 

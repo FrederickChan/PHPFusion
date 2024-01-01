@@ -211,6 +211,8 @@ $locale['u519'] = 'Periodically';
 $locale['u520'] = 'Off';
 $locale['u521'] = 'Notification settings have been updated';
 
+
+
 $locale['u600'] = 'Privacy and safety';
 $locale['u601'] = 'Account access to your account, data storage and account security options';
 $locale['u602'] = 'Two step verification';

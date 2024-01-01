@@ -16,7 +16,7 @@ class AccountProfile extends UserFieldsForm {
         $locale = fusion_get_locale();
         $settings = fusion_get_settings();
 
-        $info['page_title'] = 'Details';
+        $info['page_title'] = 'Public profile settings';
 
         $info['user_firstname'] = form_text( 'user_firstname', $locale['u010'], $this->userFields->userData['user_firstname'], [
         ] );

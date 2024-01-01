@@ -26,6 +26,7 @@ use GoogleAuthenticator\GoogleAuthenticator;
 use PHPFusion\Authenticate;
 use PHPFusion\EmailAuth;
 use PHPFusion\PasswordAuth;
+use PHPFusion\QuantumFields;
 use PHPFusion\Userfields\UserFieldsValidate;
 use function Sodium\add;
 
@@ -51,6 +52,8 @@ class AccountsValidate extends UserFieldsValidate {
      * @var string
      */
     private $_username;
+
+    private $_quantum;
 
     /**
      * @param $fieldname
@@ -118,33 +121,6 @@ class AccountsValidate extends UserFieldsValidate {
         }
 
         return $this->userFieldsInput->userData['user_name'];
-    }
-
-    /**
-     * Phone number
-     *
-     * @return string
-     */
-    public function setUserPhone() {
-        $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
-        // design sanitization
-        if ( $this->userFieldsInput->_method == 'validate_update' ) {
-            return sanitizer( 'user_phone', '', 'user_phone' );
-        }
-        return '';
-    }
-
-    /**
-     * Hide phone
-     *
-     * @return int
-     */
-    public function setUserHidePhone() {
-        if ( $this->userFieldsInput->_method == 'validate_update' ) {
-            return post( 'user_hide_phone' ) ? 1 : 0;
-        }
-        return 0;
     }
 
 
@@ -431,10 +407,10 @@ class AccountsValidate extends UserFieldsValidate {
     /**
      * @param string $field
      *
-     * @return false|mixed
+     * @return string
      */
     private function getPasswordInput( $field ) {
-        return isset( $_POST[$field] ) && $_POST[$field] != "" ? $_POST[$field] : FALSE;
+        return isset( $_POST[$field] ) && $_POST[$field] != "" ? $_POST[$field] : '';
     }
 
     /**
@@ -749,19 +725,84 @@ class AccountsValidate extends UserFieldsValidate {
         return [];
     }
 
+    public function setAccountProfile() {
+        $locale = fusion_get_locale();
+        $settings = fusion_get_settings();
+
+        $this->_data['user_id'] = $this->userFieldsInput->userData['user_id'];
+        $this->_data['user_name'] = $this->setUserName();
+        $this->_data['user_firstname'] = sanitizer( 'user_firstname', '', 'user_firstname' );
+        $this->_data['user_lastname'] = sanitizer( 'user_lastname', '', 'user_lastname' );
+        $this->_data['user_addname'] = sanitizer( 'user_addname', '', 'user_addname' );
+        $this->_data['user_displayname'] = sanitizer( 'user_displayname', '0', 'user_displayname' );
+        $this->_data['user_phonecode'] = sanitizer( 'user_phonecode', '', 'user_phonecode' );
+        $this->_data['user_phone'] = sanitizer( 'user_phone', '', 'user_phone' );
+        $this->_data['user_bio'] = sanitizer( 'user_bio', '', 'user_bio' );
+
+        if ( $_input = $this->setCustomUserFields() ) {
+            foreach ( $_input as $input_values ) {
+                $this->_data += $input_values;
+            }
+        }
+
+        //        $this->setUserAvatar();
+        //if ( $this->validation ) {
+        //    $this->verifyCaptchas();
+        //}
+
+        // id request spoofing request
+        if ( $this->userFieldsInput->checkUpdateAccess() ) {
+
+            // Log username change
+            if ( $settings['username_change'] && $this->_data['user_name'] !== $this->userFieldsInput->userData['user_name'] ) {
+                save_user_log( $this->userFieldsInput->userData['user_id'], 'user_name', $this->_data['user_name'], $this->userFieldsInput->userData['user_name'] );
+            }
+
+            // Log all custom field changes
+            $this->_quantum->logUserAction( DB_USERS, 'user_id' );
+
+            // Update Table
+            dbquery_insert( DB_USERS, $this->_data, 'update' );
+
+            //dbquery_insert( DB_USER_SETTINGS, $this->data, 'update', ['primary_key' => 'user_id'] );
+            addnotice( 'success', $locale['u163'] . "\nYour personal information has been successfully updated." );
+
+            redirect( BASEDIR . 'edit_profile.php' );
+
+        } else {
+
+            fusion_stop();
+            addnotice( 'danger', $locale['error_request'] );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function setCustomUserFields() {
+
+        $this->_quantum = new QuantumFields();
+        $this->_quantum->setFieldDb( DB_USER_FIELDS );
+        $this->_quantum->loadFields();
+        $this->_quantum->loadFieldCats();
+        $this->_quantum->setCallbackData( $this->_data );
+
+        return $this->_quantum->returnFieldsInput( DB_USERS, 'user_id' );
+    }
+
     public function setAccountPrivacy() {
 
         $rows = [
-            'user_id' => $this->userFieldsInput->userData['user_id'],
-            'user_hide_phone' => sanitizer( 'user_hide_phone', '0', 'user_hide_phone' ),
-            'user_hide_email' => sanitizer( 'user_hide_email', '0', 'user_hide_email' ),
-            'user_hide_location' => sanitizer( 'user_hide_location', '0', 'user_hide_location' ),
+            'user_id'             => $this->userFieldsInput->userData['user_id'],
+            'user_hide_phone'     => sanitizer( 'user_hide_phone', '0', 'user_hide_phone' ),
+            'user_hide_email'     => sanitizer( 'user_hide_email', '0', 'user_hide_email' ),
+            'user_hide_location'  => sanitizer( 'user_hide_location', '0', 'user_hide_location' ),
             'user_hide_birthdate' => sanitizer( 'user_hide_birthdate', '0', 'user_hide_birthdate' ),
         ];
 
         if ( fusion_safe() ) {
 
-            dbquery_insert(DB_USERS, $rows, 'update');
+            dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
             addnotice( 'success', "Account profile updated.\nPrivacy settings has been updated successfully." );
             redirect( BASEDIR . 'edit_profile.php?ref=privacy' );
         }

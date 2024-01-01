@@ -123,6 +123,7 @@ if ( !function_exists( 'display_up_settings' ) ) {
             . fusion_get_function( 'closeside' );
     }
 
+    require_once __DIR__.'/profile_settings/notify.tpl.php';
     require_once __DIR__.'/profile_settings/settings.tpl.php';
     require_once __DIR__.'/profile_settings/privacy.tpl.php';
     require_once __DIR__.'/profile_settings/close.tpl.php';

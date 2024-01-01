@@ -1283,7 +1283,6 @@ class CoreTables {
                 'unsigned' => TRUE,
             ]//field_cat_order SMALLINT(5) UNSIGNED NOT NULL ,
         ];
-
         $table_package['user_fields'] = [
             'field_id'           => [
                 'type'           => 'BIGINT',
@@ -1417,109 +1416,105 @@ class CoreTables {
         ];
 
         $table_package['user_settings'] = [
-            'user_id'                => [
+            'user_id'                   => [
                 'type'           => 'BIGINT',
                 'length'         => 20,
                 'auto_increment' => TRUE,
-                'key'            => 2, //PRIMARY KEY (user_id),
+                'key'            => 1, //PRIMARY KEY (user_id),
                 'unsigned'       => TRUE,
             ],
-            'user_auth'              => [
+            'user_auth'                 => [
                 'type'     => 'TINYINT',
                 'length'   => 1,
                 'unsigned' => TRUE,
                 'default'  => 0,
             ],
-            'user_hide_email'        => [
+            'user_hide_email'           => [
                 'type'     => 'TINYINT',
                 'length'   => 1,
                 'default'  => 1,
                 'unsigned' => TRUE,
             ], //user_hide_email TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
-            'user_hide_phone'        => [
+            'user_hide_phone'           => [
                 'type'     => 'TINYINT',
                 'length'   => 1,
                 'default'  => 1,
                 'unsigned' => TRUE,
             ],
-            'user_inbox'             => [
+            'user_hide_location'        => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
+            ],
+            'user_hide_birthdate'       => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
+            ],
+            'user_inbox'                => [
                 'type'     => 'SMALLINT',
                 'length'   => 6,
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_inbox SMALLINT(6) unsigned not null default '0',
-            'user_outbox'            => [
+            'user_outbox'               => [
                 'type'     => 'SMALLINT',
                 'length'   => 6,
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_outbox SMALLINT(6) unsigned not null default '0',
-            'user_archive'           => [
+            'user_archive'              => [
                 'type'     => 'SMALLINT',
                 'length'   => 6,
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_archive SMALLINT(6) unsigned not null default '0',
-            'user_pm_save_sent'      => [
+            'user_pm_save_sent'         => [
                 'type'    => 'TINYINT',
                 'length'  => 1,
                 'default' => '0'
             ], //user_pm_save_sent TINYINT(1) not null default '0',
-            'user_comments_notify'   => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_comments'      => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_tag_notify'        => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_mentions'      => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_newsletter_notify' => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_subscriptions' => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_follow_notify'     => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_birthdays'     => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_pm_notify'         => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_groups'        => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_pm_email'          => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_events'        => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_follow_email'      => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_messages'      => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_feedback_email'    => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'default'  => '0',
-                'unsigned' => TRUE,
+            'user_notify_updates'       => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => 1,
             ],
-            'user_email_duration'    => [
-                'type'     => 'TINYINT',
-                'length'   => 2,
-                'default'  => '4',
-                'unsigned' => TRUE,
-            ],
-            'user_language'          => [
+            'user_language'             => [
                 'type'    => 'VARCHAR',
                 'length'  => 50,
                 'default' => $localeset
@@ -1721,24 +1716,10 @@ class CoreTables {
                 'length'  => 50,
                 'default' => ''
             ], //user_location VARCHAR(50) NOT NULL DEFAULT '',
-            'user_hide_location'          => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'key'      => 2,
-                'unsigned' => TRUE,
-                'default'  => '0',
-            ],
             'user_birthdate'              => [
                 'type'    => 'DATE',
                 'default' => '1900-01-01'
             ], //user_birthdate DATE NOT NULL DEFAULT '1900-01-01',
-            'user_hide_birthdate'         => [
-                'type'     => 'TINYINT',
-                'length'   => 1,
-                'key'      => 2,
-                'unsigned' => TRUE,
-                'default'  => '0',
-            ],
             'user_skype'                  => [
                 'type'    => 'VARCHAR',
                 'length'  => 100,
@@ -1773,19 +1754,20 @@ class CoreTables {
                 'key'      => 2,
                 'unsigned' => TRUE,
             ], // user_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
-            'blacklist_uid' => [
+            'blacklist_uid'  => [
                 'type'     => 'BIGINT',
                 'length'   => 20,
                 'key'      => 2,
                 'unsigned' => TRUE,
             ],
-            'blacklist_time'   => [
-                'type'    => 'INT',
-                'length'  => 10,
+            'blacklist_time' => [
+                'type'     => 'INT',
+                'length'   => 10,
                 'unsigned' => TRUE,
-                'default' => '0'
+                'default'  => '0'
             ],
         ];
+
         $table_package['user_sessions'] = [
             'user_id'        => [
                 'type'     => 'BIGINT',

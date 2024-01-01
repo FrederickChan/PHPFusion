@@ -2,7 +2,7 @@
 
 function details_up_settings($info) {
 
-    openside( 'Profile Information' );?>
+    opentable( 'Public profile' );?>
 
     <!-- Profile_page-->
     <?php echo $info['form_open'] ?>
@@ -43,6 +43,6 @@ function details_up_settings($info) {
         <?php endforeach; ?>
     <?php endif; ?>
     <?php echo $info['button'] . $info['form_close'] ?>
-    <?php closeside();
+    <?php closetable();
 
 }

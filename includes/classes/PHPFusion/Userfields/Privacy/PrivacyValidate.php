@@ -6,6 +6,9 @@ use PHPFusion\Userfields\UserFieldsValidate;
 
 class PrivacyValidate extends UserFieldsValidate {
 
+    /**
+     * Is this still working?
+     */
     public function validate() {
 
         $locale = fusion_get_locale();
@@ -23,7 +26,7 @@ class PrivacyValidate extends UserFieldsValidate {
                     if ($pin == $rows['user_2fa_pin']) {
 
                         $data = [
-                            'user_id'   => (int)$this->userData['user_id'],
+                            'user_id'   => (int)$this->userFieldsInput->userData['user_id'],
                             'user_auth' => 1,
                         ];
                         dbquery_insert( DB_USER_SETTINGS, $data, 'update', ['primary_key' => 'user_id', 'no_unique' => TRUE] );
@@ -76,7 +79,6 @@ class PrivacyValidate extends UserFieldsValidate {
             }
         }
 
-        return FALSE;
     }
 
 }

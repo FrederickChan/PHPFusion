@@ -22,6 +22,7 @@ namespace PHPFusion;
 use PHPFusion\Userfields\Accounts\AccountPrivacy;
 use PHPFusion\Userfields\Accounts\AccountsForm;
 use PHPFusion\Userfields\Accounts\CloseAccount;
+use PHPFusion\Userfields\Notifications\NotificationForm;
 use PHPFusion\Userfields\Privacy\PrivacyForm;
 use PHPFusion\Userfields\UserFieldsForm;
 
@@ -148,7 +149,7 @@ class UserFields extends QuantumFields {
             // privacy page
             'privacy'        => BASEDIR . 'edit_profile.php?ref=privacy',
             'login'          => BASEDIR . 'edit_profile.php?section=privacy&ref=login',
-            'blacklist'          => BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist',
+            'blacklist'      => BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist',
             // Authenticator download links
             'appstore'       => 'https://apps.apple.com/au/app/google-authenticator/id388497605',
             'playstore'      => 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US',
@@ -161,9 +162,10 @@ class UserFields extends QuantumFields {
 
             switch ( $this->sectionURI ) {
                 case 'notifications':
-                    return $this->showNotificationSection();
+                    display_up_notification( ( $this->info + ( new NotificationForm( $this ) )->displayInputFields() ) );
+                    break;
                 case 'privacy':
-                    display_up_privacy( ( $this->info + (new PrivacyForm($this))->displayInputFields()) );
+                    display_up_privacy( ( $this->info + ( new PrivacyForm( $this ) )->displayInputFields() ) );
                     break;
                 case 'close':
                     display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );
@@ -366,8 +368,6 @@ class UserFields extends QuantumFields {
             'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account'],
             'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications'],
             'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety'],
-            'communications' => ['link' => $link_prefix . 'communications', 'title' => 'Communications'],
-            'message'        => ['link' => $link_prefix . 'message', 'title' => 'Messaging'],
             'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account']
         ];
 

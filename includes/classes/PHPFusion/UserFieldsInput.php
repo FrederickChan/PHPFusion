@@ -65,7 +65,7 @@ class UserFieldsInput {
     private $_newUserPassword = FALSE;
 
     public $moderation = 0;
-    private $_data;
+
 
     /**
      * Save User Fields
@@ -333,8 +333,6 @@ class UserFieldsInput {
 
     /**
      * Update User Fields
-     *
-     * @return bool
      */
     public function saveUpdate() {
 
@@ -343,25 +341,24 @@ class UserFieldsInput {
 
         switch ( get( 'section' ) ) {
             case 'notifications':
-                return $this->updateNotifications();
-            case 'privacy':
-                return ( new PrivacyValidate( $this ) )->validate();
+                ( new NotificationsValidate( $this ) )->validate();
+                break;
+            //case 'privacy':
+                //( new PrivacyValidate( $this ) )->validate();
+                //break;
             case 'close':
-                return ( new CloseValidate( $this ) )->validate();
+                ( new CloseValidate( $this ) )->validate();
+                break;
             default:
                 return $this->updateAccount();
         }
+
     }
 
     /**
      * Update account settings for users
-     *
-     * @return bool
      */
     private function updateAccount() {
-
-        $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
 
         $userFieldsValidate = new AccountsValidate( $this );
 
@@ -387,96 +384,14 @@ class UserFieldsInput {
 
         } else if ( check_post( 'update_profile_btn' ) ) {
 
-            $this->_data['user_id'] = $this->userData['user_id'];
-            $this->_data['user_name'] = $userFieldsValidate->setUserName();
-            $this->_data['user_firstname'] = sanitizer( 'user_firstname', '', 'user_firstname' );
-            $this->_data['user_lastname'] = sanitizer( 'user_lastname', '', 'user_lastname' );
-            $this->_data['user_addname'] = sanitizer( 'user_addname', '', 'user_addname' );
-            $this->_data['user_displayname'] = sanitizer( 'user_displayname', '0', 'user_displayname' );
-            $this->_data['user_phonecode'] = sanitizer( 'user_phonecode', '', 'user_phonecode' );
-            $this->_data['user_phone'] = sanitizer( 'user_phone', '', 'user_phone' );
-            $this->_data['user_bio'] = sanitizer( 'user_bio', '', 'user_bio' );
-
-            if ( $_input = $this->setCustomUserFields() ) {
-                foreach ( $_input as $input_values ) {
-                    $this->_data += $input_values;
-                }
-            }
-
-
-            // Set admin password
-            //if ( check_post( 'user_admin_password1' ) ) {
-            //    if ( $admin_pass = $userFieldsValidate->setAdminPassword() ) {
-            //        if ( count( $admin_pass ) === 3 ) {
-            //            [$this->data['user_admin_algo'], $this->data['user_admin_salt'], $this->data['user_admin_password']] = $admin_pass;
-            //        }
-            //    }
-            //}
-
-            //        $this->setUserAvatar();
-
-            //if ( $this->validation ) {
-            //    $this->verifyCaptchas();
-            //}
-
-            // id request spoofing request
-            if ( $this->checkUpdateAccess() ) {
-
-                // Log username change
-                if ( $settings['username_change'] && $this->_data['user_name'] !== $this->userData['user_name'] ) {
-                    save_user_log( $this->userData['user_id'], 'user_name', $this->_data['user_name'], $this->userData['user_name'] );
-                }
-
-                // Log all custom field changes
-                $this->_quantum->logUserAction( DB_USERS, 'user_id' );
-
-                // Update Table
-                dbquery_insert( DB_USERS, $this->_data, 'update' );
-
-                //dbquery_insert( DB_USER_SETTINGS, $this->data, 'update', ['primary_key' => 'user_id'] );
-                addnotice( 'success', $locale['u163'] );
-
-                redirect( BASEDIR . 'edit_profile.php' );
-
-            } else {
-                fusion_stop();
-                addnotice( 'danger', $locale['error_request'] );
-            }
+            $userFieldsValidate->setAccountProfile();
         }
-
-    }
-
-    /**
-     * Update notifications settings for users
-     *
-     * @return bool
-     */
-    private function updateNotifications() {
-
-        if ( check_post( 'save_notify' ) ) {
-
-            $rows = ( new NotificationsValidate( $this ) )->validate();
-
-            if ( $this->checkUpdateAccess() ) {
-
-                if ( fusion_safe() ) {
-
-                    dbquery_insert( DB_USER_SETTINGS, $rows, 'update', ['no_unique' => TRUE, 'primary_key' => 'user_id'] );
-
-                    $locale = fusion_get_locale();
-                    addnotice( 'success', $locale['u521'] );
-
-                    return TRUE;
-                }
-            }
-        }
-
-        return FALSE;
     }
 
     /**
      * Admin needs hash
      * User just need match own user_id
+     * Only admin needs a userhash to update
      *
      * @return bool
      */
@@ -484,25 +399,12 @@ class UserFieldsInput {
         return fusion_safe() && ( ( iADMIN && checkrights( 'M' ) && ( $this->userData['user_password'] == sanitizer( 'user_hash', '', "user_hash" ) ) ) || ( $this->data['user_id'] == $this->userData['user_id'] ) );
     }
 
-    /**
-     * @return array
-     */
-    private function setCustomUserFields() {
 
-        $this->_quantum = new QuantumFields();
-        $this->_quantum->setFieldDb( DB_USER_FIELDS );
-        $this->_quantum->loadFields();
-        $this->_quantum->loadFieldCats();
-        $this->_quantum->setCallbackData( $this->_data );
-
-        return $this->_quantum->returnFieldsInput( DB_USERS, 'user_id' );
-    }
 
     /**
      * Set user avatar
      */
-    private
-    function setUserAvatar() {
+    private function setUserAvatar() {
         if ( isset( $_POST['delAvatar'] ) ) {
             if ( $this->userData['user_avatar'] != "" && file_exists( IMAGES . "avatars/" . $this->userData['user_avatar'] ) && is_file( IMAGES . "avatars/" . $this->userData['user_avatar'] ) ) {
                 unlink( IMAGES . "avatars/" . $this->userData['user_avatar'] );
@@ -525,8 +427,7 @@ class UserFieldsInput {
      *
      * @return array
      */
-    public
-    function setUserHash() {
+    public function setUserHash() {
         if ( !empty( $this->userData['user_password'] ) ) {
             // when edit profile
             $this->data['user_hash'] = $this->userData['user_password'];
@@ -541,14 +442,16 @@ class UserFieldsInput {
     /**
      * @param string $value
      */
-    public
-    function verifyCode( $value ) {
+    public function verifyCode( $value ) {
         $locale = fusion_get_locale();
         $userdata = fusion_get_userdata();
+
         if ( !preg_check( "/^[0-9a-z]{32}$/i", $value ) ) {
             redirect( BASEDIR . 'index.php' );
         }
+
         $result = dbquery( "SELECT * FROM " . DB_EMAIL_VERIFY . " WHERE user_code=:usercode", [':usercode' => $value] );
+
         if ( dbrows( $result ) ) {
             $data = dbarray( $result );
             if ( $data['user_id'] == $userdata['user_id'] ) {
