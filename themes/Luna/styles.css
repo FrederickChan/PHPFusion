@@ -17,6 +17,7 @@
  * +--------------------------------------------------------
  */
 body {
+  --lg-side-width: 270px;
   --color: #676a79;
   --light-color: #87909f;
   --low-emphasis: #00000088;
@@ -38,7 +39,6 @@ body {
   --darker-input-bg: #eef0f2;
   color: var(--color);
   background: var(--bg);
-  font-size: 14px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -74,10 +74,10 @@ body main > .container {
   min-height: 100%;
 }
 body main .luna-left-col {
-  max-width: 225px;
+  max-width: var(--lg-side-width);
 }
 body main .luna-right-col {
-  max-width: 225px;
+  max-width: var(--lg-side-width);
 }
 body main .luna-body {
   flex: 1;
@@ -147,7 +147,7 @@ h1,
 .h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.25;
   color: var(--header-color, inherit);
 }
@@ -201,6 +201,10 @@ a {
   text-decoration: none;
   background-color: var(--bs-list-group-bg);
   border: var(--bs-list-group-border-width) solid var(--bs-list-group-border-color);
+  margin-bottom: 0;
+}
+.list-group.check-group .form-check:first-of-type {
+  border-bottom: 0;
 }
 .list-group.check-group .form-check label {
   padding-right: 40px;

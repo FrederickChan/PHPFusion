@@ -287,11 +287,11 @@ function render_page() {
             ] )
     ] );
 
-    $side_unit = 3;
+    $side_unit = 4;
     $left = defined( 'LEFT' ) && LEFT;
     $right = defined( 'RIGHT' ) && RIGHT;
-    $lg_span = 12 - ( ( $left + $right ) * 3 );
-    $md_span = 8;
+    $lg_span = 12 - ( ( $left + $right ) * $side_unit );
+    $md_span = $lg_span;
 
     echo '</header>';
 
