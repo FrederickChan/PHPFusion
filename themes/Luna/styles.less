@@ -275,6 +275,7 @@ a {
     }
 }
 
+
 .list-group.check-group {
     .form-check {
 
@@ -373,6 +374,45 @@ a {
         border-radius: 0 0 var(--inner-radius) var(--inner-radius);
     }
 
+
+}
+
+.row {
+    .nav {
+        --bs-list-group-color: var(--input-color);
+        --bs-list-group-active-color: #fff;
+        --bs-list-group-active-bg: var(--bs-primary);
+        --hover-bg: #f6f8fa;
+
+        .nav-item {
+            margin-bottom: .3rem;
+        }
+
+        .nav-link {
+            color: var(--bs-list-group-color);
+            border-radius: 6px;
+            padding: .4rem .6rem;
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                background: var(--hover-bg);
+            }
+
+            svg {
+                fill: var(--bs-list-group-color);
+            }
+
+            &.active {
+                color: var(--bs-list-group-active-color);
+                background: var(--bs-list-group-active-bg);
+
+                svg {
+                    fill: var(--bs-list-group-active-color);
+                }
+            }
+        }
+    }
 }
 
 .bg-warning-soft {
@@ -467,6 +507,11 @@ a {
         --bs-btn-disabled-color: #fff;
         --bs-btn-disabled-bg: #0f6fec;
         --bs-btn-disabled-border-color: #0f6fec;
+
+        svg {
+            width: 20px;
+            fill: #fff;
+        }
     }
 
     &.btn-outline-primary {
@@ -499,6 +544,11 @@ a {
         --bs-btn-active-border-color: rgba(31, 35, 40, .15);
         --bs-box-shadow: rgba(31, 35, 40, 0.04) 0px 1px 0px;
         --bs-btn-border-width: 1px;
+
+        svg {
+            width: 20px;
+            fill: rgb(36, 41, 47);;
+        }
     }
 
     &.btn-remove {
@@ -533,6 +583,23 @@ a {
             color: #fff !important;
             background-color: #d6293e !important;
             border-color: #d6293e !important;
+        }
+    }
+
+    &.btn-success {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: rgb(12, 188, 135);
+        --bs-btn-hover-bg: rgb(10, 150, 108);
+        --bs-btn-hover-color: #fff;
+        --bs-btn-border-color: rgb(31, 136, 61, .15);
+        --bs-btn-hover-border-color: rgb(31, 136, 61, .15);
+        --bs-btn-active-border-color: rgb(31, 136, 61, .15);
+        --bs-box-shadow: rgba(31, 35, 40, 0.04) 0px 1px 0px;
+        --bs-btn-border-width: 1px;
+
+        svg {
+            width: 20px;
+            fill: #fff;
         }
     }
 
@@ -616,6 +683,26 @@ a.stretched:after {
     font-weight: 500;
     margin-bottom: .3rem;
 
+    p {
+        color: var(--bs-card-color);
+        font-size: .85rem;
+        font-weight: 400;
+    }
+}
+
+.form-check.radio {
+    &:first-of-type {
+        margin-top: 1rem;
+    }
+
+    &:last-of-type {
+        margin-bottom: 1rem;
+    }
+
+    .form-check-label {
+        color: var(--label-color);
+        font-weight: 500;
+    }
 }
 
 .form-group, .form-check.check-group {
@@ -878,7 +965,7 @@ div[data-fusion="true"] {
             border: 0;
 
             &.active {
-                color: var(--bs-primary);
+                //color: var(--bs-primary);
             }
         }
     }
@@ -1187,6 +1274,10 @@ div[data-fusion="true"] {
             padding-top: 5px;
         }
 
+        .nav-tabs .nav-item {
+            margin: 0;
+        }
+
         .nav-tabs .nav-link {
             display: flex;
             font-size: .9rem;
@@ -1228,6 +1319,14 @@ div[data-fusion="true"] {
         padding: 5px;
     }
 
+    .form-check.check-group {
+        label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+    }
+
+
     button {
         color: #656d76;
         border-radius: 6px;
@@ -1238,14 +1337,14 @@ div[data-fusion="true"] {
         background: transparent;
         transition: none;
 
-        img {
+        svg {
             filter: opacity(.5);
             width: 20px;
             height: 20px;
         }
 
         &:hover {
-            img {
+            svg {
                 filter: opacity(1);
             }
 

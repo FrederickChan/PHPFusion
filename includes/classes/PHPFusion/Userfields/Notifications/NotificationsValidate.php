@@ -28,6 +28,7 @@ class NotificationsValidate extends UserFieldsValidate {
                 'user_notify_events'        => check_post( 'user_notify_events' ) ?? '0',
                 'user_notify_messages'      => check_post( 'user_notify_messages' ) ?? '0',
                 'user_notify_updates'       => check_post( 'user_notify_updates' ) ?? '0',
+                'user_pm_email'             => check_post( 'user_pm_email' ) ?? '0',
             ];
 
             if ( $this->userFieldsInput->checkUpdateAccess() ) {
@@ -36,9 +37,9 @@ class NotificationsValidate extends UserFieldsValidate {
 
                     dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
 
-                    addnotice( 'success', $locale['u163']."\n".$locale['u521'] );
+                    addnotice( 'success', $locale['u163'] . "\n" . $locale['u522'] );
 
-                    redirect(BASEDIR.'edit_profile.php?section=notifications');
+                    redirect( BASEDIR . 'edit_profile.php?section=notifications' );
                 }
             }
         }

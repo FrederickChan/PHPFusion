@@ -179,7 +179,9 @@ class ImageRepo {
         // You need to + sign it, so setImage will work.
         self::$image_paths += [
             //A
+            'add'             => IMAGES . 'icons/add.svg',
             "app_store"       => IMAGES . "icons/apple.svg",
+            'archive'         => IMAGES . 'icons/archive.svg',
             //B
             'birthdays'       => IMAGES . 'icons/birthdays.svg',
             'bbcode_bold'     => INCLUDES . 'bbcodes/images/b.svg',
@@ -228,6 +230,7 @@ class ImageRepo {
             //M
             'mentions'        => IMAGES . 'icons/mentions.svg',
             'messages_unread' => IMAGES . 'icons/unread.svg',
+            'minus'           => IMAGES . 'icons/minus.svg',
             //N
             "noavatar"        => IMAGES . "avatars/no-avatar.jpg",
             "no-avatar"       => IMAGES . "avatars/no-avatar.jpg",

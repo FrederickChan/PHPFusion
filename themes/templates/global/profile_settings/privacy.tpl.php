@@ -52,7 +52,17 @@ function display_up_privacy( array $info ) {
                 </div>
             </div>
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Login acitivty</h6>
+                <div class="pe-3"><h6 class="mb-0">Private messaging options</h6>
+                    <p class="small mb-0">
+                        Manage your private messages configurations
+                    </p>
+                </div>
+                <div class="ms-auto">
+                    <a class="btn btn-primary" href="<?php echo $info['link']['pm_options'] ?>">Change</a>
+                </div>
+            </div>
+            <div class="list-group-item d-flex align-items-center">
+                <div class="pe-3"><h6 class="mb-0">Login activity</h6>
                     <p class="small mb-0">
                         Manage your login activity across all devices
                     </p>

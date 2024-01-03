@@ -22,6 +22,7 @@ namespace PHPFusion\Userfields;
 
 use PHPFusion\SiteLinks;
 use PHPFusion\UserFields;
+use PHPFusion\Userfields\Accounts\AccountMessaging;
 use PHPFusion\Userfields\Accounts\AccountPrivacy;
 use PHPFusion\Userfields\Accounts\Fields\AccountEmail;
 use PHPFusion\Userfields\Accounts\Fields\AccountPasswords;
@@ -44,6 +45,7 @@ abstract class UserFieldsForm {
     private static $twofactorInstance;
     private static $privacyInstance;
     private static $sessionInstance;
+    private static $pmInstance;
 
     protected $userFields;
 
@@ -112,6 +114,13 @@ abstract class UserFieldsForm {
             self::$privacyInstance = ( new AccountPrivacy( $this->userFields ) );
         }
         return self::$privacyInstance;
+    }
+
+    public function accountMessaging() {
+        if ( !isset( self::$pmInstance ) ) {
+            self::$pmInstance = ( new AccountMessaging( $this->userFields ) );
+        }
+        return self::$pmInstance;
     }
 
     public function accountSessions() {

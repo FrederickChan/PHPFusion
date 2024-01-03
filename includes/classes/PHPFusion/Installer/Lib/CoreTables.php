@@ -1469,6 +1469,11 @@ class CoreTables {
                 'unsigned' => TRUE,
                 'default'  => '0'
             ], //user_archive SMALLINT(6) unsigned not null default '0',
+            'user_pm_email'         => [
+                'type'    => 'TINYINT',
+                'length'  => 1,
+                'default' => '0'
+            ], //user_pm_save_sent TINYINT(1) not null default '0',
             'user_pm_save_sent'         => [
                 'type'    => 'TINYINT',
                 'length'  => 1,

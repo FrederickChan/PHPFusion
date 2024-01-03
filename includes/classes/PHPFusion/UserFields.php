@@ -149,6 +149,7 @@ class UserFields extends QuantumFields {
             'google'         => BASEDIR . 'edit_profile.php?ref=google',
             // privacy page
             'privacy'        => BASEDIR . 'edit_profile.php?ref=privacy',
+            'pm_options'     => BASEDIR . 'edit_profile.php?ref=pm_options',
             'login'          => BASEDIR . 'edit_profile.php?section=privacy&ref=login',
             'blacklist'      => BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist',
             // Authenticator download links
@@ -172,7 +173,7 @@ class UserFields extends QuantumFields {
                     display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );
                     break;
                 default:
-                    display_up_settings( ( ( new AccountsForm( $this ) )->displayInputFields() ) + $this->info);
+                    display_up_settings( ( ( new AccountsForm( $this ) )->displayInputFields() ) + $this->info );
             }
         }
         /*
@@ -303,10 +304,10 @@ class UserFields extends QuantumFields {
         }
 
         return [
-            'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account', 'icon'=>'profile'],
-            'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications', 'icon'=>'notification'],
-            'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety', 'icon'=>'privacy'],
-            'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account', 'icon'=>'close']
+            'account'       => ['link' => $link_prefix . 'account', 'title' => 'Account', 'icon' => 'profile'],
+            'notifications' => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications', 'icon' => 'notification'],
+            'privacy'       => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety', 'icon' => 'privacy'],
+            'close'         => ['link' => $link_prefix . 'close', 'title' => 'Close account', 'icon' => 'close']
         ];
 
     }

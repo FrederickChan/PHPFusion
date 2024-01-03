@@ -30,41 +30,42 @@ class NotificationForm extends UserFieldsForm {
      * @return array
      */
     public function displayInputFields() {
+        $locale = fusion_get_locale();
 
         return [
             'notify_openform'  => openform( 'notifyFrm', 'POST' ),
             'notify_closeform' => closeform(),
-            'comments'         => form_checkbox( 'user_notify_comments', 'Comments', $this->userFields->userData['user_notify_comments'], [
+            'comments'         => form_checkbox( 'user_notify_comments', $locale['u502'], $this->userFields->userData['user_notify_comments'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications for comments on your posts and replies to your comments.',
+                'ext_tip' => $locale['u503'],
             ] ),
-            'mentions'         => form_checkbox( 'user_notify_mentions', 'Mentions', $this->userFields->userData['user_notify_mentions'], [
+            'mentions'         => form_checkbox( 'user_notify_mentions', $locale['u504'], $this->userFields->userData['user_notify_mentions'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications for when someone tags you in a comment, post or story.',
+                'ext_tip' => $locale['u505'],
             ] ),
-            'subscriptions'    => form_checkbox( 'user_notify_subscriptions', 'Subscriptions', $this->userFields->userData['user_notify_subscriptions'], [
+            'subscriptions'    => form_checkbox( 'user_notify_subscriptions', $locale['u506'], $this->userFields->userData['user_notify_subscriptions'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications to remind you of updates you may have missed.',
+                'ext_tip' => $locale['u507'],
             ] ),
-            'birthdays'        => form_checkbox( 'user_notify_birthdays', 'Birthdays', $this->userFields->userData['user_notify_birthdays'], [
+            'birthdays'        => form_checkbox( 'user_notify_birthdays', $locale['u508'], $this->userFields->userData['user_notify_birthdays'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications about your members birthdays.',
+                'ext_tip' => $locale['u509'],
             ] ),
-            'groups'           => form_checkbox( 'user_notify_groups', 'Groups', $this->userFields->userData['user_notify_groups'], [
+            'groups'           => form_checkbox( 'user_notify_groups', $locale['u510'], $this->userFields->userData['user_notify_groups'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications about activity in Groups you have joined.',
+                'ext_tip' => $locale['u511'],
             ] ),
-            'events'           => form_checkbox( 'user_notify_events', 'Events', $this->userFields->userData['user_notify_events'], [
+            'events'           => form_checkbox( 'user_notify_events', $locale['u512'], $this->userFields->userData['user_notify_events'], [
                 'type'    => 'toggle',
                 'ext_tip' => 'These are notifications about Events.',
             ] ),
-            'messages'         => form_checkbox( 'user_notify_messages', 'Messaging', $this->userFields->userData['user_notify_messages'], [
+            'messages'         => form_checkbox( 'user_notify_messages', $locale['u514'], $this->userFields->userData['user_notify_messages'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications for messages you’ve received directly in the private messages inbox.',
+                'ext_tip' => $locale['u515'],
             ] ),
-            'updates'          => form_checkbox( 'user_notify_updates', 'Updates', $this->userFields->userData['user_notify_updates'], [
+            'updates'          => form_checkbox( 'user_notify_updates', $locale['u518'], $this->userFields->userData['user_notify_updates'], [
                 'type'    => 'toggle',
-                'ext_tip' => 'These are notifications for requests, breaking news, expiring offers and more.',
+                'ext_tip' => $locale['u519'],
             ] ),
             'notify_button'    => form_button( 'update_notify', 'Confirm', 'update_notify', [
                 'class' => 'btn-primary',

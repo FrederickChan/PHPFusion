@@ -382,6 +382,10 @@ class UserFieldsInput {
 
             $userFieldsValidate->setAccountPrivacy();
 
+        } else if ( check_post( 'user_pm_submit' ) ) {
+
+            $userFieldsValidate->setAccountMesssaging();
+
         } else if ( check_post( 'update_profile_btn' ) ) {
 
             $userFieldsValidate->setAccountProfile();

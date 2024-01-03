@@ -283,6 +283,35 @@ a {
   background-color: var(--card-header);
   border-radius: 0 0 var(--inner-radius) var(--inner-radius);
 }
+.row .nav {
+  --bs-list-group-color: var(--input-color);
+  --bs-list-group-active-color: #fff;
+  --bs-list-group-active-bg: var(--bs-primary);
+  --hover-bg: #f6f8fa;
+}
+.row .nav .nav-item {
+  margin-bottom: 0.3rem;
+}
+.row .nav .nav-link {
+  color: var(--bs-list-group-color);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  align-items: center;
+}
+.row .nav .nav-link:hover {
+  background: var(--hover-bg);
+}
+.row .nav .nav-link svg {
+  fill: var(--bs-list-group-color);
+}
+.row .nav .nav-link.active {
+  color: var(--bs-list-group-active-color);
+  background: var(--bs-list-group-active-bg);
+}
+.row .nav .nav-link.active svg {
+  fill: var(--bs-list-group-active-color);
+}
 .bg-warning-soft {
   background-color: rgba(243, 139, 44, 0.1);
 }
@@ -361,6 +390,10 @@ a {
   --bs-btn-disabled-bg: #0f6fec;
   --bs-btn-disabled-border-color: #0f6fec;
 }
+.btn.btn-primary svg {
+  width: 20px;
+  fill: #fff;
+}
 .btn.btn-outline-primary {
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
@@ -389,6 +422,10 @@ a {
   --bs-btn-active-border-color: rgba(31, 35, 40, 0.15);
   --bs-box-shadow: rgba(31, 35, 40, 0.04) 0px 1px 0px;
   --bs-btn-border-width: 1px;
+}
+.btn.btn-secondary svg {
+  width: 20px;
+  fill: #24292f;
 }
 .btn.btn-remove {
   --bs-btn-color: #d6293e;
@@ -423,6 +460,21 @@ a {
   color: #fff !important;
   background-color: #d6293e !important;
   border-color: #d6293e !important;
+}
+.btn.btn-success {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0cbc87;
+  --bs-btn-hover-bg: #0a966c;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-border-color: #1f883d;
+  --bs-btn-hover-border-color: #1f883d;
+  --bs-btn-active-border-color: #1f883d;
+  --bs-box-shadow: rgba(31, 35, 40, 0.04) 0px 1px 0px;
+  --bs-btn-border-width: 1px;
+}
+.btn.btn-success svg {
+  width: 20px;
+  fill: #fff;
 }
 .btn.btn-light {
   --bs-btn-color: #676a79;
@@ -493,6 +545,21 @@ a.stretched:after {
   color: var(--label-color);
   font-weight: 500;
   margin-bottom: 0.3rem;
+}
+.form-label p {
+  color: var(--bs-card-color);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.form-check.radio:first-of-type {
+  margin-top: 1rem;
+}
+.form-check.radio:last-of-type {
+  margin-bottom: 1rem;
+}
+.form-check.radio .form-check-label {
+  color: var(--label-color);
+  font-weight: 500;
 }
 .form-group,
 .form-check.check-group {
@@ -680,9 +747,6 @@ div[data-fusion="true"] strong {
   font-weight: 500;
   color: var(--bs-dark);
   border: 0;
-}
-.nav-tabs.nav-pills .nav-link.active {
-  color: var(--bs-primary);
 }
 .badge .badge-circle {
   border-radius: 50%;
@@ -938,6 +1002,9 @@ div[data-fusion="true"] strong {
   margin-left: auto;
   padding-top: 5px;
 }
+.panel-txtarea .panel-heading .nav-tabs .nav-item {
+  margin: 0;
+}
 .panel-txtarea .panel-heading .nav-tabs .nav-link {
   display: flex;
   font-size: 0.9rem;
@@ -966,6 +1033,10 @@ div[data-fusion="true"] strong {
 .panel-txtarea .panel-footer {
   padding: 5px;
 }
+.panel-txtarea .form-check.check-group label {
+  font-size: 13px;
+  font-weight: 500;
+}
 .panel-txtarea button {
   color: #656d76;
   border-radius: 6px;
@@ -976,7 +1047,7 @@ div[data-fusion="true"] strong {
   background: transparent;
   transition: none;
 }
-.panel-txtarea button img {
+.panel-txtarea button svg {
   filter: opacity(0.5);
   width: 20px;
   height: 20px;
@@ -984,6 +1055,6 @@ div[data-fusion="true"] strong {
 .panel-txtarea button:hover {
   background: var(--bs-txtarea-btn-hover-bg);
 }
-.panel-txtarea button:hover img {
+.panel-txtarea button:hover svg {
   filter: opacity(1);
 }

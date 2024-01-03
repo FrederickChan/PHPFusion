@@ -45,7 +45,11 @@ class AccountsForm extends UserFieldsForm {
 
         } else if ( $ref == 'privacy' ) {
 
-            $info = array_merge( $info, $this->accountPrivacy()->profilePrivacyField());
+            $info = array_merge( $info, $this->accountPrivacy()->profilePrivacyField() );
+
+        } else if ($ref == 'pm_options') {
+
+            $info = array_merge($info, $this->accountMessaging()->profileMessageField());
 
         } else {
 

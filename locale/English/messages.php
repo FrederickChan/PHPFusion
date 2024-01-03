@@ -43,7 +43,7 @@ $locale['441'] = "Write as Site Owner";
 $locale['442'] = "User Levels";
 $locale['443'] = "Groups";
 $locale['444'] = "More";
-$locale['445'] = "Configuration saved";
+//$locale['445'] = "Configuration saved";
 $locale['446'] = "Unread Messages";
 $locale['447'] = "Read Messages";
 $locale['448'] = "Settings";
@@ -110,16 +110,17 @@ $locale['513'] = "Click to set the marked messages as read";
 $locale['514'] = "Click to set the marked messages as unread";
 $locale['515'] = "Click to delete the marked messages";
 $locale['516'] = "Click to make configuration changes";
-$locale['520'] = "Default";
-$locale['521'] = "Do not notify me";
-$locale['522'] = "Yes, keep me informed";
-$locale['523'] = "Do not keep a record";
-$locale['524'] = "Yes, keep my sent messages";
 
+// This one move.
+//$locale['520'] = "Default";
+//$locale['521'] = "Do not notify me";
+//$locale['522'] = "Yes, keep me informed";
+//$locale['523'] = "Do not keep a record";
+//$locale['524'] = "Yes, keep my sent messages";
 // Options
 $locale['620'] = "Settings";
-$locale['621'] = "Notify me via email when I receive a new PM:";
-$locale['622'] = "Automatically save sent messages:";
+$locale['621'] = "";
+//$locale['622'] = "Automatically save sent messages:";
 $locale['623'] = "Save Configuration";
 $locale['624'] = "Saved Configuration";
 $locale['625'] = "You have a new private message waiting at [SITENAME]";

@@ -190,38 +190,52 @@ $locale['u400'] = "Already on [SITENAME]?";
 
 $locale['u500'] = 'Notification';
 $locale['u501'] = 'Preferred settings for all sorts of notifications about the user account.';
-$locale['u502'] = 'Comments and reactions';
-$locale['u503'] = 'Notifications when someone reacted to the contents created, rated or commented on';
+$locale['u502'] = 'Comments';
+$locale['u503'] = 'These are notifications for comments on your posts and replies to your comments.';
 $locale['u504'] = 'Mentions';
-$locale['u505'] = 'Notify when someone mentioned or tagged in the post, article, news or commented on';
+$locale['u505'] = 'These are notifications for when someone tags you in a comment, post or story.';
 $locale['u506'] = 'Newsletter and Subscriptions';
-$locale['u507'] = 'Notify when there are any newsletter subscriptions and invitations';
-$locale['u508'] = 'Following';
-$locale['u509'] = 'Notify when there are any follow up updates on the articles, posts or any contents that are being tracked';
-$locale['u510'] = 'Private messages';
-$locale['u511'] = 'Notify when there are any new private messages';
-$locale['u512'] = 'Email notifications';
+$locale['u507'] = 'These are notifications to remind you of updates you may have missed.';
+$locale['u508'] = 'Birthdays';
+$locale['u509'] = 'These are notifications about your members birthdays.';
+$locale['u510'] = 'Groups';
+$locale['u511'] = 'These are notifications about activity in Groups you have joined.';
+$locale['u512'] = 'Events';
 $locale['u513'] = 'Receive emails for the particular updates';
-$locale['u514'] = 'Follow updates emails';
-$locale['u515'] = 'Feedback emails';
-$locale['u516'] = 'Email Frequency';
-$locale['u517'] = 'Daily';
-$locale['u518'] = 'Weekly';
-$locale['u519'] = 'Periodically';
-$locale['u520'] = 'Off';
-$locale['u521'] = 'Notification settings have been updated';
+$locale['u514'] = 'Messaging';
+$locale['u515'] = 'These are notifications for messages you’ve received directly in the private messages inbox.';
+
+$locale['u518'] = 'Updates';
+$locale['u519'] = 'These are notifications for requests, breaking news, expiring offers and more.';
+$locale['u520'] = 'Notification settings have been updated';
+
+$locale['u600'] = 'Private Messaging';
+$locale['u601'] = 'Message Emails';
+$locale['u602'] = 'These are emails for messsages you’ve received directly in the private messages inbox.';
+$locale['u603'] = "Default";
+$locale['u604'] = "Do not notify me";
+$locale['u605'] = "Yes, keep me informed";
+$locale['u606'] = 'Save sent messages';
+$locale['u607'] = 'Automatically keep a copy to outbox for each sent messages';
+$locale['u608'] = "Do not keep a record";
+$locale['u609'] = "Yes, keep my sent messages";
+$locale['u610'] = "Private Messaging Settings";
+$locale['u611'] = "Private message options sucessfully updated.";
 
 
 
-$locale['u600'] = 'Privacy and safety';
-$locale['u601'] = 'Account access to your account, data storage and account security options';
-$locale['u602'] = 'Two step verification';
-$locale['u603'] = 'Secure your account with two-step verification';
-$locale['u604'] = 'Two step verification gives you additional security by requiring a verification code whenever sign in on a new device.';
-$locale['u605'] = 'Setup Two-step verification';
-$locale['u606'] = 'We sent a code to your email';
-$locale['u607'] = 'Enter the 6-digit verification code sent to [EMAIL]';
-$locale['u608'] = '6-digit code';
-$locale['u609'] = 'If you don\'t see the email in your inbox, check your spam folder.';
-$locale['u610'] = 'You have successfully activated your two-step verification';
-$locale['u611'] = 'Two step verification could not be performed. Please contact system administrator';
+$locale['u700'] = 'Privacy and safety';
+$locale['u700'] = 'Account access to your account, data storage and account security options';
+$locale['u700'] = 'Two step verification';
+$locale['u700'] = 'Secure your account with two-step verification';
+$locale['u700'] = 'Two step verification gives you additional security by requiring a verification code whenever sign in on a new device.';
+$locale['u700'] = 'Setup Two-step verification';
+$locale['u700'] = 'We sent a code to your email';
+$locale['u700'] = 'Enter the 6-digit verification code sent to [EMAIL]';
+$locale['u700'] = '6-digit code';
+$locale['u700'] = 'If you don\'t see the email in your inbox, check your spam folder.';
+$locale['u700'] = 'You have successfully activated your two-step verification';
+$locale['u700'] = 'Two step verification could not be performed. Please contact system administrator';
+
+
+$locale['u800'] = '';
