@@ -638,12 +638,9 @@ let addNotice = function (title, text = '', cssClass = 'base', options) {
     };
     var opts = {};
     $.extend(opts, defaultOptions, options);
-console.log(cssClass);
-
 
     if (text) {
         title = '<strong>' + title + '</strong>' + text;
     }
-
     $.notify(title, cssClass, {'autoHide': opts.static === false});
 };

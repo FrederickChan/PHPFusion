@@ -74,6 +74,7 @@ class Upload extends Validation {
                             } else {
                                 fusion_stop('Fusion Dynamics invalid accepted extension format. Please use either | or ,');
                             }
+
                             $file = $_FILES[$source_file];
                             $file_type = $file['type'][$i];
                             if ($target_file == "" || preg_match("/[^a-zA-Z0-9_-]/", $target_file)) {
@@ -107,13 +108,18 @@ class Upload extends Validation {
                             ) {
                                 $upload['error'] = 4;
                             } else {
+
                                 $target_file = (self::$inputConfig['replace_upload'] ? $target_file.$file_ext :
                                     filename_exists($file_dest, $target_file.$file_ext));
+
                                 $upload_file['target_file'] = $target_file;
+
                                 move_uploaded_file($file['tmp_name'][$i], $file_dest.$target_file);
+
                                 if (function_exists("chmod")) {
                                     chmod($file_dest.$target_file, 0644);
                                 }
+
                                 if ($query && !dbquery($query)) {
                                     // Invalid query string
                                     $upload['error'] = 3;
@@ -122,11 +128,13 @@ class Upload extends Validation {
                                     }
                                 }
                             }
+
                             if ($upload['error'] !== 0) {
                                 if (file_exists($file_dest.$target_file.$file_ext)) {
                                     @unlink($file_dest.$target_file.$file_ext);
                                 }
                             }
+
                             $upload['source_file'][$i] = $upload_file['source_file'];
                             $upload['source_size'][$i] = $upload_file['source_size'];
                             $upload['source_ext'][$i] = $upload_file['source_ext'];
@@ -240,6 +248,7 @@ class Upload extends Validation {
                     if (is_uploaded_file($_FILES[self::$inputConfig['input_name']]['tmp_name'][$i])) {
                         $image = $_FILES[self::$inputConfig['input_name']];
                         $target_name = $_FILES[self::$inputConfig['input_name']]['name'][$i];
+
                         if ($target_name != "" && !preg_match("/[^a-zA-Z0-9_-]/", $target_name)) {
                             $image_name = $target_name;
                         } else {
@@ -251,6 +260,7 @@ class Upload extends Validation {
                         if (filesize($image['tmp_name'][$i]) > 10 && @getimagesize($image['tmp_name'][$i])) {
                             $image_res = @getimagesize($image['tmp_name'][$i]);
                         }
+
                         $image_info = [
                             "image"         => FALSE,
                             "target_folder" => $target_folder,
@@ -267,6 +277,7 @@ class Upload extends Validation {
                             "thumb2_name"   => "",
                             "error"         => 0,
                         ];
+
                         if ($image_ext == ".gif") {
                             $filetype = 1;
                         } else if ($image_ext == ".jpg") {
@@ -278,6 +289,7 @@ class Upload extends Validation {
                         } else {
                             $filetype = FALSE;
                         }
+
                         if ($image['size'][$i] > $max_size) {
                             // Invalid file size
                             $image_info['error'] = 1;
@@ -298,15 +310,22 @@ class Upload extends Validation {
                             if (!file_exists($target_folder)) {
                                 mkdir($target_folder, 0755);
                             }
+
                             $image_name_full = (self::$inputConfig['replace_upload'] ? $image_name.$image_ext :
                                 filename_exists($target_folder, $image_name.$image_ext));
+
                             $image_name = substr($image_name_full, 0, strrpos($image_name_full, "."));
+
                             $image_info['image_name'] = $image_name_full;
+
                             $image_info['image'] = TRUE;
+
                             move_uploaded_file($image['tmp_name'][$i], $target_folder.$image_name_full);
+
                             if (function_exists("chmod")) {
                                 chmod($target_folder.$image_name_full, 0755);
                             }
+
                             if ($query && !dbquery($query)) {
                                 // Invalid query string
                                 $image_info['error'] = 4;

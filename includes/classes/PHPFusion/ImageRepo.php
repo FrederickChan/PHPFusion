@@ -179,61 +179,99 @@ class ImageRepo {
         // You need to + sign it, so setImage will work.
         self::$image_paths += [
             //A
-            "app_store"      => IMAGES . "icons/apple.svg",
+            "app_store"       => IMAGES . "icons/apple.svg",
             //B
-            'bbcode_bold'    => INCLUDES . 'bbcodes/images/b.svg',
-            'bbcode_big'     => INCLUDES . 'bbcodes/images/big.svg',
-            'bbcode_i'       => INCLUDES . 'bbcodes/images/i.svg',
-            'bbcode_u'       => INCLUDES . 'bbcodes/images/u.svg',
-            'bbcode_smiley'  => INCLUDES . 'bbcodes/images/smiley.svg',
-            'bbcode_url'     => INCLUDES . 'bbcodes/images/url.svg',
-            'bbcode_small'   => INCLUDES . 'bbcodes/images/small.svg',
-            'bbcode_mail'    => INCLUDES . 'bbcodes/images/mail.svg',
-            'bbcode_img'     => INCLUDES . 'bbcodes/images/img.svg',
-            'bbcode_aleft'   => INCLUDES . 'bbcodes/images/left.svg',
-            'bbcode_acenter' => INCLUDES . 'bbcodes/images/center.svg',
-            'bbcode_aright'  => INCLUDES . 'bbcodes/images/right.svg',
-            'bbcode_code'    => INCLUDES . 'bbcodes/images/code.svg',
-            'bbcode_quote'   => INCLUDES . 'bbcodes/images/quote.svg',
+            'birthdays'       => IMAGES . 'icons/birthdays.svg',
+            'bbcode_bold'     => INCLUDES . 'bbcodes/images/b.svg',
+            'bbcode_big'      => INCLUDES . 'bbcodes/images/big.svg',
+            'bbcode_i'        => INCLUDES . 'bbcodes/images/i.svg',
+            'bbcode_u'        => INCLUDES . 'bbcodes/images/u.svg',
+            'bbcode_smiley'   => INCLUDES . 'bbcodes/images/smiley.svg',
+            'bbcode_url'      => INCLUDES . 'bbcodes/images/url.svg',
+            'bbcode_small'    => INCLUDES . 'bbcodes/images/small.svg',
+            'bbcode_mail'     => INCLUDES . 'bbcodes/images/mail.svg',
+            'bbcode_img'      => INCLUDES . 'bbcodes/images/img.svg',
+            'bbcode_aleft'    => INCLUDES . 'bbcodes/images/left.svg',
+            'bbcode_acenter'  => INCLUDES . 'bbcodes/images/center.svg',
+            'bbcode_aright'   => INCLUDES . 'bbcodes/images/right.svg',
+            'bbcode_code'     => INCLUDES . 'bbcodes/images/code.svg',
+            'bbcode_quote'    => INCLUDES . 'bbcodes/images/quote.svg',
+            'block'           => IMAGES . 'icons/block.svg',
             //C
+            'certified'       => IMAGES . 'icons/certified.svg',
+            'close'           => IMAGES . 'icons/deactivate.svg',
+            'cross'           => IMAGES . 'icons/cross.svg',
+            'comments'        => IMAGES . 'icons/comments.svg',
+            'celebrations'    => IMAGES . 'icons/celebrations.svg',
+
             //D
-            "down"           => IMAGES . "icons/down.png",
+            "down"            => IMAGES . "icons/down.png",
+            'delete'          => IMAGES . 'icons/delete.svg',
             //E
+            'events'          => IMAGES . 'icons/events.svg',
+            'email'           => IMAGES . 'icons/email.svg',
+
             //F
             //G
-            "google_play"    => IMAGES . "icons/google-play.svg",
+            "google_play"     => IMAGES . "icons/google-play.svg",
 
             //H
             //I
-            "imagenotfound"  => IMAGES . "imagenotfound.jpg",
+            'inbox'           => IMAGES . 'icons/inbox.svg',
+            "imagenotfound"   => IMAGES . "imagenotfound.jpg",
             //J
             //K
+            'ko'              => IMAGES . 'icons/cancel.svg',
             //L
-            "left"           => IMAGES . "icons/left.png",
-            "logo"           => $settings['sitebanner'],
+            "left"            => IMAGES . "icons/left.png",
+            "logo"            => $settings['sitebanner'],
             //M
+            'mentions'        => IMAGES . 'icons/mentions.svg',
+            'messages_unread' => IMAGES . 'icons/unread.svg',
             //N
-            "noavatar"       => IMAGES . "avatars/no-avatar.jpg",
-            "no-avatar"      => IMAGES . "avatars/no-avatar.jpg",
-            "no-cover"       => IMAGES . "covers/no-cover.png",
+            "noavatar"        => IMAGES . "avatars/no-avatar.jpg",
+            "no-avatar"       => IMAGES . "avatars/no-avatar.jpg",
+            "no-cover"        => IMAGES . "covers/no-cover.png",
+            'notification'    => IMAGES . 'icons/notifications.svg',
             //O
+            'ok'              => IMAGES . 'icons/check_circle.svg',
+            'outbox'          => IMAGES . 'icons/outbox.svg',
             //P
-            "panel_on"       => IMAGES . "icons/panel_on.gif",
-            "panel_off"      => IMAGES . "icons/panel_off.gif",
+            'password'        => IMAGES . 'icons/password.svg',
+            'passkey'         => IMAGES . 'icons/passkey.svg',
+            "panel_on"        => IMAGES . "icons/panel_on.gif",
+            "panel_off"       => IMAGES . "icons/panel_off.gif",
+            'privacy'         => IMAGES . 'icons/privacy.svg',
+            'profile'         => IMAGES . 'icons/profile.svg',
+
             //Q
-            "qrcode"             => IMAGES . "icons/qr.svg",
+            'qrcode'          => IMAGES . 'icons/qr.svg',
             //R
-            "right"          => IMAGES . "icons/right.png",
+            'right'           => IMAGES . 'icons/right.png',
             //S
+            'secured'         => IMAGES . 'icons/secured.svg',
+            'subscriptions'   => IMAGES . 'icons/subscriptions.svg',
             //T
             //U
-            "up"             => IMAGES . "icons/up.png",
+            'up'              => IMAGES . "icons/up.png",
+            'updates'         => IMAGES . 'icons/updates.svg',
+            'upgrades'        => IMAGES . 'icons/upgrades.svg',
+
+            'user'            => IMAGES . 'icons/profile.svg',
+            'users'           => IMAGES . 'icons/users.svg',
+            'user_pending'    => IMAGES . 'icons/find_user.svg',
+            'user_admin'      => IMAGES . 'icons/admin_user.svg',
+            'user_add'        => IMAGES . 'icons/add_user.svg',
+            'user_archive'    => IMAGES . 'icons/archive_user.svg',
+            'user_deactivate' => IMAGES . 'icons/deactivate.svg',
+            'user_ban'        => IMAGES . 'icons/ban_user.svg',
             //V
             //W
-            'warning'        => IMAGES . 'icons/warning.svg',
+            'warning'         => IMAGES . 'icons/warning.svg',
             //X
             //Y
             //Z
+            'zoom'            => IMAGES . 'icons/zoom.svg',
         ];
         //</editor-fold>
         $installedTables = [
@@ -322,12 +360,17 @@ class ImageRepo {
      */
     public static function getImage( $image, $alt = "", $style = "", $title = "", $atts = "" ) {
         self::cache();
-        $url = self::$image_paths[$image] ?? IMAGES . "imagenotfound.jpg";
+        $url = self::$image_paths[$image] ?? IMAGES . "icons/image_not_found.svg";
         if ( $style ) {
             $style = " style='$style'";
         }
         if ( $title ) {
             $title = " title='" . $title . "'";
+        }
+
+        if ( strchr( $url, '.svg' ) ) {
+            $icon = file_get_contents( $url );
+            return ( $style or $title or $atts ) ? "<span" . $style . $title . " " . $atts . ">" . $icon . "</span>" : $icon;
         }
 
         return ( $alt or $style or $title or $atts )

@@ -1,0 +1,15 @@
+{% macro fileinput_input(input_name, input_value, options) %}
+
+    {% set krajee_disabled_class = ( options['krajee_disabled'] ? 'class="form-control"' : '' ) %}
+    {% set format_accept = (options['format'] ? 'accept="'~optinons['format']~'"' :'') %}
+    {% set input_tags =  whitespace(options['width'] ? 'style="width:'~options['width']~';"' : '') ~ whitespace(options['deactivate'] ? 'readonly' : '') ~ whitespace(options['multiple'] ? 'multiple="1"' : '') %}
+    {% if options['input_error'] %}
+        {% set errorText = '<div id="'~options['input_id']~'-help" class="invalid-feedback'~ whitespace(options['inline'] =='' or options['append_button'] or options['prepend_button'] or options['append_value'] or options['prepend_value'] ? 'display-block' : '' )~'">'~options['error_text']~'</div>' %}
+        {% set errorValidClass = ' is-invalid' %}
+    {% endif %}
+
+    <input type="file"{{ whitespace(krajee_disabled_class)~whitespace(format_accept) }} name="{{ input_name }}" id="{{ options['input_id'] }}"{{ input_tags }}>
+    {{ (options['ext_tip'] ? '<span class="form-tip">'~options['ext_tip']~'</span>' : '')|raw }}
+    {{ errorText|raw }}
+
+{% endmacro %}

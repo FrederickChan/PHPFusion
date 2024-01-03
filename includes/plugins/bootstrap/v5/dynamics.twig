@@ -77,8 +77,7 @@
 
     {% endif %}
 
-    <div id="{{ input_options['input_id'] }}-field"
-         class="{{ group_class }}{{ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) }}"{{ whitespace(ct_width) }}>
+    <div id="{{ input_options['input_id'] }}-field" class="{{ group_class }}{{ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) }}"{{ whitespace(ct_width) }}>
 
         {{ prepend_checkbox_input|raw }}
 
@@ -126,6 +125,12 @@
             {% import 'dynamics/textarea.twig' as textarea %}
 
             {{ textarea.textarea_input(input_name, input_value, input_options) }}
+
+        {% elseif input_options['template_type'] == 'fileinput' %}
+
+            {% import 'dynamics/fileinput.twig' as fileinput %}
+
+            {{ fileinput.fileinput_input(input_name, input_value, input_options) }}
 
         {% elseif input_options['template_type'] == 'button_group' %}
 

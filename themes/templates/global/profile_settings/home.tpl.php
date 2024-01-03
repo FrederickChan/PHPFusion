@@ -8,7 +8,7 @@ function home_up_settings( $info ) {
     ?>
 
     <!--profile_settings_home-->
-    <div class="profile-idx pt-3 mb-2">
+    <div class="profile-header pt-3 mb-5">
         <div class="row align-items-center">
             <div class="col-xs-12 col-sm-8 col-md-8">
                 <div class="d-flex align-items-center">
@@ -31,13 +31,13 @@ function home_up_settings( $info ) {
             <div class="col-xs-12 col-sm-4 col-md-4">
                         <span class="badge rounded-pill bg-light text-dark text-normal me-3 p-1">
                             <span class="badge bg-primary-subtle badge-circle">
-                            <?php echo show_icon( 'check-circle', 'text-primary icon-sm' ) ?>
+                            <?php echo get_image( 'ok', '', '', '', 'class="text-primary"' ) ?>
                             </span>
                             <span class="fs-6 text-normal">Verified</span>
                         </span>
                 <span class="badge rounded-pill bg-light text-dark text-normal me-3 p-1">
                             <span class="badge bg-warning-subtle badge-circle">
-                                <?php echo show_icon( 'verified', 'text-warning icon-sm' ) ?>
+                                <?php echo get_image( 'certified', '', '', '', 'class="text-warning"' ) ?>
                             </span>
                             <span class="fs-6 text-normal"><?php echo getuserlevel( $userdata['user_level'] ) ?></span>
                         </span>
@@ -69,16 +69,16 @@ function home_up_settings( $info ) {
             <div class="row align-items-center">
                 <div class="col-xs-12 col-sm-4">
                     <div class="d-flex align-items-center">
-                        <?php echo show_icon( 'email', 'text-dark me-3' ) ?>
-                        <h6 class="m-0">Email</h6>
+                        <?php echo get_image( 'email', '', '', '', 'class="me-3"' ) ?>
+                        <h6 class="m-0 bold">Email</h6>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <?php echo show_icon( 'check-circle', 'text-success' ) ?>
+                    <?php echo get_image( 'inbox', '', '', '', 'class="me-3"' ) ?>
                     <?php echo censortext( $userdata['user_email'] ) ?>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <button id="email_change" class="btn  btn-block btn-primary-soft">Change</button>
+                    <button id="email_change" class="btn  btn-block btn-secondary">Change</button>
                 </div>
             </div>
         </div>
@@ -87,8 +87,8 @@ function home_up_settings( $info ) {
             <div class="row align-items-center">
                 <div class="col-xs-12 col-sm-4">
                     <div class="d-flex align-items-center">
-                        <?php echo show_icon( 'profile', 'text-dark me-3' ) ?>
-                        <h6 class="m-0">Profile Information</h6>
+                        <?php echo get_image( 'profile', '', '', '', 'class="me-3"' ) ?>
+                        <h6 class="m-0 bold">Profile Information</h6>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6">
@@ -98,7 +98,7 @@ function home_up_settings( $info ) {
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <a href="<?php echo $info['link']['details'] ?>" class="btn  btn-block btn-primary-soft">Change</a>
+                    <a href="<?php echo $info['link']['details'] ?>" class="btn  btn-block btn-secondary">Change</a>
                 </div>
             </div>
         </div>
@@ -107,16 +107,16 @@ function home_up_settings( $info ) {
             <div class="row align-items-center">
                 <div class="col-xs-12 col-sm-4">
                     <div class="d-flex align-items-center">
-                        <?php echo show_icon( 'otp', 'me-3 text-dark' ) ?>
-                        <h6 class="m-0">TOTP</h6>
+                        <?php echo get_image( 'qrcode', '', '', '', 'class="me-3"' ) ?>
+                        <h6 class="m-0 bold">TOTP</h6>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6">
-                    <?php echo show_icon( 'check-circle', $info['user_totp_status'] ? 'text-success' : 'text-lighter' ) ?>
+                    <?php echo get_image( 'ok', '', '', '', 'class="me-3 '.($info['user_totp_status'] ? '' : 'text-muted').'"' ) ?>
                     <?php echo $info['user_totp_status'] ? 'Activated' : 'Not Set' ?>
                 </div>
                 <div class="col-xs-12 col-sm-2">
-                    <a href="<?php echo $info['link']['totp'] ?>" class="btn  btn-block btn-primary-soft">Change</a>
+                    <a href="<?php echo $info['link']['totp'] ?>" class="btn  btn-block btn-secondary">Change</a>
                 </div>
             </div>
         </div>
@@ -132,11 +132,11 @@ function home_up_settings( $info ) {
             <div class="col-xs-12 col-sm-<?php echo $col_css ?>">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
-                        <?php echo show_icon( 'lock', 'icon-lg' ) ?>
+                        <?php echo get_image( 'secured', '', '', '', 'class="mb-3"' ) ?>
                         <h5>Password</h5>
                         <div class="small mb-3">Login password management</div>
                         <div class="small mb-3">Last change: <?php showdate( 'shortdate', $info['user_password_changed'] ) ?></div>
-                        <a href="<?php echo $info['link']['password'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
+                        <a href="<?php echo $info['link']['password'] ?>" class="btn btn-secondary  mt-auto">Change</a>
                     </div>
                 </div>
             </div>
@@ -144,11 +144,11 @@ function home_up_settings( $info ) {
                 <div class="col-xs-12 col-sm-<?php echo $col_css ?>">
                     <div class="card">
                         <div class="card-body d-flex flex-column">
-                            <?php echo show_icon( 'lock', 'icon-lg' ) ?>
+                            <?php echo get_image( 'secured', '', '', '', 'class="mb-3"' ) ?>
                             <h5>Admin password</h5>
-                            <div class="small mb-3">Admin password management</div>
+                            <div class="mb-3">Admin password management</div>
                             <div class="small mb-3">Last change: <?php showdate( 'shortdate', $info['user_admin_password_changed'] ) ?></div>
-                            <a href="<?php echo $info['link']['admin_password'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
+                            <a href="<?php echo $info['link']['admin_password'] ?>" class="btn btn-secondary  mt-auto">Change</a>
                         </div>
                     </div>
                 </div>
@@ -156,20 +156,20 @@ function home_up_settings( $info ) {
             <div class="col-xs-12 col-sm-<?php echo $col_css ?>">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
-                        <?php echo show_icon( 'verified', 'icon-lg' ) ?>
+                        <?php echo get_image( 'user_deactivate', '', '', '', 'class="mb-3"' ) ?>
                         <h5>Account</h5>
                         <div class="small mb-3">Freeze or delete account</div>
-                        <a href="<?php echo $info['section']['close']['link'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
+                        <a href="<?php echo $info['section']['close']['link'] ?>" class="btn btn-secondary  mt-auto">Change</a>
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-<?php echo $col_css ?>">
                 <div class="card">
                     <div class="card-body d-flex flex-column">
-                        <?php echo show_icon( 'secure', 'icon-lg' ) ?>
+                        <?php echo get_image( 'passkey', '', '', '', 'class="mb-3"' ) ?>
                         <h5>Social accounts</h5>
                         <div class="small mb-3">Log in to <?php echo $settings['sitename'] ?> with a third-party account</div>
-                        <a href="<?php echo $info['link']['google'] ?>" class="btn btn-primary-soft  mt-auto">Change</a>
+                        <a href="<?php echo $info['link']['google'] ?>" class="btn btn-secondary disabled mt-auto">In development</a>
                     </div>
                 </div>
             </div>

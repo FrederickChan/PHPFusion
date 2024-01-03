@@ -69,7 +69,7 @@ function twofactor_up_settings( $info ) {
                     <?php echo closemodal() ?>
                 </div>
                 <h6>Step 2: Setup "Google Authenticator".</h6>
-                <span class="text-warning">Note: Please properly keep the Google verification key.</span>
+                <span class="text-primary">Note: Please properly keep the Google verification key.</span>
                 <div class="spacer-md">
                     <img src="<?php echo $info['totp_qr_image'] ?>" alt="Scan with authenticator">
                     <p>Key: <code><?php echo $info['totp_key'] ?></code></p>

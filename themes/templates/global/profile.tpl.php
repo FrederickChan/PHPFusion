@@ -109,7 +109,10 @@ if ( !function_exists( 'display_up_settings' ) ) {
                 $active = ( !$i && !$_get || $_get == $key ? ' active' : '' );
 
                 $menu .= '<li class="nav-item" data-bs-dismiss="offcanvas" role="presentation">'
-                    . '<a class="nav-link d-flex mb-0' . $active . '" href="' . $rows['link'] . '" aria-selected="true" role="tab">' . $rows['title'] . '</a>'
+                    . '<a class="nav-link d-flex mb-0' . $active . '" href="' . $rows['link'] . '" aria-selected="true" role="tab">'.
+                    '<span>'.get_image($rows['icon'], $rows['title'], '', '', 'class="icon me-2"').'</span>'.
+                    $rows['title'] . '
+                    </a>'
                     . '</li>';
 
                 $i++;

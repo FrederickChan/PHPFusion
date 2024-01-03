@@ -135,9 +135,10 @@ class UserFields extends QuantumFields {
 
         $this->refURI = get( 'ref' );
 
-        $this->info = $this->getEmptyInputInfo();
+        $this->info = $this->userData;
 
         $this->info['section'] = $this->upInputSections();
+
         $this->info['ref'] = $this->refURI;
 
         $this->info['link'] = [
@@ -171,7 +172,7 @@ class UserFields extends QuantumFields {
                     display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );
                     break;
                 default:
-                    display_up_settings( ( $this->info + ( new AccountsForm( $this ) )->displayInputFields() ) );
+                    display_up_settings( ( ( new AccountsForm( $this ) )->displayInputFields() ) + $this->info);
             }
         }
         /*
@@ -179,69 +180,6 @@ class UserFields extends QuantumFields {
          */
         //$this->registration ? display_register_form( $this->info ) : display_userprofile_home( $this->info );
     }
-
-    /**
-     * Notification input
-     *
-     * @return array
-     */
-    private function showNotificationSection() {
-
-        $locale = fusion_get_locale();
-
-        return [
-            'user_comments_notify'   => form_checkbox( 'n_comments', $locale['u502'], $this->userData['user_comments_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u503']] ),
-            'user_tag_notify'        => form_checkbox( 'n_tags', $locale['u504'], $this->userData['user_tag_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u505']] ),
-            'user_newsletter_notify' => form_checkbox( 'n_newsletter', $locale['u506'], $this->userData['user_newsletter_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u507']] ),
-            'user_follow_notify'     => form_checkbox( 'n_follow', $locale['u508'], $this->userData['user_follow_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u509']] ),
-            'user_pm_notify'         => form_checkbox( 'n_pm', $locale['u510'], $this->userData['user_pm_notify'], ['toggle' => TRUE, 'ext_tip' => $locale['u511']] ),
-            'user_pm_email'          => form_checkbox( 'e_pm', $locale['u510'], $this->userData['user_pm_email'] ),
-            'user_follow_email'      => form_checkbox( 'e_follow', $locale['u514'], $this->userData['user_follow_email'] ),
-            'user_feedback_email'    => form_checkbox( 'e_feedback', $locale['u515'], $this->userData['user_feedback_email'] ),
-            'user_email_duration'    => form_checkbox( 'e_duration', $locale['u516'], $this->userData['user_email_duration'], [
-                'type'    => 'radio',
-                'options' => [
-                    '1' => $locale['u517'],
-                    '2' => $locale['u518'],
-                    '3' => $locale['u519'],
-                    '0' => $locale['u520'],
-                ]] ),
-            'notify_button'          => form_button( 'save_notify', $locale['save_changes'], 'save_notify', ['class' => 'btn-primary'] ),
-        ];
-    }
-
-    private function getEmptyInputInfo() {
-        return [
-            //'section'   => $this->getProfileSections(),
-            'userdata' => $this->userData,
-        ];
-    }
-
-    /**
-     * Empty inputs vars
-     */
-    private function setEmptyInput() {
-        // I do not think we need this.
-        return [
-            'user_id'             => form_hidden( 'user_id', '', $this->userData["user_id"] ),
-            'user_hash'           => form_hidden( 'user_hash', '', $this->userData['user_password'] ),
-            'show_avatar'         => $this->showAvatarInput,
-            'user_name'           => '',
-            'user_firstname'      => '',
-            'user_lastname'       => '',
-            'user_addname'        => '',
-            'user_phone'          => '',
-            'user_bio'            => '',
-            'user_password'       => '', //form_hidden( 'user_hash', '', $this->userData['user_hash'] ),
-            'user_admin_password' => '',
-            'user_email'          => '',
-            'user_hide_email'     => '',
-            'user_avatar'         => '',
-            'validate'            => '',
-            'terms'               => '',
-        ];
-    }
-
 
     /**
      * Fetch User Fields Array to templates
@@ -365,10 +303,10 @@ class UserFields extends QuantumFields {
         }
 
         return [
-            'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account'],
-            'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications'],
-            'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety'],
-            'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account']
+            'account'        => ['link' => $link_prefix . 'account', 'title' => 'Account', 'icon'=>'profile'],
+            'notifications'  => ['link' => $link_prefix . 'notifications', 'title' => 'Notifications', 'icon'=>'notification'],
+            'privacy'        => ['link' => $link_prefix . 'privacy', 'title' => 'Privacy and safety', 'icon'=>'privacy'],
+            'close'          => ['link' => $link_prefix . 'close', 'title' => 'Close account', 'icon'=>'close']
         ];
 
     }

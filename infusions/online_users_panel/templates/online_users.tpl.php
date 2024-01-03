@@ -28,11 +28,11 @@ if (!function_exists('online_users_panel')) {
         echo '<hr>';
 
         echo '<div>';
-        echo '<i class="fas fa-users m-r-10"></i><strong>'.$locale['global_014'].':</strong> '.$info['total_members'].'<br>';
+        echo get_image('users', '', '', 'me-2').'<strong>'.$locale['global_014'].':</strong> '.$info['total_members'].'<br>';
         if (!empty($info['unactivated_members'])) {
-            echo '<i class="fa-fw fas fa-user-circle m-r-10"></i><a href="'.$info['unactivated_members']['admin_link'].'" class="strong">'.$locale['global_015'].'</a>: '.$info['unactivated_members']['total_members'].'<br>';
+            echo get_image('user_pending', '', '', 'me-2').'<a href="'.$info['unactivated_members']['admin_link'].'" class="strong">'.$locale['global_015'].'</a>: '.$info['unactivated_members']['total_members'].'<br>';
         }
-        echo '<i class="fa-fw fas fa-user m-r-10"></i><strong>'.$locale['global_016'].':</strong> '.$info['newest_member'];
+        echo get_image('user', '', '', 'me-2').$locale['global_016'].':</strong> '.$info['newest_member'];
         echo '</div>';
 
         closeside();
