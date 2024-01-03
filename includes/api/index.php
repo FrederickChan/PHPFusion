@@ -45,9 +45,10 @@ $endpoints = [
         'calling-codes'  => 'calling_codes.php', //get
         'geomap-states'  => 'states.php', //get
         'email_code'     => 'email_code.php', // post
-        'avatar-upload'  => 'avatar_upload.php', // post $_FILES
+        'avatar-upload'  => 'avatar_upload.php', // $_FILES
         'avatar-delete'  => 'avatar_delete.php', // post
-        'user-search'    => 'search_users.php',
+        'user-search'    => 'search_users.php', // get or post
+        'preview-text'   => 'text_preview.php', // post
     ]
     + get_extended_endpoints();
 

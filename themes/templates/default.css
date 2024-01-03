@@ -1161,7 +1161,6 @@ td.min {
 }
 /* Textarea Dynamics */
 .panel-txtarea .preview-response {
-  background-color: #f5f4f4;
   word-wrap: break-word;
   word-break: break-all;
 }
@@ -1519,4 +1518,3 @@ Responsive Admin for all Admin Themes.
   width: 18px;
   height: 18px;
 }
-/*# sourceMappingURL=default.css.map */

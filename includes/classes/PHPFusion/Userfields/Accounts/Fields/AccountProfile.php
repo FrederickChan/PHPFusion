@@ -118,7 +118,7 @@ class AccountProfile extends UserFieldsForm {
 
         return
             form_hidden( $this->userFields->postName, '', 'submit' ) .
-            form_button( $this->userFields->postName . '_btn', 'Save Profile', 'submit', [
+            form_button( $this->userFields->postName . '_btn', 'Update profile', 'submit', [
                     "deactivate" => $disabled,
                     "class"      => $this->userFields->options['btn_post_class'] ?? 'btn-primary'
                 ]

@@ -207,7 +207,7 @@ class ImageRepo {
             'celebrations'    => IMAGES . 'icons/celebrations.svg',
 
             //D
-            "down"            => IMAGES . "icons/down.png",
+            "down"            => IMAGES . "icons/down.svg",
             'delete'          => IMAGES . 'icons/delete.svg',
             //E
             'events'          => IMAGES . 'icons/events.svg',
@@ -225,7 +225,7 @@ class ImageRepo {
             //K
             'ko'              => IMAGES . 'icons/cancel.svg',
             //L
-            "left"            => IMAGES . "icons/left.png",
+            "left"            => IMAGES . "icons/left.svg",
             "logo"            => $settings['sitebanner'],
             //M
             'mentions'        => IMAGES . 'icons/mentions.svg',
@@ -250,13 +250,13 @@ class ImageRepo {
             //Q
             'qrcode'          => IMAGES . 'icons/qr.svg',
             //R
-            'right'           => IMAGES . 'icons/right.png',
+            'right'           => IMAGES . 'icons/right.svg',
             //S
             'secured'         => IMAGES . 'icons/secured.svg',
             'subscriptions'   => IMAGES . 'icons/subscriptions.svg',
             //T
             //U
-            'up'              => IMAGES . "icons/up.png",
+            'up'              => IMAGES . "icons/up.svg",
             'updates'         => IMAGES . 'icons/updates.svg',
             'upgrades'        => IMAGES . 'icons/upgrades.svg',
 

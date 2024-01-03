@@ -4,7 +4,6 @@ function home_up_settings( $info ) {
 
     $userdata = fusion_get_userdata();
     $settings = fusion_get_settings();
-
     ?>
 
     <!--profile_settings_home-->
@@ -13,18 +12,15 @@ function home_up_settings( $info ) {
             <div class="col-xs-12 col-sm-8 col-md-8">
                 <div class="d-flex align-items-center">
                     <div class="profile-avatar me-3">
-                        <?php echo display_avatar( $userdata, '75px', '', FALSE, 'img-circle' ) ?>
+                        <?php echo display_avatar( $userdata, '120px', 'circle', FALSE, 'circle' ) ?>
                     </div>
                     <div class="profile-meta">
                         <div class="d-flex align-items-center">
                             <h4 class="mb-0 me-3"><?php echo $userdata['user_name'] ?></h4>
-                            <span class="badge bg-primary-subtle">
-                                    <a href="edit-username"><?php echo show_icon( 'edit', 'text-primary' ) ?></a>
-                                </span>
                         </div>
-                        <small>
+                        <div>
                             <span class="text-lighter me-3">Email:</span><span class="text-body-emphasis"><?php echo censortext( $userdata['user_email'] ) ?></span>
-                        </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,7 +44,7 @@ function home_up_settings( $info ) {
     <?php
     echo openmodal( 'emailChange', 'Are you sure to change?', ['button_id' => 'email_change', 'static' => TRUE] ) .
         '<div class="spacer-sm d-flex justify-content-center"><div class="circle bg-warning-soft p-3 d-inline-block">
-                <img class="icon-md" src="' . get_image( 'warning' ) . '" alt="">
+                '.get_image( 'warning' ).'
             </div></div>' .
         'For security reasons, you are required to set up TOTP to change your email address.' .
         //modalfooter( '<button id="confirmEmailChange" data-bs-dismiss="modal" class="btn btn-primary">Continue</a>' ) .
@@ -93,7 +89,7 @@ function home_up_settings( $info ) {
                 </div>
                 <div class="col-xs-12 col-sm-6">
                     <div class="d-flex align-items-center">
-                        <?php echo display_avatar( $userdata, '30px', 'me-2', TRUE, 'img-circle' ) ?>
+                        <?php echo display_avatar( $userdata, '30px', 'circle me-2', TRUE, 'circle' ) ?>
                         <?php echo display_name( $userdata, 'profile-link', TRUE ) ?>
                     </div>
                 </div>

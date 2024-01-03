@@ -14,8 +14,8 @@ function display_up_settings( array $info ) {
 
         <div class="profile-settings mb-5">
             <div class="d-flex align-items-center mb-4">
-                <h5>Account Settings</h5>
-                <span class="mb-2 ms-2 me-2"><?php echo show_icon( 'angle-right' ) ?></span>
+                <h5><a class="text-dark text-hover-underline" href="<?php echo BASEDIR.'edit_profile.php' ?>">Account Settings</a></h5>
+                <?php echo get_image('right') ?>
                 <h5><?php echo $info['page_title'] ?></h5>
             </div>
             <?php

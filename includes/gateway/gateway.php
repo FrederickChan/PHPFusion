@@ -110,11 +110,11 @@ if (!isset($_POST['gateway_submit']) && !isset($_POST['register'])) {
     $info = [
         'showform'         => TRUE,
         'gateway_question' => '<span id="gateway_question"></span>',
-        'openform'         => openform('Fusion_Gateway', 'post', 'register.php', ['class' => 'm-t-20']),
+        'openform'         => openform('gatewayFrm', 'post', 'register.php'),
         'closeform'        => closeform(),
         'hiddeninput'      => form_hidden($honeypot_array[3]),
-        'textinput'        => form_text('gateway_answer', "", "", ['error_text' => $locale['gateway_064'], 'required' => 1]),
-        'button'           => form_button('gateway_submit', $locale['gateway_065'], $locale['gateway_065'], ['class' => 'btn-primary m-t-10']),
+        'textinput'        => form_text('gateway_answer', "<span id='gateway_question'></span>", "", ['class'=>'mb-3', 'error_text' => $locale['gateway_064'], 'floating_label'=>TRUE, 'placeholder'=>'Answer', 'required' => 1]),
+        'button'           => form_button('gateway_submit', $locale['gateway_065'], $locale['gateway_065'], ['class' => 'btn-primary btn-block']),
     ];
 }
 

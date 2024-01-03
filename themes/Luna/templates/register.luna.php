@@ -33,7 +33,7 @@ function display_register_form( array $info = [] ) {
     $locale = fusion_get_locale();
 
     define( 'LUNA_BODY_CLASS', 'register' );
-    
+
     echo '<!--HTML--><h2 class="text-center w-100 mt-4 mb-4">' . $locale['slogan'] . '</h2>';
     opentable( '' );
     echo "<!--register_pre_idx-->";
@@ -45,11 +45,11 @@ function display_register_form( array $info = [] ) {
         $info['user_admin_password'] .
         $info['user_custom'] .
         $info['validate'] .
-        ($info['terms'] ? '<div class="mt-3 mb-3">' . $info['terms'] . '</div>' : '') .
+        ( $info['terms'] ? '<div class="mt-3 mb-3">' . $info['terms'] . '</div>' : '' ) .
         $info['user_id'] .
         form_button( 'register', $locale['u101'], 'register', ['class' => 'btn-block btn-lg btn-primary mt-3'] ) .
         closeform();
-//    echo '<div class="hr"><span>or</span></div>';
+    //    echo '<div class="hr"><span>or</span></div>';
     echo '<div class="text-center mt-5">' . strtr( $locale['u400'], ['[SITENAME]' => $settings['sitename']] ) . ' <a href="' . BASEDIR . 'login.php">' . $locale['login'] . '</a>';
     echo "<!--register_sub_idx-->";
     closetable();
@@ -63,27 +63,41 @@ function display_gateway( $info ) {
 
     $locale = fusion_get_locale();
 
-    if ($info['showform']) {
+    define( 'LUNA_BODY_CLASS', 'register' );
 
-        echo '<h2 class="text-center w-100 mt-4 mb-4">' . $locale['gateway_069'] . '</h2>';
+    if ( $info['showform'] ) : ?>
 
-        opentable( 'Please answer <p class="small">' . $info['gateway_question'] . '</p>' );
-        echo $info['openform'];
-        echo $info['hiddeninput'];
-        echo $info['textinput'];
-        echo $info['button'];
-        echo $info['closeform'];
-        closetable();
+        <h5 class="text-center w-100 mb-4"><?php echo $locale['gateway_069'] ?></h5>
+        <div class="card">
+            <div class="card-body">
+                <?php
+                echo $info['openform'];
+                echo $info['hiddeninput'];
+                echo $info['textinput'];
+                echo $info['button'];
+                echo $info['closeform'];
+                //closetable();
+                ?>
+            </div>
+        </div>
 
-    } else if (!isset( $_SESSION["validated"] )) {
-        echo '<div class="well text-center"><h3 class="m-0">' . $locale['gateway_068'] . '</h3></div>';
-    }
+    <?php elseif ( !isset( $_SESSION["validated"] ) ) : ?>
+        <div class="well text-center"><h3 class="m-0"><?php echo $locale['gateway_068'] ?></h3></div>
+    <?php
+    endif;
 
-    if (isset( $info['incorrect_answer'] ) && $info['incorrect_answer'] == TRUE) {
+    if ( isset( $info['incorrect_answer'] ) && $info['incorrect_answer'] == TRUE ) :
+
         opentable( $locale['gateway_069'] );
-        echo '<div class="well text-center"><h3 class="m-0">' . $locale['gateway_066'] . '</h3></div>';
-        echo '<input type="button" value="' . $locale['gateway_067'] . '" class="text-center btn btn-info spacer-xs" onclick="location=\'' . BASEDIR . 'register.php\'"/>';
+        ?>
+        <h5 class="mb-5"><?php echo $locale['gateway_066'] ?></h5>
+        <a href="<?php echo BASEDIR . 'register.php' ?>" class="btn btn-default"><?php echo $locale['gateway_067'] ?></a>
+        <!--        <input type="button" value="--><?php //echo $locale['gateway_067']
+        ?><!--" class="text-center btn btn-info spacer-xs" onclick="location=--><?php //echo BASEDIR . 'register.php'
+        ?><!--">-->
+        <?php
         closetable();
-    }
+
+    endif;
 
 }

@@ -125,6 +125,12 @@ body {
         color: var(--lighter-color);
     }
 
+    .text-hover-underline {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     // Navs
     .navbar-brand {
         img {
@@ -391,7 +397,7 @@ a {
         .nav-link {
             color: var(--bs-list-group-color);
             border-radius: 6px;
-            padding: .4rem .6rem;
+            padding: .3rem .6rem;
             display: flex;
             align-items: center;
 
@@ -738,6 +744,12 @@ a.stretched:after {
 .form-control[data-type="password"] {
     & ~ .input-group-text {
         padding: 0;
+        margin-top: 5px;
+        margin-right: 5px;
+
+        button {
+            padding: .15rem .4rem;
+        }
     }
 }
 
@@ -1125,7 +1137,7 @@ div[data-fusion="true"] {
     }
 
     .card {
-        width: 450px;
+        width: 350px;
         margin: 0 auto;
     }
 
@@ -1167,13 +1179,6 @@ div[data-fusion="true"] {
         font-weight: 500 !important;
     }
 
-    .lreg-link {
-        text-align: center;
-
-        a {
-            font-weight: 700;
-        }
-    }
 
 }
 
