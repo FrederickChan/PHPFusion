@@ -893,43 +893,45 @@ class PrivateMessages {
         $this->data['msg_send'] = isset( $_GET['msg_send'] ) && !user_blacklisted( $_GET['msg_send'] ) ? $_GET['msg_send'] : 0;
 
         if ( iADMIN ) {
-            $input_header = "<div class='clearfix text-right'><a class='pointer' id='mass_send'><i class='fa fa-user-circle-o m-r-5'></i>" . $this->locale['434'] . "</a></div>";
-            $input_header .= form_user_select( 'msg_send', $this->locale['420a'], $this->data['msg_send'], [
-                'required'    => TRUE,
-                'inner_width' => '100%',
-                'width'       => '100%',
-                'error_text'  => $this->locale['error_input_username'],
-                'placeholder' => $this->locale['421']
-            ] );
-            $input_header .= form_hidden( 'chk_sendtoall', '', $this->data['chk_sendtoall'] );
-            $input_header .= "<div id='msg_to_group-field' class='display-none'>\n";
             $user_groups = fusion_get_groups();
             unset( $user_groups[0] );
-            $input_header .= form_select( 'msg_group_send', $this->locale['420a'], $this->data['msg_group_send'], [
-                'options'     => $user_groups,
-                'inner_width' => '300px',
-                'width'       => "100%",
-            ] );
-            $input_header .= "</div>\n";
+
+            $input_ = '<div class="d-flex flex-row-reverse align-items-center gap-3 w-100">
+                    ' . form_btngroup( 'chk_sendtoall', '', 0, [
+                    'class'   => 'ml-auto',
+                    'options' => [
+                        0 => 'Individual',
+                        1 => 'Group'
+                    ]] ) .
+                form_user_select( 'msg_send', $this->locale['420b'], $this->data['msg_send'], [
+                    'required'    => TRUE,
+                    'class'       => 'w-100',
+                    'inner_width' => '100%',
+                    'error_text'  => $this->locale['error_input_username'],
+                    'placeholder' => $this->locale['421']
+                ] ) .
+                form_select( 'msg_group_send', $this->locale['420c'], $this->data['msg_group_send'], [
+                    'options' => $user_groups,
+                    'class'   => 'w-100 d-none',
+                    'width'   => "100%",
+                ] ) . '</div>';
 
             // Toggle "Send to All" link
-            add_to_jquery( "
-            $('#mass_send').bind('click', function() {
-            $('#msg_to_group-field').toggleClass('display-none');
-            $('#msg_send-field').toggleClass('display-none');
-            var invisible = $('#msg_to_group-field').hasClass('display-none');
-            if (invisible) {
-                $('#chk_sendtoall').val(0);
-            } else {
-                $('#chk_sendtoall').val(1);
-            }
-            });
-            " );
+            add_to_jquery( "$('#chk_sendtoall > button').on('click', function() {
+                if ( $(this).val() == 1 ) {
+                    $('#msg_group_send-field').removeClass('d-none');
+                    $('#msg_send-field').addClass('d-none');
+                } else {
+                    $('#msg_group_send-field').addClass('d-none');
+                    $('#msg_send-field').removeClass('d-none');
+                }               
+            });" );
 
         } else {
-            $input_header = form_user_select( 'msg_send', $this->locale['420a'], $this->data['msg_send'], [
+
+            $input_ = form_user_select( 'msg_send', $this->locale['420a'], $this->data['msg_send'], [
                 'required'    => TRUE,
-                'input_id'    => 'msgsend2',
+                //'input_id'    => 'msgsend2',
                 'inline'      => TRUE,
                 'width'       => '100%',
                 'inner_width' => '100%',
@@ -938,14 +940,18 @@ class PrivateMessages {
             ] );
         }
 
-        $this->info['reply_form'] = openform( 'inputform', 'post', FUSION_REQUEST ) . $input_header . "<hr/>" .
-            form_text( 'subject', '', $this->data['subject'], [
+        $this->info['reply_form'] =
+            openform( 'inputform', 'post', FUSION_REQUEST ) .
+            $input_ .
+            form_text( 'subject', $this->locale['405'], $this->data['subject'], [
                 'placeholder' => $this->locale['405'],
-                'class'       => 'form-group-lg display-block',
+                'class'       => 'form-group-lg mb-3',
                 'inline'      => FALSE,
                 'required'    => TRUE,
                 'max_length'  => 100,
                 'width'       => '100%',
+                'floating_label'=>TRUE,
+
                 'error_text'  => $this->locale['error_input_default'],
             ] ) .
             form_textarea( 'message', '', $this->data['message'], [
@@ -960,10 +966,9 @@ class PrivateMessages {
                 'bbcode'      => TRUE,
                 'stacked'     => form_checkbox( 'chk_disablesmileys', $this->locale['427'] )
             ] ) .
-
             form_button( 'cancel', $this->locale['cancel'], $this->locale['cancel'] ) .
             form_button( 'send_pm', $this->locale['430'], $this->locale['430'], [
-                'class' => 'btn m-l-10 btn-primary'
+                'class' => 'btn-primary ms-1'
             ] ) . closeform();
     }
 
