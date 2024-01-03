@@ -47,6 +47,7 @@ $endpoints = [
         'email_code'     => 'email_code.php', // post
         'avatar-upload'  => 'avatar_upload.php', // post $_FILES
         'avatar-delete'  => 'avatar_delete.php', // post
+        'user-search'    => 'search_users.php',
     ]
     + get_extended_endpoints();
 
