@@ -68,90 +68,11 @@ class UserFieldsInput {
 
 
     /**
-     * Save User Fields
-     *
-     * @return bool
+     * Create user account
      */
     public function saveInsert() {
-
-        $settings = fusion_get_settings();
-
-        $locale = fusion_get_locale();
-
         $this->_method = "validate_insert";
-
-        $this->data = $this->setEmptyFields();
-
-        $this->userData = $this->setEmptyFields();
-
-        $userFieldsValidate = new AccountsValidate( $this );
-
-        $this->data['user_name'] = $userFieldsValidate->setUserName();
-
-        if ( $pass = $userFieldsValidate->setPassword() ) {
-            if ( count( $pass ) === 3 ) {
-                [$this->data['user_algo'], $this->data['user_salt'], $this->data['user_password']] = $pass;
-            }
-        }
-
-        $this->data['user_email'] = $userFieldsValidate->setUserEmail();
-
-        /**
-         * For validation purposes only to show required field errors
-         *
-         * @todo - look further for optimization
-         */
-        if ( $_input = $this->setCustomUserFields() ) {
-            foreach ( $_input as $input ) {
-                $this->data += $input;
-            }
-        }
-
-        if ( $this->validation == 1 ) {
-            $this->verifyCaptchas();
-        }
-
-        //        print_p( $this->userData );
-        //        print_p( 'Email verify: ' . $this->emailVerification );
-        //        print_p( 'Admin verify: ' . $this->adminActivation );
-        //        print_p( $this->data );
-        if ( fusion_safe() ) {
-
-            if ( $this->emailVerification ) {
-
-                $this->sendEmailVerification();
-
-            } else {
-
-                $insert_id = dbquery_insert( DB_USERS, $this->data, 'save' );
-
-                dbquery_insert( DB_USER_SETTINGS, ['user_id' => $insert_id], 'save', ['no_unique' => TRUE, 'primary_key' => 'user_id'] );
-
-                /**
-                 * Create user
-                 */
-                $notice = $locale['u160'] . " - " . $locale['u161'];
-
-                if ( $this->moderation == 1 ) {
-
-                    $this->sendAdminRegistrationMail();
-
-                } else {
-                    // got admin activation and not
-                    if ( $this->adminActivation ) {
-                        // Missing registration data?
-                        $notice = $locale['u160'] . " - " . $locale['u162'];
-                    }
-                }
-
-                addnotice( 'success', $notice, $settings['opening_page'] );
-            }
-
-            //            $this->data['new_password'] = $this->getPasswordInput( 'user_password1' );
-            return TRUE;
-        }
-
-        return FALSE;
+        (new AccountsValidate($this))->createAccount();
     }
 
     /**
@@ -181,25 +102,28 @@ class UserFieldsInput {
     }
 
 
+    private function createInitUserdata() {
+        $data = [];
+        if ( !empty( $filter = fusion_filter_hook( 'fusion_create_userdata' ) ) ) {
+            foreach ( $filter as $values ) {
+                $data += $values;
+            }
+        }
+        return $data;
+    }
+
     /**
      * Initialise empty fields
      *
      * @return array
      */
-    private function setEmptyFields() {
-
-        $userStatus = $this->adminActivation == 1 ? 2 : 0;
+    public function setEmptyFields() {
 
         /** Prepare initial variables for settings */
-        if ( $this->_method == "validate_insert" ) {
-
-            $forum_settings = [];
-            if ( defined( 'FORUM_EXISTS' ) ) {
-                $forum_settings = get_settings( 'forum' );
-            }
+        if ( $this->_method == 'validate_insert' ) {
 
             // Compulsory Core Fields
-            return [
+            $data = [
                 'user_id'         => 0,
                 'user_name'       => '',
                 'user_email'      => '',
@@ -214,16 +138,53 @@ class UserFieldsInput {
                 'user_rights'     => '',
                 'user_groups'     => '',
                 'user_level'      => USER_LEVEL_MEMBER,
-                'user_status'     => $userStatus,
+                'user_status'     => $this->adminActivation == 1 ? 2 : 0,
                 'user_theme'      => 'Default',
                 'user_language'   => LANGUAGE,
                 'user_timezone'   => fusion_get_settings( 'timeoffset' ),
-                'user_reputation' => $forum_settings['default_points'] ?? ''
             ];
 
-        } else {
-            return NULL;
+            if ( $extra_userdata = $this->createInitUserdata() ) {
+                $data += $extra_userdata;
+            }
+
+            return $data;
         }
+
+        return NULL;
+    }
+
+    /**
+     * @param $user_id
+     *
+     * @return array
+     */
+    public function setEmptySettingsField($user_id) {
+
+        $settings = fusion_get_settings();
+
+        return [
+            'user_id'                   => $user_id,
+            'user_auth'                 => 0,
+            'user_hide_email'           => 1,
+            'user_hide_phone'           => 1,
+            'user_hide_location'        => 0,
+            'user_hide_birthdate'       => 0,
+            'user_inbox'                => $settings['pm_inbox_limit'],
+            'user_outbox'               => $settings['pm_outbox_limit'],
+            'user_archive'              => $settings['pm_archive_limit'],
+            'user_pm_email'             => $settings['pm_email_notify'],
+            'user_pm_save_sent'         => $settings['pm_save_sent'],
+            'user_notify_comments'      => 1,
+            'user_notify_mentions'      => 1,
+            'user_notify_subscriptions' => 1,
+            'user_notify_birthdays'     => 1,
+            'user_notify_groups'        => 1,
+            'user_notify_events'        => 1,
+            'user_notify_messages'      => 1,
+            'user_notify_updates'       => 1,
+            'user_language'             => LANGUAGE,
+        ];
     }
 
     /**
@@ -287,7 +248,7 @@ class UserFieldsInput {
      * Sends Verification code when you change email
      * Sends Verification code when you register
      */
-    private function sendEmailVerification() {
+    public function sendEmailVerification() {
 
         $settings = fusion_get_settings();
         $locale = fusion_get_locale();
@@ -344,13 +305,13 @@ class UserFieldsInput {
                 ( new NotificationsValidate( $this ) )->validate();
                 break;
             //case 'privacy':
-                //( new PrivacyValidate( $this ) )->validate();
-                //break;
+            //( new PrivacyValidate( $this ) )->validate();
+            //break;
             case 'close':
                 ( new CloseValidate( $this ) )->validate();
                 break;
             default:
-                return $this->updateAccount();
+                $this->updateAccount();
         }
 
     }
@@ -402,7 +363,6 @@ class UserFieldsInput {
     public function checkUpdateAccess() {
         return fusion_safe() && ( ( iADMIN && checkrights( 'M' ) && ( $this->userData['user_password'] == sanitizer( 'user_hash', '', "user_hash" ) ) ) || ( $this->data['user_id'] == $this->userData['user_id'] ) );
     }
-
 
 
     /**

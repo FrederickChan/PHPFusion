@@ -98,31 +98,16 @@ class AccountProfile extends UserFieldsForm {
             'wordcount' => TRUE, 'maxlength' => 255] );
 
         $info['form_open'] = openform( 'userSettingsFrm', 'POST' );
+
         $info['form_close'] = closeform();
-        $info['button'] = $this->renderButton();
+
+        $info['button'] =  form_button( $this->userFields->postName . '_btn', 'Update profile', 'submit', [
+                "deactivate" => $this->userFields->displayTerms == 1,
+                "class"      => 'btn-primary'
+            ]
+        );
 
         return $info + $this->userFields->getUserFields();
     }
 
-
-    /**
-     * @return string
-     */
-    public function renderButton() {
-
-        $disabled = $this->userFields->displayTerms == 1;
-
-        $this->userFields->options += $this->userFields->defaultInputOptions;
-
-        //        $html = (!$this->userFields->skipCurrentPass) ? form_hidden( 'user_hash', '', $this->userFields->userData['user_password'] ) : '';
-
-        return
-            form_hidden( $this->userFields->postName, '', 'submit' ) .
-            form_button( $this->userFields->postName . '_btn', 'Update profile', 'submit', [
-                    "deactivate" => $disabled,
-                    "class"      => $this->userFields->options['btn_post_class'] ?? 'btn-primary'
-                ]
-            );
-
-    }
 }

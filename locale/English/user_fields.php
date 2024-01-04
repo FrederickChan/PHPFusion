@@ -94,7 +94,7 @@ $locale['u131'] = "Admin password";
 $locale['u132'] = "Login passwords";
 $locale['u133'] = "Login password";
 $locale['u134'] = "New Password";
-$locale['u134a'] = "Set Password";
+$locale['u134a'] = "Password";
 $locale['u134b'] = "Confirm Password";
 $locale['u135a'] = "Current Password";
 $locale['u135b'] = "Set New Password";
@@ -162,7 +162,7 @@ $locale['u186'] = "Click Browse to upload an image";
 // Captcha and terms
 $locale['u190'] = "Validation Code";
 $locale['u191'] = "Enter Validation Code";
-$locale['u193'] = "By checking this, you agree to the [SITENAME] %s";
+$locale['u193'] = "By clicking the “Sign up” button, you are creating a %s account and therefore you agree to %s's %s";
 
 $locale['u193a'] = "Updated";
 $locale['u193b'] = "I agree";

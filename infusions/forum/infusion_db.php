@@ -164,7 +164,7 @@ if ( infusion_exists( 'faq' ) ) {
                     // Update the posts count for all users
                     dbquery( "UPDATE " . DB_USERS . " SET user_posts=:user_posts WHERE user_id=:uid", [
                         ':user_posts' => $data['num_posts'],
-                        ':uid' => $data['post_author']
+                        ':uid'        => $data['post_author']
                     ] );
                 }
             }
@@ -175,5 +175,18 @@ if ( infusion_exists( 'faq' ) ) {
      * @see forum_user_action_hook()
      */
     fusion_add_hook( 'fusion_user_action', 'forum_user_action_hook', 10, [], 2 );
+
+    /**
+     * @return array
+     */
+    function forum_create_userdata() {
+        $forum_settings = get_settings( 'forum' );
+        return ['user_reputation' => $forum_settings['default_points']];
+    }
+
+    /**
+     * @see forum_create_userdata()
+     */
+    fusion_add_hook( 'fusion_create_userdata', 'forum_create_userdata' );
 
 }

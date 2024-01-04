@@ -16,10 +16,12 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 
-defined('IN_FUSION') || exit;
+use PHPFusion\Panels;
 
-if (!function_exists("display_auth_form")) {
-    function display_auth_form($info) {
+defined( 'IN_FUSION' ) || exit;
+
+if ( !function_exists( "display_auth_form" ) ) {
+    function display_auth_form( $info ) {
         $locale = fusion_get_locale();
         ?>
         <style>
@@ -51,7 +53,7 @@ if (!function_exists("display_auth_form")) {
                     <div class="text-left">
                         <?php echo $info["open_form"] ?>
                         <div class="spacer-sm">
-                            <strong><?php echo sprintf($locale["global_117"], fusion_get_settings("auth_login_length")) ?></strong>
+                            <strong><?php echo sprintf( $locale["global_117"], fusion_get_settings( "auth_login_length" ) ) ?></strong>
                         </div>
                         <?php echo $info["user_two_factor"] ?>
                         <div class="spacer-sm text-center">
@@ -61,11 +63,11 @@ if (!function_exists("display_auth_form")) {
                     </div>
                     <div class="m-t-20 text-center">
                         <h5>
-                            <a href="  <?php echo $info["restart_login_link"] ?>"><?php echo show_icon("reset", "m-r-5 fa-fw") ?>Restart Login</a>
+                            <a href="  <?php echo $info["restart_login_link"] ?>"><?php echo show_icon( "reset", "m-r-5 fa-fw" ) ?>Restart Login</a>
                         </h5>
                     </div>
                     <div class="m-t-20 text-sm text-center">
-                        <a class="strong" href="<?php echo BASEDIR.fusion_get_settings("opening_page") ?>">Back to <?php echo fusion_get_settings("sitename") ?></a>
+                        <a class="strong" href="<?php echo BASEDIR . fusion_get_settings( "opening_page" ) ?>">Back to <?php echo fusion_get_settings( "sitename" ) ?></a>
                     </div>
                 </div>
                 <?php
@@ -79,32 +81,74 @@ if (!function_exists("display_auth_form")) {
     }
 }
 
+function display_login_form( $info ) {
 
-if (!function_exists("display_login_form")) {
+    Panels::getInstance()->hideAll();
+
+    $locale = fusion_get_locale();
+
+    define( 'LUNA_BODY_CLASS', 'register' );
+
+    if ( $info['showform'] ) : ?>
+
+        <h5 class="text-center w-100 mb-4"><?php echo $locale['gateway_069'] ?></h5>
+        <div class="card">
+            <div class="card-body">
+                <?php
+                echo $info['openform'];
+                echo $info['hiddeninput'];
+                echo $info['textinput'];
+                echo $info['button'];
+                echo $info['closeform'];
+                ?>
+            </div>
+        </div>
+
+    <?php elseif ( !isset( $_SESSION["validated"] ) ) : ?>
+        <div class="well text-center"><h3 class="m-0"><?php echo $locale['gateway_068'] ?></h3></div>
+    <?php
+    endif;
+
+    if ( isset( $info['incorrect_answer'] ) && $info['incorrect_answer'] == TRUE ) :
+
+        opentable( $locale['gateway_069'] );
+        ?>
+        <h5 class="mb-5"><?php echo $locale['gateway_066'] ?></h5>
+        <a href="<?php echo BASEDIR . 'register.php' ?>" class="btn btn-default"><?php echo $locale['gateway_067'] ?></a>
+        <!--        <input type="button" value="--><?php //echo $locale['gateway_067']
+        ?><!--" class="text-center btn btn-info spacer-xs" onclick="location=--><?php //echo BASEDIR . 'register.php'
+        ?><!--">-->
+        <?php
+        closetable();
+
+    endif;
+}
+
+if ( !function_exists( "display_login_form" ) ) {
     /**
      * Display Login form
      *
      * @param array $info
      */
-    function display_login_form(array $info) {
+    function display_login_form( array $info ) {
         global $locale, $userdata, $aidlink;
-        opentable($locale['global_100']);
-        if (iMEMBER) {
-            $msg_count = dbcount("(message_id)", DB_MESSAGES, "message_to='".$userdata['user_id']."' AND message_read='0' AND message_folder='0'");
-            opentable($userdata['user_name']);
+        opentable( $locale['global_100'] );
+        if ( iMEMBER ) {
+            $msg_count = dbcount( "(message_id)", DB_MESSAGES, "message_to='" . $userdata['user_id'] . "' AND message_read='0' AND message_folder='0'" );
+            opentable( $userdata['user_name'] );
             echo "
                 <div class='text-center'><br/>\n";
-            echo "<a href='".BASEDIR."edit_profile.php' class='side'>".$locale['global_120']."</a><br/>\n";
-            echo "<a href='".BASEDIR."messages.php' class='side'>".$locale['global_121']."</a><br/>\n";
-            echo "<a href='".BASEDIR."members.php' class='side'>".$locale['global_122']."</a><br/>\n";
-            if (iADMIN && (iUSER_RIGHTS != "" || iUSER_RIGHTS != "C")) {
-                echo "<a href='".ADMIN."index.php".$aidlink."' class='side'>".$locale['global_123']."</a><br/>\n";
+            echo "<a href='" . BASEDIR . "edit_profile.php' class='side'>" . $locale['global_120'] . "</a><br/>\n";
+            echo "<a href='" . BASEDIR . "messages.php' class='side'>" . $locale['global_121'] . "</a><br/>\n";
+            echo "<a href='" . BASEDIR . "members.php' class='side'>" . $locale['global_122'] . "</a><br/>\n";
+            if ( iADMIN && ( iUSER_RIGHTS != "" || iUSER_RIGHTS != "C" ) ) {
+                echo "<a href='" . ADMIN . "index.php" . $aidlink . "' class='side'>" . $locale['global_123'] . "</a><br/>\n";
             }
-            echo "<a href='".BASEDIR."index.php?logout=yes' class='side'>".$locale['global_124']."</a>\n";
-            if ($msg_count) {
+            echo "<a href='" . BASEDIR . "index.php?logout=yes' class='side'>" . $locale['global_124'] . "</a>\n";
+            if ( $msg_count ) {
                 echo "<br/><br/>\n";
-                echo "<strong><a href='".BASEDIR."messages.php' class='side'>".sprintf($locale['global_125'], $msg_count);
-                echo ($msg_count == 1 ? $locale['global_126'] : $locale['global_127'])."</a></strong>\n";
+                echo "<strong><a href='" . BASEDIR . "messages.php' class='side'>" . sprintf( $locale['global_125'], $msg_count );
+                echo ( $msg_count == 1 ? $locale['global_126'] : $locale['global_127'] ) . "</a></strong>\n";
             }
             echo "
 </div>\n";
@@ -112,10 +156,10 @@ if (!function_exists("display_login_form")) {
         } else {
             echo "
 <div id='login_form' class='panel panel-default text-center text-dark'>\n";
-            if (fusion_get_settings("sitebanner")) {
-                echo "<a class='display-inline-block' href='".BASEDIR.fusion_get_settings("opening_page")."'><img class='img-responsive' src='".BASEDIR.fusion_get_settings("sitebanner")."' alt='".fusion_get_settings("sitename")."'/></a>\n";
+            if ( fusion_get_settings( "sitebanner" ) ) {
+                echo "<a class='display-inline-block' href='" . BASEDIR . fusion_get_settings( "opening_page" ) . "'><img class='img-responsive' src='" . BASEDIR . fusion_get_settings( "sitebanner" ) . "' alt='" . fusion_get_settings( "sitename" ) . "'/></a>\n";
             } else {
-                echo "<a class='display-inline-block' href='".BASEDIR.fusion_get_settings("opening_page")."'>".fusion_get_settings("sitename")."</a>\n";
+                echo "<a class='display-inline-block' href='" . BASEDIR . fusion_get_settings( "opening_page" ) . "'>" . fusion_get_settings( "sitename" ) . "</a>\n";
             }
             echo "
     <div class='panel-body text-center'>\n";
@@ -124,15 +168,15 @@ if (!function_exists("display_login_form")) {
             echo $info['user_pass'];
             echo $info['remember_me'];
             echo $info['login_button'];
-            echo $info['registration_link']."<br/><br/>";
-            echo $info['forgot_password_link']."<br/><br/>";
+            echo $info['registration_link'] . "<br/><br/>";
+            echo $info['forgot_password_link'] . "<br/><br/>";
             echo $info['close_form'];
             // Facebook, Google Auth, etc.
-            if (!empty($info['connect_buttons'])) {
+            if ( !empty( $info['connect_buttons'] ) ) {
                 echo "
         <hr/>
         ";
-                foreach ($info['connect_buttons'] as $mhtml) {
+                foreach ( $info['connect_buttons'] as $mhtml ) {
                     echo $mhtml;
                 }
             }

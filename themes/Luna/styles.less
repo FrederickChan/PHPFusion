@@ -664,6 +664,12 @@ a {
             //background: var(--bs-btn-hover-color);
         }
     }
+
+    &.btn-lg {
+        --bs-btn-padding-y: 0.5rem;
+        --bs-btn-padding-x: 1rem;
+        --bs-btn-font-size: 1rem;
+    }
 }
 
 .btn-sm, .btn-group-sm > .btn {
@@ -1115,7 +1121,6 @@ div[data-fusion="true"] {
 }
 
 .register, .login {
-
     display: flex;
     -webkit-box-flex: 1;
     -ms-flex: 1;
@@ -1136,9 +1141,22 @@ div[data-fusion="true"] {
         font-weight: 400;
     }
 
-    .card {
+    .content {
         width: 350px;
         margin: 0 auto;
+
+        .text-muted {
+            --bs-secondary-color: #9c9c9c;
+
+            color: var(--bs-secondary-color);
+
+            a {
+                font-weight: 600;
+                color: var(--bs-secondary-color);
+            }
+        }
+
+
     }
 
     .card-header {
@@ -1178,8 +1196,6 @@ div[data-fusion="true"] {
         font-size: 2rem;
         font-weight: 500 !important;
     }
-
-
 }
 
 .copyright-bottom {

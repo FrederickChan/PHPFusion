@@ -20,36 +20,6 @@ use PHPFusion\Panels;
 
 defined( 'IN_FUSION' ) || exit;
 
-if ( !function_exists( 'display_register_form' ) ) {
-    /**
-     * Registration Form Template
-     * echo output design in compatible with Version 7.xx theme set.
-     *
-     * @param $info - the array output that is accessible for your custom requirements
-     */
-    function display_register_form( array $info = [] ) {
-        $locale = fusion_get_locale();
-
-        echo "<!--HTML-->";
-        opentable( $locale['u101'] );
-        echo "<!--register_pre_idx-->";
-        echo openform( 'registerFrm', 'POST' ) .
-            $info['user_id'] .
-            $info['user_name'] .
-            $info['user_email'] .
-            $info['user_avatar'] .
-            $info['user_password'] .
-            $info['user_admin_password'] .
-            $info['user_custom'] .
-            $info['validate'] .
-            $info['terms'] .
-            $info['button'] .
-            closeform();
-        echo "<!--register_sub_idx-->";
-        closetable();
-        echo "<!--//HTML-->";
-    }
-}
 
 if ( !function_exists( 'display_profile_form' ) ) {
     /**
@@ -130,7 +100,6 @@ if ( !function_exists( 'display_up_settings' ) ) {
     require_once __DIR__.'/profile_settings/settings.tpl.php';
     require_once __DIR__.'/profile_settings/privacy.tpl.php';
     require_once __DIR__.'/profile_settings/close.tpl.php';
-
 }
 
 

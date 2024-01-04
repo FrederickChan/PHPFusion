@@ -41,15 +41,15 @@ class AccountsForm extends UserFieldsForm {
 
         } else if ( $ref == 'authenticator' ) {
 
-            $info = array_merge( $info, $this->accountTwoFactor()->profileTOTPField());
+            $info = array_merge( $info, $this->accountTwoFactor()->profileTOTPField() );
 
         } else if ( $ref == 'privacy' ) {
 
             $info = array_merge( $info, $this->accountPrivacy()->profilePrivacyField() );
 
-        } else if ($ref == 'pm_options') {
+        } else if ( $ref == 'pm_options' ) {
 
-            $info = array_merge($info, $this->accountMessaging()->profileMessageField());
+            $info = array_merge( $info, $this->accountMessaging()->profileMessageField() );
 
         } else {
 
@@ -89,7 +89,6 @@ class AccountsForm extends UserFieldsForm {
 
         //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
         //$this->info['user_admin_password'] = $locale['u131'];
-
 
         //if ( $this->method == 'validate_update' ) {
         //    // User Password Verification for Email Change
@@ -141,6 +140,23 @@ class AccountsForm extends UserFieldsForm {
         //}
 
         return $info;
+    }
+
+    public function displaySimpleInputFields() {
+
+        return [
+                'form_open'      => openform( 'registerFrm', 'POST' ),
+                'form_close'     => closeform(),
+                'user_name'     => $this->accountUsername()->usernameInputField(),
+                'user_password' => $this->accountPassword()->basePasswordInput(),
+                'button'        => form_button( $this->userFields->postName, 'Sign up', 'register', [
+                        "class" => 'btn-primary btn-block btn-lg'
+                    ]
+                ),
+                'validation'    => $this->userFields->displayValidation ? $this->captchaInput() : '',
+                'terms'         => $this->termInput(),
+            ] + $this->accountEmail()->emailInputField();
+
     }
 
 
@@ -338,42 +354,21 @@ class AccountsForm extends UserFieldsForm {
             if ( $_policy = LegalDocs::getInstance()->getPolicies( 3 ) ) {
 
                 if ( isset( $_policy['ups'] ) ) {
-                    $policies[] = '<a href="' . BASEDIR . 'legal . php ? type = ups" target="_blank">' . $_policy['ups'] . '</a>';
+                    $policies[] = '<a href="' . BASEDIR . 'legal.php?type=ups" target="_blank">' . $_policy['ups'] . '</a>';
                 }
 
                 if ( isset( $_policy['pps'] ) ) {
-                    $policies[] = '<a href="' . BASEDIR . 'legal . php ? type = pps" target="_blank">' . $_policy['pps'] . '</a>';
+                    $policies[] = '<a href="' . BASEDIR . 'legal.php?type=pps" target="_blank">' . $_policy['pps'] . '</a>';
                 }
 
                 if ( isset( $_policy['cps'] ) ) {
-                    $policies[] = '<a href="' . BASEDIR . 'legal . php ? type = cps" target="_blank">' . $_policy['cps'] . '</a>';
+                    $policies[] = '<a href="' . BASEDIR . 'legal.php?type=cps" target="_blank">' . $_policy['cps'] . '</a>';
                 }
             }
 
             if ( isset( $policies ) ) {
-                add_to_jquery( "
-
-                let registerTermsFn = () => {
-    let btnDOM = $('button[name=\"" . $this->userFields->postName . "\"]');
-                    if ( btnDOM . length ) {
-                        btnDOM = $(btnDOM[0]);
-                        btnDOM . attr( 'disabled', TRUE ) . addClass( 'disabled' );
-                        $('#agreement') . on( 'click', function () {
-                            if ( $(this) . is( ':checked' ) ) {
-                                btnDOM . attr( 'disabled', FALSE ) . removeClass( 'disabled' );
-                            } else {
-                                btnDOM . attr( 'disabled', TRUE ) . addClass( 'disabled' );
-                            }
-                        } );
-                    }
-                }
-
-                registerTermsFn();
-                " );
-
-                return form_checkbox( 'agreement', sprintf( strtr( $locale['u193'], ['[SITENAME]' => $settings['sitename']] ), format_sentence( $policies ) ), '', ["required" => TRUE, "reverse_label" => TRUE, 'inline' => FALSE] );;
+                return sprintf( $locale['u193'], $settings['sitename'], $settings['sitename'], format_sentence( $policies ) );
             }
-
         }
 
         return '';

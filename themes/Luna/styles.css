@@ -527,6 +527,11 @@ a {
   color: var(--header-color);
   background: rgba(0, 0, 0, 0.1);
 }
+.btn.btn-lg {
+  --bs-btn-padding-y: 0.5rem;
+  --bs-btn-padding-x: 1rem;
+  --bs-btn-font-size: 1rem;
+}
 .btn-sm,
 .btn-group-sm > .btn {
   --bs-btn-padding-y: 0.3rem;
@@ -891,10 +896,20 @@ div[data-fusion="true"] strong {
   color: var(--header-color);
   font-weight: 400;
 }
-.register .card,
-.login .card {
+.register .content,
+.login .content {
   width: 350px;
   margin: 0 auto;
+}
+.register .content .text-muted,
+.login .content .text-muted {
+  --bs-secondary-color: #9c9c9c;
+  color: var(--bs-secondary-color);
+}
+.register .content .text-muted a,
+.login .content .text-muted a {
+  font-weight: 600;
+  color: var(--bs-secondary-color);
 }
 .register .card-header,
 .login .card-header {

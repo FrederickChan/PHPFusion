@@ -33,22 +33,24 @@ use PHPFusion\Userfields\UserFieldsForm;
  */
 class UserFields extends QuantumFields {
 
-    public $userData = [
-        'user_id'             => '',
-        'user_name'           => '',
-        'user_firstname'      => '',
-        'user_lastname'       => '',
-        'user_addname'        => '',
-        'user_phone'          => '',
-        'user_hide_phone'     => 1,
-        'user_bio'            => '',
-        'user_password'       => '',
-        'user_admin_password' => '',
-        'user_email'          => '',
-        'user_hide_email'     => 1,
-        'user_language'       => LANGUAGE,
-        'user_timezone'       => 'Europe/London'
-    ];
+    public $userData;
+
+    //public $userData = [
+    //    'user_id'             => '',
+    //    'user_name'           => '',
+    //    'user_firstname'      => '',
+    //    'user_lastname'       => '',
+    //    'user_addname'        => '',
+    //    'user_phone'          => '',
+    //    'user_hide_phone'     => 1,
+    //    'user_bio'            => '',
+    //    'user_password'       => '',
+    //    'user_admin_password' => '',
+    //    'user_email'          => '',
+    //    'user_hide_email'     => 1,
+    //    'user_language'       => LANGUAGE,
+    //    'user_timezone'       => 'Europe/London'
+    //];
 
     public $displayTerms = 0;
 
@@ -61,8 +63,6 @@ class UserFields extends QuantumFields {
     public $showAdminOptions = FALSE;
 
     public $showAdminPass = TRUE;
-
-    public $showAvatarInput = TRUE;
 
     public $baseRequest = FALSE; // new in API 1.02 - turn fusion_self to fusion_request - 3rd party pages. Turn this on if you have more than one $_GET pagination str.
 
@@ -122,6 +122,90 @@ class UserFields extends QuantumFields {
      */
     private $sectionURI;
 
+    public function displayRegisterInput() {
+        $this->method = 'input';
+        $this->options += $this->defaultInputOptions;
+
+        // we will need 2 fields enough from now on.
+        if (!defined('REGISTER_JS_CHECK')) {
+
+            define('REGISTER_JS_CHECK', TRUE);
+            add_to_jquery('
+                function delayKeyupTimer(callback, ms) {
+                    let timer = 0;
+                    return function () {
+                        let context = this, args = arguments;
+                        clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            callback.apply(context, args);
+                        }, ms || 0);
+                    };
+                }
+
+                // Username check
+                let r_username = $("#userfieldsform #user_name");
+                let r_username_field = $("#userfieldsform #user_name-field"); // BS3
+                r_username.keyup(delayKeyupTimer(function () {
+                    $.ajax({
+                        url: "'.INCLUDES.'api/?api=username-check",
+                        method: "GET",
+                        data: $.param({"name": $(this).val()}),
+                        dataType: "json",
+                        success: function (e) {
+                            $(".username-checker").remove();
+
+                            if (e.result === "valid") {
+                                r_username.addClass("is-valid").removeClass("is-invalid");
+                                r_username_field.addClass("has-success").removeClass("has-error"); // BS3
+                            } else if (e.result === "invalid") {
+                                r_username.addClass("is-invalid").removeClass("is-valid");
+                                r_username_field.addClass("has-error").removeClass("has-success"); // BS3
+                                let feedback_html = "<div class=\"username-checker invalid-feedback help-block\">" + e.response + "</div>";
+                                r_username.after(feedback_html);
+                            }
+                        }
+                    });
+                }, 400));
+
+                // Password check
+                let r_userpass1 = $("#userfieldsform #user_password1");
+                let r_userpass1_field = $("#userfieldsform #user_password1-field"); // BS3
+                r_userpass1.keyup(delayKeyupTimer(function () {
+                    $.ajax({
+                        url: "'.INCLUDES.'api/?api=userpass-check",
+                        method: "GET",
+                        data: $.param({"pass": $(this).val()}),
+                        dataType: "json",
+                        success: function (e) {
+                            $(".userpass-checker").remove();
+
+                            if (e.result === "valid") {
+                                r_userpass1.addClass("is-valid").removeClass("is-invalid");
+                                r_userpass1_field.addClass("has-success").removeClass("has-error"); // BS3
+                            } else if (e.result === "invalid") {
+                                r_userpass1.addClass("is-invalid").removeClass("is-valid");
+                                r_userpass1_field.addClass("has-error").removeClass("has-success"); // BS3
+                                let feedback_html = "<div class=\"userpass-checker invalid-feedback help-block\">" + e.response + "</div>";
+                                if (r_userpass1_field.find(".input-group").length > 0) {
+                                    r_userpass1_field.find(".input-group").after(feedback_html);
+                                } else {
+                                    r_userpass1.after(feedback_html);
+                                }
+                            }
+                        }
+                    });
+                }, 400));
+            ');
+        }
+
+        display_register_form( ( new AccountsForm( $this )) ->displaySimpleInputFields()  );
+    }
+
+    public function displayAdminInput() {
+
+    }
+
+
     /**
      * Display Input Fields
      */
@@ -158,11 +242,7 @@ class UserFields extends QuantumFields {
         ];
 
         // Seperate template for each
-        if ( $this->registration ) {
-
-        } else {
-
-            switch ( $this->sectionURI ) {
+        switch ( $this->sectionURI ) {
                 case 'notifications':
                     display_up_notification( ( $this->info + ( new NotificationForm( $this ) )->displayInputFields() ) );
                     break;
@@ -175,11 +255,7 @@ class UserFields extends QuantumFields {
                 default:
                     display_up_settings( ( ( new AccountsForm( $this ) )->displayInputFields() ) + $this->info );
             }
-        }
-        /*
-         * Template Output
-         */
-        //$this->registration ? display_register_form( $this->info ) : display_userprofile_home( $this->info );
+
     }
 
     /**

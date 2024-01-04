@@ -46,20 +46,19 @@ class LegalDocs {
     }
 
     public static function getInstance() {
-        if (self::$instance === NULL) {
+        if ( self::$instance === NULL ) {
 
             self::$instance = new static();
 
-            if ($policy_get = get( 'type' )) {
+            if ( $policy_get = get( 'type' ) ) {
 
-                if ($policy_registrations = fusion_filter_hook( 'fusion_policies' )) {
-
-                    foreach ($policy_registrations as $policy_registers) {
+                if ( $policy_registrations = fusion_filter_hook( 'fusion_policies' ) ) {
+                    foreach ( $policy_registrations as $policy_registers ) {
                         self::$policies += $policy_registers;
                     }
                 }
 
-                if (isset( self::$policies[$policy_get] )) {
+                if ( isset( self::$policies[$policy_get] ) ) {
                     /**
                      * @uses policy_user()
                      */
@@ -77,15 +76,21 @@ class LegalDocs {
     public function getPolicies( $return_num ) {
 
         $_policies_cnt = count( self::$policies );
-        if ($return_num > $_policies_cnt) {
+        if ( $return_num > $_policies_cnt ) {
             $return_num = $_policies_cnt;
         }
+
+        $_policy_keys = array_keys( self::$policies );
+
         $_policies = array_chunk( self::$policies, $return_num );
+
         $_policies = $_policies[0];
-        foreach ($_policies as $key => $callback_func) {
+
+        foreach ( $_policies as $key => $callback_func ) {
             $data = call_user_func( $callback_func );
-            if (isset( $data['name'] )) {
-                $policies_cache[$key] = $data['name'];
+
+            if ( isset( $data['name'] ) ) {
+                $policies_cache[$_policy_keys[$key]] = $data['name'];
             }
         }
 
@@ -100,7 +105,7 @@ class LegalDocs {
 
         require_once THEMES . 'templates/global/legaldocs.tpl.php';
 
-        if (!empty( self::$data )) {
+        if ( !empty( self::$data ) ) {
 
             add_to_title( self::$data['title'] );
             set_meta( self::$data['meta'] );
@@ -151,7 +156,7 @@ class LegalDocs {
 
         $result = dbquery( "SELECT * FROM " . DB_TOS . " WHERE policy_name=:name AND policy_language=:lang", [':name' => $locale['pol_200'], ':lang' => LANGUAGE] );
 
-        if (dbrows( $result )) {
+        if ( dbrows( $result ) ) {
 
             $rows = dbarray( $result );
 
@@ -179,7 +184,7 @@ class LegalDocs {
         $settings = fusion_get_settings();
         $result = dbquery( "SELECT * FROM " . DB_TOS . " WHERE policy_name=:name AND policy_language=:lang", [':name' => $locale['pol_300'], ':lang' => LANGUAGE] );
 
-        if (dbrows( $result )) {
+        if ( dbrows( $result ) ) {
 
             $rows = dbarray( $result );
 
@@ -207,7 +212,7 @@ class LegalDocs {
         $settings = fusion_get_settings();
         $result = dbquery( "SELECT * FROM " . DB_TOS . " WHERE policy_name=:name AND policy_language=:lang", [':name' => $locale['pol_400'], ':lang' => LANGUAGE] );
 
-        if (dbrows( $result )) {
+        if ( dbrows( $result ) ) {
 
             $rows = dbarray( $result );
 
@@ -234,7 +239,7 @@ class LegalDocs {
         $settings = fusion_get_settings();
         $result = dbquery( "SELECT * FROM " . DB_TOS . " WHERE policy_name=:name AND policy_language=:lang", [':name' => $locale['pol_500'], ':lang' => LANGUAGE] );
 
-        if (dbrows( $result )) {
+        if ( dbrows( $result ) ) {
 
             $rows = dbarray( $result );
 
@@ -261,7 +266,7 @@ class LegalDocs {
         $settings = fusion_get_settings();
         $result = dbquery( "SELECT * FROM " . DB_TOS . " WHERE policy_name=:name AND policy_language=:lang", [':name' => $locale['pol_600'], ':lang' => LANGUAGE] );
 
-        if (dbrows( $result )) {
+        if ( dbrows( $result ) ) {
 
             $rows = dbarray( $result );
 
@@ -276,6 +281,4 @@ class LegalDocs {
 
         return [];
     }
-
-
 }

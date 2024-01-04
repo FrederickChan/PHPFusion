@@ -36,7 +36,6 @@ class AccountPasswords extends UserFieldsForm {
         return $info;
     }
 
-
     public function showPasswordTip() {
 
         $locale = fusion_get_locale();
@@ -66,55 +65,53 @@ class AccountPasswords extends UserFieldsForm {
         $locale = fusion_get_locale();
 
         return form_text( 'user_admin_password', $locale['u135a'], '', [
-            'type'             => 'password',
-            'autocomplete_off' => TRUE,
-            'max_length'       => 64,
-            'error_text'       => $locale['u133'],
-            'class'            => 'm-b-15'
-        ] )
-        . form_text( 'user_admin_password1', $locale['u134'], '', [
-            'type'              => 'password',
-            'autocomplete_off'  => TRUE,
-            'max_length'        => 64,
-            'error_text'        => $locale['u133'],
-            'tip'               => $locale['u147'],
-            'password_strength' => TRUE,
-            'class'             => 'm-b-15'
-        ] )
-        . form_text( 'user_admin_password2', $locale['u134b'], '', [
-            'type'             => 'password',
-            'autocomplete_off' => TRUE,
-            'max_length'       => 64,
-            'error_text'       => $locale['u133'],
-            'class'            => 'm-b-15'
-        ] );
+                'type'             => 'password',
+                'autocomplete_off' => TRUE,
+                'max_length'       => 64,
+                'error_text'       => $locale['u133'],
+                'class'            => 'm-b-15'
+            ] )
+            . form_text( 'user_admin_password1', $locale['u134'], '', [
+                'type'              => 'password',
+                'autocomplete_off'  => TRUE,
+                'max_length'        => 64,
+                'error_text'        => $locale['u133'],
+                'tip'               => $locale['u147'],
+                'password_strength' => TRUE,
+                'class'             => 'm-b-15'
+            ] )
+            . form_text( 'user_admin_password2', $locale['u134b'], '', [
+                'type'             => 'password',
+                'autocomplete_off' => TRUE,
+                'max_length'       => 64,
+                'error_text'       => $locale['u133'],
+                'class'            => 'm-b-15'
+            ] );
     }
 
     public function passwordInput() {
         $locale = fusion_get_locale();
 
-        return form_text( 'user_password', $locale['u135a'], '', [
-            'type'             => 'password',
-            'autocomplete_off' => TRUE,
-            'max_length'       => 64,
-            'error_text'       => $locale['u133'],
-            'class'            => 'm-b-15'
-        ] )
-        . form_text( 'user_password1', $locale['u134'], '', [
-            'type'              => 'password',
-            'autocomplete_off'  => TRUE,
-            'max_length'        => 64,
-            'error_text'        => $locale['u133'],
-            'tip'               => $locale['u147'],
-            'password_strength' => TRUE,
-            'class'             => 'm-b-15'
-        ] )
-        . form_text( 'user_password2', $locale['u134b'], '', [
-            'type'             => 'password',
-            'autocomplete_off' => TRUE,
-            'max_length'       => 64,
-            'error_text'       => $locale['u133'],
-            'class'            => 'm-b-15'
-        ] );
+        return $this->basePasswordInput()
+            . form_text( 'user_password2', $locale['u134b'], '', [
+                'type'             => 'password',
+                'autocomplete_off' => TRUE,
+                'max_length'       => 64,
+                'error_text'       => $locale['u133'],
+                'class'            => 'm-b-15'
+            ] );
+    }
+
+    public function basePasswordInput() {
+        $locale = fusion_get_locale();
+
+        return form_text( 'user_password', $locale['u134a'], '', [
+                'type'             => 'password',
+                'autocomplete_off' => TRUE,
+                'max_length'       => 64,
+                'error_text'       => $locale['u133'],
+                'class'            => 'm-b-15'
+            ] );
+
     }
 }

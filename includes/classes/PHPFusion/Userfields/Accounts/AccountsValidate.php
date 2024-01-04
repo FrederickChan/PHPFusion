@@ -54,16 +54,7 @@ class AccountsValidate extends UserFieldsValidate {
     private $_username;
 
     private $_quantum;
-
-    /**
-     * @param $fieldname
-     *
-     * @return string
-     */
-    public function sanitizer( $fieldname ) {
-        return sanitizer( $fieldname, '', $fieldname );
-    }
-
+    private $_data;
 
     /**
      * Handle Username Input and Validation
@@ -120,9 +111,8 @@ class AccountsValidate extends UserFieldsValidate {
             //            }
         }
 
-        return $this->userFieldsInput->userData['user_name'];
+        return '';
     }
-
 
     /**
      * Update email changes
@@ -333,6 +323,7 @@ class AccountsValidate extends UserFieldsValidate {
                 $this->_isValidCurrentPassword = TRUE; // changing an email in administration panel
 
             } else if ( $this->userFieldsInput->_method == 'validate_update' ) {
+                // For admin
                 // Check password
                 if ( $_userPassword = self::getPasswordInput( 'user_hash' ) ) {
                     /**
@@ -365,6 +356,8 @@ class AccountsValidate extends UserFieldsValidate {
                 if ( dbcount( "(blacklist_id)", DB_BLACKLIST, ":email like replace(if (blacklist_email like '%@%' or blacklist_email like '%\\%%', blacklist_email, concat('%@', blacklist_email)), '_', '\\_')", [':email' => $this->_userEmail] ) ) {
                     // this email blacklisted.
                     fusion_stop();
+
+
                     Defender::setInputError( 'user_email' );
                     Defender::setErrorText( 'user_email', $locale['u124'] );
 
@@ -424,8 +417,6 @@ class AccountsValidate extends UserFieldsValidate {
         $settings = fusion_get_settings();
 
         $user_password = self::getPasswordInput( 'user_password' );
-        $password_1 = self::getPasswordInput( 'user_password1' );
-        $password_2 = self::getPasswordInput( 'user_password2' );
 
         $passAuth = new PasswordAuth();
         $passAuth->currentPassCheckLength = $settings['password_length'];
@@ -435,16 +426,14 @@ class AccountsValidate extends UserFieldsValidate {
 
         if ( $this->userFieldsInput->_method == 'validate_insert' ) {
 
-            if ( !empty( $this->_newUserPassword ) ) {
+            if ( !empty( $user_password ) ) {
 
-                $passAuth->inputNewPassword = $this->_newUserPassword;
-                $passAuth->inputNewPassword2 = $this->_newUserPassword2;
+                $passAuth->inputNewPassword = $user_password;
+                $passAuth->inputNewPassword2 = $user_password;
 
-                if ( $passAuth->checkInputPassword( $this->_newUserPassword ) ) {
+                if ( $passAuth->checkInputPassword( $user_password ) ) {
 
-                    $_isValidNewPassword = $passAuth->isValidNewPassword();
-
-                    switch ( $_isValidNewPassword ) {
+                    switch ( $passAuth->isValidNewPassword() ) {
                         case '0':
                             // New password is valid
                             $_newUserPasswordHash = $passAuth->getNewHash();
@@ -454,6 +443,7 @@ class AccountsValidate extends UserFieldsValidate {
                             $this->_isValidCurrentPassword = 1;
 
                             if ( !$this->userFieldsInput->moderation && !$this->userFieldsInput->skipCurrentPass ) {
+
                                 Authenticate::setUserCookie( $this->userFieldsInput->userData['user_id'], $passAuth->getNewSalt(), $passAuth->getNewAlgo() );
                             }
 
@@ -484,8 +474,7 @@ class AccountsValidate extends UserFieldsValidate {
                     }
                 } else {
                     fusion_stop();
-                    Defender::setInputError( 'user_password1' );
-                    Defender::setErrorText( 'user_password1', $passAuth->getError() );
+                    set_input_error( 'user_password', $passAuth->getError() );
                 }
             } else {
                 fusion_stop( $locale['u134'] . $locale['u143a'] );
@@ -500,6 +489,9 @@ class AccountsValidate extends UserFieldsValidate {
                 $email_auth->setCode( $validation_code );
 
                 if ( $email_auth->verifyCode() === TRUE ) {
+
+                    $password_1 = self::getPasswordInput( 'user_password1' );
+                    $password_2 = self::getPasswordInput( 'user_password2' );
 
                     if ( $this->userFieldsInput->moderation or $user_password or $password_1 or $password_2 ) {
 
@@ -726,6 +718,7 @@ class AccountsValidate extends UserFieldsValidate {
     }
 
     public function setAccountProfile() {
+
         $locale = fusion_get_locale();
         $settings = fusion_get_settings();
 
@@ -744,11 +737,6 @@ class AccountsValidate extends UserFieldsValidate {
                 $this->_data += $input_values;
             }
         }
-
-        //        $this->setUserAvatar();
-        //if ( $this->validation ) {
-        //    $this->verifyCaptchas();
-        //}
 
         // id request spoofing request
         if ( $this->userFieldsInput->checkUpdateAccess() ) {
@@ -773,6 +761,72 @@ class AccountsValidate extends UserFieldsValidate {
 
             fusion_stop();
             addnotice( 'danger', $locale['error_request'] );
+        }
+    }
+
+
+    public function createAccount() {
+        $locale = fusion_get_locale();
+        $settings = fusion_get_settings();
+
+        $this->_data = $this->userFieldsInput->setEmptyFields();
+
+        $this->_data['user_name'] = $this->setUserName();
+
+        if ( $pass = $this->setUserPassword() ) {
+            if ( count( $pass ) === 3 ) {
+                [$this->_data['user_algo'], $this->_data['user_salt'], $this->_data['user_password']] = $pass;
+            }
+        }
+
+        $this->_data['user_email'] = $this->setUserEmail();
+
+        if ( $_input = $this->setCustomUserFields() ) {
+            foreach ( $_input as $input ) {
+                $this->_data += $input;
+            }
+        }
+
+        // we need a validation page
+        //if ( $this->validation == 1 ) {
+        //    $this->verifyCaptchas();
+        //}
+        //        print_p( $this->userData );
+        //        print_p( 'Email verify: ' . $this->emailVerification );
+        //        print_p( 'Admin verify: ' . $this->adminActivation );
+        //        print_p( $this->data );
+        if ( fusion_safe() ) {
+            if ( $settings['email_verification'] ) {
+
+                $this->userFieldsInput->sendEmailVerification();
+
+            } else {
+
+                $insert_id = dbquery_insert( DB_USERS, $this->_data, 'save' );
+
+                dbquery_insert( DB_USER_SETTINGS, $this->userFieldsInput->setEmptySettingsField( $insert_id ), 'save', ['no_unique' => TRUE, 'primary_key' => 'user_id'] );
+
+                /**
+                 * Create user
+                 */
+                $notice = $locale['u160'] . " - " . $locale['u161'];
+                //
+                if ( $this->userFieldsInput->moderation == 1 ) {
+
+                    $this->userFieldsInput->sendAdminRegistrationMail();
+
+                } else {
+                    // got admin activation and not
+                    if ( $settings['admin_activation'] ) {
+                        // Missing registration data?
+                        $notice = $locale['u160'] . " - " . $locale['u162'];
+                    }
+                }
+
+                addnotice( 'success', $notice, $settings['opening_page'] );
+            }
+
+            redirect( BASEDIR . $settings['opening_page'] );
         }
     }
 
@@ -812,14 +866,14 @@ class AccountsValidate extends UserFieldsValidate {
         $locale = fusion_get_locale();
 
         $rows = [
-            'user_id' => $this->userFieldsInput->userData['user_id'],
-            'user_pm_email'=> sanitizer('user_pm_email', '', 'user_pm_email'),
-            'user_pm_save_sent' => sanitizer('user_pm_save_sent', '', 'user_pm_save_sent')
+            'user_id'           => $this->userFieldsInput->userData['user_id'],
+            'user_pm_email'     => sanitizer( 'user_pm_email', '', 'user_pm_email' ),
+            'user_pm_save_sent' => sanitizer( 'user_pm_save_sent', '', 'user_pm_save_sent' )
         ];
         if ( fusion_safe() ) {
 
             dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
-            addnotice( 'success', "Account profile updated.\n".$locale['u611'] );
+            addnotice( 'success', "Account profile updated.\n" . $locale['u611'] );
 
             redirect( BASEDIR . 'edit_profile.php?ref=pm_options' );
         }
