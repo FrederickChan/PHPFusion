@@ -19,16 +19,7 @@
 
 namespace PHPFusion;
 
-use Defender;
-
 use PHPFusion\Userfields\Accounts\AccountsValidate;
-use PHPFusion\Userfields\Accounts\AccountClosing;
-use PHPFusion\Userfields\Accounts\Validation\AccountClose;
-use PHPFusion\Userfields\Accounts\Validation\AccountPassword;
-use PHPFusion\Userfields\Accounts\Validation\AccountPrivacy;
-use PHPFusion\Userfields\Notifications\NotificationsValidate;
-use PHPFusion\Userfields\Privacy\PrivacyValidate;
-use PHPFusion\Userfields\UserFieldsValidate;
 
 /**
  * Class UserFieldsInput
@@ -49,7 +40,6 @@ class UserFieldsInput {
 
     public $registration = FALSE;
 
-    // On insert or admin edit
     public $skipCurrentPass = FALSE; // FALSE to skip pass. True to validate password. New Register always FALSE.
 
     public $isAdminPanel = FALSE;
@@ -58,7 +48,6 @@ class UserFieldsInput {
 
     public $_userEmail;
 
-    // Passwords
     private $data = [];
 
     public $moderation = 0;
@@ -68,8 +57,9 @@ class UserFieldsInput {
      */
     public function saveInsert() {
         $this->_method = "validate_insert";
-        (new AccountsValidate($this))->createAccount();
+        ( new AccountsValidate( $this ) )->createAccount();
     }
+
     /**
      * Update User Fields
      */
@@ -78,11 +68,11 @@ class UserFieldsInput {
         $this->_method = "validate_update";
         $this->data['user_id'] = $this->userData['user_id'];
 
-        (new AccountsValidate($this))->updateAccount();
+        ( new AccountsValidate( $this ) )->updateAccount();
     }
 
     /**
-     * @return array|mixed
+     * @return array
      */
     private function createInitUserdata() {
         $data = [];
@@ -106,25 +96,25 @@ class UserFieldsInput {
 
             // Compulsory Core Fields
             $data = [
-                'user_id'         => 0,
-                'user_name'       => '',
-                'user_email'      => '',
-                'user_hide_email' => 1,
-                'user_avatar'     => '',
-                'user_posts'      => 0,
-                'user_threads'    => 0,
-                'user_joined'     => time(),
-                'user_lastvisit'  => 0,
-                'user_ip'         => USER_IP,
-                'user_ip_type'    => USER_IP_TYPE,
-                'user_rights'     => '',
-                'user_groups'     => '',
-                'user_level'      => USER_LEVEL_MEMBER,
-                'user_status'     => $this->adminActivation == 1 ? 2 : 0,
-                'user_theme'      => 'Default',
-                'user_language'   => LANGUAGE,
-                'user_timezone'   => fusion_get_settings( 'timeoffset' ),
-            ] + $this->createInitUserdata();
+                    'user_id'         => 0,
+                    'user_name'       => '',
+                    'user_email'      => '',
+                    'user_hide_email' => 1,
+                    'user_avatar'     => '',
+                    'user_posts'      => 0,
+                    'user_threads'    => 0,
+                    'user_joined'     => time(),
+                    'user_lastvisit'  => 0,
+                    'user_ip'         => USER_IP,
+                    'user_ip_type'    => USER_IP_TYPE,
+                    'user_rights'     => '',
+                    'user_groups'     => '',
+                    'user_level'      => USER_LEVEL_MEMBER,
+                    'user_status'     => $this->adminActivation == 1 ? 2 : 0,
+                    'user_theme'      => 'Default',
+                    'user_language'   => LANGUAGE,
+                    'user_timezone'   => fusion_get_settings( 'timeoffset' ),
+                ] + $this->createInitUserdata();
 
             return $data;
         }
@@ -137,7 +127,7 @@ class UserFieldsInput {
      *
      * @return array
      */
-    public function setEmptySettingsField($user_id) {
+    public function setEmptySettingsField( $user_id ) {
 
         $settings = fusion_get_settings();
 
@@ -184,7 +174,7 @@ class UserFieldsInput {
 
         $user_code = md5( $this->_userEmail . $salt );
 
-        $email_verify_link = $settings['siteurl'] . "edit_profile.php?code=" . $user_code;
+        $email_verify_link = $settings['siteurl'] . 'edit_profile.php?code=' . $user_code;
 
         $mailbody = str_replace( "[EMAIL_VERIFY_LINK]", $email_verify_link, $locale['u203'] );
         $mailbody = str_replace( "[SITENAME]", $settings['sitename'], $mailbody );
@@ -196,9 +186,7 @@ class UserFieldsInput {
         sendemail( $this->data['user_name'], $this->data['user_email'], $settings['siteusername'], $settings['siteemail'], $mailSubject, $mailbody );
 
         addnotice( 'warning', strtr( $locale['u200'], ['(%s)' => $this->_userEmail] ) );
-
         dbquery( "DELETE FROM " . DB_EMAIL_VERIFY . " WHERE user_id=:uid", [":uid" => (int)$this->data['user_id']] );
-
         dbquery( "INSERT INTO " . DB_EMAIL_VERIFY . " (user_id, user_code, user_email, user_datestamp) VALUES (':uid', ':code', ':email', ':time')", [
             ':uid'   => (int)$this->data['user_id'],
             ':code'  => $user_code,
@@ -206,8 +194,6 @@ class UserFieldsInput {
             ':time'  => time()
         ] );
     }
-
-
 
     /**
      * Admin needs hash
@@ -223,7 +209,7 @@ class UserFieldsInput {
     /**
      * Set user avatar
      */
-    private function setUserAvatar() {
+    public function setUserAvatar() {
         if ( isset( $_POST['delAvatar'] ) ) {
             if ( $this->userData['user_avatar'] != "" && file_exists( IMAGES . "avatars/" . $this->userData['user_avatar'] ) && is_file( IMAGES . "avatars/" . $this->userData['user_avatar'] ) ) {
                 unlink( IMAGES . "avatars/" . $this->userData['user_avatar'] );
@@ -269,21 +255,31 @@ class UserFieldsInput {
             redirect( BASEDIR . 'index.php' );
         }
 
-        $result = dbquery( "SELECT * FROM " . DB_EMAIL_VERIFY . " WHERE user_code=:usercode", [':usercode' => $value] );
+        $result = dbquery( "SELECT * FROM " . DB_EMAIL_VERIFY . " WHERE user_code=:code", [':code' => $value] );
 
         if ( dbrows( $result ) ) {
+
             $data = dbarray( $result );
+
             if ( $data['user_id'] == $userdata['user_id'] ) {
+
                 if ( $data['user_email'] != $userdata['user_email'] ) {
-                    $result = dbquery( "SELECT user_email FROM " . DB_USERS . " WHERE user_email=:useremail", [':useremail' => $data['user_email']] );
+
+                    $result = dbquery( "SELECT user_email FROM " . DB_USERS . " WHERE user_email=:email", [':email' => $data['user_email']] );
                     if ( dbrows( $result ) > 0 ) {
                         addnotice( "danger", $locale['u164'] . "<br />\n" . $locale['u121'] );
                     } else {
-
                         addnotice( 'success', $locale['u169'] );
                     }
-                    dbquery( "UPDATE " . DB_USERS . " SET user_email='" . $data['user_email'] . "' WHERE user_id='" . $data['user_id'] . "'" );
-                    dbquery( "DELETE FROM " . DB_EMAIL_VERIFY . " WHERE user_id='" . $data['user_id'] . "'" );
+
+                    dbquery( "UPDATE " . DB_USERS . " SET user_email=:email WHERE user_id=:uid", [
+                        ':email' => $data['user_email'],
+                        ':uid'   => $data['user_id']
+                    ] );
+
+                    dbquery( "DELETE FROM " . DB_EMAIL_VERIFY . " WHERE user_id=:uid", [
+                        ':uid' => $data['user_id']
+                    ] );
                 }
             } else {
                 redirect( BASEDIR . 'index.php' );

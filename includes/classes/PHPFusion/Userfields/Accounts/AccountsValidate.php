@@ -20,16 +20,10 @@
 
 namespace PHPFusion\Userfields\Accounts;
 
-use PHPFusion\QuantumFields;
 use PHPFusion\Userfields\Notifications\NotificationsValidate;
 use PHPFusion\Userfields\UserFieldsValidate;
 
 class AccountsValidate extends UserFieldsValidate {
-
-    /**
-     * @var
-     */
-    private $_quantum;
 
     /**
      * Account creation
