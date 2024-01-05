@@ -1,10 +1,10 @@
 <?php
-namespace PHPFusion\Userfields\Accounts;
+namespace PHPFusion\Userfields\Accounts\Validation;
 
 use PHPFusion\Authenticate;
 use PHPFusion\Userfields\UserFieldsValidate;
 
-class CloseValidate extends UserFieldsValidate {
+class AccountClose extends UserFieldsValidate {
 
     public function validate() {
 

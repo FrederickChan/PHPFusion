@@ -1,10 +1,7 @@
 <?php
 namespace PHPFusion\Userfields\Accounts;
 
-use PHPMailer\PHPMailer\Exception;
-
 class AccountActions {
-
 
     private $userdata;
 
@@ -14,7 +11,6 @@ class AccountActions {
     public function __construct( $user_id ) {
 
         $this->userdata = fusion_get_user( $user_id );
-        print_p($this->userdata);
 
         require_once INCLUDES . 'sendmail_include.php';
 
@@ -57,7 +53,6 @@ class AccountActions {
         return TRUE;
     }
 
-
     // When deleting a user
     public function deleteUser() {
 
@@ -86,5 +81,6 @@ class AccountActions {
         return TRUE;
 
     }
+
 }
 

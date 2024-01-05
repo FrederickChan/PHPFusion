@@ -87,7 +87,6 @@ if ((isset($_SESSION["validated"]) && $_SESSION["validated"] == "True") || $sett
         if (check_post('register')) {
 
             $userInput = new PHPFusion\UserFieldsInput();
-            $userInput->validation = $settings['display_validation'];
             $userInput->moderation = 0;
             $userInput->skipCurrentPass = 1;
             $userInput->saveInsert();

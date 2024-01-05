@@ -19,12 +19,10 @@
 
 namespace PHPFusion;
 
-use PHPFusion\Userfields\Accounts\AccountPrivacy;
+use PHPFusion\Userfields\Accounts\AccountClose;
 use PHPFusion\Userfields\Accounts\AccountsForm;
-use PHPFusion\Userfields\Accounts\CloseAccount;
 use PHPFusion\Userfields\Notifications\NotificationForm;
 use PHPFusion\Userfields\Privacy\PrivacyForm;
-use PHPFusion\Userfields\UserFieldsForm;
 
 /**
  * Class UserFields
@@ -201,11 +199,6 @@ class UserFields extends QuantumFields {
         display_register_form( ( new AccountsForm( $this )) ->displaySimpleInputFields()  );
     }
 
-    public function displayAdminInput() {
-
-    }
-
-
     /**
      * Display Input Fields
      */
@@ -250,7 +243,7 @@ class UserFields extends QuantumFields {
                     display_up_privacy( ( $this->info + ( new PrivacyForm( $this ) )->displayInputFields() ) );
                     break;
                 case 'close':
-                    display_up_close( ( $this->info + ( new CloseAccount( $this ) )->displayInputFields() ) );
+                    display_up_close( ( $this->info + ( new AccountClose( $this ) )->displayInputFields() ) );
                     break;
                 default:
                     display_up_settings( ( ( new AccountsForm( $this ) )->displayInputFields() ) + $this->info );

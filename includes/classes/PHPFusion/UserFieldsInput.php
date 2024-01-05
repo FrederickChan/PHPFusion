@@ -22,7 +22,10 @@ namespace PHPFusion;
 use Defender;
 
 use PHPFusion\Userfields\Accounts\AccountsValidate;
-use PHPFusion\Userfields\Accounts\CloseValidate;
+use PHPFusion\Userfields\Accounts\AccountClosing;
+use PHPFusion\Userfields\Accounts\Validation\AccountClose;
+use PHPFusion\Userfields\Accounts\Validation\AccountPassword;
+use PHPFusion\Userfields\Accounts\Validation\AccountPrivacy;
 use PHPFusion\Userfields\Notifications\NotificationsValidate;
 use PHPFusion\Userfields\Privacy\PrivacyValidate;
 use PHPFusion\Userfields\UserFieldsValidate;
@@ -33,8 +36,6 @@ use PHPFusion\Userfields\UserFieldsValidate;
  * @package PHPFusion
  */
 class UserFieldsInput {
-
-    private $_quantum = NULL;
 
     public $adminActivation = FALSE;
 
@@ -57,15 +58,10 @@ class UserFieldsInput {
 
     public $_userEmail;
 
-    private $_userName;
-
     // Passwords
     private $data = [];
 
-    private $_newUserPassword = FALSE;
-
     public $moderation = 0;
-
 
     /**
      * Create user account
@@ -74,34 +70,20 @@ class UserFieldsInput {
         $this->_method = "validate_insert";
         (new AccountsValidate($this))->createAccount();
     }
-
     /**
-     * Send mail when an administrator adds a user from admin panel
+     * Update User Fields
      */
-    function sendAdminRegistrationMail() {
+    public function saveUpdate() {
 
-        $settings = fusion_get_settings();
-        $locale = fusion_get_locale( '', LOCALE . LOCALESET . "admin/members_email.php" );
+        $this->_method = "validate_update";
+        $this->data['user_id'] = $this->userData['user_id'];
 
-        require_once INCLUDES . "sendmail_include.php";
-
-        $subject = str_replace( "[SITENAME]", $settings['sitename'], $locale['email_create_subject'] );
-
-        $replace_this = ["[USER_NAME]", "[PASSWORD]", "[SITENAME]", "[SITEUSERNAME]"];
-
-        $replace_with = [
-            $this->_userName, $this->_newUserPassword, $settings['sitename'], $settings['siteusername']
-        ];
-
-        $message = str_replace( $replace_this, $replace_with, $locale['email_create_message'] );
-
-        sendemail( $this->data['user_name'], $this->data['user_email'], $settings['siteusername'], $settings['siteemail'], $subject, $message );
-
-        // Administrator complete message
-        addnotice( 'success', $locale['u172'] );
+        (new AccountsValidate($this))->updateAccount();
     }
 
-
+    /**
+     * @return array|mixed
+     */
     private function createInitUserdata() {
         $data = [];
         if ( !empty( $filter = fusion_filter_hook( 'fusion_create_userdata' ) ) ) {
@@ -142,11 +124,7 @@ class UserFieldsInput {
                 'user_theme'      => 'Default',
                 'user_language'   => LANGUAGE,
                 'user_timezone'   => fusion_get_settings( 'timeoffset' ),
-            ];
-
-            if ( $extra_userdata = $this->createInitUserdata() ) {
-                $data += $extra_userdata;
-            }
+            ] + $this->createInitUserdata();
 
             return $data;
         }
@@ -185,20 +163,6 @@ class UserFieldsInput {
             'user_notify_updates'       => 1,
             'user_language'             => LANGUAGE,
         ];
-    }
-
-    /**
-     * Set validation error
-     */
-    private function verifyCaptchas() {
-        $locale = fusion_get_locale();
-        $settings = fusion_get_settings();
-        $_CAPTCHA_IS_VALID = FALSE;
-        include INCLUDES . "captchas/" . $settings['captcha'] . "/captcha_check.php";
-        if ( $_CAPTCHA_IS_VALID == FALSE ) {
-            fusion_stop( $locale['u194'] );
-            Defender::setInputError( 'user_captcha' );
-        }
     }
 
     /**
@@ -243,115 +207,7 @@ class UserFieldsInput {
         ] );
     }
 
-    /**
-     * Handle request for email verification
-     * Sends Verification code when you change email
-     * Sends Verification code when you register
-     */
-    public function sendEmailVerification() {
 
-        $settings = fusion_get_settings();
-        $locale = fusion_get_locale();
-
-        require_once INCLUDES . "sendmail_include.php";
-
-        $userCode = hash_hmac( "sha1", PasswordAuth::getNewPassword(), $this->data['user_email'] );
-        $activationUrl = $settings['siteurl'] . "register.php?email=" . $this->data['user_email'] . "&code=" . $userCode;
-
-        $message = str_replace( "USER_NAME", $this->data['user_name'], $locale['u152'] );
-        $message = str_replace( "SITENAME", $settings['sitename'], $message );
-        $message = str_replace( "SITEUSERNAME", $settings['siteusername'], $message );
-        $message = str_replace( "USER_PASSWORD", $this->_newUserPassword, $message );
-        $message = str_replace( "ACTIVATION_LINK", $activationUrl, $message );
-
-        $subject = str_replace( "[SITENAME]", $settings['sitename'], $locale['u151'] );
-
-        if ( !sendemail( $this->data['user_name'], $this->data['user_email'], $settings['siteusername'], $settings['siteemail'], $subject, $message ) ) {
-
-            $message = strtr( $locale['u154'], [
-                '[LINK]'  => "<a href='" . BASEDIR . "contact.php'><strong>",
-                '[/LINK]' => "</strong></a>"
-            ] );
-
-            addnotice( 'warning', $locale['u153'] . "<br />" . $message, 'all' );
-        }
-
-        if ( fusion_safe() ) {
-
-            $email_rows = [
-                'user_code'      => $userCode,
-                'user_name'      => $this->data['user_name'],
-                'user_email'     => $this->data['user_email'],
-                'user_datestamp' => time(),
-                'user_info'      => base64_encode( serialize( $this->data ) )
-            ];
-
-            dbquery_insert( DB_NEW_USERS, $email_rows, 'save', ['primary_key' => 'user_name', 'no_unique' => TRUE] );
-        }
-
-        addnotice( 'success', $locale['u150'] );
-    }
-
-    /**
-     * Update User Fields
-     */
-    public function saveUpdate() {
-
-        $this->data['user_id'] = $this->userData['user_id'];
-        $this->_method = 'validate_update';
-
-        switch ( get( 'section' ) ) {
-            case 'notifications':
-                ( new NotificationsValidate( $this ) )->validate();
-                break;
-            //case 'privacy':
-            //( new PrivacyValidate( $this ) )->validate();
-            //break;
-            case 'close':
-                ( new CloseValidate( $this ) )->validate();
-                break;
-            default:
-                $this->updateAccount();
-        }
-
-    }
-
-    /**
-     * Update account settings for users
-     */
-    private function updateAccount() {
-
-        $userFieldsValidate = new AccountsValidate( $this );
-
-        if ( check_post( 'user_email_submit' ) ) {
-
-            $userFieldsValidate->setUserEmailChange();
-
-        } else if ( check_post( 'user_totp_submit' ) ) {
-
-            $userFieldsValidate->setUserTOTP();
-
-        } else if ( check_post( 'user_pass_submit' ) ) {
-
-            $userFieldsValidate->setUserPassword();
-
-        } else if ( check_post( 'user_adminpass_submit' ) ) {
-
-            $userFieldsValidate->setAdminPassword();
-
-        } else if ( check_post( 'user_privacy_submit' ) ) {
-
-            $userFieldsValidate->setAccountPrivacy();
-
-        } else if ( check_post( 'user_pm_submit' ) ) {
-
-            $userFieldsValidate->setAccountMesssaging();
-
-        } else if ( check_post( 'update_profile_btn' ) ) {
-
-            $userFieldsValidate->setAccountProfile();
-        }
-    }
 
     /**
      * Admin needs hash
@@ -363,7 +219,6 @@ class UserFieldsInput {
     public function checkUpdateAccess() {
         return fusion_safe() && ( ( iADMIN && checkrights( 'M' ) && ( $this->userData['user_password'] == sanitizer( 'user_hash', '', "user_hash" ) ) ) || ( $this->data['user_id'] == $this->userData['user_id'] ) );
     }
-
 
     /**
      * Set user avatar

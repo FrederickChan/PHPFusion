@@ -11,7 +11,10 @@ use PHPFusion\Userfields\UserFieldsForm;
  * @package PHPFusion\Userfields\Accounts
  */
 class AccountsForm extends UserFieldsForm {
-
+    /**
+     * Edit profile
+     * @return array
+     */
     public function displayInputFields() {
 
         $ref = get( 'ref' );
@@ -142,21 +145,38 @@ class AccountsForm extends UserFieldsForm {
         return $info;
     }
 
+    /**
+     * Register
+     * @return array
+     */
     public function displaySimpleInputFields() {
 
+        $settings = fusion_get_settings();
+
+        if ( $settings['display_validation'] && check_get( 'validation' ) ) {
+
+            return [
+                'form_open'  => openform( 'validateFrm', 'POST' ),
+                'form_close' => closeform(),
+                'validation' => $this->accountCaptchas()->captchaInput(),
+                'button'     => form_button( $this->userFields->postName, 'Validate', 'validate', [
+                        "class" => 'btn-primary btn-block btn-lg'
+                    ]
+                ),
+            ];
+        }
+
         return [
-                'form_open'      => openform( 'registerFrm', 'POST' ),
-                'form_close'     => closeform(),
+                'form_open'     => openform( 'registerFrm', 'POST' ),
+                'form_close'    => closeform(),
                 'user_name'     => $this->accountUsername()->usernameInputField(),
                 'user_password' => $this->accountPassword()->basePasswordInput(),
                 'button'        => form_button( $this->userFields->postName, 'Sign up', 'register', [
                         "class" => 'btn-primary btn-block btn-lg'
                     ]
                 ),
-                'validation'    => $this->userFields->displayValidation ? $this->captchaInput() : '',
                 'terms'         => $this->termInput(),
             ] + $this->accountEmail()->emailInputField();
-
     }
 
 
@@ -298,48 +318,6 @@ class AccountsForm extends UserFieldsForm {
     }
 
     /**
-     * Display Captcha
-     *
-     * @return string
-     */
-    public function captchaInput() {
-
-        $locale = fusion_get_locale();
-
-        if ( $this->userFields->displayValidation == 1 && $this->userFields->moderation == 0 ) {
-
-            $_CAPTCHA_HIDE_INPUT = FALSE;
-
-            include INCLUDES . "captchas / " . fusion_get_settings( "captcha" ) . " / captcha_display . php";
-
-            $html = " < div class='form-group row' > ";
-            $html .= "<label for='captcha_code' class='control-label col-xs-12 col-sm-3 col-md-3 col-lg-3' > " . $locale['u190'] . " <span class='required' >*</span ></label > ";
-            $html .= "<div class='col-xs-12 col-sm-9 col-md-9 col-lg-9' > ";
-
-            $html .= display_captcha( [
-                'captcha_id' => 'captcha_userfields',
-                'input_id'   => 'captcha_code_userfields',
-                'image_id'   => 'captcha_image_userfields'
-            ] );
-
-            if ( $_CAPTCHA_HIDE_INPUT === FALSE ) {
-                $html .= form_text( 'captcha_code', '', '', [
-                    'inline'           => 1,
-                    'required'         => 1,
-                    'autocomplete_off' => TRUE,
-                    'width'            => '200px',
-                    'class'            => 'm-t-15',
-                    'placeholder'      => $locale['u191']
-                ] );
-            }
-            $html .= "</div ></div > ";
-            return $html;
-        }
-
-        return '';
-    }
-
-    /**
      * Display Terms of Agreement Field
      *
      * @return string
@@ -373,6 +351,5 @@ class AccountsForm extends UserFieldsForm {
 
         return '';
     }
-
 
 }

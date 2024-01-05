@@ -3,7 +3,7 @@ namespace PHPFusion\Userfields\Accounts;
 
 use PHPFusion\Userfields\UserFieldsForm;
 
-class CloseAccount extends UserFieldsForm {
+class AccountClose extends UserFieldsForm {
 
     public function displayInputFields() {
 

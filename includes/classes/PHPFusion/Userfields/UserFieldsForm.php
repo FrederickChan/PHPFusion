@@ -24,6 +24,7 @@ use PHPFusion\SiteLinks;
 use PHPFusion\UserFields;
 use PHPFusion\Userfields\Accounts\AccountMessaging;
 use PHPFusion\Userfields\Accounts\AccountPrivacy;
+use PHPFusion\Userfields\Accounts\Fields\AccountCaptchas;
 use PHPFusion\Userfields\Accounts\Fields\AccountEmail;
 use PHPFusion\Userfields\Accounts\Fields\AccountPasswords;
 use PHPFusion\Userfields\Accounts\Fields\AccountProfile;
@@ -44,8 +45,8 @@ abstract class UserFieldsForm {
     private static $profileInstance;
     private static $twofactorInstance;
     private static $privacyInstance;
-    private static $sessionInstance;
     private static $pmInstance;
+    private static $captchas;
 
     protected $userFields;
 
@@ -123,10 +124,11 @@ abstract class UserFieldsForm {
         return self::$pmInstance;
     }
 
-    public function accountSessions() {
-        if ( !isset( self::$sessionInstance ) ) {
-            self::$sessionInstance = ( new \AccountSessions( $this->userFields ) );
+    public function accountCaptchas() {
+        if ( !isset( self::$captchas ) ) {
+            self::$captchas = ( new AccountCaptchas( $this->userFields ) );
         }
-        return self::$sessionInstance;
+        return self::$captchas;
     }
+
 }

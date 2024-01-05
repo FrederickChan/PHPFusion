@@ -24,20 +24,27 @@ function display_register_form( array $info = [] ) {
             <!--register_pre_idx-->
             <h5 class="text-center w-100 mt-4 mb-4">Create an account</h5>
             <?php openside( '' ) ?>
-            <?php echo $info['form_open'] .
-                $info['user_name'] .
-                $info['user_email'] .
-                $info['user_password'] .
-                $info['user_admin_password'] .
-                $info['user_custom'] .
-                $info['validate'] .
-                $info['button'] .
-                $info['form_close']
-            ?>
-            <?php closeside() ?>
-            <div class="text-center text-muted mb-4">
-                <?php echo $info['terms'] ?>
-            </div>
+            <?php echo $info['form_open'];
+
+            if ( !check_get( 'validation' ) ) :
+                echo $info['user_name'] .
+                    $info['user_email'] .
+                    $info['user_password'] .
+                    $info['user_custom'].
+                    $info['button'];
+            else:
+                echo $info['validation'] .
+                    $info['button'];
+            endif;
+
+            echo $info['form_close'];
+            closeside();
+            if ( !check_get( 'validation' ) ) :
+                ?>
+                <div class="text-center text-muted mb-4">
+                    <?php echo $info['terms'] ?>
+                </div>
+            <?php endif ?>
             <div class="text-center strong mt-5 mb-5"><?php echo strtr( $locale['u400'], ['[SITENAME]' => $settings['sitename']] ) ?>
                 <a href="<?php echo BASEDIR . 'login.php' ?>"><?php echo $locale['login'] ?></a>
             </div>

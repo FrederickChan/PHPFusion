@@ -32,13 +32,9 @@ class NotificationsValidate extends UserFieldsValidate {
             ];
 
             if ( $this->userFieldsInput->checkUpdateAccess() ) {
-
                 if ( fusion_safe() ) {
-
                     dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
-
-                    addnotice( 'success', $locale['u163'] . "\n" . $locale['u522'] );
-
+                    addnotice( 'success', $locale['u163'] . "\nNotification settings has been updated" );
                     redirect( BASEDIR . 'edit_profile.php?section=notifications' );
                 }
             }
