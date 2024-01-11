@@ -57,6 +57,9 @@ function set_meta($name, $content = "") {
     OutputHandler::setMeta($name, $content);
 }
 
+function add_meta($name, $content = '') {
+    OutputHandler::addMeta($name, $content);
+}
 /**
  * Append something to a meta tag
  *

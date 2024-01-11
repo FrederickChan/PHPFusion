@@ -35,12 +35,12 @@ add_to_title( $locale['global_100'] );
 add_to_meta( "keywords", $locale['global_100'] );
 
 $info = [];
-if (isset( $_GET['error'] ) && isnum( $_GET['error'] )) {
+if ( isset( $_GET['error'] ) && isnum( $_GET['error'] ) ) {
     $action_url = FUSION_REQUEST;
-    if (isset( $_GET['redirect'] ) && strpos( urldecode( $_GET['redirect'] ), "/" ) === 0) {
+    if ( isset( $_GET['redirect'] ) && strpos( urldecode( $_GET['redirect'] ), "/" ) === 0 ) {
         $action_url = cleanurl( urldecode( $_GET['redirect'] ) );
     }
-    switch ($_GET['error']) {
+    switch ( $_GET['error'] ) {
         case 1:
             addnotice( "danger", $locale['error_input_login'] );
             break;
@@ -48,17 +48,17 @@ if (isset( $_GET['error'] ) && isnum( $_GET['error'] )) {
             addnotice( "danger", $locale['global_192'] );
             break;
         case 3:
-            if (isset( $_COOKIE[COOKIE_PREFIX . "user"] )) {
+            if ( isset( $_COOKIE[COOKIE_PREFIX . "user"] ) ) {
                 redirect( $action_url );
             } else {
                 addnotice( "danger", $locale['global_193'] );
             }
             break;
         case 4:
-            if (isset( $_GET['status'] ) && isnum( $_GET['status'] )) {
-                $id = (filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT ) ?: "0");
+            if ( isset( $_GET['status'] ) && isnum( $_GET['status'] ) ) {
+                $id = ( filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT ) ?: "0" );
 
-                switch ($_GET['status']) {
+                switch ( $_GET['status'] ) {
                     case 1:
                         $data = dbarray( dbquery( "SELECT suspend_reason
                                 FROM " . DB_SUSPENDS . "
@@ -107,7 +107,7 @@ if (isset( $_GET['error'] ) && isnum( $_GET['error'] )) {
     redirect( BASEDIR . 'login.php' );
 }
 
-if (check_get( "auth" ) && iMEMBER) {
+if ( check_get( "auth" ) && iMEMBER ) {
 
     \PHPFusion\Authenticate::validateUserPasscode();
 
@@ -141,9 +141,11 @@ if (check_get( "auth" ) && iMEMBER) {
 
     display_auth_form( $info );
 
-} else if (!iMEMBER) {
+}
 
-    switch ($settings['login_method']) {
+else if ( !iMEMBER ) {
+
+    switch ( $settings['login_method'] ) {
         case "2" :
             $placeholder = $locale['global_101c'];
             break;
@@ -154,18 +156,23 @@ if (check_get( "auth" ) && iMEMBER) {
             $placeholder = $locale['global_101a'];
     }
 
+    // Add Database
+    include INCLUDES.'oauth/google_include_var.php';
+
     $login_connectors = [];
     $login_hooks = fusion_filter_hook( 'fusion_login_connectors' );
-    if (!empty( $login_hooks )) {
-        foreach ($login_hooks as $buttons) {
+    if ( !empty( $login_hooks ) ) {
+        foreach ( $login_hooks as $buttons ) {
             $login_connectors[] = $buttons;
         }
     }
 
-    $floating_label = (defined( 'FLOATING_LABEL' ));
+    $floating_label = ( defined( 'FLOATING_LABEL' ) );
 
     $info = [
         'open_form'            => openform( 'loginPageFrm', 'POST', $settings['opening_page'] ),
+        'close_form'           => closeform(),
+        'sitebanner'           => BASEDIR . fusion_get_settings( "sitebanner" ),
         'user_name'            => form_text( 'user_name', $placeholder, '', ['required' => TRUE, 'placeholder' => $placeholder, 'floating_label' => $floating_label] ),
         'user_name_label'      => $placeholder,
         'user_pass'            => form_text( 'user_pass', $locale['global_102'], '', [
@@ -184,12 +191,10 @@ if (check_get( "auth" ) && iMEMBER) {
             '[LINK]' => "<a href='" . BASEDIR . "register.php'>", '[/LINK]' => "</a>"
         ] ) : '',
         'forgot_password_link' => strtr( $locale['global_106'], ['[LINK]' => "<a href='" . BASEDIR . "lostpassword.php'>", '[/LINK]' => "</a>"] ),
-        'close_form'           => closeform(),
         'connect_buttons'      => $login_connectors
     ];
 
     display_login_form( $info );
-
 }
 
 require_once THEMES . "templates/footer.php";

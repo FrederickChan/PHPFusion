@@ -81,13 +81,11 @@ if ( !function_exists( "display_auth_form" ) ) {
     }
 }
 
-function display_login_form( $info ) {
+function display_gateway( $info ) {
 
     Panels::getInstance()->hideAll();
 
     $locale = fusion_get_locale();
-
-    define( 'LUNA_BODY_CLASS', 'register' );
 
     if ( $info['showform'] ) : ?>
 
@@ -124,68 +122,95 @@ function display_login_form( $info ) {
     endif;
 }
 
-if ( !function_exists( "display_login_form" ) ) {
+if ( !function_exists( 'display_login_form' ) ) {
     /**
      * Display Login form
      *
      * @param array $info
      */
     function display_login_form( array $info ) {
-        global $locale, $userdata, $aidlink;
-        opentable( $locale['global_100'] );
-        if ( iMEMBER ) {
-            $msg_count = dbcount( "(message_id)", DB_MESSAGES, "message_to='" . $userdata['user_id'] . "' AND message_read='0' AND message_folder='0'" );
-            opentable( $userdata['user_name'] );
-            echo "
-                <div class='text-center'><br/>\n";
-            echo "<a href='" . BASEDIR . "edit_profile.php' class='side'>" . $locale['global_120'] . "</a><br/>\n";
-            echo "<a href='" . BASEDIR . "messages.php' class='side'>" . $locale['global_121'] . "</a><br/>\n";
-            echo "<a href='" . BASEDIR . "members.php' class='side'>" . $locale['global_122'] . "</a><br/>\n";
-            if ( iADMIN && ( iUSER_RIGHTS != "" || iUSER_RIGHTS != "C" ) ) {
-                echo "<a href='" . ADMIN . "index.php" . $aidlink . "' class='side'>" . $locale['global_123'] . "</a><br/>\n";
-            }
-            echo "<a href='" . BASEDIR . "index.php?logout=yes' class='side'>" . $locale['global_124'] . "</a>\n";
-            if ( $msg_count ) {
-                echo "<br/><br/>\n";
-                echo "<strong><a href='" . BASEDIR . "messages.php' class='side'>" . sprintf( $locale['global_125'], $msg_count );
-                echo ( $msg_count == 1 ? $locale['global_126'] : $locale['global_127'] ) . "</a></strong>\n";
-            }
-            echo "
-</div>\n";
-            closetable();
-        } else {
-            echo "
-<div id='login_form' class='panel panel-default text-center text-dark'>\n";
-            if ( fusion_get_settings( "sitebanner" ) ) {
-                echo "<a class='display-inline-block' href='" . BASEDIR . fusion_get_settings( "opening_page" ) . "'><img class='img-responsive' src='" . BASEDIR . fusion_get_settings( "sitebanner" ) . "' alt='" . fusion_get_settings( "sitename" ) . "'/></a>\n";
-            } else {
-                echo "<a class='display-inline-block' href='" . BASEDIR . fusion_get_settings( "opening_page" ) . "'>" . fusion_get_settings( "sitename" ) . "</a>\n";
-            }
-            echo "
-    <div class='panel-body text-center'>\n";
-            echo $info['open_form'];
-            echo $info['user_name'];
-            echo $info['user_pass'];
-            echo $info['remember_me'];
-            echo $info['login_button'];
-            echo $info['registration_link'] . "<br/><br/>";
-            echo $info['forgot_password_link'] . "<br/><br/>";
-            echo $info['close_form'];
-            // Facebook, Google Auth, etc.
-            if ( !empty( $info['connect_buttons'] ) ) {
-                echo "
-        <hr/>
-        ";
-                foreach ( $info['connect_buttons'] as $mhtml ) {
-                    echo $mhtml;
-                }
-            }
-            echo "
-    </div>
-    \n";
-            echo "
-</div>\n";
-        }
-        closetable();
+        global $locale;
+
+        $locale = fusion_get_locale();
+
+        //opentable(  );
+
+        //if ( iMEMBER ) {
+
+        //redirect( BASEDIR . fusion_get_settings( 'opening_page' ) );
+
+        //            $msg_count = dbcount( "(message_id)", DB_MESSAGES, "message_to='" . $userdata['user_id'] . "' AND message_read='0' AND message_folder='0'" );
+        //            opentable( $userdata['user_name'] );
+        //            echo "
+        //                <div class='text-center'><br/>\n";
+        //            echo "<a href='" . BASEDIR . "edit_profile.php' class='side'>" . $locale['global_120'] . "</a><br/>\n";
+        //            echo "<a href='" . BASEDIR . "messages.php' class='side'>" . $locale['global_121'] . "</a><br/>\n";
+        //            echo "<a href='" . BASEDIR . "members.php' class='side'>" . $locale['global_122'] . "</a><br/>\n";
+        //            if ( iADMIN && ( iUSER_RIGHTS != "" || iUSER_RIGHTS != "C" ) ) {
+        //                echo "<a href='" . ADMIN . "index.php" . $aidlink . "' class='side'>" . $locale['global_123'] . "</a><br/>\n";
+        //            }
+        //            echo "<a href='" . BASEDIR . "index.php?logout=yes' class='side'>" . $locale['global_124'] . "</a>\n";
+        //            if ( $msg_count ) {
+        //                echo "<br/><br/>\n";
+        //                echo "<strong><a href='" . BASEDIR . "messages.php' class='side'>" . sprintf( $locale['global_125'], $msg_count );
+        //                echo ( $msg_count == 1 ? $locale['global_126'] : $locale['global_127'] ) . "</a></strong>\n";
+        //            }
+        ?>
+        <div class="register">
+            <div class="content">
+                <!--register_pre_idx-->
+                <?php openside( '' ) ?>
+                <h4 class="spacer-sm mb-5 text-center">Login to your account</h4>
+                <div class="spacer-md">
+                   </div>
+
+                <?php if ( !empty( $info['connect_buttons'] ) ) :
+
+
+                    //function onSignIn(googleUser) {
+                    //    var profile = googleUser.getBasicProfile();
+                    //    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                    //    console.log('Name: ' + profile.getName());
+                    //    console.log('Image URL: ' + profile.getImageUrl());
+                    //    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                    //}
+
+                    //<a href="#" onclick="signOut();">Sign out</a>
+                    //<script>
+                    //  function signOut() {
+                    //    var auth2 = gapi.auth2.getAuthInstance();
+                    //    auth2.signOut().then(function () {
+                    //      console.log('User signed out.');
+                    //    });
+                    //  }
+                    //</script>
+                    ?>
+                    <div class="spacer-md">
+                        <?php
+                        foreach ( $info['connect_buttons'] as $mhtml ) :
+                            echo $mhtml;
+                        endforeach;
+                        ?>
+                    </div>
+                    <div class="card-divider"><span>or login with</span></div>
+                <?php endif; ?>
+                <?php
+                echo $info['form_open'];
+                echo $info['user_name'];
+                echo $info['user_pass'];
+                echo $info['remember_me'];
+                echo $info['login_button'];
+                echo $info['form_close'];
+                ?>
+                <div class="spacer-sm text-center">
+                    <?php echo $info['forgot_password_link'] ?>
+                </div>
+                <div class="spacer-sm text-center">
+                    <?php echo $info['registration_link']; ?>
+                </div>
+                <?php closeside() ?>
+            </div>
+        </div>
+        <?php
     }
 }

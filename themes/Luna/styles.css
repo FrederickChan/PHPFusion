@@ -46,6 +46,9 @@ body {
 body header {
   height: 70px;
 }
+body header .form-group {
+  margin-bottom: 0;
+}
 body header .navbar .input-group {
   position: relative;
 }
@@ -963,6 +966,21 @@ div[data-fusion="true"] strong {
   --bs-txtarea-btn-hover-bg: #eaedf1;
   --bs-txtarea-btn-tabs-active-bg: #fff;
   --bs-txtarea-btn-tabs-active-color: #1f2328;
+}
+.card .card-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--input-border-color);
+  position: relative;
+  height: 1px;
+  margin: 1rem 0;
+}
+.card .card-divider span {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  position: absolute;
+  background: var(--bs-card-bg);
 }
 .card .file-preview {
   border-radius: 0;

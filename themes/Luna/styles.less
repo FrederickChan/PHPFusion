@@ -65,6 +65,10 @@ body {
     header {
         height: 70px;
 
+        .form-group {
+            margin-bottom: 0;
+        }
+
         .navbar {
 
             .input-group {
@@ -1015,6 +1019,8 @@ div[data-fusion="true"] {
         }
     }
 
+
+
     .p-header {
         position: relative;
         display: flex;
@@ -1231,6 +1237,24 @@ div[data-fusion="true"] {
 }
 
 .card {
+
+    .card-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--input-border-color);
+        position: relative;
+        height: 1px;
+        margin: 1rem 0;
+
+        span {
+            font-size: .7rem;
+            padding: 4px 8px;
+            position: absolute;
+            background: var(--bs-card-bg);
+        }
+    }
+
     .file-preview {
         border-radius: 0;
         border: 0;

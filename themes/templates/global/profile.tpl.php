@@ -261,30 +261,3 @@ if ( !function_exists( 'display_user_profile' ) ) {
     }
 }
 
-
-if ( !function_exists( 'display_gateway' ) ) {
-    function display_gateway( $info ) {
-
-        $locale = fusion_get_locale();
-
-        if ( $info['showform'] ) {
-            opentable( $locale['gateway_069'] );
-            echo $info['openform'];
-            echo $info['hiddeninput'];
-            echo '<h3>' . $info['gateway_question'] . '</h3>';
-            echo $info['textinput'];
-            echo $info['button'];
-            echo $info['closeform'];
-            closetable();
-        } else if ( !isset( $_SESSION["validated"] ) ) {
-            echo '<div class="well text-center"><h3 class="m-0">' . $locale['gateway_068'] . '</h3></div>';
-        }
-
-        if ( isset( $info['incorrect_answer'] ) && $info['incorrect_answer'] == TRUE ) {
-            opentable( $locale['gateway_069'] );
-            echo '<div class="well text-center"><h3 class="m-0">' . $locale['gateway_066'] . '</h3></div>';
-            echo '<input type="button" value="' . $locale['gateway_067'] . '" class="text-center btn btn-info spacer-xs" onclick="location=\'' . BASEDIR . 'register.php\'"/>';
-            closetable();
-        }
-    }
-}
