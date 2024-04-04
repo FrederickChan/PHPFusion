@@ -109,9 +109,10 @@ $locale['u141'] = " can not be the same as ";
 $locale['u142'] = " is too short or contains invalid characters!";
 $locale['u143'] = " does not match!";
 $locale['u143a'] = " can not be left empty.";
-$locale['u144'] = "New admin password";
+$locale['u144'] = "New Admin password";
 $locale['u144a'] = "Current Admin Password";
-$locale['u145'] = "Confirm admin password";
+
+$locale['u145'] = "Repeat admin password";
 $locale['u146'] = " can not be the same as your current ";
 $locale['u147'] = 'Min. length %d chars';
 $locale['u147a'] = 'must contain %s';

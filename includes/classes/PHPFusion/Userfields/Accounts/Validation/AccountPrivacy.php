@@ -19,7 +19,7 @@ class AccountPrivacy  extends UserFieldsValidate {
 
             dbquery_insert( DB_USER_SETTINGS, $rows, 'update' );
             addnotice( 'success', "Account profile updated.\nPrivacy settings has been updated successfully." );
-            redirect( BASEDIR . 'edit_profile.php?ref=privacy' );
+            redirect( BASEDIR . 'edit_profile.php?section=privacy&ref=privacy' );
         }
     }
 

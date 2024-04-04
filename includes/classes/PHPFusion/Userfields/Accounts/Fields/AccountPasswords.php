@@ -64,14 +64,14 @@ class AccountPasswords extends UserFieldsForm {
 
         $locale = fusion_get_locale();
 
-        return form_text( 'user_admin_password', $locale['u135a'], '', [
+        return form_text( 'user_admin_password', $locale['u144a'], '', [
                 'type'             => 'password',
                 'autocomplete_off' => TRUE,
                 'max_length'       => 64,
                 'error_text'       => $locale['u133'],
                 'class'            => 'm-b-15'
             ] )
-            . form_text( 'user_admin_password1', $locale['u134'], '', [
+            . form_text( 'user_admin_password1', $locale['u144'], '', [
                 'type'              => 'password',
                 'autocomplete_off'  => TRUE,
                 'max_length'        => 64,
@@ -80,7 +80,7 @@ class AccountPasswords extends UserFieldsForm {
                 'password_strength' => TRUE,
                 'class'             => 'm-b-15'
             ] )
-            . form_text( 'user_admin_password2', $locale['u134b'], '', [
+            . form_text( 'user_admin_password2', $locale['u145'], '', [
                 'type'             => 'password',
                 'autocomplete_off' => TRUE,
                 'max_length'       => 64,
@@ -93,7 +93,7 @@ class AccountPasswords extends UserFieldsForm {
         $locale = fusion_get_locale();
 
         return $this->basePasswordInput()
-            . form_text( 'user_password2', $locale['u134b'], '', [
+            . form_text( 'user_password2', $locale['u135c'], '', [
                 'type'             => 'password',
                 'autocomplete_off' => TRUE,
                 'max_length'       => 64,
@@ -105,7 +105,7 @@ class AccountPasswords extends UserFieldsForm {
     public function basePasswordInput() {
         $locale = fusion_get_locale();
 
-        return form_text( 'user_password', $locale['u134a'], '', [
+        return form_text( 'user_password', $locale['u135b'], '', [
                 'type'             => 'password',
                 'autocomplete_off' => TRUE,
                 'max_length'       => 64,

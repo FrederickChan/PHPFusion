@@ -1,8 +1,8 @@
 <?php
 namespace PHPFusion\Userfields\Accounts\Fields;
 
-use GoogleAuthenticator\GoogleAuthenticator;
-use GoogleAuthenticator\GoogleQrUrl;
+use Google\Authenticator\GoogleAuthenticator;
+use Google\Authenticator\GoogleQrUrl;
 use PHPFusion\Userfields\UserFieldsForm;
 
 class AccountTwoFactor extends UserFieldsForm {

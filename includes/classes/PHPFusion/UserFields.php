@@ -220,15 +220,15 @@ class UserFields extends QuantumFields {
 
         $this->info['link'] = [
             'details'        => BASEDIR . 'edit_profile.php?ref=details',
-            'totp'           => BASEDIR . 'edit_profile.php?ref=authenticator',
             'password'       => BASEDIR . 'edit_profile.php?ref=password',
             'admin_password' => BASEDIR . 'edit_profile.php?ref=admin_password',
             'google'         => BASEDIR . 'edit_profile.php?ref=google',
             // privacy page
-            'privacy'        => BASEDIR . 'edit_profile.php?ref=privacy',
-            'pm_options'     => BASEDIR . 'edit_profile.php?ref=pm_options',
+            'privacy'        => BASEDIR . 'edit_profile.php?section=privacy&ref=privacy',
+            'pm_options'     => BASEDIR . 'edit_profile.php?section=privacy&ref=pm_options',
             'login'          => BASEDIR . 'edit_profile.php?section=privacy&ref=login',
             'blacklist'      => BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist',
+            'totp'           => BASEDIR . 'edit_profile.php?section=privacy&ref=authenticator',
             // Authenticator download links
             'appstore'       => 'https://apps.apple.com/au/app/google-authenticator/id388497605',
             'playstore'      => 'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US',
@@ -240,7 +240,12 @@ class UserFields extends QuantumFields {
                     display_up_notification( ( $this->info + ( new NotificationForm( $this ) )->displayInputFields() ) );
                     break;
                 case 'privacy':
-                    display_up_privacy( ( $this->info + ( new PrivacyForm( $this ) )->displayInputFields() ) );
+                    $arr = $this->info;
+                    $info = (new PrivacyForm($this))->displayInputFields();
+                    if (!empty($info)) {
+                        $arr = $this->info + $info;
+                    }
+                    display_up_privacy( $arr );
                     break;
                 case 'close':
                     display_up_close( ( $this->info + ( new AccountClose( $this ) )->displayInputFields() ) );

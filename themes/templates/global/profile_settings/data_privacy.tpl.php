@@ -6,10 +6,10 @@ function privacy_up_settings( $info ) {
     ?>
     <div class="row">
         <?php echo $info['privacy_openform'] ?>
-        <?php echo $info['user_hide_email'] ?>
-        <?php echo $info['user_hide_phone'] ?>
-        <?php echo $info['user_hide_birthdate'] ?>
-        <?php echo $info['user_hide_location'] ?>
+        <?php echo $info['user_hide_email_input'] ?>
+        <?php echo $info['user_hide_phone_input'] ?>
+        <?php echo $info['user_hide_birthdate_input'] ?>
+        <?php echo $info['user_hide_location_input'] ?>
         <div class="text-end">
             <?php echo $info['privacy_button'] ?>
         </div>

@@ -18,16 +18,16 @@
 require_once __DIR__ . '/maincore.php';
 require_once THEMES . 'templates/header.php';
 
-$locale = fusion_get_locale( '', LOCALE . LOCALESET . "user_fields.php" );
+$locale = fusion_get_locale('', LOCALE . LOCALESET . "user_fields.php");
 
 include THEMES . "templates/global/profile.tpl.php";
 //require_once THEMES . 'templates/global/profile.tpl.php';
 
 if (!iMEMBER) {
-    redirect( "index.php" );
+    redirect("index.php");
 }
 
-add_to_title( $locale['u102'] );
+add_to_title($locale['u102']);
 
 $info = [];
 $errors = [];
@@ -38,14 +38,14 @@ if ($settings['email_verification'] == 1) {
 
     if (check_get('code')) {
         $userInput = new PHPFusion\UserFieldsInput();
-        $userInput->verifyCode( get( 'code' ) );
-        redirect( FUSION_REQUEST );
+        $userInput->verifyCode(get('code'));
+        redirect(FUSION_REQUEST);
     }
 
-    $result = dbquery( "SELECT user_email FROM " . DB_EMAIL_VERIFY . " WHERE user_id='" . fusion_get_userdata( 'user_id' ) . "'" );
-    if (dbrows( $result )) {
-        $data = dbarray( $result );
-        $info['email_notification'] = sprintf( $locale['u200'], $data['user_email'] ) . "\n<br />\n" . $locale['u201'];
+    $result = dbquery("SELECT user_email FROM " . DB_EMAIL_VERIFY . " WHERE user_id='" . fusion_get_userdata('user_id') . "'");
+    if (dbrows($result)) {
+        $data = dbarray($result);
+        $info['email_notification'] = sprintf($locale['u200'], $data['user_email']) . "\n<br />\n" . $locale['u201'];
     }
 }
 
@@ -55,7 +55,7 @@ $userInput->verifyNewEmail = TRUE;
 $userInput->registration = FALSE;
 $userInput->userData = fusion_get_userdata();
 if ($userInput->saveUpdate() === TRUE) {
-    redirect( FUSION_REQUEST );
+    redirect(FUSION_REQUEST);
 }
 
 
@@ -67,12 +67,12 @@ $userFields->plugin_folder = [INCLUDES . "user_fields/", INFUSIONS];
 $userFields->plugin_locale_folder = LOCALE . LOCALESET . "user_fields/";
 $userFields->username_change = $settings['username_change'];// setUserNameChange( fusion_get_settings( "username_change" ) );
 $userFields->registration = FALSE;
-$userFields->inputInline = (!defined( 'INPUT_INLINE' ) || INPUT_INLINE);
+$userFields->inputInline = (!defined('INPUT_INLINE') || INPUT_INLINE);
 $userFields->displayProfileInput();
 
-if (!defined( 'EDITPROFILE_JS_CHECK' )) {
-    define( 'EDITPROFILE_JS_CHECK', TRUE );
-    add_to_jquery( '
+if (!defined('EDITPROFILE_JS_CHECK')) {
+    define('EDITPROFILE_JS_CHECK', TRUE);
+    add_to_jquery('
         function delayKeyupTimer(callback, ms) {
             let timer = 0;
             return function () {
@@ -141,7 +141,7 @@ if (!defined( 'EDITPROFILE_JS_CHECK' )) {
                 }
             });
         }, 400));
-    ' );
+    ');
 }
 
 require_once THEMES . 'templates/footer.php';

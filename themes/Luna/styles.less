@@ -45,6 +45,8 @@ html, body {
   --primary-color: #0d6efd;
   --primary-hover-color: #0d5ec9;
   --darker-input-bg: #eef0f2;
+  --bs-nav-link-font-size: 0.9rem;
+  --bs-nav-link-color: #676a79;
 }
 
 html {
@@ -159,8 +161,6 @@ body {
       }
 
       .nav-link {
-        --bs-nav-link-font-size: 0.875rem;
-        --bs-nav-link-color: #676a79;
         font-weight: 700;
       }
 
@@ -558,7 +558,7 @@ a {
     --bs-btn-bg: rgb(246, 248, 250);
     --bs-btn-hover-bg: rgb(243, 244, 246);
     --bs-btn-hover-color: rgb(36, 41, 47);
-    --bs-btn-border-color: rgba(31, 35, 40, .15);
+    --bs-btn-border-color: transparent; //rgba(31, 35, 40, .15);
     --bs-btn-hover-border-color: rgba(31, 35, 40, .15);
     --bs-btn-active-border-color: rgba(31, 35, 40, .15);
     --bs-box-shadow: rgba(31, 35, 40, 0.04) 0px 1px 0px;
@@ -704,10 +704,11 @@ a.stretched:after {
 /* Form */
 .form-label {
   color: var(--label-color);
-  //font-size: .9rem;
-  font-weight: 500;
+  font-size: 0.875rem;
   margin-bottom: .3rem;
 
+  //font-size: .9rem;
+  //font-weight: 500;
   p {
     color: var(--bs-card-color);
     font-size: .85rem;
@@ -726,7 +727,8 @@ a.stretched:after {
 
   .form-check-label {
     color: var(--label-color);
-    font-weight: 500;
+    font-size: 0.875rem;
+    font-weight:400;
   }
 }
 
@@ -859,10 +861,6 @@ div[data-fusion="true"] {
   padding-left: 0;
   margin-top: .8rem;
 
-  label {
-    font-weight: 500;
-  }
-
   input[type=checkbox].form-check-input {
     background-color: var(--toggle-switch-bg);
     border: 1px solid var(--toggle-switch-border);
@@ -883,6 +881,7 @@ div[data-fusion="true"] {
     color: var(--label-color, inherit);
     line-height: 1.25;
     margin-top: 0;
+    font-weight:400;
 
     p {
       font-weight: 400;

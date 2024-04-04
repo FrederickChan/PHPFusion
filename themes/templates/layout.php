@@ -27,8 +27,8 @@ if (!headers_sent()) {
 
 //    if (iDEVELOPER) {
 
-        header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
-        header( 'Cache-Control: no-cache' );
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+    header('Cache-Control: no-cache');
 
 //    } elseif (!check_get('logout')) {
 //        // Get last modification time of the current PHP file
@@ -67,16 +67,16 @@ echo "<html lang='" . $locale['xml_lang'] . "' dir='" . $locale['text-direction'
 echo "<head>\n";
 echo "<title>" . $settings['sitename'] . "</title>\n";
 echo "<meta charset='" . $locale['charset'] . "'>\n";
-echo "<meta name='description' content='" . str_replace( "\n", ' ', strip_tags( htmlspecialchars_decode( $settings['description'] ) ) ) . "'>\n";
+echo "<meta name='description' content='" . str_replace("\n", ' ', strip_tags(htmlspecialchars_decode($settings['description']))) . "'>\n";
 echo "<meta name='url' content='" . $settings['siteurl'] . "'>\n";
 echo "<meta name='keywords' content='" . $settings['keywords'] . "'>\n";
 echo "<meta name='image' content='" . $settings['siteurl'] . $settings['sitebanner'] . "'>\n";
 
-$is_https = (isset( $_SERVER['HTTPS'] ) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
+$is_https = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https');
 echo "<link rel='canonical' href='http" . ($is_https ? 's' : '') . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "'>\n";
 
 $languages = fusion_get_enabled_languages();
-if (count( $languages ) > 1) {
+if (count($languages) > 1) {
     foreach ($languages as $language_folder => $language_name) {
         include LOCALE . $language_folder . '/global.php';
         echo '<link rel="alternate" hreflang="' . $locale['xml_lang'] . '" href="' . $settings['siteurl'] . $settings['opening_page'] . '?lang=' . $language_folder . '">';
@@ -85,7 +85,7 @@ if (count( $languages ) > 1) {
     echo "<link rel='alternate' hreflang='x-default' href='" . $settings['siteurl'] . "'>\n";
 }
 
-fusion_apply_hook( 'fusion_header_include', $custom_file ?? '' );
+fusion_apply_hook('fusion_header_include', $custom_file ?? '');
 
 //if (BOOTSTRAP_ENABLED) {
 //    // Will optimize later with strings
@@ -136,27 +136,30 @@ fusion_apply_hook( 'fusion_header_include', $custom_file ?? '' );
 //    echo "<link rel='stylesheet' href='" . INCLUDES . "fonts/font-awesome-6/css/v4-shims.min.css'>\n";
 //}
 
-if (!defined( 'NO_DEFAULT_CSS' )) {
-    echo "<link rel='stylesheet' href='" . THEMES . "templates/default.min.css?v=" . filemtime( THEMES . 'templates/default.min.css' ) . "'>\n";
+if (!defined('NO_DEFAULT_CSS')) {
+    echo "<link rel='stylesheet' href='" . THEMES . "templates/default.min.css?v=" . filemtime(THEMES . 'templates/default.min.css') . "'>\n";
 }
 
 // Core CSS loading
-$core_css_files = fusion_filter_hook( 'fusion_core_styles' );
-if (is_array( $core_css_files )) {
-    $core_css_files = array_filter( $core_css_files );
+$core_css_files = fusion_filter_hook('fusion_core_styles');
+if (is_array($core_css_files)) {
+    $core_css_files = array_filter($core_css_files);
     foreach ($core_css_files as $css_file) {
-        if (is_file( $css_file )) {
-            echo fusion_load_script( $css_file, "css", TRUE );
+        if (is_file($css_file)) {
+            echo fusion_load_script($css_file, "css", TRUE);
         }
     }
 }
 // Theme CSS loading
-$_styles_path = THEME.'styles.css';
-if (is_file(THEME.'styles.min.css')) {
-    $_styles_path = THEME.'styles.min.css';
+$style_path = THEME . 'styles.css';
+if (is_file(THEME . 'styles.min.css')) {
+    $style_path = THEME . 'styles.min.css';
+    if (!defined('FUSION_DEVELOPMENT')) {
+        $style_path = $style_path.'?v='.filemtime($style_path);
+    }
 }
-$filetime = filemtime($_styles_path);
-echo '<link rel="stylesheet" href="'.$_styles_path.'?v='.$filetime.'" defer>';
+
+echo '<link rel="stylesheet" href="'.$style_path.'" defer>';
 
 
 /*if (defined('BOOTSTRAP') && BOOTSTRAP == TRUE) {
@@ -168,25 +171,25 @@ echo '<link rel="stylesheet" href="'.$_styles_path.'?v='.$filetime.'" defer>';
     }
 }*/
 
-$theme_css_files = fusion_filter_hook( "fusion_css_styles" );
-if (is_array( $theme_css_files )) {
-    $theme_css_files = array_filter( $theme_css_files );
+$theme_css_files = fusion_filter_hook('fusion_css_styles');
+if (is_array($theme_css_files)) {
+    $theme_css_files = array_filter($theme_css_files);
     foreach ($theme_css_files as $css_file) {
-        if (is_file( $css_file )) {
-            echo fusion_load_script( $css_file, "css", TRUE );
+        if (is_file($css_file)) {
+            echo fusion_load_script($css_file, "css", TRUE);
         }
     }
 }
 
-echo render_favicons( defined( 'THEME_ICON' ) ? THEME_ICON : IMAGES . 'favicons/' );
+echo render_favicons(defined('THEME_ICON') ? THEME_ICON : IMAGES . 'favicons/');
 
-if (function_exists( "get_head_tags" )) {
+if (function_exists("get_head_tags")) {
     echo get_head_tags();
 }
 
 echo "<script src='" . INCLUDES . "jquery/jquery-2.min.js'></script>\n";
 echo "<script>var site_path = '" . $settings['site_path'] . "';</script>";
-echo "<script defer src='" . INCLUDES . "jscripts/jscript.min.js?v=" . filemtime( INCLUDES . 'jscripts/jscript.min.js' ) . "'></script>\n";
+echo "<script defer src='" . INCLUDES . "jscripts/jscript.min.js?v=" . filemtime(INCLUDES . 'jscripts/jscript.min.js') . "'></script>\n";
 echo "</head>\n";
 
 /**
@@ -195,23 +198,23 @@ echo "</head>\n";
  * for the theme purposes.
  */
 
-if (!defined( "THEME_BODY" )) {
+if (!defined("THEME_BODY")) {
     echo "<body>\n";
 } else {
     echo THEME_BODY;
 }
 
 if (iADMIN) {
-    if (iSUPERADMIN && file_exists( BASEDIR . 'install.php' ) && $settings['devmode'] == 0 && !defined( "DEVMODE" )) {
-        addnotice( 'danger', $locale['global_198'], 'all' );
+    if (iSUPERADMIN && file_exists(BASEDIR . 'install.php') && $settings['devmode'] == 0 && !defined("DEVMODE")) {
+        addnotice('danger', $locale['global_198'], 'all');
     }
 
     if ($settings['maintenance']) {
-        addnotice( 'warning maintenance-alert', $locale['global_190'], 'all' );
+        addnotice('warning maintenance-alert', $locale['global_190'], 'all');
     }
 
-    if (!fusion_get_userdata( 'user_admin_password' )) {
-        addnotice( 'warning', str_replace( ["[LINK]", "[/LINK]"], ["<a href='" . BASEDIR . "edit_profile.php'>", "</a>"], $locale['global_199'] ), 'all' );
+    if (!fusion_get_userdata('user_admin_password')) {
+        addnotice('warning', str_replace(["[LINK]", "[/LINK]"], ["<a href='" . BASEDIR . "edit_profile.php'>", "</a>"], $locale['global_199']), 'all');
     }
 }
 
@@ -219,7 +222,7 @@ if (iADMIN) {
 render_page(); // by here, header and footer already closed
 //}
 
-fusion_apply_hook( 'fusion_footer_include' );
+fusion_apply_hook('fusion_footer_include');
 
 // Load Bootstrap javascript
 //if (BOOTSTRAP_ENABLED) {
@@ -240,7 +243,7 @@ echo OutputHandler::$pageFooterTags;
 
 //@todo: This one need to port to BS3 and BS4 folder
 $jquery_tags = '';
-if (defined( 'BOOTSTRAP' ) && BOOTSTRAP < 5) {
+if (defined('BOOTSTRAP') && BOOTSTRAP < 5) {
     $jquery_tags .= "$('[data-submenu]').submenupicker();";
     // Fix select2 on modal - http://stackoverflow.com/questions/13649459/twitter-bootstrap-multiple-modal-error/15856139#15856139
     $jquery_tags .= "$.fn.modal.Constructor.prototype.enforceFocus = function () {};";
@@ -248,12 +251,12 @@ if (defined( 'BOOTSTRAP' ) && BOOTSTRAP < 5) {
 
 // Output lines added with add_to_jquery()
 $fusion_jquery_tags = OutputHandler::$jqueryCode;
-if (!empty( $fusion_jquery_tags )) {
+if (!empty($fusion_jquery_tags)) {
     $jquery_tags .= $fusion_jquery_tags;
 
     $js = $jquery_tags;
-    if (!defined( 'FUSION_DEVELOPMENT' )) {
-        $minifier = new PHPFusion\Minify\JS( $jquery_tags );
+    if (!defined('FUSION_DEVELOPMENT')) {
+        $minifier = new PHPFusion\Minify\JS($jquery_tags);
         $js = $minifier->minify();
     }
 
