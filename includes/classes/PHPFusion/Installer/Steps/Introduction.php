@@ -122,9 +122,9 @@ class Introduction extends InstallCore {
         if (isset( $_GET['error'] ) && $_GET['error'] == 'license') {
             $content .= "<div class='alert alert-danger'>" . self::$locale['setup_5000'] . "</div>\n";
         }
+
         $content .= form_checkbox( 'license', self::$locale['setup_0005'], '',
             [
-                'reverse_label' => TRUE,
                 'required'      => TRUE,
                 'error_text'    => self::$locale['setup_5000']
             ]

@@ -13,7 +13,8 @@
   "require": {
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "google/apiclient": "v2.15.3"
   },
   "config": {
     "vendor-dir": "includes/vendor",

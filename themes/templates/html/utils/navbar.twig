@@ -17,12 +17,15 @@
 
                     {% if rows.link_child  == true %}
 
-                        {% if constant('BOOTSTRAP5') == true %}
-                            {% set secondaryMenuClass = "dropdown-menu-end" %}
-                            {% set liClass = "class='nav-item'" %}
-                        {% else %}
-                            {% set secondaryMenuClass = "dropdown-menu-right" %}
-                        {% endif %}
+                        {% set secondaryMenuClass = "dropdown-menu-end" %}
+                        {% set liClass = "class='nav-item'" %}
+
+{#                        {% if constant('BOOTSTRAP5') == true %}#}
+{#                        {% set secondaryMenuClass = "dropdown-menu-end" %}#}
+{#                        {% set liClass = "class='nav-item'" %}#}
+{#                        {% else %}#}
+{#                            {% set secondaryMenuClass = "dropdown-menu-right" %}#}
+{#                        {% endif %}#}
 
                         <ul id="menu-{{ rows.link_id }}" aria-labelledby="ddlink{{ rows['link_id'] }}" class="dropdown-menu{{ whitespace(secondary_menu ? secondaryMenuClass : '') }}">
                             {# Show self if is a link #}
@@ -69,25 +72,27 @@
                 {% endif %}
 
                 {% if responsive == true %}
-
-                    {% if constant('BOOTSTRAP5') == true %}
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}_menu" aria-controls="{{ id }}_menu" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    {% elseif constant('BOOTSTRAP4') == true %}
-                        {# Bootstrap4 #}
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#{{ id }}_menu" aria-controls="{{ id }}_menu" aria-expanded="false">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    {% else %}
-                        {# Bootstrap 3 #}
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#{{ id }}_menu" aria-expanded="false" aria-controls="#{{ id }}_menu">
-                            <span class="sr-only" aria-label="{{ locale['global_017'] }}">{{ locale['global_017'] }}</span>
-                            <span class="icon-bar top-bar"></span>
-                            <span class="icon-bar middle-bar"></span>
-                            <span class="icon-bar bottom-bar"></span>
-                        </button>
-                    {% endif %}
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}_menu" aria-controls="{{ id }}_menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+{#                    {% if constant('BOOTSTRAP5') == true %}#}
+{#                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}_menu" aria-controls="{{ id }}_menu" aria-expanded="false" aria-label="Toggle navigation">#}
+{#                            <span class="navbar-toggler-icon"></span>#}
+{#                        </button>#}
+{#                    {% elseif constant('BOOTSTRAP4') == true %}#}
+{#                        #}{# Bootstrap4 #}
+{#                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#{{ id }}_menu" aria-controls="{{ id }}_menu" aria-expanded="false">#}
+{#                            <span class="navbar-toggler-icon"></span>#}
+{#                        </button>#}
+{#                    {% else %}#}
+{#                        #}{# Bootstrap 3 #}
+{#                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#{{ id }}_menu" aria-expanded="false" aria-controls="#{{ id }}_menu">#}
+{#                            <span class="sr-only" aria-label="{{ locale['global_017'] }}">{{ locale['global_017'] }}</span>#}
+{#                            <span class="icon-bar top-bar"></span>#}
+{#                            <span class="icon-bar middle-bar"></span>#}
+{#                            <span class="icon-bar bottom-bar"></span>#}
+{#                        </button>#}
+{#                    {% endif %}#}
                 {% endif %}
                 <!--Menu Header End-->
 

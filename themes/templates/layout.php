@@ -251,13 +251,10 @@ $fusion_jquery_tags = OutputHandler::$jqueryCode;
 if (!empty( $fusion_jquery_tags )) {
     $jquery_tags .= $fusion_jquery_tags;
 
-    if (!$settings['devmode'] or !defined( 'DEVELOPER_MODE' )) {
-
+    $js = $jquery_tags;
+    if (!defined( 'FUSION_DEVELOPMENT' )) {
         $minifier = new PHPFusion\Minify\JS( $jquery_tags );
         $js = $minifier->minify();
-
-    } else {
-        $js = $jquery_tags;
     }
 
     echo "<script>$(function(){" . $js . "});</script>\n";

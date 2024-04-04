@@ -15,6 +15,7 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
 namespace PHPFusion;
 /**
  * Class PasswordAuth
@@ -79,14 +80,14 @@ class PasswordAuth {
         if ($value) {
             //$currentPassCheckLength
             $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE);
-            if (!preg_match('/'.$regex.'/', $value)) {
+            if (!preg_match('/' . $regex . '/', $value)) {
                 $pass_errors[] = $locale['u303'];
             }
 
             if ($this->currentPassCheckNum) {
                 // Check contains number
                 $regex = self::passwordStrengthOpts($this->currentPassCheckLength, $this->currentPassCheckNum);
-                if (!preg_match('/'.$regex.'/', $value)) {
+                if (!preg_match('/' . $regex . '/', $value)) {
                     $pass_errors[] = $locale['u302'];
                 }
             }
@@ -94,7 +95,7 @@ class PasswordAuth {
             if ($this->currentPassCheckCase) {
                 // Check contains at least 1 upper and 1 lowercase
                 $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE, $this->currentPassCheckCase);
-                if (!preg_match('/'.$regex.'/', $value)) {
+                if (!preg_match('/' . $regex . '/', $value)) {
                     $pass_errors[] = $locale['u301'];
                 }
             }
@@ -102,7 +103,7 @@ class PasswordAuth {
             if ($this->currentPassCheckSpecialchar) {
                 // Must contain at least 1 special char
                 $regex = self::passwordStrengthOpts($this->currentPassCheckLength, FALSE, FALSE, $this->currentPassCheckSpecialchar);
-                if (!preg_match('/'.$regex.'/', $value)) {
+                if (!preg_match('/' . $regex . '/', $value)) {
                     $pass_errors[] = $locale['u300'];
                 }
             }
@@ -118,8 +119,8 @@ class PasswordAuth {
     }
 
     /**
-     * @param int   $minimum_length
-     * @param bool  $number
+     * @param int $minimum_length
+     * @param bool $number
      * @param false $camelcase
      * @param false $special_char
      *
@@ -139,7 +140,7 @@ class PasswordAuth {
             $pass_regex .= '(?=.*?[@!#$%&\[\]()=\-_\\\\\/?+*.,:;^*])';
         }
 
-        return '^'.$pass_regex.'.{'.$minimum_length.',64}$';
+        return '^' . $pass_regex . '.{' . $minimum_length . ',64}$';
     }
 
     /**
@@ -220,7 +221,7 @@ class PasswordAuth {
         return [
             "salt" => $salt,
             "algo" => $this->newAlgo,
-            "hash" => $this->hashPassword($user_password, $this->newAlgo, $salt)
+            "hash" => $this->hashPassword($user_password, $this->newAlgo, $salt),
         ];
     }
 
@@ -288,5 +289,19 @@ class PasswordAuth {
      */
     public function getNewHash() {
         return $this->newPasswordHash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalt() {
+        return $this->currentSalt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash() {
+        return $this->currentPasswordHash;
     }
 }

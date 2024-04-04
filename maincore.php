@@ -18,6 +18,7 @@
 
 use Defender\Token;
 use PHPFusion\Authenticate;
+use PHPFusion\Sessions;
 
 if (preg_match( "/maincore.php/i", $_SERVER['PHP_SELF'] )) {
     die();
@@ -83,7 +84,7 @@ session_name( COOKIE_PREFIX . 'session' );
 // Start DB session.
 if (!empty( $settings['database_sessions'] ) && (!empty( $db_host ) && !empty( $db_user ) && !empty( $db_name ))) {
     // Establish secondary MySQL database connection for session caches
-    $handler = \PHPFusion\Sessions::getInstance( COOKIE_PREFIX . 'session' )->setConfig(
+    $handler = Sessions::getInstance( COOKIE_PREFIX . 'session' )->setConfig(
         $db_host, $db_user, (!empty( $db_pass ) ? $db_pass : ''), $db_name, (!empty( $db_port ) ? $db_port : 3306)
     );
     session_set_save_handler(
@@ -138,7 +139,7 @@ if (substr_count( $_SERVER['REQUEST_URI'], '//' )) {
     redirect( rtrim( $settings['siteurl'], '/' ) . $site_path );
 }
 
-define( "FUSION_QUERY", isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : "" );
+define( "FUSION_QUERY", $_SERVER['QUERY_STRING'] ?? "");
 define( "FUSION_SELF", basename( $_SERVER['PHP_SELF'] ) );
 define( "FUSION_REQUEST", isset( $_SERVER['REQUEST_URI'] ) && $_SERVER['REQUEST_URI'] != "" ? $_SERVER['REQUEST_URI'] : $_SERVER['SCRIPT_NAME'] );
 
