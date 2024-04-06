@@ -352,7 +352,20 @@ class Authenticate {
                 'user_logintime' => time(),
             ];
 
-            dbquery_insert(DB_USER_SESSIONS, $session_rows, 'save');
+
+            $session_id = dbresult(dbquery("SELECT session_id FROM ".DB_USER_SESSIONS." WHERE user_device=:device AND user_os=:os AND user_browser=:browser LIMIT 1", [
+                ':device' => $session_rows['user_device'],
+                ':os' => $session_rows['user_os'],
+                ':browser'=>$session_rows['user_browser']
+            ]),0);
+
+            $mode = 'save';
+            if ($session_id) {
+                $session_rows['session_id'] = $session_id;
+                $mode = 'update';
+            }
+
+            dbquery_insert(DB_USER_SESSIONS, $session_rows, $mode, ['allow_remote'=>TRUE]);
         }
     }
 
@@ -719,12 +732,14 @@ class Authenticate {
      * @return array
      */
     public static function logOut() {
+
         if (defined('COOKIE_USER') && isset($_COOKIE[COOKIE_USER]) && $_COOKIE[COOKIE_USER] != '') {
 
             $cookieDataArr = explode(".", $_COOKIE[COOKIE_USER]);
 
             if (count($cookieDataArr) == 3) {
                 [$userID, $cookieExpiration, $cookieHash] = $cookieDataArr;
+
                 //unset($_SESSION['2fa_attempts']);
                 //unset($_SESSION['auth_email_send']);
                 dbquery("UPDATE " . DB_USERS . " SET user_auth_pin='', user_auth_actiontime='' WHERE user_id=:uid", [':uid' => (int)$userID]);
@@ -732,11 +747,28 @@ class Authenticate {
                 // if cookie has expired, we need to reset immediately
                 if ($session_token = fusion_get_user($userID, "user_session")) {
 
-                    $session_token = explode(".", $session_token);
+                    $session_token = explode('.', $session_token);
 
                     if (count($session_token) === 2) {
                         //$sql = "UPDATE ".DB_USERS." SET user_salt='".$session_token[0]."', user_password='".$session_token[1]."', user_session='' WHERE user_id=$userID";
                         dbquery("UPDATE " . DB_USERS . " SET user_session='' WHERE user_id=$userID");
+
+                        $_agentDetection = new BrowserDetection();
+                        $ua = $_SERVER['HTTP_USER_AGENT'];
+                        if ($browserInfo = $_agentDetection->getAll($ua)) {
+                            $device_type = $browserInfo['device_type'] ?? 'Unknown device';
+                            $os = $browserInfo['os_title'] ?? 'Unknown OS';
+                            $browser = ($browserInfo['browser_name'] ?? 'Unknown browser') . ', ' . ($browserInfo['browser_version'] ?? 'Unknown version');
+                        }
+                        dbquery("DELETE FROM ".DB_USER_SESSIONS." WHERE user_id=:uid AND user_device=:device AND user_os=:os AND user_browser=:browser LIMIT 1", [
+                            ':device' => $device_type,
+                            ':os' => $os,
+                            ':browser'=>$browser,
+                            ':uid' => $userID
+                        ]);
+
+
+
                     }
                 }
             }

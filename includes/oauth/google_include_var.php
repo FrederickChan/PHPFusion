@@ -7,40 +7,21 @@ function google_auth_button() {
     add_to_jquery("
     // In your script section
     window.googleLogin = (response) => {
-    // const responsePayload = jwtDecode(response.credential);
-    $.post('" . INCLUDES . "oauth/google_include_auth.php', response).done(function(e) {
-        var r = $.parseJSON(e);        
-        if (r['response']) {
-            if (r['response'] === 200) {
-                document.location.href = '" . BASEDIR . fusion_get_settings('opening_page') . "';
-            } else if (r['response'] === 300) {
-                document.location.href = '" . BASEDIR . "login.php?auth=security_pin';
-            } else {
-                document.location.href = '" . BASEDIR . "login.php';
+        $.post('" . INCLUDES . "oauth/google_include_auth.php', response).done(function(e) {
+            var r = $.parseJSON(e);        
+            if (r['response']) {
+                if (r['response'] === 200) {
+                    document.location.href = '" . BASEDIR . fusion_get_settings('opening_page') . "';
+                } else if (r['response'] === 300) {
+                    document.location.href = '" . BASEDIR . "login.php?auth=security_pin';
+                } else {
+                    document.location.href = '" . BASEDIR . "login.php';
+                }
             }
-        }
-    });
+        });
     };    
     ");
 
-    //    //add_to_css( "
-//    .abcRioButton {
-//        max-width:100%;
-//        min-width:100%;
-//        border-radius: 8px !important;
-//        overflow: hidden !important;
-//        padding: 1px !important;
-//        box-shadow:none !important;
-//    }
-//    .abcRioButton:hover {
-//        background: #5194ee !important;
-//    }
-//    .abcRioButtonContentWrapper {
-//        border-radius: 8px;
-//        overflow: hidden;
-//    }
-//    " );
-//data-login_uri="' . fusion_get_settings('siteurl') . 'login.php"
 
     return '
        <div id="g_id_onload"

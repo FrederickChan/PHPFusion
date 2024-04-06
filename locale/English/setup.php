@@ -77,7 +77,7 @@ $locale['setup_1013'] = "Change Super Admin Details";
 $locale['setup_1014'] = "Rebuild .htaccess";
 $locale['setup_1015'] = "Discard current file and replace with a standard version of the .htaccess file";
 $locale['setup_1017'] = "Cancel and Exit this Installer";
-$locale['setup_1018'] = "You can exit this installer right now by clicking the button below. This will rename your config_temp.php file back to config.php.";
+$locale['setup_1018'] = "You can exit this installer right now by clicking the button below. This will rename your config.php file back to config.php.";
 $locale['setup_1019'] = "Exit Installer";
 $locale['setup_1020'] = ".htaccess file created/updated";
 // Step 2
@@ -306,7 +306,7 @@ require_once __DIR__."/user_fields/user_blacklist.php";
 $locale['setup_3650'] = "Welcome to your site";
 // Final message
 $locale['setup_1700'] = "Setup is Complete";
-$locale['setup_1701'] = "PHPFusion 9 is now ready for use. Click Finish to rewrite your config_temp.php file to config.php<br/>";
+$locale['setup_1701'] = "PHPFusion 9 is now ready for use. Click Finish to rewrite your config.php file to config.php<br/>";
 $locale['setup_1702'] = "<strong>Note: After you enter your site you should delete /install.php file and chmod your config.php back to 0644 for security reasons.</strong>";
 $locale['setup_1703'] = "Thank you for choosing PHPFusion.";
 // Email Template Setup

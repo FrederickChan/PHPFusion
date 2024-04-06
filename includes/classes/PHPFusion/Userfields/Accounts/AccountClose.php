@@ -21,6 +21,7 @@ class AccountClose extends UserFieldsForm {
                                 When you delete your account, you will not be able to retrieve the content or information. Your profile and your messages will be deleted.</p>'
                 ]
             ] ),
+            'cancel_button' => '<a href="'.BASEDIR.'edit_profile.php" class="btn btn-success-soft">Keep my account</a>',
             'close_button'    => form_button( 'confirm_close', 'Confirm', 'confirm_close', [
                 'class' => 'btn-primary',
             ] )

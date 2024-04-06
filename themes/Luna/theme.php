@@ -207,11 +207,15 @@ function opentable($title = '', $class = '') {
 
     if ($title) {
         echo '<div class="card-header">';
-        echo '<h5 class="card-title mb-0">' . $title . '</h5>';
+        echo '<h4 class="card-title mb-0">' . $title . '</h4>';
         echo '</div>';
     }
 
     echo '<div class="card-body">';
+}
+
+function tablebreak() {
+    echo '</div><div class="card-body">';
 }
 
 function closetable() {

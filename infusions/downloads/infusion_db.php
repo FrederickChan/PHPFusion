@@ -175,4 +175,17 @@ if (defined('DOWNLOADS_EXISTS')) {
      * @see blog_user_action_hook()
      */
     fusion_add_hook('fusion_user_action', 'downloads_user_action_hook', 10, [], 2);
+
+    function download_notifications() {
+        return [
+            'type' => 'DL',
+            'icon' => get_image('download'),
+            'title'=>'Download Updates'
+        ];
+    }
+
+    /**
+     * @see forum_notifications()
+     */
+    fusion_add_hook( 'fusion_register_notifications', 'download_notifications' );
 }

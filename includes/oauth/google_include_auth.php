@@ -20,8 +20,9 @@ if ($payload) {
 
     $auth = new Authenticate();
 
-    if (dbcount("(user_id)", DB_USERS, "user_google=:googleId", ['googleId' => $user_id])) {
+    \PHPFusion\Authenticate::logOut();
 
+    if (dbcount("(user_id)", DB_USERS, "user_google=:googleId", ['googleId' => $user_id])) {
         // Login
         $auth->validate($user_id, 'user_google', TRUE);
 
@@ -31,8 +32,6 @@ if ($payload) {
             if ($auth->authRedirection()) {
                 $response_code = 300;
             }
-
-
         }
 
     } else if (dbcount("(user_id)", DB_USERS, "user_email=:googleEmail", [':googleEmail' => $user_email])) {

@@ -395,6 +395,96 @@ function setError($error_level, $error_message, $error_file, $error_line) {
 }
 
 
+function fusion_get_current_page() {
+    $pageInfo = pathinfo($_SERVER['REQUEST_URI']);
+    $dirname = $pageInfo['dirname'] !== "/" ? ltrim($pageInfo['dirname'], "/") . "/" : "";
+    $site_path = ltrim(fusion_get_settings("site_path"), "/");
+    $start_page = str_replace([$site_path, '\/'], ['', ''], $dirname) . $pageInfo['basename'];
+    if (fusion_get_settings("site_seo") && defined('IN_PERMALINK') && !isset($_GET['aid'])) {
+        $filepath = Router::getRouterInstance()->getFilePath();
+        $start_page = $filepath;
+    }
+    return $start_page;
+}
+
+/**
+ * Fetch username by ID.
+ *
+ * @param int $user_id User ID.
+ *
+ * @return string Username.
+ */
+function fusion_get_username($user_id) {
+    return (dbresult(dbquery("SELECT user_name FROM " . DB_USERS . " WHERE user_id=:uid", [':uid' => (int)$user_id]), 0)) ?? fusion_get_locale('na');
+}
+
+/**
+ * Check if current page is set as homepage.
+ *
+ * @return bool
+ */
+function is_homepage() {
+
+    $settings = fusion_get_settings();
+
+    if ($settings['site_seo']) {
+        $params = http_build_query(\PHPFusion\Rewrite\Router::getRouterInstance()->getFileParams());
+        $path = \PHPFusion\Rewrite\Router::getRouterInstance()->getFilePath();
+        $file_path = '/' . (!empty($path) ? $path : PERMALINK_CURRENT_PATH) . ($params ? "?" : '') . $params;
+    } else {
+        $file_path = '/' . PERMALINK_CURRENT_PATH;
+    }
+
+    return $settings['opening_page'] == 'index.php' && $file_path == '/' || $file_path == '/' . $settings['opening_page'];
+}
+
+
+/**
+ * Infinite scroll pagination.
+ *
+ * @param string $scroll_url The ajax script that loads the content.
+ * @param int $rowstart The number of the first listed item.
+ * @param int $count The number of entries displayed on one page.
+ * @param string $getname The name of the $_GET parameter that contains the start number.
+ * @param string $http_query Additional http query.
+ *
+ * @return string
+ */
+function infinite_scroll($scroll_url, $rowstart, $count, $getname = 'rowstart', $http_query = '') {
+
+    $locale = fusion_get_locale();
+
+    add_to_jquery("
+        var count = $rowstart+1;
+        $(window).scroll(function(){
+          if ($(window).scrollTop() == ($(document).height() - $(window).height())) {
+            if (count <= '$count') {
+                loadInfinityContent(count);
+                count++;
+            }
+          }
+        });
+       function loadInfinityContent(pageNumber){
+           $('.infiniteLoader').show('fast');
+           $.ajax({
+                  url: '$scroll_url',
+                  type:'GET',
+                  data: 'action=infinite_scroll&$getname='+ pageNumber +'" . ($http_query ? "&" . $http_query : '') . "',
+                  success: function(html){
+                      $('.infiniteLoader').hide();
+                      $('#scroll_target').append(html);  // This will be the div where our content will be loaded
+                  }
+              });
+          return false;
+        }
+    ");
+
+    return "
+    <div id='scroll_target'></div>
+    <div class='infiniteLoader panel panel-default' style='display:none;'><div class='panel-body text-center'>" . $locale['loading'] . "</div></div>
+    ";
+}
+
 /**
  * Unnecessary constant.
  *

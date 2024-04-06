@@ -1783,6 +1783,7 @@ class CoreTables {
                 'type' => 'BIGINT',
                 'length' => 20,
                 'key' => 1,
+                'auto_increment' => TRUE,
                 'unsigned' => TRUE,
             ],
             'user_id' => [
@@ -1869,50 +1870,50 @@ class CoreTables {
                 'type' => 'TEXT',
             ],
         ];
-        /*$table_package['user_notify'] = [
-            'notice_id'        => [
-                'type'           => 'MEDIUMINT',
-                'length'         => 11,
+        $table_package['user_notifications'] = [
+            'notify_id' => [
+                'type' => 'BIGINT',
+                'length' => 20,
                 'auto_increment' => TRUE,
-                'key'            => 1, //PRIMARY KEY (theme_id)
-                'unsigned'       => TRUE,
-            ],
-            'notice_from'      => [
-                'type'     => 'MEDIUMINT',
-                'length'   => 11,
+                'key' => 1,
                 'unsigned' => TRUE,
-                'default'  => '0'
             ],
-            'notice_to'        => [
-                'type'     => 'MEDIUMINT',
-                'length'   => 11,
+            'notify_user' => [
+                'type' => 'BIGINT',
+                'length' => 20,
                 'unsigned' => TRUE,
-                'default'  => '0'
+                'default' => '0',
             ],
-            'notice_message'   => [
+            'notify_subject' => [
+                'type' => 'VARCHAR',
+                'length' => 200,
+                'default' => '',
+            ],
+            'notify_message' => [
                 'type' => 'TEXT',
             ],
-            'notice_event'     => [
-                'type' => 'TEXT',
+            'notify_type' => [
+                'type' => 'VARCHAR',
+                'length' => 10,
+                'default' => '',
             ],
-            'notice_datestamp' => [
-                'type'     => 'INT',
-                'length'   => 10,
+            'notify_event' => [
+                'type' => 'VARCHAR',
+                'length' => 10,
+                'default' => '',
+            ],
+            'notify_datestamp' => [
+                'type' => 'INT',
+                'length' => 10,
                 'unsigned' => TRUE,
-                'default'  => '0'
+                'default' => '0',
             ],
-            'notice_timestamp' => [
-                'type'     => 'INT',
-                'length'   => 10,
-                'unsigned' => TRUE,
-                'default'  => '0'
+            'notify_read' => [
+                'type' => 'TINYINT',
+                'length' => 1,
+                'default' => '0',
             ],
-            'notice_read'      => [
-                'type'    => 'TINYINT',
-                'length'  => 1,
-                'default' => '0'
-            ]
-        ];*/
+        ];
 
         return $table_package;
     }

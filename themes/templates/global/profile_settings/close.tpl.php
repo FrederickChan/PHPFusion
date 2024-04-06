@@ -22,7 +22,7 @@ function display_up_close( array $info ) {
         <?php echo $info['close_options'] ?>
     </div>
     <div class="spacer-sm">
-        <a href="<?php echo BASEDIR.'edit_profile.php' ?>" class="btn btn-default">Cancel</a>
+        <?php echo $info['cancel_button'] ?>
         <?php echo $info['close_button'] ?>
     </div>
     <?php echo $info['close_closeform'] ?>

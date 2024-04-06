@@ -1185,6 +1185,236 @@ function set_field_config( $field_config ) {
     Defender::add_field_session( $field_config );
 }
 
+
+/**
+ * Clean the URL and prevents entities in server globals.
+ *
+ * @param string $url URL.
+ *
+ * @return string $url clean and ready for use XHTML strict and without any dangerous code.
+ */
+function cleanurl($url) {
+
+    $bad_entities = ["&", "\"", "'", '\"', "\'", "<", ">", "", "", "*"];
+    $safe_entities = ["&amp;", "", "", "", "", "", "", "", "", ""];
+
+    return str_replace($bad_entities, $safe_entities, $url);
+}
+
+/**
+ * Prevents HTML in unwanted places
+ *
+ * @param string|array $text String or array to be stripped.
+ *
+ * @return array|string The given string decoded as non HTML text.
+ */
+function stripinput($text) {
+
+    if (!is_array($text) && !is_null($text)) {
+        return str_replace('\\', '&#092;', htmlspecialchars(stripslashes(trim($text)), ENT_QUOTES));
+    }
+
+    if (is_array($text) && !is_null($text)) {
+        foreach ($text as $i => $item) {
+            $text[$i] = stripinput($item);
+        }
+    }
+
+    return $text;
+}
+
+/**
+ * Prevent any possible XSS attacks via $_GET.
+ *
+ * @param array|string $check_url String or array to be stripped.
+ *
+ * @return bool True if the URL is not secure.
+ */
+function stripget($check_url) {
+
+    if (is_array($check_url)) {
+        foreach ($check_url as $value) {
+            if (stripget($value) == TRUE) {
+                return TRUE;
+            }
+        }
+    } else {
+        $check_url = str_replace(["\"", "\'"], ["", ""], urldecode($check_url));
+        if (preg_match("/<[^<>]+>/i", $check_url)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+/**
+ * Strips a given filename from any unwanted characters and symbols.
+ *
+ * @param string $filename Filename you want to strip. Remember to remove the file extension before parsing it through this function.
+ *
+ * @return string The filename stripped and ready for use.
+ */
+function stripfilename($filename) {
+
+    $patterns = ['/\s+/' => '_', '/[^a-z0-9_-]|^\W/i' => '', '/([_-])\1+/' => '$1'];
+
+    return preg_replace(array_keys($patterns), $patterns, strtolower($filename)) ?: (string)time();
+}
+
+
+/**
+ * Validate numeric input.
+ *
+ * @param mixed $value The value to be checked.
+ * @param bool $decimal Decimals.
+ * @param bool $negative Negative numbers.
+ *
+ * @return bool True if the value is a number.
+ */
+function isnum($value, $decimal = FALSE, $negative = FALSE) {
+
+    if ($negative == TRUE) {
+        return is_numeric($value);
+    } else {
+        $float = $decimal ? '(.{0,1})[0-9]*' : '';
+
+        return !is_array($value) and preg_match("/^[0-9]+" . $float . "$/", $value);
+    }
+}
+
+
+/**
+ * Custom preg_match function.
+ *
+ * @param string $expression The expression to search for.
+ * @param mixed $value The input string.
+ *
+ * @return bool FALSE when $value is an array
+ */
+function preg_check($expression, $value) {
+
+    return !is_array($value) and preg_match($expression, $value);
+}
+
+/**
+ * Sanitize text and remove a potentially dangerous HTML and JavaScript.
+ *
+ * @param string $text String to be sanitized.
+ * @param bool $strip_tags Removes potentially dangerous HTML tags.
+ * @param bool $strip_scripts Removes <script> tags.
+ *
+ * @return string|array Sanitized and safe string.
+ */
+function descript($text, $strip_tags = TRUE, $strip_scripts = TRUE) {
+
+    if (is_array($text) || is_null($text)) {
+        return $text;
+    }
+
+    $text = html_entity_decode($text, ENT_QUOTES, fusion_get_locale('charset'));
+    $text = preg_replace('/&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});/i', '', $text);
+
+    // Convert problematic ascii characters to their true values
+    $patterns = ['#(&\#x)([0-9A-F]+);*#si' => '', '#(/\bon\w+=\S+(?=.*>))#is' => '', '#([a-z]*)=([\`\'\"]*)script:#iU' => '$1=$2nojscript...', '#([a-z]*)=([\`\'\"]*)javascript:#iU' => '$1=$2nojavascript...', '#([a-z]*)=([\'\"]*)vbscript:#iU' => '$1=$2novbscript...', '#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU' => "$1>", '#(<[^>]+)style=([\`\'\"]*).*behaviour\([^>]*>#iU' => "$1>"];
+
+    foreach (array_merge(['(', ')', ':'], range('A', 'Z'), range('a', 'z')) as $chr) {
+        $patterns["#(&\#)(0*" . ord($chr) . "+);*#si"] = $chr;
+    }
+
+    if ($strip_tags) {
+        do {
+            $count = 0;
+            $text = preg_replace('#</*(applet|meta|xml|blink|link|style|script|object|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $text, -1, $count);
+        } while ($count);
+    }
+
+    $text = preg_replace(array_keys($patterns), $patterns, $text);
+
+    $preg_patterns = [// Fix &entity\n
+        '!(&#0+[0-9]+)!' => '$1;', '/(&#*\w+)[\x00-\x20]+;/u' => '$1;>', '/(&#x*[0-9A-F]+);*/iu' => '$1;', // Remove any attribute starting with "on" or xml name space
+        '#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu' => '$1>', // Remove any xss injected without a closing tag
+        '#(<[^>]+?\s*[\x00-\x20"\'\\\\\/])((?:on|xmlns)+[=\w\d()]*+)#iu' => '$1>', // javascript: and VB script: protocols
+        '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu' => '$1=$2nojavascript...', '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu' => '$1=$2novbscript...', '#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u' => '$1=$2nomozbinding...', // Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
+        '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i' => '$1>', '#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu' => '$1>', // namespace elements
+        '#</*\w+:\w[^>]*+>#i' => '',
+    ];
+
+    if ($strip_scripts) {
+        $preg_patterns += ['#<script(.*?)>(.*?)</script>#is' => ''];
+    }
+
+    foreach ($preg_patterns as $pattern => $replacement) {
+        $text = preg_replace($pattern, $replacement, $text);
+    }
+
+    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8', FALSE);
+}
+
+/**
+ * Prints human-readable information about a variable.
+ *
+ * @param mixed $data The expression to be printed.
+ * @param bool $modal Dump info in the modal.
+ * @param bool $print Dump info in <pre> tag.
+ *
+ * @return string The value of the variable.
+ */
+function print_p($data, $modal = FALSE, $print = TRUE) {
+
+    ob_start();
+    echo htmlspecialchars(print_r($data, TRUE), ENT_QUOTES, 'utf-8');
+    $debug = ob_get_clean();
+    if ($modal == TRUE) {
+        $modal = openmodal('Debug', 'Debug');
+        $modal .= "<pre class='printp' style='white-space:pre-wrap !important;'>";
+        $modal .= $debug;
+        $modal .= "</pre>\n";
+        $modal .= closemodal();
+        PHPFusion\OutputHandler::addToFooter($modal);
+
+        return FALSE;
+    }
+    if ($print == TRUE) {
+        echo "<pre class='printp' style='white-space:pre-wrap !important;'>";
+        echo $debug;
+        echo "</pre>\n";
+    }
+
+    return $debug;
+}
+
+
+/**
+ * Replaces special characters in a string with their "non-special" counterpart.
+ *
+ * @param string $value String to normalize.
+ *
+ * @return string
+ */
+function normalize($value) {
+
+    $table = [
+        '&amp;' => 'and', '@' => 'at', '©' => 'c', '®' => 'r', 'À' => 'a', '(' => '', ')' => '', '.' => '', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'Å' => 'a', 'Æ' => 'ae', 'Ç' => 'c', 'È' => 'e', 'É' => 'e', 'Ë' => 'e', 'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Õ' => 'o', 'Ö' => 'o', 'Ø' => 'o', 'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'Ý' => 'y', 'ß' => 'ss', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'ae', 'ç' => 'c', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'ý' => 'y', 'þ' => 'p', 'ÿ' => 'y', 'Ā' => 'a', 'ā' => 'a', 'Ă' => 'a', 'ă' => 'a', 'Ą' => 'a', 'ą' => 'a', 'Ć' => 'c', 'ć' => 'c', 'Ĉ' => 'c', 'ĉ' => 'c', 'Ċ' => 'c', 'ċ' => 'c', 'Č' => 'c', 'č' => 'c', 'Ď' => 'd', 'ď' => 'd', 'Đ' => 'd', 'đ' => 'd', 'Ē' => 'e', 'ē' => 'e', 'Ĕ' => 'e', 'ĕ' => 'e', 'Ė' => 'e', 'ė' => 'e', 'Ę' => 'e', 'ę' => 'e', 'Ě' => 'e', 'ě' => 'e', 'Ĝ' => 'g', 'ĝ' => 'g', 'Ğ' => 'g', 'ğ' => 'g', 'Ġ' => 'g', 'ġ' => 'g', 'Ģ' => 'g', 'ģ' => 'g', 'Ĥ' => 'h', 'ĥ' => 'h', 'Ħ' => 'h', 'ħ' => 'h', 'Ĩ' => 'i', 'ĩ' => 'i', 'Ī' => 'i', 'ī' => 'i', 'Ĭ' => 'i', 'ĭ' => 'i', 'Į' => 'i', 'į' => 'i', 'İ' => 'i', 'ı' => 'i', 'Ĳ' => 'ij', 'ĳ' => 'ij', 'Ĵ' => 'j', 'ĵ' => 'j', 'Ķ' => 'k', 'ķ' => 'k', 'ĸ' => 'k', 'Ĺ' => 'l', 'ĺ' => 'l', 'Ļ' => 'l', 'ļ' => 'l', 'Ľ' => 'l', 'ľ' => 'l', 'Ŀ' => 'l', 'ŀ' => 'l', 'Ł' => 'l', 'ł' => 'l', 'Ń' => 'n', 'ń' => 'n', 'Ņ' => 'n', 'ņ' => 'n', 'Ň' => 'n', 'ň' => 'n', 'ŉ' => 'n', 'Ŋ' => 'n', 'ŋ' => 'n', 'Ō' => 'o', 'ō' => 'o', 'Ŏ' => 'o', 'ŏ' => 'o', 'Ő' => 'o', 'ő' => 'o', 'Œ' => 'oe', 'œ' => 'oe', 'Ŕ' => 'r', 'ŕ' => 'r', 'Ŗ' => 'r', 'ŗ' => 'r', 'Ř' => 'r', 'ř' => 'r', 'Ś' => 's', 'ś' => 's', 'Ŝ' => 's', 'ŝ' => 's', 'Ş' => 's', 'ş' => 's', 'Š' => 's', 'š' => 's', 'Ţ' => 't', 'ţ' => 't', 'Ť' => 't', 'ť' => 't', 'Ŧ' => 't', 'ŧ' => 't', 'Ũ' => 'u', 'ũ' => 'u', 'Ū' => 'u', 'ū' => 'u', 'Ŭ' => 'u', 'ŭ' => 'u', 'Ů' => 'u', 'ů' => 'u', 'Ű' => 'u', 'ű' => 'u', 'Ų' => 'u', 'ų' => 'u', 'Ŵ' => 'w', 'ŵ' => 'w', 'Ŷ' => 'y', 'ŷ' => 'y', 'Ÿ' => 'y', 'Ź' => 'z', 'ź' => 'z', 'Ż' => 'z', 'ż' => 'z', 'Ž' => 'z', 'ž' => 'z', 'ſ' => 'z', 'Ə' => 'e', 'ƒ' => 'f', 'Ơ' => 'o', 'ơ' => 'o', 'Ư' => 'u', 'ư' => 'u', 'Ǎ' => 'a', 'ǎ' => 'a', 'Ǐ' => 'i', 'ǐ' => 'i', 'Ǒ' => 'o', 'ǒ' => 'o', 'Ǔ' => 'u', 'ǔ' => 'u', 'Ǖ' => 'u', 'ǖ' => 'u', 'Ǘ' => 'u', 'ǘ' => 'u', 'Ǚ' => 'u', 'ǚ' => 'u', 'Ǜ' => 'u', 'ǜ' => 'u', 'Ǻ' => 'a', 'ǻ' => 'a', 'Ǽ' => 'ae', 'ǽ' => 'ae', 'Ǿ' => 'o', 'ǿ' => 'o', 'ə' => 'e', 'Ё' => 'jo', 'Є' => 'e', 'І' => 'i', 'Ї' => 'i', 'А' => 'a', 'Б' => 'b', 'В' => 'v', 'Г' => 'g', 'Д' => 'd', 'Е' => 'e', 'Ж' => 'zh', 'З' => 'z', 'И' => 'i', 'Й' => 'j', 'К' => 'k', 'Л' => 'l', 'М' => 'm', 'Н' => 'n', 'О' => 'o', 'П' => 'p', 'Р' => 'r', 'С' => 's', 'Т' => 't', 'У' => 'u', 'Ф' => 'f', 'Х' => 'h', 'Ц' => 'c', 'Ч' => 'ch', 'Ш' => 'sh', 'Щ' => 'sch', 'Ъ' => '-', 'Ы' => 'y', 'Ь' => '-', 'Э' => 'je', 'Ю' => 'ju', 'Я' => 'ja', 'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'j', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch', 'ъ' => '-', 'ы' => 'y', 'ь' => '-', 'э' => 'je', 'ю' => 'ju', 'я' => 'ja', 'ё' => 'jo', 'є' => 'e', 'і' => 'i', 'ї' => 'i', 'Ґ' => 'g', 'ґ' => 'g', 'א' => 'a', 'ב' => 'b', 'ג' => 'g', 'ד' => 'd', 'ה' => 'h', 'ו' => 'v', 'ז' => 'z', 'ח' => 'h', 'ט' => 't', 'י' => 'i', 'ך' => 'k', 'כ' => 'k', 'ל' => 'l', 'ם' => 'm', 'מ' => 'm', 'ן' => 'n', 'נ' => 'n', 'ס' => 's', 'ע' => 'e', 'ף' => 'p', 'פ' => 'p', 'ץ' => 'C', 'צ' => 'c', 'ק' => 'q', 'ר' => 'r', 'ש' => 'w', 'ת' => 't', '™' => 'tm', 'ء' => 'a', 'ا' => 'a', 'آ' => 'a', 'ب' => 'b', 'پ' => 'p', 'ت' => 't', 'ث' => 's', 'ج' => 'j', 'چ' => 'ch', 'ح' => 'h', 'خ' => 'kh', 'د' => 'd', 'ر' => 'r', 'ز' => 'z', 'ژ' => 'zh', 'س' => 's', 'ص' => 's', 'ض' => 'z', 'ط' => 't', 'ظ' => 'z', 'غ' => 'gh', 'ف' => 'f', 'ق' => 'q', 'ک' => 'k', 'گ' => 'g', 'ل' => 'l', 'م' => 'm', 'ن' => 'n', 'و' => 'w', 'ه' => 'h', 'ی' => 'y ',
+    ];
+
+    return strtr($value, $table);
+}
+
+/**
+ * Converts all applicable characters to HTML entities.
+ * htmlentities is too agressive so we use this function.
+ *
+ * @param string $text The input string.
+ *
+ * @return string Encoded string.
+ */
+function phpentities($text) {
+
+    return str_replace('\\', '&#092;', htmlspecialchars($text, ENT_QUOTES));
+}
+
+
 require_once __DIR__ . '/defender/validation.php';
 require_once __DIR__ . '/defender/token.php';
 require_once __DIR__ . '/defender/mimecheck.php';

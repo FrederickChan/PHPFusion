@@ -10,8 +10,11 @@ function notification_menu() {
             // Add new method to super-menu rendering
             'link_content' => '<div class="card" style="min-width:350px;">' .
                 '<div class="card-header">' .
-                '<div class="d-flex flex-row"><h6><strong>Notifications</strong></h6><span class="badge bg-danger bg-opacity-10 text-danger ms-2">4 new</span>
-        <span class="ms-auto"><a class="small" href="">Clear all</a></span></div>' .
+                '<div class="d-flex flex-row">
+                    <h6><strong>106</strong> <span class="small">notifications</span></h6>
+                    <span class="ms-2 fs-6"><a href="">All read</a></span>
+                    <span class="ms-auto fs-6"><a href="'.BASEDIR.'notifications.php">View all '.show_icon('arrow-right').'</a></span></div>' .
+
                 '</div><div class="card-body p-0">' .
                 '<ul class="list-group list-group-flush list-unstyled p-2">' .
                 '<li>

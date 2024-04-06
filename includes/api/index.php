@@ -33,8 +33,8 @@ require_once __DIR__ . "/../../maincore.php";
  * @return array
  */
 function get_extended_endpoints() {
-    if ( $extended_endpoints = fusion_filter_hook( "fusion_register_hook_paths" ) ) {
-        return flatten_array( $extended_endpoints );
+    if ($extended_endpoints = fusion_filter_hook("fusion_register_hook_paths")) {
+        return flatten_array($extended_endpoints);
     }
     return [];
 }
@@ -42,31 +42,32 @@ function get_extended_endpoints() {
 $endpoints = [
         "username-check" => "username_validation.php",
         "userpass-check" => "userpass_validation.php",
-        'calling-codes'  => 'calling_codes.php', //get
-        'geomap-states'  => 'states.php', //get
-        'email_code'     => 'email_code.php', // post
-        'avatar-upload'  => 'avatar_upload.php', // $_FILES
-        'avatar-delete'  => 'avatar_delete.php', // post
-        'user-search'    => 'search_users.php', // get or post
-        'preview-text'   => 'text_preview.php', // post
+        'calling-codes' => 'calling_codes.php', //get
+        'geomap-states' => 'states.php', //get
+        'email_code' => 'email_code.php', // post
+        'avatar-upload' => 'avatar_upload.php', // $_FILES
+        'avatar-delete' => 'avatar_delete.php', // post
+        'user-search' => 'search_users.php', // get or post
+        'preview-text' => 'text_preview.php', // post
+        'notify-read' => 'notify_read.php' // post
     ]
     + get_extended_endpoints();
 
-if ( $api = get( "api" ) ) {
+if ($api = get("api")) {
 
-    if ( isset( $endpoints[$api] ) ) {
+    if (isset($endpoints[$api])) {
 
         require $endpoints[$api];
 
-        fusion_apply_hook( "fusion_filters" );
+        fusion_apply_hook("fusion_filters");
 
         // Close connection
         DatabaseFactory::getConnection()->close();
 
     } else {
-        die( "End point is faulty" );
+        die("End point is faulty");
     }
 } else {
-    die( "API is not specified" );
+    die("API is not specified");
 }
 die();

@@ -25,6 +25,7 @@
 
 html, body {
   --bs-body-font-size: 16px;
+  --bs-border-radius: 0.4rem;
   --lg-side-width: 270px;
   --color: #676a79;
   --light-color: #87909f;
@@ -38,15 +39,24 @@ html, body {
   --input-padding-horizontal: 16px;
   --header-color: #000;
   --border-color: #00000017;
+
+  --bg-primary-soft: rgba(15, 111, 236, 0.1);
+  --bg-warning-soft: rgba(243, 139, 44, .1);
+
+  --primary-color: #0f6fec;
+  --warning-color: var(--bs-warning);
+
   --bg: #eff2f6;
   --card-header: #fff;
   --card-radius: .4rem;
   --inner-radius: calc(0.4rem - 1px);
-  --primary-color: #0d6efd;
+
   --primary-hover-color: #0d5ec9;
   --darker-input-bg: #eef0f2;
   --bs-nav-link-font-size: 0.9rem;
   --bs-nav-link-color: #676a79;
+
+
 }
 
 html {
@@ -158,10 +168,6 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-
-      .nav-link {
-        font-weight: 700;
       }
 
       .icon-md {
@@ -433,8 +439,14 @@ a {
   }
 }
 
+.bg-primary-soft {
+  color: var(--primary-color);
+  background-color: var(--bg-primary-soft);
+}
+
 .bg-warning-soft {
-  background-color: rgba(243, 139, 44, .1);
+  color: var(--warning-color);
+  background-color: var(--bg-warning-soft);
 }
 
 .circle {
@@ -543,8 +555,9 @@ a {
   }
 
   &.btn-primary-soft {
-    color: #0f6fec;
-    background-color: rgba(15, 111, 236, 0.1);
+
+    color: var(--primary-color);
+    background-color: var(--bg-primary-soft);;
 
     &:active, &:hover, &:focus {
       color: #fff !important;
@@ -585,7 +598,7 @@ a {
   }
 
   &.btn-warning-soft {
-    background-color: rgba(243, 139, 44, .1);
+    background-color: var(--bg-warning-soft);
 
     &:active, &:hover, &:focus {
       color: #fff !important;
@@ -620,6 +633,18 @@ a {
       width: 20px;
       fill: #fff;
     }
+  }
+
+  &.btn-success-soft {
+    color: #0cbc87;
+    background-color: rgba(12, 188, 135, 0.1);
+
+    &:active, &:hover, &:focus {
+      color: #fff !important;
+      background-color: #0cbc87 !important;
+      border-color: #0cbc87 !important;
+    }
+
   }
 
   &.btn-light {
@@ -1002,6 +1027,14 @@ div[data-fusion="true"] {
 }
 
 .badge {
+
+  --bs-badge-padding-x: 0.65em;
+  --bs-badge-padding-y: 0.35em;
+  --bs-badge-font-size: 0.85em;
+  --bs-badge-font-weight: 400;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: var(--bs-border-radius);
+
   .badge-circle {
     border-radius: 50%;
     height: 1.3rem;
@@ -1239,7 +1272,10 @@ div[data-fusion="true"] {
   --bs-txtarea-btn-hover-bg: #eaedf1;
   --bs-txtarea-btn-tabs-active-bg: #fff;
   --bs-txtarea-btn-tabs-active-color: #1f2328;
+}
 
+.fs-6 {
+  font-size:0.8rem !important;
 }
 
 .card {
