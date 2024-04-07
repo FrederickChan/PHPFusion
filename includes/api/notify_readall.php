@@ -1,14 +1,14 @@
 <?php
 header('Content-Type: application/json');
 
-function notify_read() {
-
+function notify_readall() {
     if (iMEMBER && fusion_safe()) {
-        if (check_post('id', FILTER_VALIDATE_INT)) {
-            $id = post('id', FILTER_VALIDATE_INT);
+
+        if (post('type') == 'all') {
+
             $user_id = fusion_get_userdata('user_id');
-            dbquery("UPDATE " . DB_USER_NOTIFICATIONS . " SET notify_read=1 WHERE notify_id=:id AND notify_user=:uid", [
-                ':id' => $id,
+
+            dbquery("UPDATE " . DB_USER_NOTIFICATIONS . " SET notify_read=1 WHERE notify_user=:uid", [
                 ':uid' => $user_id,
             ]);
 
@@ -35,4 +35,4 @@ function notify_read() {
 /**
  * @uses notify_read()
  */
-fusion_add_hook('fusion_filters', 'notify_read');
+fusion_add_hook('fusion_filters', 'notify_readall');

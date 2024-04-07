@@ -270,7 +270,7 @@ a {
   --bs-list-group-action-hover-color: var(--bs-gray-700);
   --bs-list-group-action-hover-bg: var(--bs-light);
   --bs-list-group-action-active-color: var(--bs-body-color);
-  --bs-list-group-action-active-bg: var(--bs-light);
+  //--bs-list-group-action-active-bg: var(--bs-light);
   --bs-list-group-disabled-color: var(--bs-secondary-color);
   --bs-list-group-disabled-bg: var(--bs-body-bg);
   --bs-list-group-active-color: #fff;
@@ -489,9 +489,14 @@ a {
   transition: all 0.3s ease-in-out;
   width: fit-content;
 
+  svg {
+    transition: all .3s ease-in-out;
+  }
+
   &:hover, &:focus {
     background: var(--bs-btn-hover-bg);
     color: var(--bs-btn-hover-color);
+
   }
 
 
@@ -559,10 +564,18 @@ a {
     color: var(--primary-color);
     background-color: var(--bg-primary-soft);;
 
+    svg {
+      fill: var(--primary-color);
+    }
+
     &:active, &:hover, &:focus {
       color: #fff !important;
       background-color: #0f6fec !important;
       border-color: #0f6fec !important;
+
+      svg {
+        fill: #fff;
+      }
     }
   }
 
@@ -753,7 +766,7 @@ a.stretched:after {
   .form-check-label {
     color: var(--label-color);
     font-size: 0.875rem;
-    font-weight:400;
+    font-weight: 400;
   }
 }
 
@@ -906,7 +919,7 @@ div[data-fusion="true"] {
     color: var(--label-color, inherit);
     line-height: 1.25;
     margin-top: 0;
-    font-weight:400;
+    font-weight: 400;
 
     p {
       font-weight: 400;
@@ -1274,8 +1287,12 @@ div[data-fusion="true"] {
   --bs-txtarea-btn-tabs-active-color: #1f2328;
 }
 
+.fs-5 {
+  font-size: .9rem !important;
+}
+
 .fs-6 {
-  font-size:0.8rem !important;
+  font-size: .8rem !important;
 }
 
 .card {
@@ -1294,6 +1311,12 @@ div[data-fusion="true"] {
       padding: 4px 8px;
       position: absolute;
       background: var(--bs-card-bg);
+    }
+  }
+
+  .nav-notification-list {
+    &:hover {
+      background: var(--bs-list-group-action-active-bg);
     }
   }
 

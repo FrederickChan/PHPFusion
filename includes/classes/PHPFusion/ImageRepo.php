@@ -15,6 +15,7 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
 namespace PHPFusion;
 
 /**
@@ -199,6 +200,7 @@ class ImageRepo {
             'bbcode_code' => INCLUDES . 'bbcodes/images/code.svg',
             'bbcode_quote' => INCLUDES . 'bbcodes/images/quote.svg',
             'block' => IMAGES . 'icons/block.svg',
+            'brush' => IMAGES . 'icons/brush.svg',
             //C
             'certified' => IMAGES . 'icons/certified.svg',
             'close' => IMAGES . 'icons/deactivate.svg',
@@ -209,7 +211,7 @@ class ImageRepo {
             //D
             "down" => IMAGES . "icons/down.svg",
             'delete' => IMAGES . 'icons/delete.svg',
-            'download' => IMAGES.'icons/download.svg',
+            'download' => IMAGES . 'icons/download.svg',
             //E
             'events' => IMAGES . 'icons/events.svg',
             'email' => IMAGES . 'icons/email.svg',
@@ -232,8 +234,8 @@ class ImageRepo {
             'mentions' => IMAGES . 'icons/mentions.svg',
             'messages_unread' => IMAGES . 'icons/unread.svg',
             'minus' => IMAGES . 'icons/minus.svg',
-            'mail-read' => IMAGES.'icons/envelope-read.svg',
-            'mail-unread' => IMAGES.'icons/envelope.svg',
+            'mail-read' => IMAGES . 'icons/envelope-read.svg',
+            'mail-unread' => IMAGES . 'icons/envelope.svg',
             //N
             "noavatar" => IMAGES . "avatars/no-avatar.jpg",
             "no-avatar" => IMAGES . "avatars/no-avatar.jpg",

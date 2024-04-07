@@ -1,41 +1,14 @@
 <?php
 
 use Defender\Token;
+use PHPFusion\Notifications;
 use PHPFusion\Panels;
 
 require_once __DIR__ . '/maincore.php';
+
 require_once FUSION_HEADER;
 
-function get_notification_events() {
-
-    $notifications_type = [
-        'COMMENT' => 'Comments',
-        'MENTIONS' => 'Mentions',
-        'NEWSLETTER' => 'Newsletters',
-        'BDAYS' => 'Birthdays',
-        'GROUPS' => 'Groups',
-        'EVENTS' => 'Events',
-        'PM' => 'Messaging',
-        'UPDATES' => 'Updates',
-    ];
-
-    return $notifications_type;
-}
-
-function get_notification_type($key) {
-    static $type = [];
-    if (empty($type)) {
-        $filter = fusion_filter_hook('fusion_register_notifications');
-        if (!empty($filter)) {
-            foreach ($filter as $val) {
-                $type[$val['type']] = $val['title'];
-            }
-        }
-    }
-
-    return $type[$key] ?? '';
-}
-
+$notice_class = Notifications::getInstance();
 
 //fusion_update_table(DB_USER_NOTIFICATIONS);
 //send_notice(1, 'Download Available', 'A new download updates are available now, you can participate in the M-Day free airdrop event. The event will end at 2024-04-06 14:00:00(UTC+08:00). Come and register to join!',
@@ -51,27 +24,26 @@ function get_notification_type($key) {
 // Development issues
 $title = 'All Notifications';
 
-if ($notification_types = fusion_filter_hook('fusion_register_notifications')) {
-    $c_arr['notification_types'] = sorter($notification_types, 'title');
+if ($c_arr['notification_types'] = $notice_class->getTypes()) {
+
     $table_break = fusion_get_function('tablebreak');
     $table_close = fusion_get_function('closeside');
 
-    if (!empty($c_arr['notification_types'])) {
-        $output = fusion_get_function('openside', 'Notifications');
-        $output .= '<a href="' . BASEDIR . 'notifications.php"><span class="me-2">' . get_image('notification', '') . '</span>All Notifications</a>';
+
+    $output = fusion_get_function('openside', 'Notifications');
+    $output .= '<a href="' . BASEDIR . 'notifications.php"><span class="me-2">' . get_image('notification', '') . '</span>All Notifications</a>';
+    $output .= '<hr>';
+    foreach ($c_arr['notification_types'] as $key => $val) {
+        $count = dbcount("('notify_id')", DB_USER_NOTIFICATIONS, '');
+        $output .= '<a href="' . BASEDIR . 'notifications.php?type=' . $key . '"><span class="me-2">' . ($notice_class->selectIcons($key) ?? get_image('notification', '')) . '</span>' . $val. '</a>';
         $output .= '<hr>';
-        foreach ($c_arr['notification_types'] as $rows) {
-            $count = dbcount("('notify_id')", DB_USER_NOTIFICATIONS, '');
-            $output .= '<a href="' . BASEDIR . 'notifications.php?type=' . $rows['type'] . '"><span class="me-2">' . ($rows['icon'] ?? get_image('notification', '')) . '</span>' . $rows['title'] . '</a>';
-            $output .= '<hr>';
 
-            if (get('type') == $rows['type']) {
-                $title = $rows['title'];
-            }
-
+        if (get('type') == $key) {
+            $title = $val;
         }
-        $output .= $table_close;
+
     }
+    $output .= $table_close;
 
     $content = $output;
 
@@ -110,7 +82,7 @@ if (dbrows($res)) {
         $c_arr['nav'] = makepagenav($rowstart, $limit, $total, 3, BASEDIR . 'notifications.php?', 'rowstart');
 
     }
-
+    $i = 1;
     while ($rows = dbarray($res)) {
         $c_arr['items'][] = '<div class="item">
             <div class="d-flex">
@@ -124,10 +96,13 @@ if (dbrows($res)) {
                 </div>
                 <span class="ms-auto fs-6">' . showdate('shortdate', $rows['notify_datestamp']) . '</span>
             </div>
-            <div><span class="badge bg-primary-soft">' . get_notification_type($rows['notify_type']) . '</span></div>
-            <p>' . fusion_first_words($rows['notify_message'], '30') . '</p>
+            <div><span class="badge bg-primary-soft">' . $notice_class->selectTypes($rows['notify_type']) . '</span></div>
+            <p class="text-smaller">' . fusion_first_words($rows['notify_message'], '30') . '</p>
             <span class="d-none" style="display:none;">' . $rows['notify_message'] . '<div class="mt-2 small text-lighter">' . showdate('forumdate', $rows['notify_datestamp']) . '</div></span>
-        </div>';
+        </div>
+        ' . ($i == count($rows) ? '' : '<hr>') . '
+        ';
+        $i++;
     }
 } else {
     // Demo

@@ -49,7 +49,8 @@ $endpoints = [
         'avatar-delete' => 'avatar_delete.php', // post
         'user-search' => 'search_users.php', // get or post
         'preview-text' => 'text_preview.php', // post
-        'notify-read' => 'notify_read.php' // post
+        'notify-read' => 'notify_read.php', // post
+        'notify-readall' => 'notify_readall.php' // post
     ]
     + get_extended_endpoints();
 

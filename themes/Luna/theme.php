@@ -74,6 +74,14 @@ function render_page() {
     echo '<div id="error-logs"></div>';
     echo '<header>';
 
+    $notifications_badge = '';
+    if (dbcount("(notify_id)", DB_USER_NOTIFICATIONS, "notify_user=:uid AND notify_read=0", [':uid'=>$userdata['user_id']])) {
+        $notifications_badge = '<span class="position-absolute top-10 ms-4 translate-middle p-1 bg-danger border border-light rounded-circle">
+        <span class="visually-hidden">New alerts</span>
+        </span>
+        ';
+    }
+
     //fixed-top header-static
     echo showsublinks('', 'navbar-expand-lg bg-light navbar-light', [
         'container' => TRUE,
@@ -105,7 +113,9 @@ function render_page() {
                 ],
                 'notifications' => [
                     'link_id' => 'notifications',
-                    'link_name' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/></svg>',
+                    'link_name' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/></svg>
+'.$notifications_badge.'
+',
                     'link_class' => 'btn btn-light',
                     'link_item_class' => 'ms-2',
                     'link_url' => '#',
