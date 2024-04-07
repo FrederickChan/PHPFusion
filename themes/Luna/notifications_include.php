@@ -116,6 +116,15 @@ function notification_menu() {
 function uip_menu() {
     $userdata = fusion_get_userdata();
 
+    add_to_jquery("
+    $('.btn-theme-options').on('click', function(e) {
+        e.preventDefault();
+        let val = $(this).data('bs-theme-value');        
+        toggleColorScheme(val);        
+    });
+    ");
+    fusion_load_script(THEME.'styles.js');
+
     return [
         'n2' => [
             'link_id' => 'n2',
