@@ -11,7 +11,7 @@ function display_up_close( array $info ) {
 
     opentable( 'Deactivating or deleting your account' );
     ?>
-    <div class="text-start">If you wish to take a break from <?php echo $settings['sitename'] ?> you can temporarily deactivate this account. If you want to permanently delete your account, please take note that all data will be permanently lost and cannot be recovered once you confirm your deletion.</div>.
+    <div class="text-start">If you wish to take a break from <?php echo $settings['sitename'] ?> you can temporarily deactivate this account. If you want to permanently delete your account, please take note that all data will be permanently lost and cannot be recovered once you confirm your deletion.</div>
     <h6 class="strong">Before you go</h6>
     <ol>
         <li>Download a backup of your data <a href="" class="strong">here</a></li>
@@ -25,8 +25,7 @@ function display_up_close( array $info ) {
         <?php echo $info['cancel_button'] ?>
         <?php echo $info['close_button'] ?>
     </div>
-    <?php echo $info['close_closeform'] ?>
+    <?php echo $info['close_closeform'];
 
-    <?php
     closetable();
 }

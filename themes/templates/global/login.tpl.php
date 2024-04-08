@@ -160,9 +160,7 @@ if ( !function_exists( 'display_login_form' ) ) {
             <div class="content">
                 <!--register_pre_idx-->
                 <?php openside( '' ) ?>
-                <h4 class="spacer-sm mb-5 text-center">Login to your account</h4>
-                <div class="spacer-md">
-                   </div>
+                <h4 class="spacer-sm mb-5 text-center"><strong>Login to your account</strong></h4>
 
                 <?php if ( !empty( $info['connect_buttons'] ) ) :
 
@@ -185,7 +183,7 @@ if ( !function_exists( 'display_login_form' ) ) {
                     //  }
                     //</script>
                     ?>
-                    <div class="spacer-md">
+                    <div class="spacer-md d-flex justify-content-center">
                         <?php
                         foreach ( $info['connect_buttons'] as $mhtml ) :
                             echo $mhtml;

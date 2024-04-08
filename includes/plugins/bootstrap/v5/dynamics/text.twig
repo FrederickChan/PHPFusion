@@ -63,7 +63,7 @@
         <div class="form-floating">
     {% endif %}
 
-     <input type="{{ options['input_type'] }}" data-type="{{ options['input_type'] }}"{{ input_tags_1|raw }} class="form-control textbox{{ input_inner_class }}{{ errorValidClass }}" name="{{ input_name }}" value="{{ input_value }}" id="{{ options['input_id'] }}"{{ input_tags_2|raw }}>
+     <input type="{{ options['input_type'] }}" data-type="{{ options['input_type'] }}"{{ input_tags_1|raw }} class="form-control bg-light textbox{{ input_inner_class }}{{ errorValidClass }}" name="{{ input_name }}" value="{{ input_value }}" id="{{ options['input_id'] }}"{{ input_tags_2|raw }}>
 
     {% if options['floating_label'] and options['placeholder'] %}
         {{ options['label_dom']|raw }}

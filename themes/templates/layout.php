@@ -154,10 +154,12 @@ if (is_array($core_css_files)) {
 $style_path = THEME . 'styles.css';
 if (is_file(THEME . 'styles.min.css')) {
     $style_path = THEME . 'styles.min.css';
+
     if (!defined('FUSION_DEVELOPMENT')) {
         $style_path = $style_path.'?v='.filemtime($style_path);
     }
 }
+
 
 echo '<link rel="stylesheet" href="'.$style_path.'" defer>';
 

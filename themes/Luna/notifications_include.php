@@ -8,23 +8,23 @@ function notification_menu() {
 
     $notice_class = Notifications::getInstance();
 
-
-    $res = dbquery("SELECT * FROM ".DB_USER_NOTIFICATIONS." WHERE notify_user=:uid AND notify_read=0 ORDER BY notify_datestamp DESC LIMIT 0,15", [
-        ':uid' => $user_id
+    $res = dbquery("SELECT * FROM " . DB_USER_NOTIFICATIONS . " WHERE notify_user=:uid AND notify_read=0 ORDER BY notify_datestamp DESC LIMIT 0,15", [
+        ':uid' => $user_id,
     ]);
 
-    $count = dbcount("(notify_id)", DB_USER_NOTIFICATIONS, "notify_user=:uid AND notify_read=0", [':uid'=>$user_id]);
+    $count = dbcount("(notify_id)", DB_USER_NOTIFICATIONS, "notify_user=:uid AND notify_read=0", [':uid' => $user_id]);
     //' . ($rows['icon'] ?? get_image('notification', '')) . '
 
     if (dbrows($res)) {
         while ($rows = dbarray($res)) {
             $c_arr['items'][] = '
-            <li><a class="list-group-item-action nav-notification-list p-2" href=""><div class="d-flex gap-2">
-               <span class="ps-2">'.($notice_class->selectIcons($rows['notify_type']) ?? get_image('notification', '')).'</span>
+            <li><a class="dropdown-item nav-notification-list p-2" href="'.BASEDIR.'notifications.php?type='.$rows['notify_type'].'">
+            <div class="d-flex gap-2">
+               <span class="ps-2">' . ($notice_class->selectIcons($rows['notify_type']) ?? get_image('notification', '')) . '</span>
                 <div class="d-block">
-                    <h6 class="mb-0">'.$rows['notify_subject'].'</h6>
-                    <div class="text-nowrap fs-5">'.fusion_first_words($rows['notify_message'], 6).'</div>            
-                    <div class="fs-6">'.showdate('forumdate', $rows['notify_datestamp']).'</div>
+                    <h6 class="mb-0">' . $rows['notify_subject'] . '</h6>
+                    <div class="text-nowrap fs-5">' . fusion_first_words($rows['notify_message'], 6) . '</div>            
+                    <div class="fs-6">' . showdate('forumdate', $rows['notify_datestamp']) . '</div>
                 </div>            
             </div>
             </a></li>';
@@ -32,7 +32,7 @@ function notification_menu() {
 
         $c_arr['items'][] = '
         <li class="p-2"><div class="pt-2 pb-2 d-flex align-items-center justify-content-center w-100">
-        <a href="#" class="btn ps-5 pe-5 btn-primary-soft" data-trigger="notify-readall"><span class="me-2">'.get_image('brush').'</span>Mark all as read</a></div>
+        <a href="#" class="btn ps-5 pe-5 btn-primary-soft" data-trigger="notify-readall"><span class="me-2">' . get_image('brush') . '</span>Mark all as read</a></div>
         </li>
         ';
 
@@ -84,7 +84,7 @@ function notification_menu() {
     add_to_jquery("
     $('a[data-trigger=\"notify-readall\"]').on('click', function(e) {
         console.log('clicked');
-        $.post('".INCLUDES."api/?api=notify-readall', {type:'all', fusion_token:'$token', form_id:'$form_id'}, function(e) {
+        $.post('" . INCLUDES . "api/?api=notify-readall', {type:'all', fusion_token:'$token', form_id:'$form_id'}, function(e) {
             console.log(e);
         });    
     });    
@@ -99,11 +99,11 @@ function notification_menu() {
                 'link_content' => '<div class="card" style="min-width:350px;">' .
                     '<div class="card-header pt-3 pb-2">' .
                     '<div class="d-flex flex-row">
-                    <h6><strong>'.number_format($count).'</strong> <span class="small">notifications</span></h6>
-                    <span class="ms-auto fs-5"><a href="'.BASEDIR.'notifications.php">View more '.get_image('right').'</a></span></div>' .
+                    <h6><strong>' . number_format($count) . '</strong> <span class="small">notifications</span></h6>
+                    <span class="ms-auto fs-5"><a href="' . BASEDIR . 'notifications.php">View more ' . get_image('right') . '</a></span></div>' .
                     '</div><div class="card-body p-0">' .
                     '<ul class="list-group list-group-flush list-unstyled" style="max-height:350px;overflow-y:auto;">' .
-                    implode('', $c_arr['items']).
+                    implode('', $c_arr['items']) .
                     '</ul>' .
                     '</div></div>',
             ],
@@ -116,27 +116,18 @@ function notification_menu() {
 function uip_menu() {
     $userdata = fusion_get_userdata();
 
-    add_to_jquery("
-    $('.btn-theme-options').on('click', function(e) {
-        e.preventDefault();
-        let val = $(this).data('bs-theme-value');        
-        toggleColorScheme(val);        
-    });
-    ");
-    fusion_load_script(THEME.'styles.js');
-
     return [
         'n2' => [
             'link_id' => 'n2',
             'link_item_class' => 'p0 px-3',
             // Add new method to super-menu rendering
-            'link_content' => '<div class="uip-menu py-2 w-100">' .
+            'link_content' => '<div class="uip-menu py-2 w-100" style="min-width:240px;">' .
                 '<div class="d-flex align-items-center position-relative">
                 <!-- Avatar -->
                 ' . display_avatar($userdata, '50px', 'rounded-circle me-3', FALSE, 'rounded-circle overflow-hide') . '
                 <div>
                 <a class="h6" href="#"><strong>' . display_name($userdata) . '</strong></a>
-                  <p class="small text-lighter m-0">Web Developer</p>
+                  <p class="small m-0">Web Developer</p>
                 </div>
               </div>
               <a class="dropdown-item btn-block btn btn-primary-soft my-2 text-center" href="' . BASEDIR . 'profile.php?lookup=' . $userdata['user_id'] . '">View profile</a>
@@ -145,7 +136,7 @@ function uip_menu() {
         ],
         'n3' => [
             'link_id' => 'n3',
-            'link_item_class' => 'px-3',
+
             // Add new method to super-menu rendering
             'link_name' => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
                      <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
@@ -155,7 +146,7 @@ function uip_menu() {
         ],
         'n4' => [
             'link_id' => 'n4',
-            'link_item_class' => 'px-3',
+
             // Add new method to super-menu rendering
             'link_name' => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-life-preserver" viewBox="0 0 16 16">
                       <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm6.43-5.228a7.025 7.025 0 0 1-3.658 3.658l-1.115-2.788a4.015 4.015 0 0 0 1.985-1.985l2.788 1.115zM5.228 14.43a7.025 7.025 0 0 1-3.658-3.658l2.788-1.115a4.015 4.015 0 0 0 1.985 1.985L5.228 14.43zm9.202-9.202-2.788 1.115a4.015 4.015 0 0 0-1.985-1.985l1.115-2.788a7.025 7.025 0 0 1 3.658 3.658zm-8.087-.87a4.015 4.015 0 0 0-1.985 1.985L1.57 5.228A7.025 7.025 0 0 1 5.228 1.57l1.115 2.788zM8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
@@ -168,7 +159,7 @@ function uip_menu() {
         ],
         'n6' => [
             'link_id' => 'n6',
-            'link_item_class' => 'px-3',
+
             'link_name' => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
                       <path d="M7.5 1v7h1V1h-1z"/>
                       <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
@@ -184,6 +175,90 @@ function uip_menu() {
             'link_content' => '<div class="theme-options">
 								<span>Mode:</span>
 								<button type="button" class="btn btn-theme-options nav-link text-primary-hover mb-0 active" data-bs-theme-value="light" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Light">
+								' . get_image('light_mode') . '
+								</button>
+								<button type="button" class="btn btn-theme-options nav-link text-primary-hover mb-0" data-bs-theme-value="dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dark">
+									' . get_image('dark_mode') . '
+								</button>
+								<button type="button" class="btn btn-theme-options nav-link text-primary-hover mb-0" data-bs-theme-value="auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Dark">
+									' . get_image('auto_mode') . '
+								</button>
+							</div>',
+        ],
+    ];
+
+}
+
+/*
+ * $userdata = fusion_get_userdata();
+
+    add_to_jquery("
+    $('.btn-theme-options').on('click', function(e) {
+        e.preventDefault();
+        let val = $(this).data('bs-theme-value');
+        toggleColorScheme(val);
+    });
+    ");
+    fusion_load_script(THEME.'styles.js');
+
+    return [
+        'n2' => [
+            'link_id'         => 'n2',
+            'link_item_class' => 'p0 px-3',
+            // Add new method to super-menu rendering
+            'link_content'    => '<div class="uip-menu w-100"><div class="d-flex align-items-center position-relative">
+                <!-- Avatar -->
+                ' . display_avatar( $userdata, '50px', 'rounded-circle me-3', FALSE, 'rounded-circle overflow-hide' ) . '
+                <div>
+                <a class="h6" href="#">Lori Ferguson</a>
+                  <p class="small text-lighter m-0">Web Developer</p>
+                </div>
+              </div>
+              <a class="dropdown-item btn btn-primary-soft my-2 text-center" href="' . BASEDIR . 'profile.php?lookup=' . $userdata['user_id'] . '">View profile</a>
+              </div>
+              ',
+        ],
+        'n3' => [
+            'link_id'         => 'n3',
+            'link_item_class' => 'px-3',
+            // Add new method to super-menu rendering
+            'link_name'       => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                     <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                     <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                     </svg></span>Settings & Privacy',
+            'link_url'        => BASEDIR . 'edit_profile.php',
+        ],
+        'n4' => [
+            'link_id'         => 'n4',
+            'link_item_class' => 'px-3',
+            // Add new method to super-menu rendering
+            'link_name'       => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-life-preserver" viewBox="0 0 16 16">
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm6.43-5.228a7.025 7.025 0 0 1-3.658 3.658l-1.115-2.788a4.015 4.015 0 0 0 1.985-1.985l2.788 1.115zM5.228 14.43a7.025 7.025 0 0 1-3.658-3.658l2.788-1.115a4.015 4.015 0 0 0 1.985 1.985L5.228 14.43zm9.202-9.202-2.788 1.115a4.015 4.015 0 0 0-1.985-1.985l1.115-2.788a7.025 7.025 0 0 1 3.658 3.658zm-8.087-.87a4.015 4.015 0 0 0-1.985 1.985L1.57 5.228A7.025 7.025 0 0 1 5.228 1.57l1.115 2.788zM8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg></span>Support',
+            'link_url'        => BASEDIR . 'contact.php',
+        ],
+        'n5' => [
+            'link_id'   => 'n5',
+            'link_name' => '---'
+        ],
+        'n6' => [
+            'link_id'         => 'n6',
+            'link_item_class' => 'px-3',
+            'link_name'       => '<span class="me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+                      <path d="M7.5 1v7h1V1h-1z"/>
+                      <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+                    </svg></span>Sign Out',
+            'link_url'        => clean_request( 'logout=yes', [], TRUE ),
+        ],
+        'n7' => [
+            'link_id'   => 'n7',
+            'link_name' => '---',
+        ],
+        'n8' => [
+            'link_id'         => 'n8',
+            'link_content'    => '<div class="theme-options">
+								<span>Mode:</span>
+								<button type="button" class="btn btn-theme-options nav-link text-primary-hover mb-0 active" data-bs-theme-value="light" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Light">
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sun fa-fw mode-switch" viewBox="0 0 16 16">
 										<path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
 										<use href="#"></use>
@@ -196,14 +271,7 @@ function uip_menu() {
 										<use href="#"></use>
 									</svg>
 								</button>
-								<button type="button" class="btn btn-theme-options nav-link text-primary-hover mb-0" data-bs-theme-value="auto" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Auto">
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half fa-fw mode-switch" viewBox="0 0 16 16">
-										<path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
-										<use href="#"></use>
-									</svg>
-								</button>
-							</div>',
-        ],
+							</div>'
+        ]
     ];
-
-}
+ */

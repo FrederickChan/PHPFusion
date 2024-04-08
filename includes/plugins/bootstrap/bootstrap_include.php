@@ -48,8 +48,9 @@ function get_bootstrap( $part, $version = '3', $php = FALSE ) {
             'collapse'     => ['dir' => $_dir, 'file' => 'collapse.php']
         ];
 
+        // Template paths
         $framework_paths['twig'] = [
-            'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'navbar.twig'],
+            'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
             'form_inputs'  => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig']
         ];
 
@@ -91,7 +92,7 @@ if ( defined( 'BOOTSTRAP' ) ) {
 
         if ( $path = get_bootstrap( $component ) ) {
 
-            return fusion_render( $path['dir'], $path['file'], $info, defined( 'FUSION_TPL_DEBUG') );
+            return fusion_render( $path['dir'], $path['file'], $info, defined( 'FUSION_DEVELOPMENT') );
 
         } else if ( $path = get_bootstrap( $component, 'auto', TRUE ) ) {
 

@@ -10,18 +10,6 @@ require_once FUSION_HEADER;
 
 $notice_class = Notifications::getInstance();
 
-//fusion_update_table(DB_USER_NOTIFICATIONS);
-//send_notice(1, 'Download Available', 'A new download updates are available now, you can participate in the M-Day free airdrop event. The event will end at 2024-04-06 14:00:00(UTC+08:00). Come and register to join!',
-//    'DL', 'EVENTS');
-
-/**
- * Development issues:
- * Add a db - have a tag
- * Registers a prefix with an infusion, have a category
- * for items, each infusion have a item that is undeletable. this way everyone can share and read? no.
- * message everyone with that entry
- */
-// Development issues
 $title = 'All Notifications';
 
 if ($c_arr['notification_types'] = $notice_class->getTypes()) {
@@ -31,18 +19,22 @@ if ($c_arr['notification_types'] = $notice_class->getTypes()) {
 
 
     $output = fusion_get_function('openside', 'Notifications');
-    $output .= '<a href="' . BASEDIR . 'notifications.php"><span class="me-2">' . get_image('notification', '') . '</span>All Notifications</a>';
-    $output .= '<hr>';
+    $output .= '<ul class="nav flex-column fw-bold gap-2 border-0" role="tablist">';
+    $output .= ' <li class="nav-item" role="presentation">
+                <a class="nav-link d-flex mb-0 active" href="' . BASEDIR . 'notifications.php" aria-selected="false" role="tab">
+                <span class="me-2">' . get_image('notification', '') . '</span>All Notifications</a></li>';
     foreach ($c_arr['notification_types'] as $key => $val) {
         $count = dbcount("('notify_id')", DB_USER_NOTIFICATIONS, '');
-        $output .= '<a href="' . BASEDIR . 'notifications.php?type=' . $key . '"><span class="me-2">' . ($notice_class->selectIcons($key) ?? get_image('notification', '')) . '</span>' . $val. '</a>';
-        $output .= '<hr>';
+        $output .= '<li class="nav-item" role="presentation">
+        <a class="nav-link d-flex mb-0'.(get('type') == $key ? ' active' : '').'" href="' . BASEDIR . 'notifications.php?type=' . $key . '" aria-selected="false" role="tab">
+        <span class="me-2">' . ($notice_class->selectIcons($key) ?? get_image('notification', '')) . '</span>' . $val. '</a></li>';
 
         if (get('type') == $key) {
             $title = $val;
         }
-
     }
+
+    $output .= '</ul>';
     $output .= $table_close;
 
     $content = $output;
@@ -86,17 +78,15 @@ if (dbrows($res)) {
     while ($rows = dbarray($res)) {
         $c_arr['items'][] = '<div class="item">
             <div class="d-flex">
-                <div>
-                    <h5>
-                    <a data-id="' . $rows['notify_id'] . '" data-bs-toggle="offcanvas" href="#offCanvas" class="notify-title text-dark">
+                <div class="mb-2">              
+                    <a data-id="' . $rows['notify_id'] . '" data-bs-toggle="offcanvas" href="#offCanvas" class="h5 card-title notify-title">
                     <span class="me-2 icon-n">' . get_image($rows['notify_read'] == 0 ? 'mail-unread' : 'mail-read') . '</span>
-                    ' . $rows['notify_subject'] . '
+                    <strong>' . $rows['notify_subject'] . '</strong>
                     </a>
-                    </h5>
                 </div>
                 <span class="ms-auto fs-6">' . showdate('shortdate', $rows['notify_datestamp']) . '</span>
             </div>
-            <div><span class="badge bg-primary-soft">' . $notice_class->selectTypes($rows['notify_type']) . '</span></div>
+            <div class="mb-2"><span class="badge bg-primary-soft">' . $notice_class->selectTypes($rows['notify_type']) . '</span></div>
             <p class="text-smaller">' . fusion_first_words($rows['notify_message'], '30') . '</p>
             <span class="d-none" style="display:none;">' . $rows['notify_message'] . '<div class="mt-2 small text-lighter">' . showdate('forumdate', $rows['notify_datestamp']) . '</div></span>
         </div>

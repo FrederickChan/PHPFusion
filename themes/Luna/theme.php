@@ -38,6 +38,9 @@ add_to_head('<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 ');
 
+fusion_load_script(THEME . 'styles.js');
+add_to_jquery(" $('html').colorSchemeManager();");
+
 /**
  * Theme
  */
@@ -47,8 +50,8 @@ function render_page() {
     $userdata = fusion_get_userdata();
 
     add_to_head('<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     ');
 
@@ -75,7 +78,7 @@ function render_page() {
     echo '<header>';
 
     $notifications_badge = '';
-    if (dbcount("(notify_id)", DB_USER_NOTIFICATIONS, "notify_user=:uid AND notify_read=0", [':uid'=>$userdata['user_id']])) {
+    if (dbcount("(notify_id)", DB_USER_NOTIFICATIONS, "notify_user=:uid AND notify_read=0", [':uid' => $userdata['user_id']])) {
         $notifications_badge = '<span class="position-absolute top-10 ms-4 translate-middle p-1 bg-danger border border-light rounded-circle">
         <span class="visually-hidden">New alerts</span>
         </span>
@@ -114,7 +117,7 @@ function render_page() {
                 'notifications' => [
                     'link_id' => 'notifications',
                     'link_name' => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/></svg>
-'.$notifications_badge.'
+' . $notifications_badge . '
 ',
                     'link_class' => 'btn btn-light',
                     'link_item_class' => 'ms-2',
@@ -153,7 +156,7 @@ function render_page() {
             ]),
     ]);
 
-    $side_unit = 4;
+    $side_unit = 3;
     $left = defined('LEFT') && LEFT;
     $right = defined('RIGHT') && RIGHT;
     $lg_span = 12 - (($left + $right) * $side_unit);
@@ -188,8 +191,6 @@ function render_page() {
 }
 
 // show the error logs
-
-
 function showpolicies() {
 
     fusion_get_locale('', LOCALE . LOCALESET . 'policies.php');
@@ -211,42 +212,5 @@ function showpolicies() {
     return $html;
 }
 
-
-function opentable($title = '', $class = '') {
-    echo '<div class="card mb-4' . whitespace($class ?? '') . '">';
-
-    if ($title) {
-        echo '<div class="card-header">';
-        echo '<h4 class="card-title mb-0">' . $title . '</h4>';
-        echo '</div>';
-    }
-
-    echo '<div class="card-body">';
-}
-
-function tablebreak() {
-    echo '</div><div class="card-body">';
-}
-
-function closetable() {
-    echo '</div></div>';
-}
-
-function openside($title = '', $class = '') {
-    echo '<div class="card mb-4' . whitespace($class ?? '') . '">';
-
-    if ($title) {
-        echo '<div class="card-header pb-0 border-0">';
-        echo '<h5 class="card-title mb-0">' . $title . '</h5>';
-        echo '</div>';
-    }
-
-    echo '<div class="card-body">';
-}
-
-function closeside() {
-    echo '</div></div>';
-}
-
-
+require_once __DIR__ . '/functions_include.php';
 require_once __DIR__ . '/notifications_include.php';

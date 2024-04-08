@@ -69,7 +69,7 @@ function display_up_privacy( array $info ) {
         <div class="list-group spacer-md">
 
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Use two-factor authentication</h6>
+                <div class="pe-3"><h6 class="mb-0 strong">Use two-factor authentication</h6>
                     <p class="small mb-0">
                         Add an extra layer of protection to your account by requiring password and a verification code sent to your smartphone device.
                     </p>
@@ -79,7 +79,7 @@ function display_up_privacy( array $info ) {
                 </div>
             </div>
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Manage your privacy settings</h6>
+                <div class="pe-3"><h6 class="mb-0 strong">Manage your privacy settings</h6>
                     <p class="small mb-0">
                         Control how much personal information you share with others.
                     </p>
@@ -89,7 +89,7 @@ function display_up_privacy( array $info ) {
                 </div>
             </div>
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Private messaging options</h6>
+                <div class="pe-3"><h6 class="mb-0 strong">Private messaging options</h6>
                     <p class="small mb-0">
                         Manage your private messages configurations
                     </p>
@@ -99,7 +99,7 @@ function display_up_privacy( array $info ) {
                 </div>
             </div>
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Login activity</h6>
+                <div class="pe-3"><h6 class="mb-0 strong">Login activity</h6>
                     <p class="small mb-0">
                         Manage your login activity across all devices
                     </p>
@@ -109,7 +109,7 @@ function display_up_privacy( array $info ) {
                 </div>
             </div>
             <div class="list-group-item d-flex align-items-center">
-                <div class="pe-3"><h6 class="mb-0">Blacklist</h6>
+                <div class="pe-3"><h6 class="mb-0 strong">Blacklist</h6>
                     <p class="small mb-0">
                         Manage and block users from further interaction with your account
                     </p>

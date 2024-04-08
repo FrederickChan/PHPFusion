@@ -183,6 +183,7 @@ class ImageRepo {
             'add' => IMAGES . 'icons/add.svg',
             "app_store" => IMAGES . "icons/apple.svg",
             'archive' => IMAGES . 'icons/archive.svg',
+            'auto_mode' => IMAGES.'icons/auto_mode.svg',
             //B
             'birthdays' => IMAGES . 'icons/birthdays.svg',
             'bbcode_bold' => INCLUDES . 'bbcodes/images/b.svg',
@@ -212,6 +213,8 @@ class ImageRepo {
             "down" => IMAGES . "icons/down.svg",
             'delete' => IMAGES . 'icons/delete.svg',
             'download' => IMAGES . 'icons/download.svg',
+            'dark_mode' => IMAGES.'icons/dark_mode.svg',
+
             //E
             'events' => IMAGES . 'icons/events.svg',
             'email' => IMAGES . 'icons/email.svg',
@@ -230,6 +233,8 @@ class ImageRepo {
             //L
             "left" => IMAGES . "icons/left.svg",
             "logo" => $settings['sitebanner'],
+            'light_mode' => IMAGES.'icons/light_mode.svg',
+
             //M
             'mentions' => IMAGES . 'icons/mentions.svg',
             'messages_unread' => IMAGES . 'icons/unread.svg',

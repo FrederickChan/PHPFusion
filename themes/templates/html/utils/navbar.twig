@@ -3,7 +3,7 @@
     {% if data[link_id]|length >0 %}
         {% for rows in data[link_id] %}
             {% if rows.seperator == true %}
-                <li class='divider' role='separator'></li>
+                <li class='dropdown-divider' role='separator'></li>
             {% else %}
                 <li{{ whitespace(rows.li_class ? 'class="'~rows.li_class~'"')|raw }} role="presentation">{{ rows.li_separator|raw }}
                     {% if rows.link_url %}
