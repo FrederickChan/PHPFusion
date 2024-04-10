@@ -208,6 +208,7 @@ class ImageRepo {
             'cross' => IMAGES . 'icons/cross.svg',
             'comments' => IMAGES . 'icons/comments.svg',
             'celebrations' => IMAGES . 'icons/celebrations.svg',
+            'copy' => IMAGES . 'icons/copy.svg',
 
             //D
             "down" => IMAGES . "icons/down.svg",
@@ -281,9 +282,9 @@ class ImageRepo {
             'user_deactivate' => IMAGES . 'icons/deactivate.svg',
             'user_ban' => IMAGES . 'icons/ban_user.svg',
             //V
-            'visible' => IMAGES.'icons/visible.svg',
-            'non_visible' => IMAGES.'icons/non_visible.svg',
-            'lock_visible' => IMAGES.'icons/visibility_lock.svg',
+            'visible' => IMAGES . 'icons/visible.svg',
+            'non_visible' => IMAGES . 'icons/non_visible.svg',
+            'lock_visible' => IMAGES . 'icons/visibility_lock.svg',
 
             //W
             'warning' => IMAGES . 'icons/warning.svg',

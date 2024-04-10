@@ -200,16 +200,14 @@ class Errors {
         $error_message = strtr(stripslashes($data['error_message']), ['#' => '<br>#', '&#039;' => '`']);
         $data['error_message'] = str_replace('&#039;', "'", $data['error_message']);
 
-
         return "<tr id='eid-" . $data['error_id'] . "'>
         <td class='word-break'>" . $data['error_id'] . "</td>
-        <td class='col-4'><a data-trigger='showerror' id='Error_" . $data['error_id'] . "' href='#'>" . $link_title . "</a></td>
-        <td class='col-4 error-page'>" . $data['error_page'] . "</td>
+        <td><a data-trigger='showerror' id='Error_" . $data['error_id'] . "' href='#'>" . $link_title . "</a></td>
+        <td class='error-page'>" . $data['error_page'] . "</td>
         <td class='error-status'>" . $this->getErrorStatus($data['error_status']) . "</td>
         <td class='error-time'>" . timer($data['error_timestamp']) . "</td>
         <td>
-     <a href='#' class='btn btn-outline-secondary' " . tooltip('Delete') . ">" . get_image('delete') . "</a>
-
+        <a href='#' class='btn btn-outline-secondary' " . tooltip('Delete') . ">" . get_image('delete') . "</a>
         <div style='display:none;'>
                 <div class='error-id'>" . $data['error_id'] . "</div>
                 <div class='error-message'>$error_message</div>
@@ -217,9 +215,8 @@ class Errors {
                 <div class='error-line'>" . $data['error_line'] . "</div>
                 <div class='error-page'>" . $data['error_page'] . "</div>
                 <div class='error-level'>" . $this->getErrorTypes($data['error_level']) . "</div>
-        </div>
-         </td>
-        </tr>";
+         </div>
+         </td></tr>";
 
 
         //        $html .= "<td class='word-break' style='text-align:left;'>";
@@ -404,15 +401,30 @@ class Errors {
     private function getErrorLogs() {
 
         $locale = self::$locale;
-
-        fusion_load_script(INCLUDES . "jscripts/clipboard.js");
         fusion_load_script(INCLUDES . 'jscripts/he.js');
-
-        add_to_jquery('new ClipboardJS(".copy-error");');
-
         add_to_jquery("        
+        function copyToClipboard(element) {
+            const temp = $('<input>');
+            $(element).append(temp);
+            temp.val($(element).text()).select();
+            document.execCommand('copy');
+            temp.remove();    
+        }
+        
+        $('.copy').on('click', function(e) {
+            copyToClipboard($(this).data('copy'));
+            $(this).find('span').text('Copied');
+        });
+        ");
+
+        add_to_jquery("
+        $('.closeError').on('click', function(e) {
+               $('#ErrorLogDtl').slideUp(300);
+               e.preventDefault();
+        });
+        
         $('[data-trigger=\"showerror\"]').on('click', function(e) {
-            e.preventDefault();   
+            e.preventDefault();
             // Require the 'he' library
             let eCol1 = $('#errorPage'),
                 eCol2 = $('#errorFile'),
@@ -422,7 +434,7 @@ class Errors {
                 eCol6 = $('#errorTime'),
                 eCol7 = $('#errorStatus'),
                 eCol8 = $('#errorMessage');
-                
+
                 eCol1.html('');
                 eCol2.html('');
                 eCol3.html('');
@@ -431,11 +443,11 @@ class Errors {
                 eCol6.html('');
                 eCol7.html('');
                 eCol8.html(''),
-                
-                error_messages = $(this).closest('tr').find('.error-message').html();       
+
+                error_messages = $(this).closest('tr').find('.error-message').html();
                 error_messages = he.decode(error_messages);
-                
- 
+
+
             eCol1.html(  $(this).closest('tr').find('.error-page').text() );
             eCol2.html(  $(this).closest('tr').find('.error-file').text() );
             eCol3.html(  $(this).closest('tr').find('.error-id').text() );
@@ -445,7 +457,7 @@ class Errors {
             eCol7.html(  $(this).closest('tr').find('.error-status').text() );
             eCol8.html(  error_messages );
 
-
+            $('.copy span').text('Copy');
             $('#ErrorLogDtl').slideDown(300);
         });
         ");
@@ -460,7 +472,7 @@ class Errors {
 
             $html = '<div id="ErrorLogDtl" class="card mb-3" style="display:none;"><div class="card-body">
         <div class="d-flex align-items-center">
-        <h6><strong>Error Details</strong></h6>          
+        <h6><strong>Error Details</strong></h6>
         <div class="ms-auto mb-2">
         <a href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(1)) . '>' . get_image('visible') . '</a>
         <a href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(2)) . '>' . get_image('non_visible') . '</a>
@@ -468,7 +480,6 @@ class Errors {
         <a href="#" class="btn btn-outline-secondary" ' . tooltip('Delete') . '>' . get_image('delete') . '</a>
         </div>
         </div>
-             
         <table class="table error-details">
              <tbody>
                  <tr>
@@ -500,22 +511,30 @@ class Errors {
                     <td id="errorStatus"></td>
                 </tr>
                 </tbody></table>
+                
+                <div class="d-flex align-items-center mb-2">
                 <h6><strong>Description</strong></h6>
+                <a href="#" data-copy="#errorMessage" class="copy btn btn-outline-secondary ms-auto">'.get_image('copy').' <span class="small">Copy</span></a>                
+                </div>
+                
                 <pre id="errorMessage"></pre>
+                
+              <a href="#" class="btn btn-outline-secondary me-2 closeError" '. tooltip('Close') . '>'.get_image('cross').' Close</a>      
                 </div></div>';
 
             $html .= "<div class='table-responsive'><table id='$log_table' class='table w-100'>";
             $html .= "<thead><tr>";
             $html .= "<th>ID</th>";
-            $html .= "<th>" . $locale['ERROR_410'] . "</th>";
-            $html .= "<th>Page</th>";
-            $html .= "<th class='col-xs-4'>" . $locale['ERROR_414'] . "</th>";
-            $html .= "<th>Created</th><th></th>";
+            $html .= "<th class='col-3'>" . $locale['ERROR_410'] . "</th>";
+            $html .= "<th class='col-3'>Page</th>";
+            $html .= "<th>" . $locale['ERROR_414'] . "</th>";
+            $html .= "<th>Created</th>";
+            $html .= "<th></th>";
             $html .= "</tr></thead><tbody>";
 
             if (!empty($this->new_errors)) {
                 foreach ($this->new_errors as $data) {
-                    $html .= $this->showErrorRows($data);
+//                    $html .= $this->showErrorRows($data);
                 }
             }
 
@@ -527,11 +546,11 @@ class Errors {
 
             $html .= "</tbody></table></div>";
 
-            if ($this->rows > 20) {
+//            if ($this->rows > 20) {
 //                $html .= "<div class='m-t-10 text-center'>\n";
 //                $html .= makepagenav($this->rowstart, 20, $this->rows, 3, ADMIN . "errors.php" . $aidlink . "&");
 //                $html .= "</div>\n";
-            }
+//            }
         } else {
             $html .= "<div class='text-center'>" . $locale['ERROR_418'] . "</div>\n";
         }
@@ -635,7 +654,7 @@ class Errors {
                     type: 'json',
                     data: sendData,
                     success: function(e) {
-             
+
                         if (e.status == 'OK') {
                             var target_group_add  = $('tr#rmd-'+e.fusion_error_id+' > td > a.e_status_'+ e.to);
                             var target_group_remove = $('tr#rmd-'+e.fusion_error_id+' > td > a.e_status_'+ e.from)
