@@ -975,12 +975,13 @@ a {
   }
 
   &.btn-outline-secondary {
-    border: 1px solid transparent;
+    border: 1px solid var(--bs-gray-200);
     background: transparent;
 
     &:hover {
       color: var(--header-color);
-      background: rgba(0, 0, 0, .1);
+      background: var(--bs-gray-200);
+
       //background: var(--bs-btn-hover-color);
     }
   }
@@ -1290,6 +1291,33 @@ svg {
   }
 }
 
+.modal-body {
+  .btn {
+    padding: .3rem;
+  }
+
+  svg {
+    width: 20px;
+    height: 16px;
+  }
+}
+
+table.error-details {
+  font-size: .875rem;
+  border: 1px solid var(--bs-gray-100);
+
+  td {
+    border: 0;
+    background: transparent;
+  }
+
+  th.text-body {
+    background: rgb(36, 37, 51);
+    border: 0;
+    text-align: right;
+  }
+
+}
 
 // Tabs
 .nav-tabs {
@@ -1547,7 +1575,7 @@ svg {
   text-align: center;
   margin-top: auto;
   margin-bottom: 20px;
-  font-size: .8rem;
+  font-size: .875rem;
 
   a {
     font-weight: 600;

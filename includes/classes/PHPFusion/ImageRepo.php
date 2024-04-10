@@ -183,7 +183,7 @@ class ImageRepo {
             'add' => IMAGES . 'icons/add.svg',
             "app_store" => IMAGES . "icons/apple.svg",
             'archive' => IMAGES . 'icons/archive.svg',
-            'auto_mode' => IMAGES.'icons/auto_mode.svg',
+            'auto_mode' => IMAGES . 'icons/auto_mode.svg',
             //B
             'birthdays' => IMAGES . 'icons/birthdays.svg',
             'bbcode_bold' => INCLUDES . 'bbcodes/images/b.svg',
@@ -213,7 +213,7 @@ class ImageRepo {
             "down" => IMAGES . "icons/down.svg",
             'delete' => IMAGES . 'icons/delete.svg',
             'download' => IMAGES . 'icons/download.svg',
-            'dark_mode' => IMAGES.'icons/dark_mode.svg',
+            'dark_mode' => IMAGES . 'icons/dark_mode.svg',
 
             //E
             'events' => IMAGES . 'icons/events.svg',
@@ -233,7 +233,7 @@ class ImageRepo {
             //L
             "left" => IMAGES . "icons/left.svg",
             "logo" => $settings['sitebanner'],
-            'light_mode' => IMAGES.'icons/light_mode.svg',
+            'light_mode' => IMAGES . 'icons/light_mode.svg',
 
             //M
             'mentions' => IMAGES . 'icons/mentions.svg',
@@ -281,6 +281,10 @@ class ImageRepo {
             'user_deactivate' => IMAGES . 'icons/deactivate.svg',
             'user_ban' => IMAGES . 'icons/ban_user.svg',
             //V
+            'visible' => IMAGES.'icons/visible.svg',
+            'non_visible' => IMAGES.'icons/non_visible.svg',
+            'lock_visible' => IMAGES.'icons/visibility_lock.svg',
+
             //W
             'warning' => IMAGES . 'icons/warning.svg',
             //X

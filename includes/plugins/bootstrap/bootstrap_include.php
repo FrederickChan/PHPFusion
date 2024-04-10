@@ -24,15 +24,15 @@
  *
  * @return string
  */
-function get_bootstrap( $part, $version = '3', $php = FALSE ) {
+function get_bootstrap($part, $version = '3', $php = FALSE) {
 
     static $framework_paths = [];
 
-    if ( empty( $framework_paths ) ) {
+    if (empty($framework_paths)) {
 
-        if ( $version < 3 ) {
+        if ($version < 3) {
             $version = 3;
-        } else if ( $version > 5 ) {
+        } else if ($version > 5) {
             $version = 5;
         }
         $version = 'v' . $version;
@@ -44,14 +44,15 @@ function get_bootstrap( $part, $version = '3', $php = FALSE ) {
 
         $framework_paths['php'] = [
             'showsublinks' => ['dir' => $_dir, 'file' => 'navbar.php'],
-            'form_inputs'  => ['dir' => $_dir, 'file' => 'dynamics.php'],
-            'collapse'     => ['dir' => $_dir, 'file' => 'collapse.php']
+            'form_inputs' => ['dir' => $_dir, 'file' => 'dynamics.php'],
+            'collapse' => ['dir' => $_dir, 'file' => 'collapse.php'],
         ];
 
         // Template paths
         $framework_paths['twig'] = [
             'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
-            'form_inputs'  => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig']
+            'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
+            'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
         ];
 
     }
@@ -61,23 +62,23 @@ function get_bootstrap( $part, $version = '3', $php = FALSE ) {
     return $framework_paths[$_type][$part] ?? '';
 }
 
-if ( defined( 'BOOTSTRAP' ) ) {
+if (defined('BOOTSTRAP')) {
 
     /**
      * Load bootstrap
      * BOOTSTRAP - version number
      */
-    get_bootstrap( 'load', BOOTSTRAP );
+    get_bootstrap('load', BOOTSTRAP);
 
     /**
      * @uses bootstrap_header()
      */
-    fusion_add_hook( 'fusion_header_include', 'bootstrap_header' );
+    fusion_add_hook('fusion_header_include', 'bootstrap_header');
 
     /**
      * @uses bootstrap_footer()
      */
-    fusion_add_hook( 'fusion_footer_include', 'bootstrap_footer' );
+    fusion_add_hook('fusion_footer_include', 'bootstrap_footer');
 
 
     /**
@@ -88,17 +89,17 @@ if ( defined( 'BOOTSTRAP' ) ) {
      *
      * @return string
      */
-    function fusion_get_template( $component, $info ) {
+    function fusion_get_template($component, $info) {
 
-        if ( $path = get_bootstrap( $component ) ) {
+        if ($path = get_bootstrap($component)) {
 
-            return fusion_render( $path['dir'], $path['file'], $info, defined( 'FUSION_DEVELOPMENT') );
+            return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
 
-        } else if ( $path = get_bootstrap( $component, 'auto', TRUE ) ) {
+        } else if ($path = get_bootstrap($component, 'auto', TRUE)) {
 
             require_once $path['dir'] . $path['file'];
 
-            if ( $callback = call_user_func( $component, $info ) ) {
+            if ($callback = call_user_func($component, $info)) {
                 return $callback;
             }
         }

@@ -1011,7 +1011,7 @@ function fusion_get_contents($url) {
  *
  * @return string|null
  */
-function fusion_load_script($file_path, $file_type = "script", $html = FALSE) {
+function fusion_load_script($file_path, $file_type = 'script', $html = FALSE) {
     static $paths = [];
 
     if ($file_path && empty($paths[$file_path])) {

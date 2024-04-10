@@ -577,12 +577,6 @@ if (!function_exists('download_file')) {
  * $options['remote_file'] must be on string file path
  *
  * editor is - 'editor'
- *
- * @todo-meangczac https://www.mobilespoon.net/2019/11/design-ui-tables-20-rules-guide.html
- *                          Column Sort ON  - done
- *                          Column Resize ON    -done
- *                          Column Reorder ON   - done
- *
  * @return string
  */
 function fusion_table($table_id, array $options = []) {
@@ -621,9 +615,9 @@ function fusion_table($table_id, array $options = []) {
         'row_reorder_url' => '',
         'row_reorder_success' => '',
         'row_reorder_failed' => '',
-        'col_resize' => TRUE,
-        'col_reorder' => TRUE,
-        'fixed_header' => TRUE,
+        'col_resize' => FALSE,
+        'col_reorder' => FALSE,
+        'fixed_header' => FALSE,
         // custom jsscript append
         'js_script' => '',
     ];
@@ -665,13 +659,21 @@ function fusion_table($table_id, array $options = []) {
     }
 
     // Build configurations
-    $config = "";
+    $config = '';
     if (!empty($options["order"])) {
         $config .= "'order' : [ " . json_encode($options["order"]) . " ],";
     }
 
     if ($options['hide_search_input'] === TRUE) {
         $config .= "'dom': '<\"top\">rt<\"bottom\"><\"clear\">',";
+    }
+
+    if (!empty($options['disable_column_ordering'])) {
+        if (isset($options['disable_column_ordering'])) {
+            $config .= "'columnDefs': [
+                {'orderable': false, 'targets': ".json_encode($options['disable_column_ordering'])." } // Disable sorting for columns 0, 1, and 2
+            ],";
+        }
     }
 
     if ($options['row_reorder'] === TRUE) {
@@ -857,6 +859,9 @@ function fusion_table($table_id, array $options = []) {
         $js_config_script = str_replace("<data_filters>", $js_filter_function, $js_config_script);
     }
 
+
+
+
     // Enable column resizing
     if ($options['col_resize']) {
         $_plugin_folder = INCLUDES . 'jquery/datatables/extensions/ColResize/';
@@ -950,7 +955,6 @@ function fusion_table($table_id, array $options = []) {
     }
 
     // Load file into cache and auto include them
-
     if ($template = fusion_theme_framework()) {
 
         if (isset($plugin_registers[$template])) {
@@ -960,12 +964,19 @@ function fusion_table($table_id, array $options = []) {
                 }
             }
             if (isset($plugin_registers[$template]['js'])) {
-
                 foreach ($plugin_registers[$template]['js'] as $js_file) {
                     fusion_load_script($js_file);
                 }
             }
+        } else {
+            foreach ($plugin_registers['default']['css'] as $css_file) {
+                fusion_load_script($css_file, 'css');
+            }
+            foreach ($plugin_registers['default']['js'] as $js_file) {
+                fusion_load_script($js_file);
+            }
         }
+
         if (isset($plugin_registers['all'])) {
             if (isset($plugin_registers['all']['css'])) {
                 foreach ($plugin_registers['all']['css'] as $css_file) {
@@ -985,6 +996,7 @@ function fusion_table($table_id, array $options = []) {
     if ($options['debug']) {
         print_p($javascript);
     }
+
     add_to_jquery($javascript);
 
     return $table_id;
