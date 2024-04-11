@@ -15,8 +15,11 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
+use PHPFusion\Errors;
+
 require_once __DIR__.'/../maincore.php';
 require_once THEMES.'templates/admin_header.php';
 pageaccess('ERRO');
-\PHPFusion\Errors::getInstance()->displayAdministration();
+Errors::getInstance()->displayAdministration();
 require_once THEMES.'templates/footer.php';

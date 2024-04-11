@@ -628,7 +628,7 @@
  * Fusion notification
  * @param title
  * @param text
- * @param cssClass
+ * @param cssClass - base,success, info, warn,error
  * @param options
  */
 let addNotice = function (title, text = '', cssClass = 'base', options) {

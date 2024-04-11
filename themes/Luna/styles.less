@@ -979,10 +979,26 @@ a {
     background: transparent;
 
     &:hover {
-      color: var(--header-color);
+      color: var(--bs-gray-500);
       background: var(--bs-gray-200);
-
       //background: var(--bs-btn-hover-color);
+    }
+
+    &.active {
+      background-color: rgba(var(--bs-secondary-rgb), .3);
+      color: var(--bs-gray-600);
+    }
+  }
+
+  &.btn-outline-danger {
+    border: 1px solid var(--bs-danger);
+    color: var(--bs-danger);
+    background-color: rgba(214, 41, 62, 0.1);
+
+    &:hover, &:focus {
+      color: #fff !important;
+      background-color: #d6293e !important;
+      border-color: #d6293e !important;
     }
   }
 
@@ -1302,6 +1318,7 @@ svg {
   }
 }
 
+// Error logs table
 table.error-details {
   font-size: .875rem;
   border: 1px solid var(--bs-gray-100);

@@ -178,14 +178,16 @@ class Errors {
      * @param $value
      * @return mixed|string
      */
-    private function getErrorStatus($value) {
+    public function getErrorStatus($value) {
         switch ($value) {
             case 1:
                 return self::$locale['ERROR_451'];
             case 2:
                 return self::$locale['ERROR_452'];
+            case 0:
+                return self::$locale['ERROR_450'];
         }
-        return self::$locale['ERROR_450'];
+        return '';
     }
 
     /**
@@ -401,8 +403,10 @@ class Errors {
     private function getErrorLogs() {
 
         $locale = self::$locale;
-        fusion_load_script(INCLUDES . 'jscripts/he.js');
-        add_to_jquery("        
+        $form_id = random_string();
+        $form_token = fusion_get_token($form_id);
+
+        add_to_jquery("
         function copyToClipboard(element) {
             const temp = $('<input>');
             $(element).append(temp);
@@ -414,10 +418,13 @@ class Errors {
         $('.copy').on('click', function(e) {
             copyToClipboard($(this).data('copy'));
             $(this).find('span').text('Copied');
+            $(this).removeClass('btn-outline-secondary').addClass('btn-success');   
+            setTimeout(function() {
+                  $('.copy span').text('Copy');
+                  $('.copy').removeClass('btn-success').addClass('btn-outline-secondary');
+            }, 3000);                        
         });
-        ");
-
-        add_to_jquery("
+       
         $('.closeError').on('click', function(e) {
                $('#ErrorLogDtl').slideUp(300);
                e.preventDefault();
@@ -435,18 +442,15 @@ class Errors {
                 eCol7 = $('#errorStatus'),
                 eCol8 = $('#errorMessage');
 
-                eCol1.html('');
-                eCol2.html('');
-                eCol3.html('');
-                eCol4.html('');
-                eCol5.html('');
-                eCol6.html('');
-                eCol7.html('');
-                eCol8.html(''),
-
-                error_messages = $(this).closest('tr').find('.error-message').html();
-                error_messages = he.decode(error_messages);
-
+            eCol1.html('');
+            eCol2.html('');
+            eCol3.html('');
+            eCol4.html('');
+            eCol5.html('');
+            eCol6.html('');
+            eCol7.html('');
+            eCol8.html(''),
+            error_messages = $(this).closest('tr').find('.error-message').html();
 
             eCol1.html(  $(this).closest('tr').find('.error-page').text() );
             eCol2.html(  $(this).closest('tr').find('.error-file').text() );
@@ -457,9 +461,29 @@ class Errors {
             eCol7.html(  $(this).closest('tr').find('.error-status').text() );
             eCol8.html(  error_messages );
 
-            $('.copy span').text('Copy');
             $('#ErrorLogDtl').slideDown(300);
         });
+        
+        // button actions
+        $('a[data-trigger=\"errorAction\"]').on('click', function(e) {
+            var actionVal= $(this).data('action');
+            var errorId = $('#errorId').text();
+            $('a[data-trigger=\"errorAction\"]').removeClass('active');
+            var current = $(this);
+            $.post('" . INCLUDES . "api/?api=error-update', {'form_id': '" . $form_id . "', fusion_token: '" . $form_token . "', action: actionVal, id: errorId }, function(e) {              
+                if (e['error_id']) {
+                    if (e['status'] === 200) {
+                        if (e['to'].length) {
+                            $('#errorStatus').text( e['to'] );
+                            current.addClass('active');
+                       }
+                    } else if (e['status'] === 999) {
+                           $('#ErrorLogDtl').slideUp(300);
+                           $('#eid-'+e['error_id']).remove();
+                    }                  
+                }              
+            }); 
+        });        
         ");
 
         $html = '';
@@ -473,11 +497,11 @@ class Errors {
             $html = '<div id="ErrorLogDtl" class="card mb-3" style="display:none;"><div class="card-body">
         <div class="d-flex align-items-center">
         <h6><strong>Error Details</strong></h6>
-        <div class="ms-auto mb-2">
-        <a href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(1)) . '>' . get_image('visible') . '</a>
-        <a href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(2)) . '>' . get_image('non_visible') . '</a>
-        <a href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(3)) . '>' . get_image('lock_visible') . '</a>
-        <a href="#" class="btn btn-outline-secondary" ' . tooltip('Delete') . '>' . get_image('delete') . '</a>
+        <div class="action-btn ms-auto mb-2">
+        <a data-trigger="errorAction" data-action="0" href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(0)) . '>' . get_image('visible') . '</a>
+        <a data-trigger="errorAction" data-action="1" href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(1)) . '>' . get_image('lock_visible') . '</a>
+        <a data-trigger="errorAction" data-action="2" href="#" class="btn btn-outline-secondary" ' . tooltip($this->getErrorStatus(2)) . '>' . get_image('non_visible') . '</a>
+        <a data-trigger="errorAction" data-action="4" href="#" class="btn btn-outline-danger" ' . tooltip('Delete') . '>' . get_image('delete') . '</a>
         </div>
         </div>
         <table class="table error-details">
@@ -514,12 +538,12 @@ class Errors {
                 
                 <div class="d-flex align-items-center mb-2">
                 <h6><strong>Description</strong></h6>
-                <a href="#" data-copy="#errorMessage" class="copy btn btn-outline-secondary ms-auto">'.get_image('copy').' <span class="small">Copy</span></a>                
+                <a href="#" data-copy="#errorMessage" class="copy btn btn-outline-secondary ms-auto">' . get_image('copy') . ' <span class="small">Copy</span></a>                
                 </div>
                 
                 <pre id="errorMessage"></pre>
                 
-              <a href="#" class="btn btn-outline-secondary me-2 closeError" '. tooltip('Close') . '>'.get_image('cross').' Close</a>      
+                <a href="#" class="btn btn-outline-secondary me-2 closeError" ' . tooltip('Close') . '>' . get_image('cross') . ' Close</a>      
                 </div></div>';
 
             $html .= "<div class='table-responsive'><table id='$log_table' class='table w-100'>";
@@ -534,7 +558,7 @@ class Errors {
 
             if (!empty($this->new_errors)) {
                 foreach ($this->new_errors as $data) {
-//                    $html .= $this->showErrorRows($data);
+                    $html .= $this->showErrorRows($data);
                 }
             }
 
@@ -546,11 +570,6 @@ class Errors {
 
             $html .= "</tbody></table></div>";
 
-//            if ($this->rows > 20) {
-//                $html .= "<div class='m-t-10 text-center'>\n";
-//                $html .= makepagenav($this->rowstart, 20, $this->rows, 3, ADMIN . "errors.php" . $aidlink . "&");
-//                $html .= "</div>\n";
-//            }
         } else {
             $html .= "<div class='text-center'>" . $locale['ERROR_418'] . "</div>\n";
         }
