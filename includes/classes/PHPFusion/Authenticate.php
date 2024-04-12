@@ -816,7 +816,7 @@ class Authenticate {
 
                 addnotice("success", "Authorization code has been sent to your registered email address.");
 
-            } else if ($_SESSION['user_auth_actiontime'] <= time()) {
+            } else if (empty($_SESSION['user_auth_actiontime']) || $_SESSION['user_auth_actiontime'] <= time()) {
 
                 require_once INCLUDES . 'sendmail_include.php';
 
