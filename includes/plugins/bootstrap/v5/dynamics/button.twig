@@ -10,7 +10,7 @@
     {% endif %}
 
     <a id="{{ options['input_id'] }}" title="{{ input_label }}"
-       class="{{ options['deactivate'] ? 'disabled ' : '' }}btn {{ options['class'] }} button" href="{{ input_name }}"
+       class="{{ options['deactivate'] ? 'disabled ' : '' }}btn {{ options['class'] }}" href="{{ input_name }}"
        data-value="{{ input_value }}" {{ (options['options_data'] ? options['options_data']|join(' ') : '') ~ whitespace(disabled_status)|raw }}>
         {{ icon|raw }}{{ whitespace(input_label) }}
     </a>
@@ -31,7 +31,7 @@
     {% set type = (options['type'] == 'submit' ? 'submit' : 'button') %}
 
     <button name="{{ input_name }}" type="{{ type }}" id="{{ options['input_id'] }}" title="{{ input_label }}"
-            class="{{ options['deactivate'] ? 'disabled ' : '' }}btn {{ options['class'] }} button" data-value="{{ input_value }}"
+            class="{{ options['deactivate'] ? 'disabled ' : '' }}btn {{ options['class'] }}" data-value="{{ input_value }}"
              value="{{ input_value }}" {{ (options['options_data'] ? options['options_data']|join(' ') : '') ~ whitespace(disabled_status)|raw }}>
         {{ icon|raw }}{{ whitespace(input_label) |raw}}
     </button>

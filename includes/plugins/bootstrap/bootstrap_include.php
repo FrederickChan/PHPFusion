@@ -53,6 +53,7 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
             'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
             'login' => ['dir' => TEMPLATES.'html/public/', 'file' => 'login.twig',],
+            'login_auth' => ['dir' => TEMPLATES.'html/public/', 'file' => 'login_auth.twig',],
         ];
     }
 
@@ -91,8 +92,6 @@ if (defined('BOOTSTRAP')) {
     function fusion_get_template($component, $info) {
 
         if ($path = get_bootstrap($component)) {
-print_p($path);
-
             // Get twig templates
             return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
 

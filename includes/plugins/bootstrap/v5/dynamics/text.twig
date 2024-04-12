@@ -44,7 +44,10 @@
 {# Text Input #}
 {% macro text_input(input_name, input_value, options) %}
 
-    {% set input_tags_1 = whitespace(options['data']) ~ whitespace(options['min']) ~ whitespace(options['max']) ~ whitespace(options['step']) ~ whitespace(options['inner_width'] ? 'style="width:'~options['inner_width']~';"' : '') ~ whitespace( options['max_length']) %}
+    {% set input_tags_1 = whitespace(options['data']) ~ whitespace(options['min']) ~ whitespace(options['max']) ~ whitespace(options['step']) ~ whitespace(options['inner_width'] ? 'style="width:'~options['inner_width']~';"' : '')
+        ~ whitespace( options['max_length'] ? 'maxlength="'~options['max_length']~'"' : '')
+        ~ whitespace( options['input_attr'] ?? '')
+    %}
 
     {% set input_tags_2 =  whitespace(options['placeholder'] ? 'placeholder="'~options['placeholder']~'"' : '') ~ whitespace(options['autocomplete_off'] ? 'autocomplete="off"' : '') ~whitespace(options['deactivate'] ? 'readonly': '') ~ whitespace(options['required'] ? 'required' : '') %}
 

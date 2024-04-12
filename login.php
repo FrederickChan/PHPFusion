@@ -19,14 +19,13 @@
 use PHPFusion\Panels;
 
 require_once __DIR__ . "/maincore.php";
-require_once THEMES . "templates/header.php";
-require_once THEMES . "templates/global/login.tpl.php";
+require_once TEMPLATES."header.php";
+require_once TEMPLATES."global/login.tpl.php";
 
 Panels::getInstance( TRUE )->hidePanel( "RIGHT" );
 Panels::getInstance( TRUE )->hidePanel( "LEFT" );
 Panels::getInstance( TRUE )->hidePanel( "AU_CENTER" );
 Panels::getInstance( TRUE )->hidePanel( "U_CENTER" );
-
 
 $locale = fusion_get_locale();
 $settings = fusion_get_settings();
@@ -107,27 +106,37 @@ if ( isset( $_GET['error'] ) && isnum( $_GET['error'] ) ) {
     redirect( BASEDIR . 'login.php' );
 }
 
-// already iMEMBER , auth for what fuck?
 
-if ( check_get( "auth" ) && iMEMBER ) {
+if ( (get( "auth" ) == 'security_pin')) {
 
-    \PHPFusion\Authenticate::validateUserPasscode();
+    \PHPFusion\Authenticate::validatePin();
+
+//    print_p($_SESSION['user_auth_otp']);
 
     $info["authenticate"] = TRUE;
-    $info["open_form"] = openform( "authFrm", "POST" );
-    $info["close_form"] = closeform();
-    $info["email"] = substr_replace( fusion_get_userdata( "user_email" ), str_repeat( '*', 6 ), 0, 6 );
-    $info["user_two_factor"] = form_text( "pin", "", "", ["max_length" => $settings['auth_login_length'], "inline" => TRUE] );
-    $info["restart_login_link"] = BASEDIR . 'login.php?auth=restart';
-    $info["resend_button"] = form_button( "resend_otp", $locale["global_119"] . " <span id='countTimer' class='m-l-5'></span>", "resend_otp", ["class" => "btn-default", "alt" => "", "deactivate" => TRUE] );
+    $info['form_open'] = openform( "authFrm", "POST" );
+    $info['form_close'] = closeform();
+    $info['form_text'] = sprintf( $locale["global_117"], fusion_get_settings( "auth_login_length" ) );
 
-    fusion_load_script( INCLUDES . "jquery/jquery.segmentedInput.js" );
-    add_to_jquery( "
-        $('#pin').PHPFusionSegmentedInput({
-          autoSubmit: true,
-          fieldClasses: 'form-control',
-        });    
-        let timerSpan = $('#countTimer'), timerBtn = $('#resend_otp'), cntVal = 30, timer = null;
+    $info["email"] = substr_replace( fusion_get_userdata( "user_email" ), str_repeat( '*', 6 ), 0, 6 );
+    $info["user_two_factor"] = form_text( "pin", "", "", [
+        'max_length' => $settings['auth_login_length'],
+        "inline" => TRUE
+    ] );
+    $info["restart_login_link"] = BASEDIR . 'login.php?auth=restart';
+    $info["resend_button"] = form_button( "resend_otp", $locale["global_119"] . " <span id='countTimer' class='ms-2'></span>", "resend_otp", ["alt" => "", "deactivate" => TRUE] );
+
+    add_to_footer('
+    <script src="'.INCLUDES.'jquery/jquery.pin.js"></script>
+    ');
+
+    add_to_jquery( "  
+         $('#pin').segmentedInput({
+            autoSubmit: true,
+          });
+        
+        let timerSpan = $('#countTimer'), timerBtn = $('#resend_otp'), 
+        cntVal = 15, timer = null;
         (function OTPCountdown() {
             timerSpan.text('('+cntVal+')'); // Display counter
             // Run function every sec if count is not zero
@@ -169,8 +178,8 @@ if ( check_get( "auth" ) && iMEMBER ) {
     $floating_label = ( defined( 'FLOATING_LABEL' ) );
 
     $info = [
-        'open_form'            => openform( 'loginPageFrm', 'POST', $settings['opening_page'] ),
-        'close_form'           => closeform(),
+        'form_open'            => openform( 'loginPageFrm', 'POST', $settings['opening_page'] ),
+        'form_close'           => closeform(),
         'sitebanner'           => BASEDIR . fusion_get_settings( "sitebanner" ),
         'user_name'            => form_text( 'user_name', $placeholder, '', ['required' => TRUE, 'placeholder' => $placeholder, 'floating_label' => $floating_label] ),
         'user_name_label'      => $placeholder,
@@ -196,4 +205,4 @@ if ( check_get( "auth" ) && iMEMBER ) {
     display_login_form( $info );
 }
 
-require_once THEMES . "templates/footer.php";
+require_once TEMPLATES . "footer.php";

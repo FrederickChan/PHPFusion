@@ -1,0 +1,63 @@
+<style>
+    .pin-parent {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+    }
+    input {
+        font-size: 150%;
+        max-width: 50px;
+        height: 50px;
+        padding: .4rem;
+        text-align: center;
+    }
+</style>
+
+<div class="display-flex flex-row justify-center">
+    <div class="spacer-lg">
+        {{ openside('') }}
+        <div class="ui m-b-20">
+            <div class="m-b-20">
+                <h3 class="m-b-20">{{ locale['global_115'] }} 📬</h3>
+                <div class="word-break">
+                    {{ locale['global_116'] }}
+                </div>
+                <div>
+                    <strong>
+                        {{ email|raw }}
+                    </strong>
+                </div>
+            </div>
+            <div class="text-left">
+                {{ form_open|raw }}
+                <div class="spacer-sm">
+                    <strong>{{ form_text }}</strong>
+                </div>
+                <div id="pin_code">
+                    {{ user_two_factor|raw }}
+                </div>
+                <div class="spacer-sm text-center">
+                    {{ resend_button|raw }}
+                </div>
+                {{ form_close|raw }}
+            </div>
+            <div class="m-t-20 text-center">
+                <div class="fs-5">
+                    <a href="{{ restart_login_link|raw }}">
+                        <span class="me-2">
+                           {{ get_image('restart') }}
+                        </span>
+                        Restart Login
+                    </a>
+                </div>
+            </div>
+            <div class="m-t-20 text-sm text-center">
+                <a class="strong" href="{{ BASEDIR ~ fusion_get_settings('opening_page')}}">Back
+                to {{ fusion_get_settings('sitename') }}
+                </a>
+            </div>
+        </div>
+        {{ closeside() }}
+    </div>
+</div>

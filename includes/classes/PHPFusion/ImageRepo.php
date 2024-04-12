@@ -262,7 +262,7 @@ class ImageRepo {
             'qrcode' => IMAGES . 'icons/qr.svg',
             //R
             'right' => IMAGES . 'icons/right.svg',
-
+            'restart' => IMAGES . 'icons/restart.svg',
             //S
             'secured' => IMAGES . 'icons/secured.svg',
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',

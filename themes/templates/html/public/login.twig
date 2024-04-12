@@ -1,1 +1,28 @@
-Show me this
+<div class="register">
+    <div class="content">
+        <!--register_pre_idx-->
+        {{ openside('') }}
+        <h4 class="spacer-sm mb-5 text-center"><strong>Login to your account</strong></h4>
+        {% if connect_buttons|length %}
+            <div class="spacer-md d-flex justify-content-center">
+                {% for login_connects in connect_buttons %}
+                    {{ login_connects|raw }}
+                {% endfor %}
+            </div>
+            <div class="card-divider"><span>or login with</span></div>
+        {% endif %}
+        {{ form_open|raw }}
+        {{ user_name|raw }}
+        {{ user_pass|raw }}
+        {{ remember_me|raw }}
+        {{ login_button|raw }}
+        {{ form_close|raw }}
+        <div class="spacer-sm text-center">
+            {{ forgot_password_link|raw }}
+        </div>
+        <div class="spacer-sm text-center">
+            {{ registration_link|raw }}
+        </div>
+        {{ closeside() }}
+    </div>
+</div>

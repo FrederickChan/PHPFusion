@@ -816,15 +816,12 @@ function fusion_set_user() {
 
         if (fusion_safe()) {
 
-//            $auth = new Authenticate(post('user_name'), post('user_pass'), check_post('remember_me'));
             $auth = new Authenticate();
             $auth->authenticate(post('user_name'), post('user_pass'), check_post('remember_me'));
 
             if ($auth->authRedirection()) {
-                //             auth mode for security pin
-                //             on second refresh, the validateAuthUser will kick in and log user out if session not loaded.
-                redirect(BASEDIR . 'login.php?auth=security_pin');
-                //             we have once chance to do a OTP.
+                // redirect to login system to generate pin
+                redirect(BASEDIR . 'login.php?auth=security_pin&auth_email=pin');
             }
 
             if ($userdata = $auth->getUserData()) {
@@ -834,6 +831,7 @@ function fusion_set_user() {
     } else if (get('logout') === 'yes') {
 
         $userdata = Authenticate::logOut();
+
         redirect(BASEDIR . fusion_get_settings('opening_page'));
 
     } else if (empty($userdata['user_id'])) {

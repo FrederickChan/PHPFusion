@@ -24,24 +24,26 @@ function google_auth_button() {
 
 
     return '  
-    <div id="g_id_onload" data-client_id="' . $client_id . '" data-context="signin" data-ux_mode="popup" data-nonce="" data-auto_select="true" data-callback="googleLogin" data-itp_support="true"></div>
+
+     <div id="g_id_onload"
+     data-client_id="' . $client_id . '"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="googleLogin"
+     data-auto_prompt="false">
+</div>
      
-    <div class="g_id_signin"
+     
+     <div class="g_id_signin"
      data-type="standard"
-     data-shape="pill"
+     data-shape="rectangular"
      data-theme="filled_black"
      data-text="continue_with"
      data-size="large"
-     allow="identity-credentials-get"
      data-logo_alignment="left">
-    </div>
+</div>    
     ';
-    /*
-     * data-shape='rectangular'
-     * data-theme="filled_black"
-     data-text="signin_with"
-     data-size="large"
-     */
+
 }
 
 

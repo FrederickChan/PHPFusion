@@ -22,7 +22,7 @@ class EmailAuth {
         if ( iMEMBER ) {
             $userdata = fusion_get_userdata();
             if ( $this->_code == $userdata['user_auth_pin'] ) {
-                if ( time() <= $userdata['user_auth_actiontime'] ) {
+                if ( time() <= $_SESSION['user_auth_actiontime'] ) {
                     return TRUE;
                 } else {
                     // Expired
@@ -66,7 +66,7 @@ class EmailAuth {
 
             $locale = fusion_get_locale( '', [LOCALE . LOCALESET . 'admin/members_email.php'] );
 
-            if ( $userdata['user_auth_actiontime'] >= time() && isset( $_SESSION['new_otp_time'] ) && $_SESSION['new_otp_time'] <= time() ) {
+            if ( $_SESSION['user_auth_actiontime'] >= time() && isset( $_SESSION['new_otp_time'] ) && $_SESSION['new_otp_time'] <= time() ) {
 
                 // Resend code within 30 seconds
                 $_SESSION['new_otp_time'] = time() + 30;
@@ -84,7 +84,7 @@ class EmailAuth {
 
                 $this->_response = 200;
 
-            } else if ( $userdata['user_auth_actiontime'] <= time() ) {
+            } else if ( $_SESSION['user_auth_actiontime'] <= time() ) {
 
                 $_SESSION['new_otp_time'] = time() + 30;
 
