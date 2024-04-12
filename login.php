@@ -107,6 +107,8 @@ if ( isset( $_GET['error'] ) && isnum( $_GET['error'] ) ) {
     redirect( BASEDIR . 'login.php' );
 }
 
+// already iMEMBER , auth for what fuck?
+
 if ( check_get( "auth" ) && iMEMBER ) {
 
     \PHPFusion\Authenticate::validateUserPasscode();
@@ -141,9 +143,7 @@ if ( check_get( "auth" ) && iMEMBER ) {
 
     display_auth_form( $info );
 
-}
-
-else if ( !iMEMBER ) {
+} else if ( !iMEMBER ) {
 
     switch ( $settings['login_method'] ) {
         case "2" :
@@ -156,7 +156,6 @@ else if ( !iMEMBER ) {
             $placeholder = $locale['global_101a'];
     }
 
-    // Add Database
     include INCLUDES.'oauth/google_include_var.php';
 
     $login_connectors = [];

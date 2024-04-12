@@ -203,11 +203,11 @@ class Errors {
         $data['error_message'] = str_replace('&#039;', "'", $data['error_message']);
 
         return "<tr id='eid-" . $data['error_id'] . "'>
-        <td class='word-break'>" . $data['error_id'] . "</td>
-        <td><a data-trigger='showerror' id='Error_" . $data['error_id'] . "' href='#'>" . $link_title . "</a></td>
-        <td class='error-page'>" . $data['error_page'] . "</td>
-        <td class='error-status'>" . $this->getErrorStatus($data['error_status']) . "</td>
-        <td class='error-time'>" . timer($data['error_timestamp']) . "</td>
+        <td class='word-break font-monospace'>" . $data['error_id'] . "</td>
+        <td><a class='font-monospace' data-trigger='showerror' id='Error_" . $data['error_id'] . "' href='#'>" . $link_title . "</a></td>
+        <td class='error-page font-monospace'>" . $data['error_page'] . "</td>
+        <td class='error-status font-monospace'>" . $this->getErrorStatus($data['error_status']) . "</td>
+        <td class='error-time font-monospace'>" . timer($data['error_timestamp']) . "</td>
         <td>
         <a href='#' class='btn btn-outline-secondary' " . tooltip('Delete') . ">" . get_image('delete') . "</a>
         <div style='display:none;'>

@@ -35,6 +35,14 @@
     --bs-navbar-color: var(--bs-gray-900);
   }
 
+  .nav-notification-list {
+    color: var(--bs-gray-400);
+
+    &:hover {
+      background: var(--bs-light);
+    }
+  }
+
   // Dropdown menu
   .dropdown-menu {
     --bs-dropdown-bg: var(--bs-mode);
@@ -82,8 +90,6 @@
     }
   }
 
-
-
   .btn-secondary-soft-hover:hover {
     background-color: rgba(var(--bs-secondary-rgb), 0.1);
     color: var(--bs-gray-600) !important;
@@ -98,6 +104,51 @@
     --bs-btn-active-bg: var(--bs-gray-200);
     --bs-btn-active-color: var(--bs-gray-800);
   }
+
+  .btn.btn-outline-secondary {
+    --bs-btn-color: var(--bs-gray-600);
+    --bs-btn-border-color: var(--bs-gray-200);
+    --bs-btn-hover-color: var(--bs-gray-600);
+    --bs-btn-hover-bg: var(--bs-gray-200);
+    --bs-btn-hover-border-color: var(--bs-gray-200);
+    --bs-btn-focus-shadow-rgb: 108, 117, 125;
+    --bs-btn-active-color: var(--bs-gray-600);
+    --bs-btn-active-bg: var(--bs-gray-200);
+    --bs-btn-active-border-color: var(--bs-gray-200);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #6c757d;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #6c757d;
+    --bs-gradient: none;
+  }
+
+  .btn.btn-outline-danger {
+    svg {
+      fill: var(--bs-danger);
+    }
+    &:hover {
+      svg {
+        fill: var(--bs-light);
+      }
+    }
+
+    --bs-btn-color: var(--bs-danger);
+    --bs-btn-border-color: var(--bs-danger);
+    --bs-btn-hover-color: var(--bs-light);
+    --bs-btn-hover-bg: var(--bs-danger);
+    --bs-btn-hover-border-color: var(--bs-danger);
+    --bs-btn-focus-shadow-rgb: 108, 117, 125;
+    --bs-btn-active-color: var(--bs-danger);
+    --bs-btn-active-bg: var(--bs-danger);
+    --bs-btn-active-border-color: var(--bs-danger);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: rgba(214, 41, 62, 0.1);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: rgba(214, 41, 62, 0.1);
+    --bs-gradient: none;
+  }
+
+
 
   // Modal
   .modal {
@@ -135,6 +186,36 @@
       color: var(--bs-gray-400);
     }
   }
+
+  table.error-details {
+    border: 1px solid var(--bs-gray-100);
+    background-color: transparent;
+
+    th.text-body {
+      background: rgb(36, 37, 51);
+      border:0 !important;
+    }
+  }
+
+
+  table, table.dataTable {
+    background: var(--bs-dark);
+    border: 1px solid var(--bs-gray-100);
+
+    th {
+      border-bottom-color: var(--bs-gray-100) !important;
+
+      &:hover, &:focus {
+        background-color: var(--bs-light);
+      }
+    }
+
+    &.no-footer {
+      border-bottom: 1px solid var(--bs-gray-100) !important;
+    }
+  }
+
+
 
   // Background mode
   header {

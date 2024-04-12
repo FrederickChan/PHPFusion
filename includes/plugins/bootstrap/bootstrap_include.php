@@ -25,7 +25,6 @@
  * @return string
  */
 function get_bootstrap($part, $version = '3', $php = FALSE) {
-
     static $framework_paths = [];
 
     if (empty($framework_paths)) {
@@ -53,8 +52,8 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
             'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
             'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
+            'login' => ['dir' => TEMPLATES.'html/public/', 'file' => 'login.twig',],
         ];
-
     }
 
     $_type = $php ? 'php' : 'twig';
@@ -92,11 +91,13 @@ if (defined('BOOTSTRAP')) {
     function fusion_get_template($component, $info) {
 
         if ($path = get_bootstrap($component)) {
+print_p($path);
 
+            // Get twig templates
             return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
 
         } else if ($path = get_bootstrap($component, 'auto', TRUE)) {
-
+            // Get php templates
             require_once $path['dir'] . $path['file'];
 
             if ($callback = call_user_func($component, $info)) {

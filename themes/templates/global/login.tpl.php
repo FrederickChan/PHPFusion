@@ -129,9 +129,9 @@ if ( !function_exists( 'display_login_form' ) ) {
      * @param array $info
      */
     function display_login_form( array $info ) {
-        global $locale;
 
-        $locale = fusion_get_locale();
+        echo fusion_get_template('login', $info);
+
 
         //opentable(  );
 
