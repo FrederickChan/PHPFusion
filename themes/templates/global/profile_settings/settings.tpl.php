@@ -1,7 +1,44 @@
 <?php
-
 // Edit profile account settings
 use PHPFusion\Panels;
+
+// Notification template
+function display_up_notification($info) {
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
+
+    echo fusion_get_template('up_notify', $info);
+}
+
+// Privacy template
+function display_up_privacy(array $info) {
+
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
+
+    if (!empty($info['ref'])) {
+        switch ($info['ref']) {
+            case 'authenticator':
+                $info['privacy_form'] = fusion_get_template('up_privacy_twofactor', $info);
+                break;
+            case 'pm_options':
+                $info['privacy_form'] = fusion_get_template('up_privacy_pm', $info);
+                break;
+            case 'privacy':
+                $info['privacy_form'] = fusion_get_template('up_data', $info);
+                break;
+            case 'login':
+                $info['privacy_form'] = fusion_get_template('up_privacy_login', $info);
+                break;
+            case 'blacklist':
+                $info['privacy_form'] = fusion_get_template('up_privacy_blacklist', $info);
+                break;
+        }
+    }
+
+    echo fusion_get_template('up_privacy', $info);
+}
+
 
 function display_up_settings(array $info) {
 
@@ -14,7 +51,7 @@ function display_up_settings(array $info) {
 
         <div class="profile-settings mb-5">
             <div class="d-flex align-items-center mb-4">
-                <h5><a class="text-dark text-hover-underline" href="<?php echo BASEDIR . 'edit_profile.php' ?>">Account Settings</a></h5>
+                <h5><a class="text-hover-underline" href="<?php echo BASEDIR . 'edit_profile.php' ?>">Account Settings</a></h5>
                 <?php
                 echo get_image('right') ?>
                 <h5><?php
@@ -53,7 +90,5 @@ function display_up_settings(array $info) {
         }
 
         home_up_settings($info);
-
     endif;
-
 }

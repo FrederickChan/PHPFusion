@@ -1,0 +1,13 @@
+{{ opentable('Manage Privacy Settings') }}
+<div class="row">
+    {{ privacy_openform|raw }}
+    {{ user_hide_email_input|raw }}
+    {{ user_hide_phone_input|raw }}
+    {{ user_hide_birthdate_input|raw }}
+    {{ user_hide_location_input|raw }}
+    <div class="text-end">
+        {{ privacy_button|raw }}
+    </div>
+    {{ privacy_closeform|raw }}
+</div>
+{{ closetable }}

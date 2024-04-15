@@ -35,10 +35,10 @@ use Twig\TwigFunction;
 function twig_init(array $config = []): Environment {
 
     $config += [
-        'path'         => '',
-        'debug'        => FALSE,
+        'path' => '',
+        'debug' => FALSE,
         'config_debug' => FALSE,
-        'namespace'    => [] // documentation: https://symfony.com/doc/4.1/templating/namespaced_paths.html
+        'namespace' => [] // documentation: https://symfony.com/doc/4.1/templating/namespaced_paths.html
     ];
 
     $loader = new FilesystemLoader($config['path']);
@@ -58,8 +58,8 @@ function twig_init(array $config = []): Environment {
     }
 
     $twig = new Environment($loader, [
-        'cache' => INCLUDES.'plugins/twig/cache',
-        'debug' => $config['debug']
+        'cache' => INCLUDES . 'plugins/twig/cache',
+        'debug' => $config['debug'],
     ]);
 
 
@@ -91,15 +91,15 @@ function twig_init(array $config = []): Environment {
  *
  * @param string $dir_path
  * @param string $file_path
- * @param array  $info
- * @param bool   $debug
+ * @param array $info
+ * @param bool $debug
  *
  * @return string
  */
-function fusion_render(string $dir_path = THEMES.'templates/', string $file_path = '', array $info = [], bool $debug = FALSE): string {
+function fusion_render(string $dir_path = THEMES . 'templates/', string $file_path = '', array $info = [], bool $debug = FALSE): string {
 
     $config = [
-        'path'  => $dir_path,
+        'path' => $dir_path,
         'debug' => $debug,
     ];
 
@@ -153,48 +153,50 @@ function twig_cache_functions() {
     static $__fn;
 
     $function_registers = [
-        'openside'                     => ['type' => 'string'],
-        'closeside'                    => ['type' => 'string'],
-        'opentable'                    => ['type' => 'string'],
-        'closetable'                   => ['type' => 'string'],
-        "tablebreak"                   => ["type" => "string"],
-        'display_avatar'               => ['type' => 'string'],
-        'profile_link'                 => ['type' => 'string'],
-        'opentab'                      => ['type' => 'string'],
-        'closetab'                     => ['type' => 'string'],
-        'tab_active'                   => ['type' => 'string'],
-        'opentabbody'                  => ['type' => 'string'],
-        'closetabbody'                 => ['type' => 'string'],
-        'format_word'                  => ['type' => 'string'],
-        'format_num'                   => ['type' => 'string'],
-        'countdown'                    => ['type' => 'string'],
-        'showdate'                     => ['type' => 'string'],
-        'showdatetime'                 => ['type' => 'string'],
-        'timer'                        => ['type' => 'string'],
-        'showcopyright'                => ['type' => 'string'],
-        'showFooterErrors'             => ['type' => 'string'],
-        'get_image'                    => ['type' => 'string'],
-        'show_icon'                     => ['type' => 'string'],
-        'lorem_ipsum'                  => ['type' => 'string'],
-        'parse_textarea'               => ['type' => 'string'],
-        'schema'                       => ['type' => 'string'],
-        'whitespace'                   => ['type' => 'whitespace'],
-        'print_p'                      => ['type' => 'void'],
-        'fusion_get_userdata'          => ['type' => 'array'],
-        'fusion_get_settings'          => ['type' => 'array'],
-        'fusion_get_locale'            => ['type' => 'array'],
-        'add_to_jquery'                => ['type' => 'outputhandler'],
-        'add_to_footer'                => ['type' => 'outputhandler'],
-        'add_to_css'                   => ['type' => 'outputhandler'],
-        'get_settings'                 => ['type' => 'string'],
-        'getuserlevel'                 => ['type' => 'string'],
+        'openside' => ['type' => 'string'],
+        'closeside' => ['type' => 'string'],
+        'opentable' => ['type' => 'string'],
+        'closetable' => ['type' => 'string'],
+        "tablebreak" => ["type" => "string"],
+        'display_avatar' => ['type' => 'string'],
+        'profile_link' => ['type' => 'string'],
+        'opentab' => ['type' => 'string'],
+        'closetab' => ['type' => 'string'],
+        'tab_active' => ['type' => 'string'],
+        'opentabbody' => ['type' => 'string'],
+        'closetabbody' => ['type' => 'string'],
+        'format_word' => ['type' => 'string'],
+        'format_num' => ['type' => 'string'],
+        'countdown' => ['type' => 'string'],
+        'showdate' => ['type' => 'string'],
+        'showdatetime' => ['type' => 'string'],
+        'timer' => ['type' => 'string'],
+        'showcopyright' => ['type' => 'string'],
+        'showFooterErrors' => ['type' => 'string'],
+        'get_image' => ['type' => 'string'],
+        'show_icon' => ['type' => 'string'],
+        'lorem_ipsum' => ['type' => 'string'],
+        'parse_textarea' => ['type' => 'string'],
+        'schema' => ['type' => 'string'],
+        'whitespace' => ['type' => 'whitespace'],
+        'print_p' => ['type' => 'void'],
+        'fusion_get_userdata' => ['type' => 'array'],
+        'fusion_get_settings' => ['type' => 'array'],
+        'fusion_get_locale' => ['type' => 'array'],
+        'add_to_jquery' => ['type' => 'outputhandler'],
+        'add_to_footer' => ['type' => 'outputhandler'],
+        'add_to_css' => ['type' => 'outputhandler'],
+        'get_settings' => ['type' => 'string'],
+        'getuserlevel' => ['type' => 'string'],
         // languages
         'fusion_get_enabled_languages' => ['type' => 'array'],
-        'fusion_get_language_switch'   => ['type' => 'array'],
-        'translate_lang_names'         => ['type' => 'string'],
+        'fusion_get_language_switch' => ['type' => 'array'],
+        'translate_lang_names' => ['type' => 'string'],
         // colors
-        'string_to_color_code'         => ['type' => 'string'],
-        'get_color_brightness'         => ['type' => 'string'],
+        'string_to_color_code' => ['type' => 'string'],
+        'get_color_brightness' => ['type' => 'string'],
+        'openmodal' => ['type' => 'string'],
+        'closemodal' => ['type' => 'string'],
     ];
 
     if (empty($__fn)) {
@@ -262,6 +264,6 @@ function twig_cache_config() {
 spl_autoload_register(function ($class_name) {
     if (stristr($class_name, 'Twig')) {
         $class_name = str_replace('\\', DIRECTORY_SEPARATOR, $class_name);
-        require_once BASEDIR.'includes/plugins/twig/src/'.$class_name.'.php';
+        require_once BASEDIR . 'includes/plugins/twig/src/' . $class_name . '.php';
     }
 });

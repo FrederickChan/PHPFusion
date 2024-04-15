@@ -458,7 +458,6 @@ let cleanRequest = function (adds, filterArray = [], keep = false) {
     return params.toString() + '&' + adds;
 };
 
-
 let BASEDIR = document.location.origin + site_path;
 let INFUSIONS = document.location.origin + "/infusions/";
 let INCLUDES = document.location.origin + "/includes/";

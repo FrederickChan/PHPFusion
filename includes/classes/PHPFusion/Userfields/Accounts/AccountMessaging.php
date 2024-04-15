@@ -3,14 +3,21 @@ namespace PHPFusion\Userfields\Accounts;
 
 use PHPFusion\Userfields\UserFieldsForm;
 
+/**
+ * Class AccountMessaging
+ * @package PHPFusion\Userfields\Accounts
+ */
 class AccountMessaging extends UserFieldsForm {
 
+    /**
+     * @return array
+     */
     public function profileMessageField() {
 
         $locale = fusion_get_locale();
 
         return [
-            'page_title'   => $locale['u600'],
+            'page_title'   => $locale['u610'],
             'pm_openform'  => openform( 'pmSettingsFrm', 'POST' ),
             'pm_closeform' => closeform(),
             // previously 'pm_email_notify'

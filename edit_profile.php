@@ -16,12 +16,11 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 require_once __DIR__ . '/maincore.php';
-require_once THEMES . 'templates/header.php';
+require_once TEMPLATES.'header.php';
 
 $locale = fusion_get_locale('', LOCALE . LOCALESET . "user_fields.php");
 
-include THEMES . "templates/global/profile.tpl.php";
-//require_once THEMES . 'templates/global/profile.tpl.php';
+include TEMPLATES.'global/profile.tpl.php';
 
 if (!iMEMBER) {
     redirect("index.php");
@@ -144,4 +143,4 @@ if (!defined('EDITPROFILE_JS_CHECK')) {
     ');
 }
 
-require_once THEMES . 'templates/footer.php';
+require_once TEMPLATES.'footer.php';

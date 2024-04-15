@@ -24,34 +24,32 @@ use PHPFusion\Authenticate;
 use PHPFusion\Quantum\QuantumFactory;
 use PHPFusion\Userfields\UserFieldsForm;
 
+/**
+ * Class PrivacyForm
+ * @package PHPFusion\Userfields\Privacy
+ */
 class PrivacyForm extends UserFieldsForm {
 
     /**
-     * Deprecated
-     *
+     * Rendering functions lib
      * @return array
      */
     public function displayInputFields() {
-
-        switch ($this->userFields->info['ref']) {
-            case 'authenticator':
-                return $this->accountTwoFactor()->profileTOTPField(); //array_merge($info, );
-            case 'privacy':
-                return $this->accountPrivacy()->profilePrivacyField();
-            case 'pm_options':
-                return $this->accountMessaging()->profileMessageField();
-            case 'login':
-                return $this->getLoginField();
-            case 'blacklist':
-                return $this->getBlacklistField();
-            default:
-                return [];
-        }
-
+        return match ($this->userFields->info['ref']) {
+            'authenticator' => $this->accountTwoFactor()->profileTOTPField(),
+            'privacy' => $this->accountPrivacy()->profilePrivacyField(),
+            'pm_options' => $this->accountMessaging()->profileMessageField(),
+            'login' => $this->getLoginField(),
+            'blacklist' => $this->getBlacklistField(),
+            default => [],
+        };
     }
 
+    /**
+     * @return array
+     */
     private function getLoginField() {
-
+        $info['page_title'] = 'Account Login Sessions';
         if ($session = get('rm')) {
 
             dbquery("DELETE FROM " . DB_USER_SESSIONS . " WHERE user_session=:session_name AND user_id=:uid", [
@@ -78,11 +76,16 @@ class PrivacyForm extends UserFieldsForm {
         return $info;
     }
 
+    /**
+     * @return array
+     */
     private function getBlacklistField() {
-
+        $info['page_title'] = 'Account Blacklist';
+        $info['data'] = [];
         $result = dbquery("SELECT * FROM " . DB_BLACKLIST . " WHERE user_id=:uid ORDER BY blacklist_time DESC", [
             ':uid' => $this->userFields->userData['user_id'],
         ]);
+
         if (dbrows($result)) {
             while ($rows = dbarray($result)) {
                 $rows['remove'] = BASEDIR . 'edit_profile.php?section=privacy&ref=blacklist&rm=' . $rows['blacklist_uid'];
@@ -90,7 +93,7 @@ class PrivacyForm extends UserFieldsForm {
             }
         }
 
-        return [];
+        return $info;
     }
 
     /**

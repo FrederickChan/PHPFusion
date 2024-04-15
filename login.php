@@ -111,7 +111,7 @@ if ( (get( "auth" ) == 'security_pin')) {
 
     \PHPFusion\Authenticate::validatePin();
 
-//    print_p($_SESSION['user_auth_otp']);
+    print_p($_SESSION['user_auth_otp']);
 
     $info["authenticate"] = TRUE;
     $info['form_open'] = openform( "authFrm", "POST" );

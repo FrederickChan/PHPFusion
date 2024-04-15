@@ -52,12 +52,30 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
             'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
             'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
-            'login' => ['dir' => TEMPLATES.'html/public/', 'file' => 'login.twig',],
-            'login_auth' => ['dir' => TEMPLATES.'html/public/', 'file' => 'login_auth.twig',],
+            'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
+            'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
+            // Profile
+            'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],
+            'up_close' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'close.twig'],
+            'up_privacy' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'privacy.twig'],
+
+            // Privacy Settings
+            'up_data' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'data.twig'],
+            'up_privacy_twofactor' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'two_factor.twig'],
+            'up_privacy_settings' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'settings.twig'],
+            'up_privacy_pm' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'messaging.twig'],
+            'up_privacy_login' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'login.twig'],
+            'up_privacy_blacklist' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'blacklist.twig'],
         ];
     }
 
     $_type = $php ? 'php' : 'twig';
+
+//    static $debug;
+//    if (empty($debug)) {
+//        $debug = $framework_paths['twig'];
+//        print_p($debug);
+//    }
 
     return $framework_paths[$_type][$part] ?? '';
 }

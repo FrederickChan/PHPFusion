@@ -1,7 +1,6 @@
 <?php
 
 function twofactor_up_settings( $info ) {
-
     if ( !isset( $info['totp_code_field'] ) ) :
         openside( 'Unbind two factor authenticator' ) ?>
         <!--TOTP_page-->

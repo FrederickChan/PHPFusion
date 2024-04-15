@@ -1,7 +1,7 @@
 <?php
 namespace PHPFusion\Userfields\Accounts\Validation;
 
-use GoogleAuthenticator\GoogleAuthenticator;
+use Google\Authenticator\GoogleAuthenticator;
 use PHPFusion\EmailAuth;
 use PHPFusion\Userfields\UserFieldsValidate;
 
@@ -12,12 +12,17 @@ class AccountTwoFactor extends UserFieldsValidate {
     public function validate() {
 
         if ( $this->userFieldsInput->userData['user_totp'] ) {
+
             if ( $validation_code = sanitizer( 'email_code', '', 'email_code' ) ) {
+
                 $email_auth = ( new EmailAuth() );
+
                 $email_auth->setCode( $validation_code );
+
                 if ( $email_auth->verifyCode() === TRUE ) {
+
                     dbquery( "UPDATE " . DB_USERS . " SET user_totp=:secret WHERE user_id=:uid", [
-                        ':secret' => '',
+                        ':secret' => $this->userFieldsInput->userData['user_totp'],
                         ':uid'    => $this->userFieldsInput->userData['user_id']
                     ] );
 
@@ -70,6 +75,7 @@ class AccountTwoFactor extends UserFieldsValidate {
                             addnotice( 'success', "Two factor authentication method has been activated successfully.\nYour account is now protected with a two factor authentication security measure." );
 
                             redirect( FUSION_SELF );
+
                         } else {
 
                             addnotice( 'danger', "The authenticator code is invalid or has expired.\nPlease try again with a new code." );

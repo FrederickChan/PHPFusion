@@ -16,7 +16,6 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 
-use PHPFusion\Authenticate;
 use PHPFusion\EmailAuth;
 
 defined( 'IN_FUSION' ) || exit;

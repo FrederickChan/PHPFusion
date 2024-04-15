@@ -3,8 +3,15 @@ namespace PHPFusion\Userfields\Accounts;
 
 use PHPFusion\Userfields\UserFieldsForm;
 
+/**
+ * Class AccountPrivacy
+ * @package PHPFusion\Userfields\Accounts
+ */
 class AccountPrivacy extends UserFieldsForm {
 
+    /**
+     * @return array
+     */
     public function profilePrivacyField() {
 
         $locale = fusion_get_locale();

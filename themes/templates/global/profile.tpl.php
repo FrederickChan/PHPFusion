@@ -15,9 +15,6 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
-
-use PHPFusion\Panels;
-
 defined( 'IN_FUSION' ) || exit;
 
 
@@ -96,12 +93,9 @@ if ( !function_exists( 'display_up_settings' ) ) {
             . fusion_get_function( 'closeside' );
     }
 
-    require_once __DIR__.'/profile_settings/notify.tpl.php';
     require_once __DIR__.'/profile_settings/settings.tpl.php';
-    require_once __DIR__.'/profile_settings/privacy.tpl.php';
     require_once __DIR__.'/profile_settings/close.tpl.php';
 }
-
 
 /**
  * Profile display view

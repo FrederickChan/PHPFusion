@@ -1,0 +1,32 @@
+{{ opentable('Manage account login sessions') }}
+<table class="table table-responsive">
+    <thead>
+    <tr>
+        <th style="width:33%;">Time</th>
+        <th>Device</th>
+        <th>IP</th>
+        <th>Operation</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if (user_logins|length) %}
+        {% for rows in user_logins %}
+            <tr>
+                <td>
+                    <span class="small text-muted">{{ showdate( 'l', rows['user_logintime'] ) }}</span>
+                    <br>{{ showdate('Y-m-d H:i:s e', rows['user_logintime']) }}
+                </td>
+                <td>
+                    <span class="small text-muted">{{ rows['user_device']|capitalize }}</span><br>
+                    <p class="small">{{ rows['user_os'] }}, {{ rows['user_browser'] }}</p>
+                </td>
+                <td class="align-middle">{{ rows['user_ip'] }}</td>
+                <td class="align-middle">
+                    <a href="{{ rows['remove']|raw }}" class="btn btn-primary-soft">Deauthorise</a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{{ closetable() }}
