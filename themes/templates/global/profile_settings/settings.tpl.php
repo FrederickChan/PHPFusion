@@ -1,16 +1,19 @@
 <?php
 // Edit profile account settings
 use PHPFusion\Panels;
-Panels::getInstance()->hidePanel('RIGHT');
-Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
 
 // Notification template
 function display_up_notification($info) {
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
+
     echo fusion_get_template('up_notify', $info);
 }
 
 // Privacy template
 function display_up_privacy(array $info) {
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
 
     if (!empty($info['ref'])) {
         switch ($info['ref']) {
@@ -37,10 +40,15 @@ function display_up_privacy(array $info) {
 
 // Close template
 function display_up_close(array $info) {
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
+
     echo fusion_get_template('up_close', $info);
 }
 
 function display_up_settings(array $info) {
+    Panels::getInstance()->hidePanel('RIGHT');
+    Panels::addPanel('navigation_panel', navigation_panel($info['section']), 1, USER_LEVEL_MEMBER, 1);
 
     switch ($info['ref']) {
         case 'details':
@@ -55,5 +63,4 @@ function display_up_settings(array $info) {
     }
 
     echo fusion_get_template('up_home', $info);
-
 }

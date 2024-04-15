@@ -380,32 +380,32 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         //}
 
         add_to_jquery("
-            $(document).on('click', '[data-action=\"preview\"]', function(e) {
-                e.preventDefault();                
-                let preview_tab = $('#" . $options['input_id'] . "_preview'),
-                editor_tab = $('#" . $options['input_id'] . "_write'),
-                placeholder = $(this).find('.preview-response');
-    
-                let text = $('#" . $options['input_id'] . "').val(),
-                format = '" . ($options['type'] == "bbcode" ? 'bbcode' : 'html') . "',
-                data = {
-                    " . (defined('ADMIN_PANEL') ? "'mode': 'admin', " : "") . "
-                    'text' : text,
-                    'editor' : format,
-                    'url' : '" . $_SERVER['REQUEST_URI'] . "',
-                    'form_id' : 'prw-" . $options['form_name'] . "',
-                    'fusion_token' : '" . fusion_get_token("prw-" . $options['form_name'], 30) . "'
-                },
+        $(document).on('click', '[data-action=\"preview\"]', function(e) {
+            e.preventDefault();                
+            let preview_tab = $('#" . $options['input_id'] . "_preview'),
+            editor_tab = $('#" . $options['input_id'] . "_write'),
+            placeholder = $(this).find('.preview-response');
 
-                sendData = $(this).closest('form').serialize() + '&' + $.param(data);
-                
-                $.post('" . FUSION_ROOT . INCLUDES . "api/?api=preview-text', sendData).
-                done(function(e) {
-                    preview_tab.html(e);
-                }).error(function(e) {
-                    alert('" . $locale['error_preview'] . "' + '\\n" . $locale['error_preview_text'] . "');
-                });
+            let text = $('#" . $options['input_id'] . "').val(),
+            format = '" . ($options['type'] == "bbcode" ? 'bbcode' : 'html') . "',
+            data = {
+                " . (defined('ADMIN_PANEL') ? "'mode': 'admin', " : "") . "
+                'text' : text,
+                'editor' : format,
+                'url' : '" . $_SERVER['REQUEST_URI'] . "',
+                'form_id' : 'prw-" . $options['form_name'] . "',
+                'fusion_token' : '" . fusion_get_token("prw-" . $options['form_name'], 30) . "'
+            },
+
+            sendData = $(this).closest('form').serialize() + '&' + $.param(data);
+            
+            $.post('" . FUSION_ROOT . INCLUDES . "api/?api=preview-text', sendData).
+            done(function(e) {
+                preview_tab.html(e);
+            }).error(function(e) {
+                alert('" . $locale['error_preview'] . "' + '\\n" . $locale['error_preview_text'] . "');
             });
+        });
         ");
 
     }

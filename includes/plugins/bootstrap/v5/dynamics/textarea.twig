@@ -1,12 +1,12 @@
 {% macro live_textarea(input_name, input_value, options) %}
-    <div class="panel panel-default form-control panel-txtarea">
-        <div class="panel-heading">
+    <div class="card form-control panel-txtarea">
+        <div class="card-header">
             <div class="display-flex">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
+                <ul class="nav nav-tabs border-0">
+                    <li class="nav-item m-0">
                         <a class="nav-link active" data-bs-toggle="list" href="#{{ options['input_id'] }}_write" href="#">Write</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item m-0">
                         <a class="nav-link" data-bs-toggle="list" data-action="preview" href="#{{ options['input_id'] }}_preview">Preview</a>
                     </li>
                 </ul>
@@ -18,23 +18,22 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="{{ options['input_id'] }}_write" role="tabpanel">
+                <div class="tab-pane fade border-0 show active" id="{{ options['input_id'] }}_write" role="tabpanel">
                     {{ _self.textarea(input_name, input_value, options) }}
                 </div>
-                <div class="tab-pane fade" id="{{ options['input_id'] }}_preview" role="tabpanel">
+                <div class="tab-pane border-0 fade" id="{{ options['input_id'] }}_preview" role="tabpanel">
                 </div>
             </div>
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="display-flex">
                 {% if options['stacked'] %}
                     <div class="stacked-content ps-1">{{ options['stacked']|raw }}</div>
                 {% endif %}
                 <div class="flex-end char-counter ms-auto pe-1">
-                    {{ fusion_get_locale('word_count') }} : <span id="{{ options['input_id'] }}-counter"
-                                                                  class="c-counter">0</span>
+                    {{ fusion_get_locale('word_count') }} : <span id="{{ options['input_id'] }}-counter" class="c-counter">0</span>
                     {{ options['maxlength'] ? ' / '~options['maxlength'] : '' }}
                 </div>
             </div>
@@ -43,21 +42,20 @@
 {% endmacro %}
 
 {% macro textarea(input_name, input_value, options) %}
-    <textarea name="{{ input_name }}" id="{{ options['input_id'] }}"
-              style="width:{{ options['inner_width'] }};height:{{ options['height'] }};{{ (options['no_resize'] ? ' resize:none;' : '') }}"
-              rows="{{ options['rows'] }}"
-              class="form-control{{ whitespace(options['inner_class'] ?? '') ~ whitespace(options['autosize'] ? 'animated-height' : '') }}"
-              placeholder="{{ options['placeholder'] }}"{{ whitespace(options['deactivate'] ? 'readonly' : '')~whitespace(options['maxlength'] ? 'maxlength="'~options['maxlength']~'"' : '') }}>
-                {{ input_value }}
+
+    <textarea name="{{ input_name }}" id="{{ options['input_id'] }}" style="width:{{ options['inner_width'] }};height:{{ options['height'] }};{{ (options['no_resize'] ? ' resize:none;' : '') }}" rows="{{ options['rows'] }}" class="form-control{{ whitespace(options['inner_class'] ?? '') ~ whitespace(options['autosize'] ? 'animated-height' : '') }}" placeholder="{{ options['placeholder'] }}"{{ whitespace(options['deactivate'] ? 'readonly' : '')~whitespace(options['maxlength'] ? 'maxlength="'~options['maxlength']~'"' : '') }}>
+        {{ input_value }}
     </textarea>
 {% endmacro %}
 
 {% macro textarea_input(input_name, input_value, options) %}
+
     {% if (options['html'] or options['type'] == 'html') or (options['bbcode'] or options['type'] == 'bbcode') %}
         {{ _self.live_textarea(input_name, input_value, options) }}
     {% else %}
         {{ _self.textarea(input_name, input_value, options) }}
     {% endif %}
+
 {% endmacro %}
 
 

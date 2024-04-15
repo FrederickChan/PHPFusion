@@ -120,7 +120,7 @@ function display_bbcodes( $width, $textarea_name = "message", $inputform_name = 
         $dropdown_bbcode_end = '';
         if (array_key_exists( 'dropdown', $bbdata ) && $bbdata['dropdown'] == TRUE) {
             $dropdown = 'data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"';
-            $dropdown_caret = '<i class="fas fa-caret-down m-l-5"></i>';
+            $dropdown_caret = '<span>'.get_image('down').'</span>'; //'<i class="fas fa-caret-down m-l-5"></i>';
             $bbcodes .= '<div class="dropdown display-inline-block">';
             $dropdown_bbcodes = '</div>';
         }
@@ -136,9 +136,9 @@ function display_bbcodes( $width, $textarea_name = "message", $inputform_name = 
             $bbcodes .= substr( $bbdata['value'],
                 0,
                 1 ) != "!" && isset( $input_content ) ?
-                "<button type='button' class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" . $input_content . $dropdown_caret . "\n</button>\n" : "";
+                "<button type='button' class='btn btn-sm button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" . $input_content . $dropdown_caret . "\n</button>\n" : "";
         } else {
-            $bbcodes .= substr( $bbdata['value'],0, 1 ) != "!" ? "<input " . $type . " class='btn btn-sm btn-default button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" : "";
+            $bbcodes .= substr( $bbdata['value'],0, 1 ) != "!" ? "<input " . $type . " class='btn button' " . $id . " onclick=\"" . $onclick . "\" " . $onmouseover . " " . $onmouseout . " title='" . $bbdata['description'] . "' aria-label='" . $bbdata['description'] . "' aria-disabled='false' aria-pressed='false' " . $dropdown . "/>\n" : "";
         }
 
         if (isset( $bbdata['dropdown'] ) && $bbdata['dropdown'] == TRUE) {
