@@ -32,19 +32,15 @@ class AccountsForm extends UserFieldsForm {
         ];
 
         if ($ref == 'details') {
-
             $info = array_merge($info, $this->accountProfile()->profileInputField());
 
         } else if ($ref == 'password') {
-
             $info = array_merge($info, $this->accountPassword()->profilePasswordField());
 
         } else if ($ref == 'admin_password') {
-
             $info = array_merge($info, $this->accountPassword()->adminprofilePasswordField());
 
         } else {
-
             $info = array_merge($info, $this->accountEmail()->emailInputField());
             //$this->info['user_password'] = $input->passwordInputField();
             //$this->info['user_admin_password'] = $input->adminpasswordInputField();
@@ -81,7 +77,6 @@ class AccountsForm extends UserFieldsForm {
 
         //$this->info['user_password'] = form_para( $locale['u132'], 'password', 'profile_category_name' );
         //$this->info['user_admin_password'] = $locale['u131'];
-
         //if ( $this->method == 'validate_update' ) {
         //    // User Password Verification for Email Change
         //    $footer = openmodal( 'verifyPassword', 'Verify password', ['hidden' => TRUE] )

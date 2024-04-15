@@ -159,6 +159,7 @@ function twig_cache_functions() {
         'closetable' => ['type' => 'string'],
         "tablebreak" => ["type" => "string"],
         'display_avatar' => ['type' => 'string'],
+        'display_name' => ['type' => 'string'],
         'profile_link' => ['type' => 'string'],
         'opentab' => ['type' => 'string'],
         'closetab' => ['type' => 'string'],
@@ -176,6 +177,7 @@ function twig_cache_functions() {
         'get_image' => ['type' => 'string'],
         'show_icon' => ['type' => 'string'],
         'lorem_ipsum' => ['type' => 'string'],
+        'censortext' => ['type' => 'string'],
         'parse_textarea' => ['type' => 'string'],
         'schema' => ['type' => 'string'],
         'whitespace' => ['type' => 'whitespace'],
@@ -197,6 +199,7 @@ function twig_cache_functions() {
         'get_color_brightness' => ['type' => 'string'],
         'openmodal' => ['type' => 'string'],
         'closemodal' => ['type' => 'string'],
+        'modalfooter' => ['type' => 'string'],
     ];
 
     if (empty($__fn)) {

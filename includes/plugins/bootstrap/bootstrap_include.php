@@ -58,6 +58,11 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],
             'up_close' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'close.twig'],
             'up_privacy' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'privacy.twig'],
+            'up_home'=> ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'home.twig'],
+            // Home settings
+            'up_home_details' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'details.twig'],
+            'up_home_password' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'password.twig'],
+            'up_home_adm_password' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'adm_password.twig'],
 
             // Privacy Settings
             'up_data' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'data.twig'],

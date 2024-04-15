@@ -244,7 +244,7 @@ class UserFields extends QuantumFields {
                 display_up_close(($this->info + (new AccountClose($this))->displayInputFields()));
                 break;
             default:
-                display_up_settings(($this->info + (new AccountsForm($this))->displayInputFields()));
+                display_up_settings(( (new AccountsForm($this))->displayInputFields()) + $this->info);
         }
 
     }

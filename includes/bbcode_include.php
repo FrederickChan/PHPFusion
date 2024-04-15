@@ -265,17 +265,16 @@ function smiley_regex() {
  *
  * @return string  Option for users to insert smileys in a post by displaying the smiley's button.
  */
-function display_smiley_options()
-: string {
+function display_smiley_options() {
 
-    $res = "<div style='display:flex;flex-direction:row;flex-wrap:wrap;gap:3px;width:100%;'>\n";
+    $res = "<div style='display:flex;flex-direction:row;flex-wrap:wrap;gap:3px;width:100%;'>";
     foreach (cache_smileys() as $smiley) {
 
         $res .= "<span class='icons smaller' data-action='bbcode_smileys' data-smiley='" . $smiley['smiley_code'] . "'>";
         $res .= "<img class='smiley' src='" . get_image( "smiley_" . $smiley['smiley_text'] ) . "' alt='" . $smiley['smiley_code'] . "' title='" . $smiley['smiley_code'] . "'>"; //onclick=\"insertText('".$textarea."', '".$smiley['smiley_code']."', '".$form."');
         $res .= "</span>";
     }
-    $res .= "</div>\n";
+    $res .= "</div>";
 
     return $res;
 }

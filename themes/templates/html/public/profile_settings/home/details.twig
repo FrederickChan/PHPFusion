@@ -1,0 +1,56 @@
+{{ opentable('Public profile') }}
+{{ form_open|raw }}
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-8">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                {{ user_firstname|raw }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                {{ user_lastname|raw }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                {{ user_addname|raw }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                {{ user_name|raw }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+                {{ user_name_display|raw }}
+            </div>
+        </div>
+        <div class="row align-items-center">
+            {{ user_phone|raw }}
+        </div>
+
+        {{ user_bio|raw }}
+
+        {% if (user_field|length) %}
+            {% for field in user_field %}
+                {% if (field['fields']|length and field['title']|length) %}
+                    <h6 class="spacer-sm">{{ field['title'] }}</h6>
+                     {% for field_input in field['fields'] %}
+                          {{ field_input|raw }}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {{ button|raw }}
+    </div>
+    <div class="col-xs-12 col-sm-7 col-md-4">
+        <div class="position-relative">
+            {{ user_avatar_upload|raw }}
+            {% if (user_avatar_remove) %}
+                <div class="avatar-remove" style="top:55px; right:5px; position:absolute;">
+                    {{ user_avatar_remove|raw }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{{ form_close|raw }}
+{{ closetable() }}

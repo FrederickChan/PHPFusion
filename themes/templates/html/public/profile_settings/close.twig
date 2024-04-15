@@ -1,0 +1,26 @@
+{% set settings = fusion_get_settings() %}
+{{ opentable( 'Deactivating or deleting your account' ) }}
+<div class="text-start">If you wish to take a break from {{ settings['sitename'] }} you can temporarily deactivate this
+    account. If you want to permanently delete your account, please take note that all data will be permanently lost and
+    cannot be recovered once you confirm your deletion.
+</div>
+
+<div class="spacer-sm">
+    <h6 class="strong mb-3">Before you go</h6>
+    <ol>
+        <li>Download a backup of your data <a href="" class="strong">here</a></li>
+        <li>All your data will be <strong>permanently erased</strong> and you will lose all your data as a result</li>
+    </ol>
+</div>
+
+{{ close_openform|raw }}
+<div class="list-group">
+    {{ close_options|raw }}
+</div>
+<div class="spacer-sm">
+    {{ cancel_button|raw }}
+    {{ close_button|raw }}
+</div>
+{{ close_closeform|raw }}
+
+{{ closetable() }}

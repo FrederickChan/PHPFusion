@@ -94,7 +94,6 @@ if ( !function_exists( 'display_up_settings' ) ) {
     }
 
     require_once __DIR__.'/profile_settings/settings.tpl.php';
-    require_once __DIR__.'/profile_settings/close.tpl.php';
 }
 
 /**
