@@ -200,6 +200,9 @@ function twig_cache_functions() {
         'openmodal' => ['type' => 'string'],
         'closemodal' => ['type' => 'string'],
         'modalfooter' => ['type' => 'string'],
+        // post and get checks
+        'check_get' => ['type'=>'boolean'],
+        'check_post' => ['type'=>'boolean']
     ];
 
     if (empty($__fn)) {

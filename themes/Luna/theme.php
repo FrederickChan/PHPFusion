@@ -23,10 +23,23 @@ const BOOTSTRAP = 5;
 const WEBICON = ['octicons'];
 
 // Autoload template
-$file_path = THEME . 'templates/' . preg_replace('(.php)', '.luna.php', basename($_SERVER['PHP_SELF']));
-if (file_exists($file_path)) {
-    require_once $file_path;
+function register_luna_templates() {
+    $tpls = [
+      'register'=> ['dir'=>THEME.'templates/', 'file'=>'register.twig'] // registration templates
+    ];
+    return $tpls;
 }
+
+/**
+ * @see register_luna_templates()
+ */
+fusion_add_hook('fusion_theme_templates', 'register_luna_templates');
+
+// For autoloading directory files matching PHP templates
+//$file_path = THEME . 'templates/' . preg_replace('(.php)', '.luna.php', basename($_SERVER['PHP_SELF']));
+//if (file_exists($file_path)) {
+//    require_once $file_path;
+//}
 
 // Override User Info Panel (Template Override to BS5)
 //require_once __DIR__.'/templates/user_info.tpl.php';

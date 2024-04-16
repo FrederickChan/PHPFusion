@@ -21,7 +21,7 @@
  *
  * @param        $part
  * @param string $version
- *
+ * @param bool $php
  * @return string
  */
 function get_bootstrap($part, $version = '3', $php = FALSE) {
@@ -52,6 +52,7 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
             'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
             'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
+            'register' =>['dir' => TEMPLATES.'html/public/', 'file' => 'register.twig'],
             'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
             'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
             // Profile
@@ -103,6 +104,16 @@ if (defined('BOOTSTRAP')) {
      */
     fusion_add_hook('fusion_footer_include', 'bootstrap_footer');
 
+    function get_theme_template($component) {
+        static $framework_paths = [];
+        if (empty($paths)) {
+            $framework_paths = fusion_filter_hook('fusion_theme_templates');
+            $framework_paths = flatten_array($framework_paths);
+        }
+
+        return $framework_paths[$component] ?? '';
+    }
+
 
     /**
      * System template callback function
@@ -115,6 +126,12 @@ if (defined('BOOTSTRAP')) {
     function fusion_get_template($component, $info) {
 
         if ($path = get_bootstrap($component)) {
+
+            // check for theme port, for now only support php
+            if ($theme_path = get_theme_template($component)) {
+                $path = $theme_path;
+            }
+
             // Get twig templates
             return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
 
@@ -130,4 +147,3 @@ if (defined('BOOTSTRAP')) {
         return 'This template ' . $component . ' is not supported';
     }
 }
-

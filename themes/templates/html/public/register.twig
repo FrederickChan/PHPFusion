@@ -1,0 +1,33 @@
+<div class="register">
+    <div class="content">
+        <!--register_pre_idx-->
+        <h5 class="text-center w-100 mt-4 mb-4">Create an account</h5>
+        {{ openside('') }}
+        {{ form_open|raw }}
+
+        {% if (check_get('validation')|length == 0) %}
+            {{ user_name|raw }}
+            {{ user_email|raw }}
+            {{ user_password|raw }}
+            {{ user_custom|raw }}
+
+        {% else %}
+            {{ validation|raw }}
+
+        {% endif %}
+
+        {{ button|raw }}
+        {{ form_close|raw }}
+
+        {% if (check_get('validation')|length == 0) %}
+            {{ terms|raw }}
+        {% endif %}
+        {{ closeside('') }}
+
+        <div class="text-center strong mt-5 mb-5">
+            {{ locale['u400']|replace({ ('[SITENAME]') : fusion_get_settings('sitename') }) }}
+            <a href="{{ BASEDIR }}login.php">{{ locale['login'] }}</a>
+        </div>
+        <!--register_sub_idx-->
+    </div>
+</div>
