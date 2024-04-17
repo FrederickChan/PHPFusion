@@ -238,13 +238,13 @@ class UserFields extends QuantumFields {
                 display_up_notification(($this->info + (new NotificationForm($this))->displayInputFields()));
                 break;
             case 'privacy':
-                display_up_privacy(($this->info + (new PrivacyForm($this))->displayInputFields()) );
+                display_up_privacy(($this->info + (new PrivacyForm($this))->displayInputFields()));
                 break;
             case 'close':
                 display_up_close(($this->info + (new AccountClose($this))->displayInputFields()));
                 break;
             default:
-                display_up_settings(( (new AccountsForm($this))->displayInputFields()) + $this->info);
+                display_up_settings(((new AccountsForm($this))->displayInputFields()) + $this->info);
         }
 
     }
@@ -341,7 +341,7 @@ class UserFields extends QuantumFields {
                             foreach ($item[$cat_id] as $field) {
 
                                 // Outputs array
-                                $field_output = $this->displayFields($field, $this->callback_data, $this->userFields->method);
+                                $field_output = $this->displayFields($field, $this->callback_data, $this->method);
 
                                 //$fields['user_field'][$cat_id]['fields'][$field['field_id']] = $field_output; // relational to the category
                                 $fields['extended_field'][$field['field_name']] = $field_output; // for the gets
@@ -379,6 +379,30 @@ class UserFields extends QuantumFields {
 
     }
 
+    private function upOutputSections() {
+        $link_prefix = BASEDIR . 'edit_profile.php?section=';
+        if ($this->moderation) {
+            $link_prefix = ADMIN . ' members.php?lookup=' . $this->userData['user_id'] . '&action=edit&';
+        }
+
+        $arr[1] = [
+            'title' => 'Profile',
+            'link' => $link_prefix . 'section=1',
+        ];
+        $res = dbquery("SELECT field_cat_id, field_cat_name FROM " . DB_USER_FIELD_CATS . " WHERE field_parent=0 ORDER BY field_cat_order");
+        if (dbrows($res)) {
+            while ($rows = dbarray($res)) {
+                $arr[$rows['field_cat_id']] = [
+                    'id' => $rows['field_cat_id'],
+                    'title' => self::parseLabel($rows['field_cat_name']),
+                    'link' => $link_prefix . 'section=' . $rows['field_cat_id'],
+                ];
+            }
+        }
+
+        return $arr;
+    }
+
 
     /***
      * Fetch profile output data
@@ -404,15 +428,17 @@ class UserFields extends QuantumFields {
                 }
 
                 if (defined('ADMIN_PANEL') && get('step') === 'view') {
+
                     redirect(ADMIN . "members.php" . fusion_get_aidlink() . "&amp;step=view&amp;user_id=" . $this->userData['user_id']);
                 } else {
+
                     redirect(BASEDIR . "profile.php?lookup=" . $lookup);
                 }
 
             }
         }
 
-        $this->info['section'] = $this->upInputSections();
+        $this->info['section'] = $this->upOutputSections();
 
         $this->info['user_id'] = $this->userData['user_id'];
 
@@ -511,7 +537,10 @@ class UserFields extends QuantumFields {
             $this->info['core_field']['profile_user_group']['value'] = $group_info;
         }
 
-        $this->info = $this->info + $this->getUserFields();
+        if ($user_fields = $this->getUserFields()) {
+
+            $this->info = $this->info + $user_fields;
+        }
 
         if (iMEMBER && fusion_get_userdata('user_id') != $this->userData['user_id']) {
 
