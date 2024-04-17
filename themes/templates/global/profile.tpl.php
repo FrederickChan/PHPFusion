@@ -15,6 +15,9 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
+use PHPFusion\Panels;
+
 defined('IN_FUSION') || exit;
 
 
@@ -108,13 +111,13 @@ if (!function_exists('display_up_settings')) {
 if (!function_exists('display_user_profile')) {
     function display_user_profile($info) {
         $locale = fusion_get_locale();
-
+        Panels::getInstance()->hideAll();
         add_to_css('.cat-field .field-title > img{max-width:25px;}');
 
         opentable('');
         echo '<section id="user-profile">';
         echo '<div class="row m-b-20">';
-        echo '<div class="col-xs-12 col-3 p-3">';
+        echo '<div class="col-xs-12 col-2 p-3">';
         $avatar['user_id'] = $info['user_id'];
         $avatar['user_name'] = $info['user_name'];
         $avatar['user_avatar'] = $info['core_field']['profile_user_avatar']['value'];
@@ -126,7 +129,7 @@ if (!function_exists('display_user_profile')) {
         }
         echo '</div>';
 
-        echo '<div class="col-xs-12 col-9  ps-3 p-3">';
+        echo '<div class="col-xs-12 col-10  ps-3 p-3">';
         if (!empty($info['user_admin'])) {
             $button = $info['user_admin'];
             echo '<div class="pull-right btn-group">

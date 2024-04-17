@@ -16,6 +16,8 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 
+use PHPFusion\PrivateMessages;
+
 /**
  * Fetch user data of the currently logged-in user from database.
  *
