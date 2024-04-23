@@ -19,7 +19,7 @@
 
 @charset "UTF-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 .inline-svg-code( @code ) {
   @-svg-code: escape(~'<?xml version="1.0" ?>@{code}');
@@ -112,7 +112,7 @@
   --bs-dark-border-subtle: #a1a3a5;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI Historic", "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: "Plus Jakarta Sans", sans-serif;
@@ -167,6 +167,7 @@
 }
 
 [data-luna-theme=dark] {
+  color-scheme: dark;
 
   --header-color: #000;
   --border-color: #00000017;
@@ -184,8 +185,6 @@
   --warning-color: var(--bs-warning);
   --primary-hover-color: #0d5ec9;
 
-  color-scheme: dark;
-
 
   --bs-body-color: #eef0f2;
   --bs-body-color-rgb: 238, 240, 242;
@@ -193,7 +192,7 @@
   --bs-body-bg-rgb: 15, 15, 16;
   --bs-emphasis-color: #fff;
   --bs-emphasis-color-rgb: 255, 255, 255;
-  --bs-secondary-color: rgba(238, 240, 242, 0.5);
+  --bs-secondary-color: #B0B3B8;
   --bs-secondary-color-rgb: 238, 240, 242;
   --bs-secondary-bg: #14191e;
   --bs-secondary-bg-rgb: 20, 25, 30;
@@ -255,9 +254,12 @@ body {
 
     .navbar {
 
-
       .input-group {
         position: relative;
+        border-radius: 9999px !important;
+        overflow: hidden;
+        transition: none;
+        border: 0;
 
         .form-control {
           padding-left: 3rem;
@@ -1043,15 +1045,15 @@ a.stretched:after {
   }
 }
 
+.transparent {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 1rem 0;
+}
+
 .form-group, .form-check.check-group {
   margin-bottom: 1.2rem;
 }
-
-//.form-group:not(:first-of-type) {
-//    .form-label {
-//        margin: 16px 0 4px 0;
-//    }
-//}
 
 .form-floating > label.form-label {
   color: var(--emphasis);
@@ -1060,6 +1062,7 @@ a.stretched:after {
 
 .form-control {
   border: 1px solid var(--input-border-color);
+
   &:focus {
     color: var(--bs-gray-700);
     border-color: var(--bs-primary); //#0f6fec;
@@ -1574,7 +1577,7 @@ pre {
 
   .card-title {
     font-size: 2rem;
-    color:var(--bs-gray-800);
+    color: var(--bs-gray-800);
     font-weight: 800 !important;
   }
 }
@@ -1621,6 +1624,7 @@ pre {
 }
 
 .card {
+  border: 0;
 
   .card-divider {
     display: flex;
@@ -1703,9 +1707,23 @@ pre {
 
 }
 
+
+.form-floating {
+  .form-control {
+    border: 1px solid var(--bs-gray-200) !important;
+    border-radius: .875rem !important;
+  }
+}
+
+textarea {
+  transition: none !important;
+  border: 0;
+}
+
 .panel-txtarea {
   display: block;
   padding: 0;
+  border: 0;
 
   .panel-heading {
     padding: 0 5px 0 0;
@@ -1752,12 +1770,26 @@ pre {
     }
   }
 
+  .tab-content {
+    padding: 0;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 2.5rem);
+    margin-top: -2.5rem;
+    margin-left: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
   .panel-body {
     padding: 8px;
   }
 
-  .panel-footer {
+  .card-footer {
     padding: 5px;
+    border: 0 !important;
   }
 
   .form-check.check-group {
@@ -1765,6 +1797,15 @@ pre {
       font-size: 13px;
       font-weight: 500;
     }
+  }
+
+  textarea {
+    padding-bottom: 2.5rem;
+  }
+
+  .char-counter {
+    margin-left: auto;
+    font-size: .675rem;
   }
 
   button {
@@ -1790,3 +1831,5 @@ pre {
     }
   }
 }
+
+@import url('./../../infusions/social/templates/styles');

@@ -18,8 +18,32 @@
 
     {% set group_class = 'form-group' %}
 
-    {% if input_options['floating_label'] and input_options['placeholder'] %}
-        {% set group_class = 'form-floating' %}
+
+    {% set group_class = '' %}
+    {% if (input_options['prepend'] or input_options['append']) %}
+        {% set group_class = 'form-group' %}
+    {% endif %}
+
+    {# {% if (input_options['floating_label'] and input_options['placeholder']) %} #}
+    {# {% set group_class = 'form-floating' %} #}
+    {# {% endif %} #}
+
+    {# Sizing #}
+    {% if (input_options['size']) %}
+        {% set sizeClass = '' %}
+
+        {% if (input_options['size'] == 2) %}
+            {% set sizeClass = ' input-group-md' %}
+        {% elseif (input_options['size'] == 3) %}
+            {% set sizeClass = ' input-group-lg' %}
+        {% elseif (input_options['size'] == 1) %}
+            {% set sizeClass = ' input-group-sm' %}
+        {% endif %}
+
+        {% if group_class %}
+            {% set group_class = group_class ~ input_options['class'] %}
+        {% endif %}
+
     {% endif %}
 
     {# Checkbox extra classes #}
@@ -73,15 +97,20 @@
 
         {% set label_dom = '<label for="'~ input_options['input_id'] ~'" class="'~label_class~'"'~whitespace(checkbox_label)~whitespace(checkbox_style)~'>'~ input_options['label_icon'] ~ input_label ~ whitespace(required_mark) ~ whitespace(ext_tip) ~ whitespace(checkbox_tip) ~ '</label>' %}
 
+        {% if input_options['floating_label'] %}
+            {% set label_dom = '<label for="'~ input_options['input_id'] ~'"'~whitespace(checkbox_label)~whitespace(checkbox_style)~'>'~ input_options['label_icon'] ~ input_label ~ whitespace(required_mark) ~ whitespace(ext_tip) ~ whitespace(checkbox_tip) ~ '</label>' %}
+        {% endif %}
+
         {% set input_options = input_options|merge({'label_dom': label_dom}) %}
 
     {% endif %}
 
-    <div id="{{ input_options['input_id'] }}-field" class="{{ group_class }}{{ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) }}"{{ whitespace(ct_width) }}>
+    <div id="{{ input_options['input_id'] }}-field"
+         class="{{ group_class }}{{ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) }}"{{ whitespace(ct_width) }}>
 
         {{ prepend_checkbox_input|raw }}
 
-        {% if (group_class != 'form-floating') %}
+        {% if (input_options['floating_label'] == false) %}
             {{ label_dom|raw }}
         {% endif %}
 

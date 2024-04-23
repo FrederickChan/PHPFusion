@@ -55,7 +55,9 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'register' =>['dir' => TEMPLATES.'html/public/', 'file' => 'register.twig'],
             'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
             'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
-            // Profile
+            'profile' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'profile.twig'],
+
+            // Profile Settings
             'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],
             'up_close' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'close.twig'],
             'up_privacy' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'privacy.twig'],

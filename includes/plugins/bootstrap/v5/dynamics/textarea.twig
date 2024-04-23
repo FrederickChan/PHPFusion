@@ -1,27 +1,38 @@
 {% macro live_textarea(input_name, input_value, options) %}
-    <div class="card form-control panel-txtarea">
-        <div class="card-header">
-            <div class="display-flex">
-                <ul class="nav nav-tabs border-0">
-                    <li class="nav-item m-0">
-                        <a class="nav-link active" data-bs-toggle="list" href="#{{ options['input_id'] }}_write" href="#">Write</a>
-                    </li>
-                    <li class="nav-item m-0">
-                        <a class="nav-link" data-bs-toggle="list" data-action="preview" href="#{{ options['input_id'] }}_preview">Preview</a>
-                    </li>
-                </ul>
-                <div class="flex-start">
-                    {{ options['toolbar']|raw }}
-                </div>
-                <div class="flex-end">
-                    {{ options['toolbar_1']|raw }}
+    <div class="card panel-txtarea">
+        {% if options['preview'] %}
+            <div class="card-header">
+                <div class="display-flex">
+                    <ul class="nav nav-tabs border-0">
+                        <li class="nav-item m-0">
+                            <a class="nav-link active" data-bs-toggle="list" href="#{{ options['input_id'] }}_write"
+                               href="#">Write</a>
+                        </li>
+                        <li class="nav-item m-0">
+                            <a class="nav-link" data-bs-toggle="list" data-action="preview"
+                               href="#{{ options['input_id'] }}_preview">Preview</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        {% endif %}
         <div class="card-body">
             <div class="tab-content">
                 <div class="tab-pane fade border-0 show active" id="{{ options['input_id'] }}_write" role="tabpanel">
                     {{ _self.textarea(input_name, input_value, options) }}
+                    <div class="toolbar">
+                        <div class="a">
+                            {{ options['toolbar']|raw }}
+                        </div>
+                        <div class="b">
+                            {{ options['toolbar_1']|raw }}
+                        </div>
+                        <div class="char-counter ms-auto pe-1">
+                            {{ fusion_get_locale('word_count') }} : <span id="{{ options['input_id'] }}-counter"
+                                                                          class="c-counter">0</span>
+                            {{ options['maxlength'] ? ' / '~options['maxlength'] : '' }}
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane border-0 fade" id="{{ options['input_id'] }}_preview" role="tabpanel">
                 </div>
@@ -32,20 +43,28 @@
                 {% if options['stacked'] %}
                     <div class="stacked-content ps-1">{{ options['stacked']|raw }}</div>
                 {% endif %}
-                <div class="flex-end char-counter ms-auto pe-1">
-                    {{ fusion_get_locale('word_count') }} : <span id="{{ options['input_id'] }}-counter" class="c-counter">0</span>
-                    {{ options['maxlength'] ? ' / '~options['maxlength'] : '' }}
-                </div>
+
             </div>
         </div>
     </div>
 {% endmacro %}
 
 {% macro textarea(input_name, input_value, options) %}
+    {% if options['floating_label'] and options['placeholder'] %}
+        <div class="form-floating">
+    {% endif %}
 
-    <textarea name="{{ input_name }}" id="{{ options['input_id'] }}" style="width:{{ options['inner_width'] }};height:{{ options['height'] }};{{ (options['no_resize'] ? ' resize:none;' : '') }}" rows="{{ options['rows'] }}" class="form-control{{ whitespace(options['inner_class'] ?? '') ~ whitespace(options['autosize'] ? 'animated-height' : '') }}" placeholder="{{ options['placeholder'] }}"{{ whitespace(options['deactivate'] ? 'readonly' : '')~whitespace(options['maxlength'] ? 'maxlength="'~options['maxlength']~'"' : '') }}>
-        {{ input_value }}
-    </textarea>
+     <textarea name="{{ input_name }}" style="width:{{ options['inner_width'] }};height:{{ options['height'] }};{{ (options['no_resize'] ? ' resize:none;' : '') }}"
+     rows="{{ options['rows'] }}"
+     class="form-control{{ whitespace(options['inner_class'] ?? '') ~ whitespace(options['autosize'] ? 'animated-height' : '') }}"
+     placeholder="{{ options['placeholder'] }}"
+     {{ (options['deactivate'] ? ' readonly' : '')~(options['maxlength'] ? ' maxlength="'~options['maxlength']~'"' : '') }}
+     id="{{ options['input_id'] }}">{{ input_value }}</textarea>
+
+    {% if options['floating_label'] and options['placeholder'] %}
+        {{ options['label_dom']|raw }}
+        </div>
+    {% endif %}
 {% endmacro %}
 
 {% macro textarea_input(input_name, input_value, options) %}

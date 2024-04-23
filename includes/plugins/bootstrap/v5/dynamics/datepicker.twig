@@ -1,8 +1,22 @@
 {% macro date_input(input_name, input_value, options) %}
+
+    {% set input_tags_2 =  whitespace(options['placeholder'] ? 'placeholder="'~options['placeholder']~'"' : '') ~ whitespace(options['autocomplete_off'] ? 'autocomplete="off"' : '') ~whitespace(options['deactivate'] ? 'readonly': '') ~ whitespace(options['required'] ? 'required' : '') %}
+
+
     <div id="{{ options['input_id'] }}_datepicker" data-target-input="nearest" class="input-group date {{ whitespace(options['width'] ? 'style="width:'~options['width']~'"' : '') }}">
-        <input type="datetime-local" name="{{ input_name }}" id="{{ options['input_id'] }}" data-target="#{{ options['input_id'] }}-datepicker" value="{{ input_value }}" class="datetimepicker-input form-control textbox"{{ whitespace(options['inner_width'] ? 'style="width:'~options['inner_width']~';"' : '')|raw ~ whitespace(options['placeholder'] ? 'placeholder="'~options['placeholder']~'"' : '')|raw }}>
+
+        {% if options['floating_label'] and options['placeholder'] %}
+        <div class="form-floating">
+            {% endif %}
+
+        <input type="datetime-local" name="{{ input_name }}" id="{{ options['input_id'] }}" data-target="#{{ options['input_id'] }}-datepicker" value="{{ input_value }}" class="datetimepicker-input form-control{{ whitespace(options['inner_class'] ?? '') }}"{{ whitespace(options['inner_width'] ? 'style="width:'~options['inner_width']~';"' : '')|raw }}{{ input_tags_2|raw }}>
 {#        <span class="input-group-addon input-group-append{{ whitespace(options['fieldicon_off'] ? 'display-none' : '') }}" data-target="#{{ options["input_id"] }}-datepicker" data-toggle="datetimepicker">#}
 {#            <i class="input-group-text fa fa-calendar"></i>#}
 {#        </span>#}
+
+        {% if options['floating_label'] and options['placeholder'] %}
+            {{ options['label_dom']|raw }}
+        </div>
+        {% endif %}
     </div>
 {% endmacro %}

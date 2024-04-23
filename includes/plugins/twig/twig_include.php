@@ -177,6 +177,7 @@ function twig_cache_functions() {
         'get_image' => ['type' => 'string'],
         'show_icon' => ['type' => 'string'],
         'lorem_ipsum' => ['type' => 'string'],
+        'censorwords' => ['type' => 'string'],
         'censortext' => ['type' => 'string'],
         'parse_textarea' => ['type' => 'string'],
         'schema' => ['type' => 'string'],

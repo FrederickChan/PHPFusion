@@ -162,7 +162,6 @@ function random_string($length = 6, $letters_only = FALSE) {
  * @return array Array of all smileys.
  */
 function cache_smileys() {
-
     return ImageRepo::cacheSmileys();
 }
 

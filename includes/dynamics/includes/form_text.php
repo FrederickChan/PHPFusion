@@ -85,7 +85,8 @@ function form_text($input_name, $label = "", $input_value = "", array $options =
         'error_text' => '',
         'delimiter' => ',',
         'stacked' => '',
-        'group_size' => '', // Possible value: sm, md, lg
+        'size' => '',
+        //'group_size' => '', // Possible value: sm, md, lg // deprecated
         'password_strength' => FALSE,
         'data' => [],
         'prepend_html' => '',
@@ -221,7 +222,6 @@ function form_text($input_name, $label = "", $input_value = "", array $options =
         if (defined('BOOTSTRAP') && isnum(BOOTSTRAP) && BOOTSTRAP < 5) {
             $ui_rules = 'bootstrap' . BOOTSTRAP . ' : true,';
         }
-
 
         add_to_jquery("
             i18next.init({            

@@ -755,7 +755,7 @@ if (!function_exists('display_avatar')) {
         $name = !empty($userdata['user_name']) ? $userdata['user_name'] : 'Guest';
 
         $imgTpl = '<img class="avatar img-responsive ' . $img_class . '" alt="' . $name . '" data-pin-nopin="true" style="display:inline; width:' . $size . '; max-height:' . $size . '" src="%s">';
-        $imgTpl = '<div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar ' . ($class ?? '') . '" data-bs-original-title="' . $userdata['user_name'] . '">' . $imgTpl . '</div>';
+        $imgTpl = '<div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="' . ($class ?? '') . '" data-bs-original-title="' . $userdata['user_name'] . '">' . $imgTpl . '</div>';
 
         if ($hasAvatar) {
             $img = sprintf($imgTpl, IMAGES . "avatars/" . $userdata['user_avatar']);
@@ -775,7 +775,7 @@ if (!function_exists('display_avatar')) {
                 }
 
                 $size_int = (int)filter_var($size, FILTER_SANITIZE_NUMBER_INT);
-                $img = '<div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar ' . ($class ?? '') . '" data-bs-original-title="' . $userdata['user_name'] . '"><div class="display-inline-block va avatar ' . $img_class . '" style="width:' . $size . ';max-height:' . $size . ';"><svg viewBox="0 0 ' . $size_int . ' ' . $size_int . '" preserveAspectRatio="xMidYMid meet"><rect fill="#' . $color . '" stroke-width="0" y="0" x="0" width="' . $size . '" height="' . $size . '"/><text class="m-t-5" font-size="' . (floor($size_int * .50)) . '" fill="#' . $font_color . '" x="50%" y="50%" text-anchor="middle" dy="0.325em">' . $first_char . '</text></svg></div></div>';
+                $img = '<div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="' . ($class ?? '') . '" data-bs-original-title="' . $userdata['user_name'] . '"><div class="display-inline-block va avatar ' . $img_class . '" style="width:' . $size . ';max-height:' . $size . ';"><svg viewBox="0 0 ' . $size_int . ' ' . $size_int . '" preserveAspectRatio="xMidYMid meet"><rect fill="#' . $color . '" stroke-width="0" y="0" x="0" width="' . $size . '" height="' . $size . '"/><text class="m-t-5" font-size="' . (floor($size_int * .50)) . '" fill="#' . $font_color . '" x="50%" y="50%" text-anchor="middle" dy="0.325em">' . $first_char . '</text></svg></div></div>';
             }
         }
 

@@ -175,6 +175,153 @@ class ImageRepo {
         self::$cached = TRUE;
 
         $settings = fusion_get_settings();
+// You need to + sign it, so setImage will work.
+        self::$image_paths += [
+            //A
+            'add' => IMAGES . 'icons/add.svg',
+            "app_store" => IMAGES . "icons/apple.svg",
+            'archive' => IMAGES . 'icons/archive.svg',
+            'auto_mode' => IMAGES . 'icons/auto_mode.svg',
+            //B
+            'birthdays' => IMAGES . 'icons/birthdays.svg',
+            'bbcode_bold' => INCLUDES . 'bbcodes/images/b.svg',
+            'bbcode_big' => INCLUDES . 'bbcodes/images/big.svg',
+            'bbcode_i' => INCLUDES . 'bbcodes/images/i.svg',
+            'bbcode_u' => INCLUDES . 'bbcodes/images/u.svg',
+            'bbcode_smiley' => INCLUDES . 'bbcodes/images/smiley.svg',
+            'bbcode_url' => INCLUDES . 'bbcodes/images/url.svg',
+            'bbcode_small' => INCLUDES . 'bbcodes/images/small.svg',
+            'bbcode_mail' => INCLUDES . 'bbcodes/images/mail.svg',
+            'bbcode_img' => INCLUDES . 'bbcodes/images/img.svg',
+            'bbcode_aleft' => INCLUDES . 'bbcodes/images/left.svg',
+            'bbcode_acenter' => INCLUDES . 'bbcodes/images/center.svg',
+            'bbcode_aright' => INCLUDES . 'bbcodes/images/right.svg',
+            'bbcode_code' => INCLUDES . 'bbcodes/images/code.svg',
+            'bbcode_quote' => INCLUDES . 'bbcodes/images/quote.svg',
+            'block' => IMAGES . 'icons/block.svg',
+            'brush' => IMAGES . 'icons/brush.svg',
+            'bonus' => IMAGES.'icons/bonus.svg',
+            //C
+            'cart' => IMAGES . 'icons/cart.svg',
+            'cake' => IMAGES . 'icons/cake.svg',
+            'certified' => IMAGES . 'icons/certified.svg',
+            'close' => IMAGES . 'icons/deactivate.svg',
+            'cross' => IMAGES . 'icons/cross.svg',
+            'comments' => IMAGES . 'icons/comments.svg',
+            'celebrations' => IMAGES . 'icons/celebrations.svg',
+            'copy' => IMAGES . 'icons/copy.svg',
+            'crypto' => IMAGES . 'icons/crypto.svg',
+            'cash' => IMAGES . 'icons/money.svg',
+
+
+            //D
+            "down" => IMAGES . "icons/down.svg",
+            'delete' => IMAGES . 'icons/delete.svg',
+            'delivery' => IMAGES . 'icons/delivery.svg',
+            'download' => IMAGES . 'icons/download.svg',
+            'dark_mode' => IMAGES . 'icons/dark_mode.svg',
+
+            //E
+            'events' => IMAGES . 'icons/events.svg',
+            'email' => IMAGES . 'icons/email.svg',
+            'edit' => IMAGES . 'icons/pencil.svg',
+
+
+            //F
+            //G
+            "google_play" => IMAGES . "icons/google-play.svg",
+            'gender_male' => IMAGES . 'icons/male.svg',
+            'gender_female' => IMAGES . 'icons/female.svg',
+            'gender_trans' => IMAGES . 'icons/trans.svg',
+
+            //H
+            'heart' => IMAGES . 'icons/heart.svg',
+            'home' => IMAGES . 'icons/home.svg',
+
+            //I
+            'inbox' => IMAGES . 'icons/inbox.svg',
+            "imagenotfound" => IMAGES . "imagenotfound.jpg",
+            //J
+            'job' => IMAGES . 'icons/work.svg',
+
+            //K
+            'ko' => IMAGES . 'icons/cancel.svg',
+            //L
+            "left" => IMAGES . "icons/left.svg",
+            "logo" => $settings['sitebanner'],
+            'light_mode' => IMAGES . 'icons/light_mode.svg',
+            'location' => IMAGES . 'icons/location.svg',
+
+            //M
+            'mentions' => IMAGES . 'icons/mentions.svg',
+            'messages_unread' => IMAGES . 'icons/unread.svg',
+            'minus' => IMAGES . 'icons/minus.svg',
+            'mail-read' => IMAGES . 'icons/envelope-read.svg',
+            'mail-unread' => IMAGES . 'icons/envelope.svg',
+            'more' => IMAGES . 'icons/hellip-h.svg',
+            'more-h' => IMAGES . 'icons/hellip-v.svg',
+            'mood' => IMAGES.'icons/mood.svg',
+
+            //N
+            "noavatar" => IMAGES . "avatars/no-avatar.jpg",
+            "no-avatar" => IMAGES . "avatars/no-avatar.jpg",
+            "no-cover" => IMAGES . "covers/no-cover.png",
+            'notification' => IMAGES . 'icons/notifications.svg',
+            //O
+            'ok' => IMAGES . 'icons/check_circle.svg',
+            'outbox' => IMAGES . 'icons/outbox.svg',
+            //P
+            'pin' => IMAGES . 'icons/pin.svg',
+            'password' => IMAGES . 'icons/password.svg',
+            'passkey' => IMAGES . 'icons/passkey.svg',
+            "panel_on" => IMAGES . "icons/panel_on.gif",
+            "panel_off" => IMAGES . "icons/panel_off.gif",
+            'privacy' => IMAGES . 'icons/privacy.svg',
+            'profile' => IMAGES . 'icons/profile.svg',
+            'posts' => IMAGES . 'icons/comment.svg',
+            'photos' => IMAGES.'icons/photo.svg',
+            //Q
+            'qrcode' => IMAGES . 'icons/qr.svg',
+            //R
+            'right' => IMAGES . 'icons/right.svg',
+            'restart' => IMAGES . 'icons/restart.svg',
+            'remove' => IMAGES . 'icons/eraser.svg',
+            //S
+            'secured' => IMAGES . 'icons/secured.svg',
+            'subscriptions' => IMAGES . 'icons/subscriptions.svg',
+            'shop' => IMAGES . 'icons/shop.svg',
+            'school' => IMAGES . 'icons/school.svg',
+
+
+            //T
+            'tag' => IMAGES . 'icons/label.svg',
+            'trip' => IMAGES . 'icons/luggage.svg',
+            'totp' => IMAGES . 'icons/totp.svg',
+
+            //U
+            'up' => IMAGES . "icons/up.svg",
+            'updates' => IMAGES . 'icons/updates.svg',
+            'upgrades' => IMAGES . 'icons/upgrades.svg',
+            'user' => IMAGES . 'icons/profile.svg',
+            'users' => IMAGES . 'icons/users.svg',
+            'user_pending' => IMAGES . 'icons/find_user.svg',
+            'user_admin' => IMAGES . 'icons/admin_user.svg',
+            'user_add' => IMAGES . 'icons/add_user.svg',
+            'user_archive' => IMAGES . 'icons/archive_user.svg',
+            'user_deactivate' => IMAGES . 'icons/deactivate.svg',
+            'user_ban' => IMAGES . 'icons/ban_user.svg',
+            //V
+            'visible' => IMAGES . 'icons/visible.svg',
+            'non_visible' => IMAGES . 'icons/non_visible.svg',
+            'lock_visible' => IMAGES . 'icons/visibility_lock.svg',
+
+            //W
+            'warning' => IMAGES . 'icons/warning.svg',
+            //X
+            //Y
+            //Z
+            'zoom' => IMAGES . 'icons/zoom.svg',
+        ];
 
         //<editor-fold desc="imagePaths">
         // You need to + sign it, so setImage will work.

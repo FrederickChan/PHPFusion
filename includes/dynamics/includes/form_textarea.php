@@ -83,6 +83,7 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         'rows' => 5,
         'censor_words' => TRUE,
         'descript' => TRUE,
+        'floating_label' => FALSE,
     ];
 
     $input_value = clean_input_value($input_value, $input_name);
@@ -344,10 +345,11 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
     } else {
 
         if ($options['type'] == 'bbcode' || $options['bbcode']) {
+            fusion_load_script(INCLUDES . 'jquery/texteditor.min.js');
+
             if (!defined('TT_BBCODE')) {
                 define('TT_BBCODE', TRUE);
                 add_to_footer('<script src="' . INCLUDES . 'jscripts/bbcode.min.js" defer></script>');
-                add_to_footer('<script src="' . INCLUDES . 'jquery/texteditor.min.js" defer></script>');
             }
         }
 
@@ -358,12 +360,7 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         }
 
         if ($options['autosize'] || defined('AUTOSIZE')) {
-
-            if (!defined('TT_AUTOSIZE')) {
-                define('TT_AUTOSIZE', TRUE);
-                add_to_footer('<script src="' . DYNAMICS . 'assets/autosize/autosize.min.js"></script>');
-            }
-
+            fusion_load_script(DYNAMICS . 'assets/autosize/autosize.js');
             add_to_jquery("autosize($('#" . $options['input_id'] . "'));");
         }
     }
@@ -372,15 +369,9 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
 
     if ($options['type'] == 'html' or $options['type'] == 'bbcode') {
 
-        // Load editor plugin
-        //if ( !defined( 'TEXT_EDITOR' ) ) {
-        //    define( 'TEXT_EDITOR', TRUE );
-        //    In development
-        //    add_to_footer( '<script src="' . INCLUDES . 'jquery/texteditor.min.js"></script>' );
-        //}
-
-        add_to_jquery("
-        $(document).on('click', '[data-action=\"preview\"]', function(e) {
+        if ($options['preview']) {
+            add_to_jquery("
+            $(document).on('click', '[data-action=\"preview\"]', function(e) {
             e.preventDefault();                
             let preview_tab = $('#" . $options['input_id'] . "_preview'),
             editor_tab = $('#" . $options['input_id'] . "_write'),
@@ -407,7 +398,7 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
             });
         });
         ");
-
+        }
     }
 
     // we do not need form_name any longer, because we can use plugin and Id
@@ -432,14 +423,8 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
     //    }
 
     if (($options['type'] == "html" || $options['type'] == "bbcode") && $options['char_count'] != FALSE) {
-
         // depends on texteditor.js
         add_to_jquery("$('#" . $options['input_id'] . "').charCounter();");
-
-
-        //        $html .= "</div>\n<div class='panel-footer clearfix'>\n";
-        //        $html .= "<div class='overflow-hide'><i><small>" . $locale['word_count'] . ": <span id='" . $options['input_id'] . "-wordcount'></span>" . (!empty( $options['maxlength'] ) ? " / " . $options['maxlength'] : '') . "</small></i></div>";
-        //        $html .= "</div>\n<!---panel-footer-->";
     }
 
     //    if ((!$options['type'] == "bbcode" && !$options['type'] == "html")) {

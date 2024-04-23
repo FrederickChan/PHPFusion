@@ -14,15 +14,20 @@
   --bs-dark: #14191e;
   --bs-light: #202227;
   --bs-secondary-rgb: 197, 198, 204;
-  --bs-body-bg: #191a1f;
+  //--bs-body-bg: #191a1f;
+  --bs-body-bg: #18191A;
   --bs-body-color: #a1a1a8;
   --bs-body-color-rgb: 161, 161, 168;
   --bs-mode: #0f0f10;
   --bs-mode-rgb: 15, 15, 16;
   --bs-border-color: rgba(255, 255, 255, 0.07);
-  --bs-card-bg-dark: #141519;
+  //--bs-card-bg-dark: #141519;
+  --bs-card-bg-dark: #242526;
   --bs-heading-color: var(--bs-gray-900);
   --bs-light-rgb: 32, 34, 39;
+  //--bs-input-bg: #191A1F;
+  --bs-input-bg: #3A3B3C;
+  --bs-input-hover-bg: #ffffff2a;
 
   // Navbar
   .navbar {
@@ -117,7 +122,6 @@
       }
     }
 
-
     --bs-btn-color: var(--bs-gray-600);
     --bs-btn-border-color: var(--bs-gray-200);
     --bs-btn-hover-color: var(--bs-gray-600);
@@ -172,7 +176,7 @@
   .card {
     --bs-card-cap-bg: var(--bs-card-bg-dark) !important;
     --bs-card-bg: var(--bs-card-bg-dark) !important;
-    --bs-card-border-color: var(--bs-light);
+    --bs-card-border-color: var(--bs-gray-100);
   }
 
   // Offacanvas
@@ -209,7 +213,6 @@
     }
   }
 
-
   table, table.dataTable {
     background: var(--bs-dark);
     border: 1px solid var(--bs-gray-100);
@@ -227,10 +230,10 @@
     }
   }
 
-
   // Background mode
   header {
-    background: var(--bs-mode);
+    background: var(--bs-card-bg-dark);
+    border-bottom: 1px solid var(--bs-border-color);
     height: auto;
   }
 
@@ -251,6 +254,21 @@
   .navbar-nav .dropdown .dropdown-submenu:hover > .dropdown-menu {
     box-shadow: none;
   }
+
+  .file-input {
+    .file-preview .fileinput-remove.close {
+      background: var(--bs-gray-400);
+      border: 0;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0 .3rem;
+      height: 1.3rem;
+      width: 1.3rem;
+    }
+  }
+
 
   // Mobile mockup and mac mockup
   .iphone-x {
@@ -275,12 +293,16 @@
 
   // Form control background
   .form-control {
-    background-color: var(--bs-body-bg);
     border-color: var(--bs-gray-100);
+    background-color: var(--bs-input-bg);
+    border-radius: .5rem;
 
-    &:focus {
-      border-color: var(--bs-primary);
+    &:hover, &:focus {
+      border: 0;
+      background-color: var(--bs-input-hover-bg);
+
     }
+
   }
 
   // Choices
@@ -538,7 +560,116 @@
     background-color: #ddd;
   }
 
+  .nav {
+    .nav-item {
+      .nav-link {
+        color: var(--bs-gray-400);
 
+        &:hover, &:focus {
+          color: var(--bs-gray-400);
+          background-color: var(--bs-gray-100);
+        }
+      }
+    }
+  }
+
+  .nav-pills {
+
+    .nav-item {
+      margin-right: 1rem;
+
+      .nav-link {
+        background: transparent;
+        color: var(--bs-gray-400);
+        font-weight: 500;
+
+        &:hover {
+          color: var(--bs-gray-400);
+          background: var(--bs-gray-100);
+        }
+
+        &.active {
+          background: var(--bs-gray-200);
+          color: var(--bs-gray-400);
+        }
+      }
+    }
+  }
+
+  .panel-txtarea {
+
+    .display-flex {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+
+    .flex-start {
+      margin-right: auto;
+    }
+
+    .card-header {
+      padding-bottom: 0;
+      padding-top: .5rem;
+    }
+
+    .card-body {
+      padding: 0;
+    }
+
+    .card-footer {
+      background: transparent;
+      padding-bottom: 0;
+      padding-top: 0;
+      border-top: 1px solid var(--bs-card-border-color);
+    }
+
+    .nav-tabs {
+      margin-right: -3px;
+
+      .nav-item > .nav-link {
+        border-bottom: 0 !important;
+
+        &.active {
+          color: var(--bs-gray-900);
+          border: 1px solid var(--bs-border-color) !important;
+          background: var(--bs-input-bg);
+          border-bottom: 0 !important;
+        }
+      }
+    }
+
+    .preview-response {
+      background: var(--bs-input-bg);
+    }
+
+  }
+
+  .bbcode_input {
+    .button {
+      margin-right: 0.5rem;
+      background: transparent;
+
+      &:hover {
+        //background: var(--bs-input-hover-bg);
+        color: var(--bs-secondary-color);
+        background: var(--bs-gray-200);
+      }
+
+      svg {
+        height: 25px;
+        width: 25px;
+      }
+    }
+  }
+
+  .btn-file {
+    border: 1px dashed var(--bs-gray-200);
+    font-weight: 700;
+
+    &:hover {
+      color: var(--bs-gray-600);
+    }
+  }
 }
 
 // Dark mode switch
