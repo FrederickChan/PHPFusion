@@ -22,12 +22,16 @@
   --bs-mode-rgb: 15, 15, 16;
   --bs-border-color: rgba(255, 255, 255, 0.07);
   //--bs-card-bg-dark: #141519;
+  --bs-card-bg: #242526;
   --bs-card-bg-dark: #242526;
   --bs-heading-color: var(--bs-gray-900);
   --bs-light-rgb: 32, 34, 39;
   //--bs-input-bg: #191A1F;
   --bs-input-bg: #3A3B3C;
   --bs-input-hover-bg: #ffffff2a;
+
+  --bs-secondary-bg: #3A3B3C;
+  --bs-secondary-hover-bg: #ffffff2a;
 
   // Navbar
   .navbar {
@@ -83,6 +87,18 @@
 
   .btn-close {
     filter: invert(1) grayscale(100%) brightness(300%);
+  }
+
+  .btn-secondary {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-gray-400); //#3A3B3C
+    border:0;
+    &:hover {
+      background-color: var(--bs-secondary-hover-bg);
+    }
+    svg {
+      fill:var(--bs-gray-800) !important;
+    }
   }
 
   .btn-secondary-soft {
@@ -436,8 +452,8 @@
     }
 
     .select2-dropdown {
-      background-color: rgba(var(--bs-light-rgb), 1) !important;
-      border: 1px solid var(--bs-gray-100) !important;
+      background-color: var(--bs-card-bg) !important; //rgba(var(--bs-light-rgb), 1) !important;
+      border: 1px solid var(--bs-gray-200) !important;
       color: var(--bs-body-color);
 
       .select2-search .select2-search__field {

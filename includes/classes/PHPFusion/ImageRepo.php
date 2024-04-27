@@ -159,7 +159,7 @@ class ImageRepo {
      * @return string[]
      */
     public static function getImagePaths() {
-        self::cache();
+        self::cacheImages();
 
         return self::$image_paths;
     }
@@ -167,7 +167,7 @@ class ImageRepo {
     /**
      * Fetch and cache all off the imagepaths
      */
-    private static function cache() {
+    public static function cacheImages() {
         if (self::$cached) {
             return;
         }
@@ -175,7 +175,8 @@ class ImageRepo {
         self::$cached = TRUE;
 
         $settings = fusion_get_settings();
-// You need to + sign it, so setImage will work.
+
+        // You need to + sign it, so setImage will work.
         self::$image_paths += [
             //A
             'add' => IMAGES . 'icons/add.svg',
@@ -200,9 +201,11 @@ class ImageRepo {
             'bbcode_quote' => INCLUDES . 'bbcodes/images/quote.svg',
             'block' => IMAGES . 'icons/block.svg',
             'brush' => IMAGES . 'icons/brush.svg',
-            'bonus' => IMAGES.'icons/bonus.svg',
+            'bonus' => IMAGES . 'icons/bonus.svg',
             //C
             'cart' => IMAGES . 'icons/cart.svg',
+            'calendar' => IMAGES . 'icons/calendar.svg',
+            'calenda_today' => IMAGES . 'icons/calendar_today.svg',
             'cake' => IMAGES . 'icons/cake.svg',
             'certified' => IMAGES . 'icons/certified.svg',
             'close' => IMAGES . 'icons/deactivate.svg',
@@ -212,6 +215,7 @@ class ImageRepo {
             'copy' => IMAGES . 'icons/copy.svg',
             'crypto' => IMAGES . 'icons/crypto.svg',
             'cash' => IMAGES . 'icons/money.svg',
+            'countdown' => IMAGES . 'icons/countdown.svg',
 
 
             //D
@@ -220,6 +224,7 @@ class ImageRepo {
             'delivery' => IMAGES . 'icons/delivery.svg',
             'download' => IMAGES . 'icons/download.svg',
             'dark_mode' => IMAGES . 'icons/dark_mode.svg',
+            'depart' => IMAGES . 'icons/depart.svg',
 
             //E
             'events' => IMAGES . 'icons/events.svg',
@@ -240,6 +245,7 @@ class ImageRepo {
 
             //I
             'inbox' => IMAGES . 'icons/inbox.svg',
+            'ip' => IMAGES . 'icons/ip.svg',
             "imagenotfound" => IMAGES . "imagenotfound.jpg",
             //J
             'job' => IMAGES . 'icons/work.svg',
@@ -251,6 +257,8 @@ class ImageRepo {
             "logo" => $settings['sitebanner'],
             'light_mode' => IMAGES . 'icons/light_mode.svg',
             'location' => IMAGES . 'icons/location.svg',
+            'lock' => IMAGES . 'icons/lock.svg',
+            'like' => IMAGES.'icons/like.svg',
 
             //M
             'mentions' => IMAGES . 'icons/mentions.svg',
@@ -260,7 +268,7 @@ class ImageRepo {
             'mail-unread' => IMAGES . 'icons/envelope.svg',
             'more' => IMAGES . 'icons/hellip-h.svg',
             'more-h' => IMAGES . 'icons/hellip-v.svg',
-            'mood' => IMAGES.'icons/mood.svg',
+            'mood' => IMAGES . 'icons/mood.svg',
 
             //N
             "noavatar" => IMAGES . "avatars/no-avatar.jpg",
@@ -279,9 +287,11 @@ class ImageRepo {
             'privacy' => IMAGES . 'icons/privacy.svg',
             'profile' => IMAGES . 'icons/profile.svg',
             'posts' => IMAGES . 'icons/comment.svg',
-            'photos' => IMAGES.'icons/photo.svg',
+            'photos' => IMAGES . 'icons/photo.svg',
             //Q
             'qrcode' => IMAGES . 'icons/qr.svg',
+            'preview' => IMAGES . 'icons/preview.svg',
+            'question' => IMAGES . 'icons/question.svg',
             //R
             'right' => IMAGES . 'icons/right.svg',
             'restart' => IMAGES . 'icons/restart.svg',
@@ -291,12 +301,14 @@ class ImageRepo {
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',
             'shop' => IMAGES . 'icons/shop.svg',
             'school' => IMAGES . 'icons/school.svg',
+            'share' => IMAGES.'icons/share.svg',
 
 
             //T
             'tag' => IMAGES . 'icons/label.svg',
             'trip' => IMAGES . 'icons/luggage.svg',
             'totp' => IMAGES . 'icons/totp.svg',
+            'tour' => IMAGES . 'icons/tour.svg',
 
             //U
             'up' => IMAGES . "icons/up.svg",
@@ -310,6 +322,9 @@ class ImageRepo {
             'user_archive' => IMAGES . 'icons/archive_user.svg',
             'user_deactivate' => IMAGES . 'icons/deactivate.svg',
             'user_ban' => IMAGES . 'icons/ban_user.svg',
+            'user_level' => IMAGES . 'icons/user_level.svg',
+            'user_lastvisit' => IMAGES . 'icons/last_visit.svg',
+            'unlock' => IMAGES . 'icons/unlock.svg',
             //V
             'visible' => IMAGES . 'icons/visible.svg',
             'non_visible' => IMAGES . 'icons/non_visible.svg',
@@ -526,7 +541,9 @@ class ImageRepo {
      * but others not. Otherwise, the html "img" tag
      */
     public static function getImage($image, $alt = "", $style = "", $title = "", $atts = "") {
-        self::cache();
+
+        self::cacheImages();
+
         $url = self::$image_paths[$image] ?? IMAGES . "icons/image_not_found.svg";
         if ($style) {
             $style = " style='$style'";
@@ -580,7 +597,7 @@ class ImageRepo {
      * @param string $target
      */
     public static function replaceInAllPath($source, $target) {
-        self::cache();
+        self::cacheImages();
         foreach (self::$image_paths as $name => $path) {
             self::$image_paths[$name] = str_replace($source, $target, $path);
         }

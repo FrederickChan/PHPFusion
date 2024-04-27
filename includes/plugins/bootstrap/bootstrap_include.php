@@ -52,7 +52,7 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
             'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
             'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
-            'register' =>['dir' => TEMPLATES.'html/public/', 'file' => 'register.twig'],
+            'register' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'register.twig'],
             'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
             'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
             'profile' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'profile.twig'],
@@ -61,7 +61,7 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],
             'up_close' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'close.twig'],
             'up_privacy' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'privacy.twig'],
-            'up_home'=> ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'home.twig'],
+            'up_home' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'home.twig'],
             // Home settings
             'up_home_details' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'details.twig'],
             'up_home_password' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'password.twig'],
@@ -106,11 +106,19 @@ if (defined('BOOTSTRAP')) {
      */
     fusion_add_hook('fusion_footer_include', 'bootstrap_footer');
 
-    function get_theme_template($component) {
+    /**
+     * @param $component
+     * @param false $debug
+     * @return mixed|string
+     */
+    function get_theme_template($component, $debug = FALSE) {
         static $framework_paths = [];
         if (empty($paths)) {
             $framework_paths = fusion_filter_hook('fusion_theme_templates');
             $framework_paths = flatten_array($framework_paths);
+        }
+        if ($debug) {
+            print_p($framework_paths);
         }
 
         return $framework_paths[$component] ?? '';
@@ -129,16 +137,20 @@ if (defined('BOOTSTRAP')) {
 
         if ($path = get_bootstrap($component)) {
 
-            // check for theme port, for now only support php
-            if ($theme_path = get_theme_template($component)) {
-                $path = $theme_path;
+            // Override by theme
+            if ($t_path = get_theme_template($component)) {
+                $path = $t_path;
             }
-
             // Get twig templates
+            return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
+
+        } else if ($path = get_theme_template($component)) {
+
             return fusion_render($path['dir'], $path['file'], $info, defined('FUSION_DEVELOPMENT'));
 
         } else if ($path = get_bootstrap($component, 'auto', TRUE)) {
             // Get php templates
+
             require_once $path['dir'] . $path['file'];
 
             if ($callback = call_user_func($component, $info)) {
