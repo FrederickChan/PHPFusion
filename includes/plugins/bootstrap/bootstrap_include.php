@@ -56,6 +56,8 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
             'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
             'profile' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'profile.twig'],
+            'comments' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comments.twig'],
+            'comment-list' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comment-list.twig'],
 
             // Profile Settings
             'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],

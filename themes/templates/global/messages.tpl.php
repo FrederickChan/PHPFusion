@@ -167,7 +167,7 @@ if ( !function_exists( 'display_pm_inbox' ) ) {
             echo '<div class="m-b-20">';
             if ( !empty( $data['user_id'] ) ) {
                 echo display_avatar( $data, '40px', '', FALSE, 'img-rounded pull-left m-t-5 m-r-10' );
-                echo profile_link( $data['user_id'], $data['user_name'], $data['user_status'], 'display-block' );
+                echo display_name( $data, '', $data['user_status'] );
             } else {
                 echo $data['contact_user']['user_name'] . ': ';
             }

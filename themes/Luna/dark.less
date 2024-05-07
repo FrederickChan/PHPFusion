@@ -23,6 +23,7 @@
   --bs-border-color: rgba(255, 255, 255, 0.07);
   //--bs-card-bg-dark: #141519;
   --bs-card-bg: #242526;
+  --bs-card-color: #fff;
   --bs-card-bg-dark: #242526;
   --bs-heading-color: var(--bs-gray-900);
   --bs-light-rgb: 32, 34, 39;
@@ -92,12 +93,14 @@
   .btn-secondary {
     background-color: var(--bs-secondary-bg);
     color: var(--bs-gray-400); //#3A3B3C
-    border:0;
+    border: 0;
+
     &:hover {
       background-color: var(--bs-secondary-hover-bg);
     }
+
     svg {
-      fill:var(--bs-gray-800) !important;
+      fill: var(--bs-gray-800) !important;
     }
   }
 
@@ -193,6 +196,7 @@
     --bs-card-cap-bg: var(--bs-card-bg-dark) !important;
     --bs-card-bg: var(--bs-card-bg-dark) !important;
     --bs-card-border-color: var(--bs-gray-100);
+    --bs-card-color: #fff;
   }
 
   // Offacanvas
@@ -630,6 +634,7 @@
 
     .card-body {
       padding: 0;
+      color: var(--bs-gray-600);
     }
 
     .card-footer {

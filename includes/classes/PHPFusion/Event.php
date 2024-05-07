@@ -191,7 +191,7 @@ class Event {
                     $user = fusion_get_user($notice['notice_from']);
                     $sub_html .= strtr(self::childNoticeTemplate($notice), [
                         '{%avatar%}'       => display_avatar($user, '50px', '', TRUE, ''),
-                        '{%profile_name%}' => profile_link($user['user_id'], $user['user_name'], $user['user_status']),
+                        '{%profile_name%}' => display_name($user),
                         '{%message%}'      => ucfirst($notice['notice_message']),
                         '{%datetime%}'     => timer($notice['notice_datestamp'])
                     ]);

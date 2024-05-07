@@ -84,6 +84,7 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         'censor_words' => TRUE,
         'descript' => TRUE,
         'floating_label' => FALSE,
+        'template' => 'form_inputs',
     ];
 
     $input_value = clean_input_value($input_value, $input_name);
@@ -445,7 +446,7 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
 
     ksort($options);
 
-    return fusion_get_template('form_inputs', [
+    return fusion_get_template($options['template'], [
         "input_name" => $input_name,
         "input_label" => $label,
         "input_value" => $options['priority_value'] ?? $input_value,

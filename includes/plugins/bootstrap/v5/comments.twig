@@ -1,0 +1,48 @@
+{% set userdata = fusion_get_userdata() %}
+{% set settings = fusion_get_settings() %}
+
+
+{# {{ comment_title|raw }} #}
+
+<div class='comments-panel'>
+    {{ comment_ratings|raw }}
+    <!-- Comment wrap START -->
+    <ul class="comment-wrap list-unstyled">
+        {{ comment_posts|raw }}
+    </ul>
+    <!-- Comment wrap END -->
+    <!--Comment Navigation START-->
+    <div class='clearfix'>
+        <span class='pull-right'>{{ comment_admin_link|raw }}</span>
+        <div class='overflow-hide'>{{ comment_pagenav }}</div>
+    </div>
+</div>
+
+{% if comment_postable %}
+    {{ comment_form_open|raw }}
+    <div class="d-flex" id="{{ comment_form_id }}">
+        <!-- Avatar -->
+        {% if settings['comments_avatar'] %}
+            <div class="circle me-2">
+                {{ display_avatar(userdata, '40px') }}
+            </div>
+        {% endif %}
+        <!-- Comment box  -->
+        <div class="w-100">
+            {{ comment_name_input|raw }}
+            {{ comment_subject_input|raw }}
+            {{ comment_ratings_input|raw }}
+            {{ comment_message_input|raw }}
+        </div>
+    </div>
+    <div class="text-end">
+        {{ comment_button|raw }}
+    </div>
+    {% if comment_captcha|length %}
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-md-6">{{ comment_captcha['captcha']|raw }}</div>
+            <div class="col-xs-12 col-sm-8 col-md-6">{{ comment_captcha['input']|raw }}</div>
+        </div>
+    {% endif %}
+    {{ comment_form_close|raw }}
+{% endif %}

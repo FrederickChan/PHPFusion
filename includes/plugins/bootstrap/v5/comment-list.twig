@@ -1,0 +1,130 @@
+{% set settings = fusion_get_settings() %}
+   {% if comment_nested %}
+{% set h_ = ' h-reply' %}
+   {% endif %}
+
+<li class="comment-item{{ h_ }}" id="{{ comment_list_id }}">
+    <div class="comment-container d-flex position-relative">
+        {% if settings['comments_avatar'] %}
+            <!-- Avatar -->
+            {{ user_avatar_display|raw }}
+        {% endif %}
+        <div class="ms-2">
+{#            <div class="comment-timeline"></div>#}
+            <!-- Comment by -->
+            <div class="comment-content">
+                <div class="d-flex justify-content-between">
+                    <h6 class="comment-name">{{ user_name_display|raw }}</h6>
+                </div>
+                {% if comment_ratings %}
+                    <div class="ratings">{{ comment_ratings|raw }}</div>
+                {% endif %}
+                {% if comment_subject %}
+                    <div class='comment_title'>{{ comment_subject|raw }}</div>
+                {% endif %}
+
+                <p class="mb-0">{{ comment_message|raw }}</p>
+            </div>
+            <!-- Comment react -->
+            <ul class="nav nav-divider small">
+                <li class="nav-item">
+                    <small class="ms-2">5hr</small>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">Like (3)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">Reply</a>
+                </li>
+            </ul>
+        </div>
+        <div class="ms-1 comment-options-wrapper">
+            <div class="dropdown">
+                <a href="#" class="text-secondary circle py-1 px-2" id="options_{{ comment_list_id }}"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ get_image('more') }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="options_{{ comment_list_id }}">
+                    <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_list_id }}"
+                           href="#">
+                            <span class="pe-2">{{ get_image('user') }}</span> Block{{ display_name(data) }}
+                        </a>
+                    </li>
+                    <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_list_id }}"
+                           href="#">
+                            <span class="pe-2">{{ get_image('hide') }}</span> Hide comment</a>
+                    </li>
+                    <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_list_id }}"
+                           href="#">
+                            <span class="pe-2">{{ get_image('ban') }}</span>Report content
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment item nested START -->
+    {% if comment_nested %}
+        <ul class="comment-item-nested list-unstyled">
+            <li class="comment-item">
+                <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_reply_count, 'reply|replies') }}</a>
+            </li>
+        </ul>
+        <ul class="comment-item-nested list-unstyled" style="display:none;">
+             {{ comment_nested|raw }}
+        </ul>
+    {% endif %}
+    <!-- Comment item nested END -->
+    <!-- Comment form nested START -->
+    <ul class="comment-item-nested comments-reply-form list-unstyled">
+        <li class="comment-item">
+            <div class="d-flex position-relative w-100">
+                {% if settings['comments_avatar'] %}
+                    <!-- Avatar -->
+                    {{ user_avatar_display|raw }}
+                {% endif %}
+                <div class="ms-2 w-100">
+                    {{ comment_form_open|raw }}
+                    {{ comment_name_input|raw }}
+                    {{ comment_message_input|raw }}
+                    {{ comment_captcha['captcha']|raw }}
+                    {{ comment_captcha['input']|raw }}
+                    <div class="text-end">
+                        {{ comment_button|raw }}
+                    </div>
+                    {{ comment_form_close|raw }}
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!-- Comment form nested END -->
+
+    <!-- Load more replies -->
+    {# <a href="#!" role="button" #}
+    {# class="btn btn-link btn-link-loader btn-sm text-secondary d-flex align-items-center mb-3 ms-5" #}
+    {# data-bs-toggle="button" aria-pressed="true"> #}
+    {# <div class="spinner-dots me-2"> #}
+    {# <span class="spinner-dot"></span> #}
+    {# <span class="spinner-dot"></span> #}
+    {# <span class="spinner-dot"></span> #}
+    {# </div> #}
+    {# Load more replies #}
+    {# </a> #}
+    <!-- Comment item nested END -->
+</li>
+
+
+
+
+{# $html .= "<div><small>"; #}
+{# $html .= !empty($info['reply_link']) ? $info['comment_reply_link'] : ''; #}
+{# $html .= !empty($info['edit_link']) ? ' &middot; '.$info['comment_edit_link'] : ''; #}
+{# $html .= !empty($info['delete_link']) ? ' &middot; '.$info['comment_delete_link'] : ''; #}
+{# $html .= " - <span class='comment_date'>".$info['comment_date']."</span>"; #}
+{# $html .= "</small></div>"; #}
+
+{# $html .= $info['comment_reply_form']; #}
+
+{# $html .= "<ul class='sub_comments list-style-none'>".$info['comment_sub_comments']."</ul>"; #}
+

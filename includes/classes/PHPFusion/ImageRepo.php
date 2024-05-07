@@ -202,6 +202,8 @@ class ImageRepo {
             'block' => IMAGES . 'icons/block.svg',
             'brush' => IMAGES . 'icons/brush.svg',
             'bonus' => IMAGES . 'icons/bonus.svg',
+            'bookmark' => IMAGES . 'icons/bookmark.svg',
+
             //C
             'cart' => IMAGES . 'icons/cart.svg',
             'calendar' => IMAGES . 'icons/calendar.svg',
@@ -258,7 +260,7 @@ class ImageRepo {
             'light_mode' => IMAGES . 'icons/light_mode.svg',
             'location' => IMAGES . 'icons/location.svg',
             'lock' => IMAGES . 'icons/lock.svg',
-            'like' => IMAGES.'icons/like.svg',
+            'like' => IMAGES . 'icons/like.svg',
 
             //M
             'mentions' => IMAGES . 'icons/mentions.svg',
@@ -301,7 +303,7 @@ class ImageRepo {
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',
             'shop' => IMAGES . 'icons/shop.svg',
             'school' => IMAGES . 'icons/school.svg',
-            'share' => IMAGES.'icons/share.svg',
+            'share' => IMAGES . 'icons/share.svg',
 
 
             //T
@@ -346,7 +348,10 @@ class ImageRepo {
             "app_store" => IMAGES . "icons/apple.svg",
             'archive' => IMAGES . 'icons/archive.svg',
             'auto_mode' => IMAGES . 'icons/auto_mode.svg',
+            'alert' => IMAGES . 'icons/alert.svg',
+            'at' => IMAGES . 'icons/at.svg',
             //B
+            'ban' => IMAGES . 'icons/block.svg',
             'birthdays' => IMAGES . 'icons/birthdays.svg',
             'bbcode_bold' => INCLUDES . 'bbcodes/images/b.svg',
             'bbcode_big' => INCLUDES . 'bbcodes/images/big.svg',
@@ -364,6 +369,8 @@ class ImageRepo {
             'bbcode_quote' => INCLUDES . 'bbcodes/images/quote.svg',
             'block' => IMAGES . 'icons/block.svg',
             'brush' => IMAGES . 'icons/brush.svg',
+            'bookmark' => IMAGES . 'icons/bookmark.svg',
+            'beach' => IMAGES . 'icons/beach.svg',
             //C
             'certified' => IMAGES . 'icons/certified.svg',
             'close' => IMAGES . 'icons/deactivate.svg',
@@ -371,6 +378,8 @@ class ImageRepo {
             'comments' => IMAGES . 'icons/comments.svg',
             'celebrations' => IMAGES . 'icons/celebrations.svg',
             'copy' => IMAGES . 'icons/copy.svg',
+            'cafe' => IMAGES . 'icons/cafe.svg',
+
 
             //D
             "down" => IMAGES . "icons/down.svg",
@@ -381,15 +390,22 @@ class ImageRepo {
             //E
             'events' => IMAGES . 'icons/events.svg',
             'email' => IMAGES . 'icons/email.svg',
-
+            'explore' => IMAGES . 'icons/explore.svg',
             //F
+            'follow' => IMAGES . 'icons/follow.svg',
+            'flag' => IMAGES . 'icons/flag.svg',
+            'fruit' => IMAGES . 'icons/fruit.svg',
+            'food' => IMAGES . 'icons/rice.svg',
             //G
             "google_play" => IMAGES . "icons/google-play.svg",
 
             //H
+            'hide' => IMAGES . 'icons/hide.svg',
+            'history' => IMAGES . 'icons/history.svg',
             //I
             'inbox' => IMAGES . 'icons/inbox.svg',
             "imagenotfound" => IMAGES . "imagenotfound.jpg",
+            'icecream' => IMAGES . 'icons/icecream.svg',
             //J
             //K
             'ko' => IMAGES . 'icons/cancel.svg',
@@ -412,6 +428,8 @@ class ImageRepo {
             //O
             'ok' => IMAGES . 'icons/check_circle.svg',
             'outbox' => IMAGES . 'icons/outbox.svg',
+            'objects' => IMAGES . 'icons/objects.svg',
+
             //P
             'password' => IMAGES . 'icons/password.svg',
             'passkey' => IMAGES . 'icons/passkey.svg',
@@ -420,20 +438,25 @@ class ImageRepo {
             'privacy' => IMAGES . 'icons/privacy.svg',
             'profile' => IMAGES . 'icons/profile.svg',
             'posts' => IMAGES . 'icons/comment.svg',
+            'pet' => IMAGES . 'icons/pet.svg',
             //Q
             'qrcode' => IMAGES . 'icons/qr.svg',
             //R
             'right' => IMAGES . 'icons/right.svg',
             'restart' => IMAGES . 'icons/restart.svg',
+
             //S
             'secured' => IMAGES . 'icons/secured.svg',
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',
+            'sports' => IMAGES . 'icons/sports.svg',
+            'store' => IMAGES . 'icons/store.svg',
             //T
+            'trophy' => IMAGES . 'icons/trophy.svg',
             //U
             'up' => IMAGES . "icons/up.svg",
             'updates' => IMAGES . 'icons/updates.svg',
             'upgrades' => IMAGES . 'icons/upgrades.svg',
-
+            'unfollow' => IMAGES . 'icons/unfollow.svg',
 
             'user' => IMAGES . 'icons/profile.svg',
             'users' => IMAGES . 'icons/users.svg',

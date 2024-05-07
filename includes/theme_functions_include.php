@@ -792,7 +792,7 @@ if (!function_exists('display_avatar')) {
  *
  * @return string
  */
-function display_name($userdata, $class = '', $display_link = FALSE) {
+function display_name($userdata, $class = 'profile-link', $display_link = FALSE) {
 
     $username = $userdata['user_name'];
     if (!empty($userdata['user_firstname']) && !empty($userdata['user_lastname']) && $userdata['user_displayname'] == 1) {
