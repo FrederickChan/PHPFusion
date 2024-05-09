@@ -112,10 +112,11 @@
   --bs-dark-border-subtle: #a1a3a5;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI Historic", "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  //--bs-font-sans-serif: system-ui, -apple-system, "Segoe UI Historic", "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: "Segoe UI Historic", "Segoe UI", Helvetica, Arial, sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-  --bs-body-font-family: system-ui, -apple-system, "Segoe UI Historic", "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; // "Plus Jakarta Sans", sans-serif;
+  --bs-body-font-family: var(--bs-font-sans-serif); // system-ui, -apple-system, "Segoe UI Historic", "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; // "Plus Jakarta Sans", sans-serif;
   --bs-body-font-size: 0.9375rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
@@ -1345,18 +1346,24 @@ pre {
   margin-bottom: 1rem;
 
   .nav-item {
-
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    margin-bottom: 0 !important;
+    font-size: 12px;
+    margin: .2rem .5rem;
+
+    time {
+      color: var(--bs-gray-600);
+      margin-left: 10px;
+    }
 
     .nav-link {
       background: transparent;
       padding: 0;
+      font-weight: 700;
 
       &:hover {
         text-decoration: underline;
@@ -1898,14 +1905,15 @@ textarea {
 }
 
 .comment-name {
-  font-size: .775rem;
   font-weight: 600;
+  font-size: .8rem;
   margin: 0 !important;
+  color: var(--bs-gray-700);
 }
 
 .comment-content {
   background: var(--bs-input-bg);
-  color: var(--bs-gray-800);
+  color: var(--bs-gray-700);
 
   h6.comment-name {
     a {
@@ -1917,6 +1925,7 @@ textarea {
 }
 
 .comment-item {
+  position: relative;
 
   div.comment-container:before {
     content: "";
@@ -1936,6 +1945,18 @@ textarea {
   &.h-reply {
     & > div.comment-container:before {
       display: inline-block;
+    }
+  }
+
+  &.r-open {
+
+    & > .timeline-border {
+      content: "";
+      position: absolute;
+      height: calc(100% - 220px);
+      left: 16px;
+      border-left: 2px solid var(--bs-gray-200);
+      display: block;
     }
   }
 }
@@ -1970,15 +1991,8 @@ textarea {
 
   &.comments-reply-form {
     display: none;
-
     &.open {
       display: block;
-    }
-
-    &:before {
-      min-height: 30%;
-      height: fit-content;
-      top: -30%;
     }
   }
 
@@ -1987,17 +2001,6 @@ textarea {
     padding: 6px 0;
 
     &:before {
-      //content: "";
-      //width: 90px;
-      //height: calc(100% + 20px);
-      //display: inline-block;
-      //position: absolute;
-      //left: -39px;
-      //top: -8px;
-      //border-left: 2px solid var(--bs-border-color);
-      //border-bottom: 2px solid var(--bs-border-color);
-      //border-radius: 0 0 0 25px;
-
       position: absolute;
       content: "";
       width: 31px;
@@ -2007,7 +2010,7 @@ textarea {
       left: -39px;
       border-left: 2px solid var(--bs-gray-200);
       border-bottom: 2px solid var(--bs-gray-200);
-      border-radius: 0 0 0 25px;
+      border-radius: 0 0 0 10px;
     }
 
     a {
@@ -2016,6 +2019,18 @@ textarea {
 
       &:hover {
         text-decoration: underline;
+      }
+    }
+
+    &.r-open {
+
+      & > .timeline-border {
+        content: "";
+        position: absolute;
+        height: calc(100% - 283px);
+        left: 16px;
+        border-left: 2px solid var(--bs-gray-200);
+        display: block;
       }
     }
   }
@@ -2061,7 +2076,7 @@ textarea {
     }
   }
 
-  &:hover {
+  & .comment-container:hover {
     .comment-options-wrapper {
       display: block;
     }

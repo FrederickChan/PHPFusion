@@ -161,6 +161,16 @@ class Comments {
             $(this).closest('ul').next('ul').show();
         });
         
+        $(document).on('click', 'a[data-comment-r=\"reply\"]', function(e) {
+            e.preventDefault();   
+            console.log('yep');         
+            var tgt = $(this).data('comment-target'),
+            tgtObj = $(tgt);
+            
+            $(this).closest('li.comment-item').addClass('r-open');
+            tgtObj.addClass('open');
+        });
+        
         ");
     }
 

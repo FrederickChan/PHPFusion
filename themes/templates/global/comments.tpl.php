@@ -63,6 +63,7 @@ if (!function_exists('display_no_comments')) {
 if (!function_exists('display_comments_list')) {
     function display_comments_list($info = []) {
 
+
         return fusion_get_template('comment-list', $info);
 
 //        $html = "<li id='".$info['comment_list_id']."' class='m-b-15'>";

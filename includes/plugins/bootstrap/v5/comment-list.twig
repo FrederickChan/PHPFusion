@@ -3,7 +3,8 @@
 {% set h_ = ' h-reply' %}
    {% endif %}
 
-<li class="comment-item{{ h_ }}" id="{{ comment_list_id }}">
+<li class="comment-item r-open{{ h_ }}" id="{{ comment_list_id }}">
+    <div class="timeline-border"></div>
     <div class="comment-container d-flex position-relative">
         {% if settings['comments_avatar'] %}
             <!-- Avatar -->
@@ -22,19 +23,18 @@
                 {% if comment_subject %}
                     <div class='comment_title'>{{ comment_subject|raw }}</div>
                 {% endif %}
-
                 <p class="mb-0">{{ comment_message|raw }}</p>
             </div>
             <!-- Comment react -->
             <ul class="nav nav-divider small">
                 <li class="nav-item">
-                    <small class="ms-2">5hr</small>
+                    {{ comment_time|raw }}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#!">Like (3)</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#!">Reply</a>
+                    <a class="nav-link" href="#" data-comment-r="reply" data-comment-target="#cr{{ comment_list_id }}">Reply</a>
                 </li>
             </ul>
         </div>
@@ -77,7 +77,7 @@
     {% endif %}
     <!-- Comment item nested END -->
     <!-- Comment form nested START -->
-    <ul class="comment-item-nested comments-reply-form list-unstyled">
+    <ul class="comment-item-nested comments-reply-form list-unstyled" id="cr{{ comment_list_id }}">
         <li class="comment-item">
             <div class="d-flex position-relative w-100">
                 {% if settings['comments_avatar'] %}
