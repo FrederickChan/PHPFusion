@@ -1,5 +1,5 @@
 {% set settings = fusion_get_settings() %}
-   {% if comment_nested %}
+   {% if comment_child_count %}
 {% set h_ = ' h-reply' %}
    {% endif %}
 
@@ -34,7 +34,7 @@
                     <a class="nav-link" href="#!">Like (3)</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-comment-r="reply" data-comment-target="#cr{{ comment_list_id }}">Reply</a>
+                    <a class="nav-link" href="#" data-comment-r="reply" data-comment-id="{{ comment_list_id }}" data-comment-target="#cr{{ comment_list_id }}">Reply</a>
                 </li>
             </ul>
         </div>
@@ -65,39 +65,20 @@
     </div>
 
     <!-- Comment item nested START -->
-    {% if comment_nested %}
+    {% if comment_child_count %}
         <ul class="comment-item-nested list-unstyled">
             <li class="comment-item">
-                <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_reply_count, 'reply|replies') }}</a>
+                <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_child_count, 'reply|replies') }}</a>
             </li>
         </ul>
         <ul class="comment-item-nested list-unstyled" style="display:none;">
-             {{ comment_nested|raw }}
+{#             {{ comment_nested|raw }}#}
         </ul>
     {% endif %}
     <!-- Comment item nested END -->
+
     <!-- Comment form nested START -->
-    <ul class="comment-item-nested comments-reply-form list-unstyled" id="cr{{ comment_list_id }}">
-        <li class="comment-item">
-            <div class="d-flex position-relative w-100">
-                {% if settings['comments_avatar'] %}
-                    <!-- Avatar -->
-                    {{ user_avatar_display|raw }}
-                {% endif %}
-                <div class="ms-2 w-100">
-                    {{ comment_form_open|raw }}
-                    {{ comment_name_input|raw }}
-                    {{ comment_message_input|raw }}
-                    {{ comment_captcha['captcha']|raw }}
-                    {{ comment_captcha['input']|raw }}
-                    <div class="text-end">
-                        {{ comment_button|raw }}
-                    </div>
-                    {{ comment_form_close|raw }}
-                </div>
-            </div>
-        </li>
-    </ul>
+    <ul class="comment-item-nested comments-reply-form list-unstyled" id="cr{{ comment_list_id }}"></ul>
     <!-- Comment form nested END -->
 
     <!-- Load more replies -->

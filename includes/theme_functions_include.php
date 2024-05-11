@@ -794,12 +794,16 @@ if (!function_exists('display_avatar')) {
  */
 function display_name($userdata, $class = 'profile-link', $display_link = FALSE) {
 
-    $username = $userdata['user_name'];
-    if (!empty($userdata['user_firstname']) && !empty($userdata['user_lastname']) && $userdata['user_displayname'] == 1) {
+    $username = $userdata['user_name'] ?? 'Guest';
+    $user_id = $userdata['user_id'] ?? '0';
+    $user_status = $userdata['user_status'] ?? '0';
+    $show_ = $userdata['user_displayname'] ?? '0';
+
+    if (!empty($userdata['user_firstname']) && !empty($userdata['user_lastname']) && $show_) {
         $username = $userdata['user_firstname'] . ' ' . $userdata['user_lastname'];
     }
 
-    return profile_link($userdata['user_id'], $username, $userdata['user_status'], $class, $display_link);
+    return profile_link($user_id, $username, $user_status, $class, $display_link);
 }
 
 /**
@@ -812,7 +816,6 @@ function display_name($userdata, $class = 'profile-link', $display_link = FALSE)
 function string_to_color_code($text) {
     $min_brightness = 50; // integer between 0 and 100
     $spec = 3;            // integer between 2-10, determines how unique each color will be
-
     $hash = sha1(md5(sha1($text)));
     $colors = [];
     for ($i = 0; $i < 3; $i++) {

@@ -58,6 +58,7 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
             'profile' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'profile.twig'],
             'comments' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comments.twig'],
             'comment-list' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comment-list.twig'],
+            'comment-form' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comment-form.twig'],
 
             // Profile Settings
             'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],

@@ -50,7 +50,7 @@ require_once INCLUDES."deprecated.php";
 
 require_once INCLUDES."theme_functions_include.php";
 
-require_once INCLUDES.'plugins_include.php';
+require_once INCLUDES."plugins_include.php";
 
 // for compatibility
 if (!defined('THEME_BULLET')) {

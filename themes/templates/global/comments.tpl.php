@@ -18,18 +18,13 @@
 
 if (!function_exists('display_comments_ui')) {
     function display_comments_ui($info) {
-        add_to_jquery("
-        $(document).on('focus', '.plchr > input', function(e) {
-            var pom = $(this).closest('.plchr'),
-            tom = pom.closest('.plchw').find('.plchx'),
-            tomText = tom.find('textarea');
-            // let us do emoji buttons
-            pom.hide();
-            tom.show();
-            tomText.focus();
-        });
-        ");
         return fusion_get_template('comments', $info);
+    }
+}
+
+if (!function_exists('display_comment_form')) {
+    function display_comment_form($info) {
+        return fusion_get_template('comment-form', $info);
     }
 }
 
@@ -62,7 +57,6 @@ if (!function_exists('display_no_comments')) {
 
 if (!function_exists('display_comments_list')) {
     function display_comments_list($info = []) {
-
 
         return fusion_get_template('comment-list', $info);
 
@@ -136,6 +130,7 @@ if (!function_exists('display_comments_reply_form')) {
 
 if (!function_exists('display_comments_form')) {
     function display_comments_form($info) {
+
         return fusion_get_template('comments', $info);
 
 

@@ -36,7 +36,6 @@ if ($list = makefilelist( INCLUDES . 'plugins/', '.|..', FALSE, 'folders' )) {
 /**
  * When there are no plugins with get_template enabled during load, then revert system to load template for non-bootstrap version
  */
-
 if (!function_exists( 'fusion_get_template' )) {
     /**
      * @param $component
@@ -56,7 +55,7 @@ if (!function_exists( 'fusion_get_template' )) {
             return call_user_func( $path['arguments'], $info );
         }
 
-        return 'This template ' . $component . ' is not supported';
+        return 'This template ' . $component . ' is not supported (default)';
 
     }
 

@@ -51,7 +51,8 @@ $endpoints = [
         'preview-text' => 'text_preview.php', // post
         'notify-read' => 'notify_read.php', // post
         'notify-readall' => 'notify_readall.php', // post
-        'error-update' => 'errorlogs_update.php' // post
+        'error-update' => 'errorlogs_update.php', // post
+        'comment-get' => 'comments_get.php', // post
     ]
     + get_extended_endpoints();
 

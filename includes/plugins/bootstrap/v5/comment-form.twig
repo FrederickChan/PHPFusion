@@ -1,0 +1,23 @@
+
+{% set settings = fusion_get_settings()  %}
+{% set userdata = fusion_get_userdata() %}
+
+<li class="comment-item">
+    <div class="d-flex position-relative w-100">
+        {% if settings['comments_avatar'] %}
+            <!-- Avatar -->
+            {{ comment_form_avatar|raw }}
+        {% endif %}
+        <div class="ms-2 w-100">
+            {{ comment_form_open|raw }}
+            {{ comment_name_input|raw }}
+            {{ comment_message_input|raw }}
+            {{ comment_captcha['captcha']|raw }}
+            {{ comment_captcha['input']|raw }}
+            <div class="text-end">
+                {{ comment_button|raw }}
+            </div>
+            {{ comment_form_close|raw }}
+        </div>
+    </div>
+</li>

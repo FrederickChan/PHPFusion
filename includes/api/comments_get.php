@@ -1,0 +1,35 @@
+<?php
+
+use PHPFusion\Comments;
+
+defined('IN_FUSION') || exit;
+const BOOTSTRAP = 5;
+
+function get_comments() {
+
+    if (fusion_safe()) {
+//print_p($_GET);
+//        PHPFusion\Installer\Infusions::loadConfiguration();
+//        require_once THEME.'theme_db.php';
+
+        require_once INCLUDES . "plugins_include.php";
+        require_once INCLUDES . "theme_functions_include.php";
+
+        $params = fusion_decode(fusion_decrypt(get('params'), SECRET_KEY));
+        if (!empty($params)) {
+            $params['comment_cat_id'] = str_replace('c', '', get('id'));
+        }
+
+        if (!empty($params['comment_item_type']) && !empty($params['comment_item_id']) && !empty($params['comment_cat_id'])) {
+            if (get('type') == 'input') {
+                $obj = Comments::getInstance($params)->showCommentForm();
+                echo $obj;
+            } else {
+                $obj = Comments::getInstance($params)->showCommentPosts();
+                echo $obj;
+            }
+        }
+    }
+}
+
+fusion_add_hook('fusion_filters', 'get_comments');
