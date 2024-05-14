@@ -44,47 +44,47 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
     }
 
     $options += [
-        'input_id' => clean_input_id($input_name),
-        'input_name' => clean_input_name($input_name),
-        'type' => '',
-        'inline_editing' => FALSE,
-        'required' => FALSE,
-        'tinymce_forced_root' => TRUE,
-        'placeholder' => '',
-        'deactivate' => FALSE,
-        'width' => '',
-        'inner_width' => '100%',
-        'height' => '200px',
-        'class' => '',
-        'inner_class' => '',
-        'inline' => FALSE,
-        'length' => 200,
-        'error_text' => $locale['error_input_default'],
-        'safemode' => FALSE,
-        'form_name' => 'input_form',
-        'tinymce' => 'simple',
-        'tinymce_css' => '',
-        'tinymce_image' => TRUE, // Turns on or off the image selection feature in TinyMCE
-        'no_resize' => FALSE,
-        'autosize' => FALSE,
-        'bbcode' => FALSE,
-        'html' => FALSE,
-        'preview' => FALSE,
-        'path' => IMAGES,
-        'maxlength' => '',
-        'tip' => '',
-        'ext_tip' => '',
-        'input_bbcode' => '',
-        'char_count' => TRUE, // it is a character counter, not a word counter
-        'file_filter' => ['.png', '.PNG', '.svg', '.SVG', '.bmp', '.BMP', '.jpg', '.JPG', '.jpeg', '.gif', '.GIF', '.tiff', '.TIFF'],
-        'tinymce_theme' => 'silver', // silver|mobile
-        'tinymce_skin' => 'oxide', // oxide|oxide-dark
-        'tinymce_spellcheck' => TRUE,
-        'rows' => 5,
-        'censor_words' => TRUE,
-        'descript' => TRUE,
-        'floating_label' => FALSE,
-        'template' => 'form_inputs',
+        "input_id" => clean_input_id($input_name),
+        "input_name" => clean_input_name($input_name),
+        "type" => "",
+        "inline_editing" => FALSE,
+        "required" => FALSE,
+        "tinymce_forced_root" => TRUE,
+        "placeholder" => "",
+        "deactivate" => FALSE,
+        "width" => "",
+        "inner_width" => "100%",
+        "height" => "200px",
+        "class" => "",
+        "inner_class" => "",
+        "inline" => FALSE,
+        "length" => 200,
+        "error_text" => $locale["error_input_default"],
+        "safemode" => FALSE,
+        "form_name" => "input_form",
+        "tinymce" => "simple",
+        "tinymce_css" => "",
+        "tinymce_image" => TRUE, // Turns on or off the image selection feature in TinyMCE
+        "no_resize" => FALSE,
+        "autosize" => FALSE,
+        "bbcode" => FALSE,
+        "html" => FALSE,
+        "preview" => FALSE,
+        "path" => IMAGES,
+        "maxlength" => "",
+        "tip" => "",
+        "ext_tip" => "",
+        "input_bbcode" => "",
+        "char_count" => TRUE, // it is a character counter, not a word counter
+        "file_filter" => [".png", ".PNG", ".svg", ".SVG", ".bmp", ".BMP", ".jpg", ".JPG", ".jpeg", ".gif", ".GIF", ".tiff", ".TIFF"],
+        "tinymce_theme" => "silver", // silver|mobile
+        "tinymce_skin" => "oxide", // oxide|oxide-dark
+        "tinymce_spellcheck" => TRUE,
+        "rows" => 5,
+        "censor_words" => TRUE,
+        "descript" => TRUE,
+        "floating_label" => FALSE,
+        "template" => "form_inputs",
     ];
 
     $input_value = clean_input_value($input_value, $input_name);
@@ -453,29 +453,4 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         "input_options" => $options,
     ]);
 
-}
-
-function openeditortab($tab_title, $link_active_arrkey, $id, $link = FALSE, $class = FALSE, $getname = "section") {
-
-    $link_mode = !empty($link) ? $link : 0;
-    $html = "<div class='nav-wrapper $class'>\n";
-    $html .= "<ul class='nav' " . ($id ? "id='" . $id . "'" : "") . " >";
-    if (!empty($tab_title['title'])) {
-        foreach ($tab_title['title'] as $arr => $v) {
-            $v_title = str_replace("-", " ", $v);
-            $tab_id = $tab_title['id'][$arr];
-            $icon = (isset($tab_title['icon'][$arr])) ? $tab_title['icon'][$arr] : "";
-            $link_url = $link ? clean_request($getname . '=' . $tab_id, [$getname], FALSE) : '#';
-            if ($link_mode) {
-                $html .= ($link_active_arrkey == $tab_id) ? "<li class='active'>" : "<li>";
-            } else {
-                $html .= ($link_active_arrkey == "" . $tab_id) ? "<li class='active'>" : "<li>";
-            }
-            $html .= "<a class='btn btn-default btn-sm m-l-5 pointer' " . (!$link_mode ? "id='tab-" . $tab_id . "' data-toggle='tab' data-target='#" . $tab_id . "'" : "href='$link_url'") . ">" . ($icon ? "<i class='" . $icon . "'></i>" : '') . " " . $v_title . " </a>";
-            $html .= "</li>";
-        }
-    }
-    $html .= "</ul>";
-
-    return $html;
 }

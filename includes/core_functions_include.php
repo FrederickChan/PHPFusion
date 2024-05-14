@@ -1035,7 +1035,7 @@ function fusion_load_script($file_path, $file_type = 'script', $html = FALSE) {
 
         if ($file_type == "script") {
 
-            $html_tag = "<script src='$file_path'></script>";
+            $html_tag = "<script src='$file_path' defer></script>";
             if ($html === TRUE) {
                 return $html_tag;
             }

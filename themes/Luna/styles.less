@@ -478,7 +478,7 @@ body {
   --bs-dropdown-zindex: 1000;
   --bs-dropdown-min-width: 15rem;
   --bs-dropdown-padding-x: 0;
-  --bs-dropdown-padding-y: 1rem;
+  --bs-dropdown-padding-y: 8px;
   --bs-dropdown-spacer: 0;
   --bs-dropdown-font-size: 0.9375rem;
   --bs-dropdown-color: var(--bs-body-color);
@@ -496,8 +496,8 @@ body {
   --bs-dropdown-link-active-color: #0f6fec;
   --bs-dropdown-link-active-bg: transparent;
   --bs-dropdown-link-disabled-color: var(--bs-gray-600);
-  --bs-dropdown-item-padding-x: 1.2rem;
-  --bs-dropdown-item-padding-y: 0.4rem;
+  --bs-dropdown-item-padding-x: 8px;
+  --bs-dropdown-item-padding-y: 4px;
   --bs-dropdown-header-color: var(--bs-gray-800);
   --bs-dropdown-header-padding-x: 1rem;
   --bs-dropdown-header-padding-y: 0.5rem;
@@ -505,7 +505,8 @@ body {
   z-index: var(--bs-dropdown-zindex);
   display: none;
   min-width: var(--bs-dropdown-min-width);
-  padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+  padding: var(--bs-dropdown-padding-y) 0; //var(--bs-dropdown-padding-x);
+  //padding: 0;
   margin: 0;
   font-size: var(--bs-dropdown-font-size);
   color: var(--bs-dropdown-color);
@@ -515,6 +516,17 @@ body {
   background-clip: padding-box;
   border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
   border-radius: var(--bs-dropdown-border-radius);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, .2));
+  border: 0 !important;
+
+  li {
+    margin: 0 8px;
+  }
+
+  .dropdown-item {
+    border-radius: 4px;
+    font-weight: 500;
+  }
 }
 
 // Typography
@@ -1953,7 +1965,7 @@ textarea {
     & > .timeline-border {
       content: "";
       position: absolute;
-      height: calc(100% - 320px);
+      height: calc(100% - 280px);
       //height: calc(100% - 240px);
       left: 16px;
       border-left: 2px solid var(--bs-gray-200);
@@ -1964,7 +1976,7 @@ textarea {
 
 .comment-item.open {
   & > .comment-item-nested {
-    &:not(:last-child):not(.comments-reply-formly):before {
+    &:not(:last-child):not(.comments-reply-form):before {
       display: inline-block;
     }
   }
@@ -1992,6 +2004,7 @@ textarea {
 
   &.comments-reply-form {
     display: none;
+
     &.open {
       display: block;
     }

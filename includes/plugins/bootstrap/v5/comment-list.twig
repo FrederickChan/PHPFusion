@@ -3,7 +3,7 @@
 {% set h_ = ' h-reply' %}
    {% endif %}
 
-<li class="comment-item r-open{{ h_ }}" id="{{ comment_list_id }}">
+<li class="comment-item{{ h_ }}" id="{{ comment_list_id }}">
     <div class="timeline-border"></div>
     <div class="comment-container d-flex position-relative">
         {% if settings['comments_avatar'] %}
@@ -47,12 +47,12 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="options_{{ comment_list_id }}">
                     <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_list_id }}"
                            href="#">
-                            <span class="pe-2">{{ get_image('user') }}</span> Block{{ display_name(data) }}
+                            <span class="pe-2">{{ get_image('user') }}</span>Block {{ user_name_display }}
                         </a>
                     </li>
                     <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_list_id }}"
                            href="#">
-                            <span class="pe-2">{{ get_image('hide') }}</span> Hide comment</a>
+                            <span class="pe-2">{{ get_image('hide') }}</span>Hide comment</a>
                     </li>
                     <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_list_id }}"
                            href="#">
@@ -63,7 +63,6 @@
             </div>
         </div>
     </div>
-
     <!-- Comment item nested START -->
     {% if comment_child_count %}
         <ul class="comment-item-nested list-unstyled">
@@ -71,12 +70,9 @@
                 <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_child_count, 'reply|replies') }}</a>
             </li>
         </ul>
-        <ul class="comment-item-nested list-unstyled" style="display:none;">
-{#             {{ comment_nested|raw }}#}
-        </ul>
+        <ul id="{{ comment_list_id }}_r" class="comment-item-nested list-unstyled" style="display:none;"></ul>
     {% endif %}
     <!-- Comment item nested END -->
-
     <!-- Comment form nested START -->
     <ul class="comment-item-nested comments-reply-form list-unstyled" id="cr{{ comment_list_id }}"></ul>
     <!-- Comment form nested END -->
