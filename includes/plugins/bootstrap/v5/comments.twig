@@ -2,17 +2,17 @@
 {% set settings = fusion_get_settings() %}
 
 {# {{ comment_title|raw }} #}
-<div class='comments-panel'>
+<div class="comments-panel">
     {{ comment_ratings|raw }}
     <!-- Comment wrap START -->
-    <ul class="comment-wrap list-unstyled">
+    <ul id="{{ comment_container_id }}" class="comment-wrap list-unstyled">
         {{ comment_posts|raw }}
     </ul>
     <!-- Comment wrap END -->
     <!--Comment Navigation START-->
     <div class='clearfix'>
         <span class='pull-right'>{{ comment_admin_link|raw }}</span>
-        <div class='overflow-hide'>{{ comment_pagenav }}</div>
+        <div class='overflow-hide'>{{ comment_pagenav|raw }}</div>
     </div>
 </div>
 <ul class="comment-form list-unstyled">

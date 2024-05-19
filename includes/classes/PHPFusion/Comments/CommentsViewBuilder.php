@@ -1,5 +1,8 @@
 <?php
+
 namespace PHPFusion\Comments;
+
+use Defender;
 
 /**
  * Class CommentsViewBuilder
@@ -33,43 +36,80 @@ class CommentsViewBuilder {
     public function displayAllComments($c_data, $index, $options) {
         $comments_html = '';
 
-        foreach ($c_data[$index] as $comments_id => $data) {
+        foreach ($c_data[$index] as $data) {
 
-            $data['comment_ratings'] = '';
-            if (fusion_get_settings('ratings_enabled') && self::$parent->getParams('comment_allow_ratings')) {
-                $remainder = 5 - (int)$data['ratings'];
-                for ($i = 1; $i <= $data['ratings']; $i++) {
-                    $data['comment_ratings'] .= '<i class="fas fa-star text-warning"></i> ';
-                }
-                if ($remainder) {
-                    for ($i = 1; $i <= $remainder; $i++) {
-                        $data['comment_ratings'] .= '<i class="far fa-star text-lighter"></i> ';
-                    }
-                }
-            }
+            $comments_html .= $this->displaySingleComment($data, $options);
 
-            $data_api = \Defender::encode($options);
-
-            $data += [
-                "comment_id" => $data["comment_id"],
-                "comment_list_id" => "c" . $data["comment_id"],
-                "comment_cat_id" => $data["comment_cat"],
-                "comment_date" => $data["comment_datestamp"],
-                "comment_ratings" => $data["comment_ratings"],
-                "comment_subject" => $data["comment_subject"],
-                "comment_message" => $data["comment_message"],
-                "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $comments_id . "'>" . self::$locale["c112"] . "</a>" : ""),
-                "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
-                "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
-                "comment_reply_form" => ($data["reply_form"] ?? ""),
-                //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
-                //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
-            ];
-
-            $comments_html .= display_comments_list($data);
+//            $data['comment_ratings'] = '';
+//            if (fusion_get_settings('ratings_enabled') && self::$parent->getParams('comment_allow_ratings')) {
+//                $remainder = 5 - (int)$data['ratings'];
+//                for ($i = 1; $i <= $data['ratings']; $i++) {
+//                    $data['comment_ratings'] .= '<i class="fas fa-star text-warning"></i> ';
+//                }
+//                if ($remainder) {
+//                    for ($i = 1; $i <= $remainder; $i++) {
+//                        $data['comment_ratings'] .= '<i class="far fa-star text-lighter"></i> ';
+//                    }
+//                }
+//            }
+//
+//            $data_api = \Defender::encode($options);
+//
+//            $data += [
+//                "comment_id" => $data["comment_id"],
+//                "comment_list_id" => "c" . $data["comment_id"],
+//                "comment_cat_id" => $data["comment_cat"],
+//                "comment_date" => $data["comment_datestamp"],
+//                "comment_ratings" => $data["comment_ratings"],
+//                "comment_subject" => $data["comment_subject"],
+//                "comment_message" => $data["comment_message"],
+//                "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $comments_id . "'>" . self::$locale["c112"] . "</a>" : ""),
+//                "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
+//                "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
+//                "comment_reply_form" => ($data["reply_form"] ?? ""),
+//                //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
+//                //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
+//            ];
+//            $comments_html .= display_comments_list($data);
         }
 
         return $comments_html;
+    }
+
+    public function displaySingleComment($data, $options) {
+
+        $data['comment_ratings'] = '';
+        if (fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings")) {
+            $remainder = 5 - (int)$data['ratings'];
+            for ($i = 1; $i <= $data['ratings']; $i++) {
+                $data['comment_ratings'] .= '<i class="fas fa-star text-warning"></i> ';
+            }
+            if ($remainder) {
+                for ($i = 1; $i <= $remainder; $i++) {
+                    $data['comment_ratings'] .= '<i class="far fa-star text-lighter"></i> ';
+                }
+            }
+        }
+
+        $data_api = Defender::encode($options);
+
+        $data += [
+            "comment_id" => $data["comment_id"],
+            "comment_list_id" => "c" . $data["comment_id"],
+            "comment_cat_id" => $data["comment_cat"],
+            "comment_date" => $data["comment_datestamp"],
+            "comment_ratings" => $data["comment_ratings"],
+            "comment_subject" => $data["comment_subject"],
+            "comment_message" => $data["comment_message"],
+            "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $data["comment_id"] . "'>" . self::$locale["c112"] . "</a>" : ""),
+            "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
+            "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
+            "comment_reply_form" => ($data["reply_form"] ?? ""),
+            //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
+            //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
+        ];
+
+        return display_comments_list($data);
     }
 
     /**
@@ -167,7 +207,7 @@ class CommentsViewBuilder {
                     // Add support custom template
                     $message_input = form_textarea($edata["comment_cat"] ? "comment_message_reply" : "comment_message", "", $edata["comment_message"],
                         [
-                            "input_id" => self::$parent->getParams("comment_key") . " - comment_message",
+                            "input_id" => self::$parent->getParams("comment_key") . " -commentMessage",
                             "required" => TRUE,
                             "autosize" => TRUE,
                             "form_name" => "inputform",
@@ -190,7 +230,7 @@ class CommentsViewBuilder {
             return display_comment_form([
                 "comment_form_open" => $comments_form_open ?? '',
                 "comment_form_close" => $comments_form_close ?? '',
-                "comment_form_id" => self::$parent->getParams("comment_key") ."_edit_comment",
+                "comment_form_id" => self::$parent->getParams("comment_key") . "_edit_comment",
                 "comment_postable" => $can_post ?? '',
                 "comment_name_input" => $name_input ?? '',
                 "comment_subject_input" => $subject_input ?? '',
@@ -240,18 +280,17 @@ class CommentsViewBuilder {
      * @return string
      */
     public function displayRatingsForm() {
-        $ratings_html = openform('remove_ratings_frm', 'POST', $this->getParams('clink'), [
-                'class' => 'text-right',
-                'form_id' => $this->getParams('comment_key') . "-remove_ratings_frm",
-            ]
-        );
-        $ratings_html .= form_hidden('comment_type', '', $this->getParams('comment_item_type'));
-        $ratings_html .= form_hidden('comment_item_id', '', $this->getParams('comment_item_id'));
-        $ratings_html .= form_button('remove_ratings_vote', $this->locale['r102'], 'remove_ratings_vote', ['input_id' => $this->getParams('comment_key') . "-remove_ratings_vote", 'class' => 'btn-default btn-rmRatings']);
-        $ratings_html .= closeform();
 
-        return $ratings_html;
+        return openform('remove_ratings_frm', 'POST', self::$parent->getParams('clink'), [
+                    'class' => 'text-end',
+                    'form_id' => self::$parent->getParams('comment_key') . "-remove_ratings_frm",
+                ]
+            ) .
+            form_hidden('comment_type', '', self::$parent->getParams('comment_item_type')) .
+            form_hidden('comment_item_id', '', self::$parent->getParams('comment_item_id')) .
+            form_button('remove_ratings_vote', self::$locale['r102'], 'remove_ratings_vote', ['input_id' => self::$parent->getParams('comment_key') . "-removeRatings", 'class' => 'btn-default btn-rmRatings']) .
+            closeform();
+
     }
-
 
 }

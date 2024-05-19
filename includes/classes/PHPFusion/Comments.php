@@ -70,9 +70,11 @@ class Comments extends Comments\Comments {
     public static function getInstance(array $params = [], $key = "Default") {
         if (!isset(self::$instances[$key])) {
             self::$instances[$key] = new static();
+
             self::$key = $key;
-            $params["comment_key"] = $key;
-            self::$params = $params + self::$params;
+
+            self::$params = $params + self::$params + ["comment_key"=>$key];
+
             self::setInstance($key);
         }
 
@@ -92,7 +94,9 @@ class Comments extends Comments\Comments {
 
         (new CommentsAccess($obj))->checkPermissions();
 
-        (new CommentsInput($obj))->executeCommentUpdate();
+        (new CommentsInput($obj))->removeRatings();
+
+        (new CommentsInput($obj))->update();
 
         $obj->getComments();
 
@@ -143,14 +147,19 @@ class Comments extends Comments\Comments {
             e.preventDefault();
             var data = $(this).closest('form').serializeArray();
             data.push({name: 'params', value: '" . $this->comment_param_data . "'});
-            $.post('" . INCLUDES . "api/?api=comment-update', data, function (e) {
+            data.push({name: 'method', value: 'update'});
+            $.post('" . INCLUDES . "api/?api=comment-update', data, function(e) {
                 console.log(e);
+                if (e['status'] === 200) {
+                    var containerId = e['parent_dom'],
+                    dom = e['dom'];
+                    $('#'+containerId).appendHTML(dom);
+                }
             });
         });
         ");
         }
     }
-
 
 
     /**
@@ -215,8 +224,8 @@ class Comments extends Comments\Comments {
             $html .= display_comments_ui([
                 "comment_title" => $this->getParams("comment_title"),
                 "comment_count" => ($this->getParams("comment_count") ? $this->c_arr["c_info"]["comments_count"] : ""),
-                "comment_container_id" => $this->getParams("comment_key"),
-                "comment_form_container_id" => $this->getParams("comment_key") . " - comments_form",
+                "comment_container_id" => $this->getParams("comment_key")."-commentsContainer",
+                "comment_form_container_id" => $this->getParams("comment_key") . "-commentsForm",
                 "comment_ratings" => $ratings_html,
                 "comment_form_title" => ($this->getParams("comment_form_title") ?: $this->locale["c111"]),
                 "comment_type" => $this->getParams("comment_item_type"),
@@ -224,7 +233,7 @@ class Comments extends Comments\Comments {
                 "comment_item_id" => $this->getParams("comment_item_id"),
                 "options" => $this->getParams(),
                 // Comments
-                "comment_pagenav" => ($this->c_arr["c_info"]["c_makepagenav"] ? " < div class='text-left' > " . $this->c_arr["c_info"]["c_makepagenav"] . " </div > \n" : ""),
+                "comment_pagenav" => ($this->c_arr["c_info"]["c_makepagenav"] ? " <div class='text-left'>" . $this->c_arr["c_info"]["c_makepagenav"] . "</div>\n" : ""),
                 "comment_posts" => $this->showCommentPosts(),
                 "comment_admin_link" => $this->c_arr["c_info"]["admin_link"],
                 "comment_form" => $this->showCommentForm(),

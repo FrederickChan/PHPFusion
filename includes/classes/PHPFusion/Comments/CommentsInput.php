@@ -2,6 +2,8 @@
 
 namespace PHPFusion\Comments;
 
+use Exception;
+
 /**
  * Class CommentsInput
  * @package PHPFusion\Comments
@@ -21,18 +23,7 @@ class CommentsInput {
         self::$locale = fusion_get_locale();
     }
 
-    /**
-     * @param \PHPFusion\Comments $class
-     * @param $key
-     * @return static
-     */
-    public static function getInstance(\PHPFusion\Comments $class, $key) {
-        if (!isset(self::$comments[$key])) {
-            self::$comments[$key] = new static($class);
-        }
-        return self::$comments[$key];
-    }
-
+//Ratings Removal Update
     public function removeRatings() {
         if (iMEMBER && self::$parent->getParams("comment_allow_ratings") &&
             !self::$parent->getParams("comment_allow_vote")) {
@@ -55,19 +46,7 @@ class CommentsInput {
         }
     }
 
-    /**
-     * Execute comment update
-     */
-    public function executeCommentUpdate() {
-        $settings = fusion_get_settings();
-
-//        $this->replaceParam("comment_user", $this->userdata['user_id']);
-
-        // Non Jquery Actions
-//        if (isset($_GET["comment_reply"])) {
-//            add_to_jquery("scrollTo('comments_reply_form');");
-//        }
-
+    public function delete() {
         /** Delete */
         if (isset($_GET['c_action']) && iMEMBER) {
 
@@ -108,15 +87,28 @@ class CommentsInput {
             }
         }
 
-        /** Update & Save */
-        // Ratings Removal Update
-        // post comment_type, comment_item_id, remove_ratings_vote;
-        $this->removeRatings();
+    }
+
+    /**
+     * Execute comment update
+     * @throws Exception
+     */
+    public function update() {
+
+        $settings = fusion_get_settings();
+
+//        $this->replaceParam("comment_user", $this->userdata['user_id']);
+
+        // Non Jquery Actions
+//        if (isset($_GET["comment_reply"])) {
+//            add_to_jquery("scrollTo('comments_reply_form');");
+//        }
+
 
         /**
          * Post Comment, Reply Comment
          */
-        if ((iMEMBER || $settings['guestposts']) && check_post('post_comment')) {
+        if ((iMEMBER || $settings['guestposts'])) {
 
             if (!iMEMBER && $settings['guestposts']) {
                 // Process Captchas
@@ -143,7 +135,7 @@ class CommentsInput {
             ];
 
             $ratings_query = "SELECT rating_id FROM " . DB_RATINGS . " WHERE rating_item_id=:id AND rating_type=:type AND rating_user=:name";
-            $ratings_data = [];
+
             $ratings_id = dbresult(dbquery($ratings_query, [
                 ":id" => $comment_data["comment_item_id"],
                 ":type" => $comment_data["comment_type"],
@@ -151,7 +143,9 @@ class CommentsInput {
             ]), 0);
             // edit
 
-            if (self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote") && isset($_POST["comment_rating"])) {
+            // Ratings
+            $ratings_data = [];
+            if (self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote") && check_post("comment_rating")) {
 
                 $ratings_data = [
                     "rating_id" => $ratings_id,
@@ -165,64 +159,64 @@ class CommentsInput {
                 ];
             }
 
-            if (iMEMBER && $comment_data["comment_id"]) {
+            if (fusion_safe()) {
 
-                // Update comment
-                if ((iADMIN && checkrights("C")) || (iMEMBER && dbcount("(comment_id)", DB_COMMENTS, "comment_id=:id
+                if (iMEMBER && $comment_data["comment_id"]) {
+
+                    // Update comment
+                    if ((iADMIN && checkrights("C")) || (iMEMBER && dbcount("(comment_id)", DB_COMMENTS, "comment_id=:id
                         AND comment_item_id=:item_id AND comment_type=:type AND comment_name=:name AND comment_hidden='0'", [
-                            ":id" => $comment_data["comment_id"],
-                            ":item_id" => self::$parent->getParams("comment_item_id"),
-                            ":type" => self::$parent->getParams("comment_item_type"),
-                            ":name" => self::$parent->userdata["user_id"],
-                        ])) && fusion_safe()) {
+                                ":id" => $comment_data["comment_id"],
+                                ":item_id" => self::$parent->getParams("comment_item_id"),
+                                ":type" => self::$parent->getParams("comment_item_type"),
+                                ":name" => self::$parent->userdata["user_id"],
+                            ]))) {
 
-                    $c_name_query = "SELECT comment_name FROM " . DB_COMMENTS . " WHERE comment_id=:comment_id";
+                        $c_name_query = "SELECT comment_name FROM " . DB_COMMENTS . " WHERE comment_id=:comment_id";
 
-                    $comment_data['comment_name'] = dbresult(dbquery($c_name_query, [
-                        ":comment_id" => $comment_data["comment_id"],
-                    ]), 0);
+                        $comment_data['comment_name'] = dbresult(dbquery($c_name_query, [
+                            ":comment_id" => $comment_data["comment_id"],
+                        ]), 0);
 
-                    dbquery_insert(DB_COMMENTS, $comment_data, 'update');
+                        dbquery_insert(DB_COMMENTS, $comment_data, 'update');
 
-                    self::$parent->comment_params[self::$key]['post_id'] = $comment_data['comment_id'];
+                        self::$parent->comment_params[self::$key]['post_id'] = $comment_data['comment_id'];
 
-                    $func = self::$parent->getParams('comment_edit_callback_function');
+                        $func = self::$parent->getParams('comment_edit_callback_function');
 
-                    if (is_callable($func)) {
-                        $func(self::$parent->getParams());
-                    }
+                        if (is_callable($func)) {
+                            $func(self::$parent->getParams());
+                        }
 
-                    if (iMEMBER && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
-                        dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
-                    }
+                        if (iMEMBER && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
+                            dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
+                        }
 
-                    if ($this->settings["comments_sorting"] == "ASC") {
-                        $c_operator = "<=";
-                    } else {
-                        $c_operator = ">=";
-                    }
+                        if ($this->settings["comments_sorting"] == "ASC") {
+                            $c_operator = "<=";
+                        } else {
+                            $c_operator = ">=";
+                        }
 
-                    $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_id" . $c_operator . " :id
+                        $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_id" . $c_operator . " :id
                             AND comment_item_id=:id2
                             AND comment_type=:type", [
-                        ":id" => $comment_data["comment_id"],
-                        ":id2" => self::$parent->getParams("comment_item_id"),
-                        ":type" => self::$parent->getParams("comment_item_type"),
-                    ]);
+                            ":id" => $comment_data["comment_id"],
+                            ":id2" => self::$parent->getParams("comment_item_id"),
+                            ":type" => self::$parent->getParams("comment_item_type"),
+                        ]);
 
-                    if (fusion_safe()) {
+
                         addnotice("success", self::$locale["c114"]);
                         // $c_start = (ceil($c_count / $this->settings["comments_per_page"]) - 1) * $this->settings["comments_per_page"];
                         // $_c = (isset($c_start) && isnum($c_start) ? $c_start : "");
                         // $c_link = $this->getParams("clink");
                         // redirect(self::formatClink("$c_link&c_start=$_c"));
+
                     }
-                }
-            } else {
+                } else {
 
-                $comment_data["comment_datestamp"] = time();
-
-                if (fusion_safe()) {
+                    $comment_data["comment_datestamp"] = time();
 
                     if ($comment_data['comment_name'] && $comment_data['comment_message']) {
 
@@ -232,19 +226,26 @@ class CommentsInput {
 
                             $id = dbquery_insert(DB_COMMENTS, $comment_data, "save");
 
-                            self::$parent->comment_params[self::$key]["post_id"] = $id;
-
-                            $func = self::$parent->getParams("comment_post_callback_function");
-
-                            if (is_callable($func)) {
-                                $func(self::$parent->getParams());
-                            }
-
                             if (iMEMBER && fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
                                 dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
                             }
 
-//                            $c_start = 0;
+                            self::$parent->replaceParam("comment_id", $id);
+
+                            $func = self::$parent->getParams("comment_post_callback_function");
+                            if (is_callable($func)) {
+                                $func(self::$parent->getParams());
+                            }
+
+                            // return the post data.
+                            return [
+                                "status" => 200,
+                                "parent_dom" => !empty($comment_data['comment_cat']) ? $comment_data['comment_cat'] : self::$parent->getParams("comment_key")."-commentsContainer",
+                                "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($comment_data, self::$parent->getParams()),
+                            ];
+
+
+                            //                            $c_start = 0;
 //                            if ($this->settings["comments_sorting"] == "ASC") {
 //                                $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_item_id=:item_id AND comment_type=:type", [
 //                                    ":item_id" => $this->getParams("comment_item_id"),
@@ -258,8 +259,13 @@ class CommentsInput {
                         }
                     }
                 }
+            } else {
+
+                set_error(E_NOTICE, 'Token Error', FUSION_SELF, 260);
             }
         }
+
+        return [];
     }
 
 }

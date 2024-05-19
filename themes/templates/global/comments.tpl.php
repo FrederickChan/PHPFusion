@@ -94,11 +94,7 @@ if (!function_exists('display_comments_list')) {
     }
 }
 
-if (!function_exists('display_comments_form')) {
-    function display_comments_form($info) {
 
-    }
-}
 
 if (!function_exists('display_comments_reply_form')) {
     function display_comments_reply_form($info) {
