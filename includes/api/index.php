@@ -42,17 +42,18 @@ function get_extended_endpoints() {
 $endpoints = [
         "username-check" => "username_validation.php",
         "userpass-check" => "userpass_validation.php",
-        'calling-codes' => 'calling_codes.php', //get
-        'geomap-states' => 'states.php', //get
-        'email_code' => 'email_code.php', // post
-        'avatar-upload' => 'avatar_upload.php', // $_FILES
-        'avatar-delete' => 'avatar_delete.php', // post
-        'user-search' => 'search_users.php', // get or post
-        'preview-text' => 'text_preview.php', // post
-        'notify-read' => 'notify_read.php', // post
-        'notify-readall' => 'notify_readall.php', // post
-        'error-update' => 'errorlogs_update.php', // post
-        'comment-get' => 'comments_get.php', // post
+        "calling-codes" => "calling_codes.php", //get
+        "geomap-states" => "states.php", //get
+        "email_code" => "email_code.php", // post
+        "avatar-upload" => "avatar_upload.php", // $_FILES
+        "avatar-delete" => "avatar_delete.php", // post
+        "user-search" => "search_users.php", // get or post
+        "preview-text" => "text_preview.php", // post
+        "notify-read" => "notify_read.php", // post
+        "notify-readall" => "notify_readall.php", // post
+        "error-update" => "errorlogs_update.php", // post
+        "comment-get" => "comments_get.php", // post
+        "comment-update" => "comments_update.php", // post
     ]
     + get_extended_endpoints();
 
