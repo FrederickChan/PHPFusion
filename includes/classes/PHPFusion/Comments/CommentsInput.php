@@ -161,6 +161,8 @@ class CommentsInput {
 
             if (fusion_safe()) {
 
+                $user = fusion_get_userdata();
+
                 if (iMEMBER && $comment_data["comment_id"]) {
 
                     // Update comment
@@ -192,10 +194,9 @@ class CommentsInput {
                             dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
                         }
 
-                        if ($this->settings["comments_sorting"] == "ASC") {
+                        $c_operator = ">=";
+                        if (fusion_get_settings("comments_sorting") == "ASC") {
                             $c_operator = "<=";
-                        } else {
-                            $c_operator = ">=";
                         }
 
                         $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_id" . $c_operator . " :id
@@ -212,8 +213,8 @@ class CommentsInput {
                         // $_c = (isset($c_start) && isnum($c_start) ? $c_start : "");
                         // $c_link = $this->getParams("clink");
                         // redirect(self::formatClink("$c_link&c_start=$_c"));
-
                     }
+
                 } else {
 
                     $comment_data["comment_datestamp"] = time();
@@ -224,24 +225,38 @@ class CommentsInput {
 
                         if (!flood_control("comment_datestamp", DB_COMMENTS, "comment_ip='" . USER_IP . "'")) {
 
-                            $id = dbquery_insert(DB_COMMENTS, $comment_data, "save");
+                            $comment_data["comment_id"] = dbquery_insert(DB_COMMENTS, $comment_data, "save");
 
                             if (iMEMBER && fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
                                 dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
                             }
 
-                            self::$parent->replaceParam("comment_id", $id);
+                            self::$parent->replaceParam("comment_id", $comment_data["comment_id"]);
 
                             $func = self::$parent->getParams("comment_post_callback_function");
                             if (is_callable($func)) {
                                 $func(self::$parent->getParams());
                             }
 
+                            $comment_data += array(
+                                "user_id" => $user["user_id"] ?? 0,
+                                "user_name" => $user["user_name"] ?? "",
+                                "user_firstname" => $user["user_firstname"] ?? "" ,
+                                "user_lastname" => $user["user_lastname"] ?? "",
+                                "user_displayname" => $user["user_displayname"] ?? "",
+                                "user_avatar" => $user["user_avatar"] ?? "",
+                                "user_status" => $user["user_status"] ?? "",
+                            );
+
+                            //Adds $comment_data
+                            $rows = self::$parent->parseCommentsData($comment_data, TRUE);
+
                             // return the post data.
                             return [
                                 "status" => 200,
-                                "parent_dom" => !empty($comment_data['comment_cat']) ? $comment_data['comment_cat'] : self::$parent->getParams("comment_key")."-commentsContainer",
-                                "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($comment_data, self::$parent->getParams()),
+                                "method" => "ins",
+                                "parent_dom" => !empty($comment_data['comment_cat']) ? "c".$comment_data['comment_cat']."_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                                "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($rows, self::$parent->getParams()),
                             ];
 
 

@@ -23,7 +23,6 @@ class CommentsViewBuilder {
         self::$locale = fusion_get_locale();
     }
 
-
     /**
      * Comments Listing
      *
@@ -33,12 +32,12 @@ class CommentsViewBuilder {
      *
      * @return string
      */
-    public function displayAllComments($c_data, $index, $options) {
+    public function displayAllComments($c_data, $index, $param) {
         $comments_html = '';
 
         foreach ($c_data[$index] as $data) {
 
-            $comments_html .= $this->displaySingleComment($data, $options);
+            $comments_html .= $this->displaySingleComment($data, $param);
 
 //            $data['comment_ratings'] = '';
 //            if (fusion_get_settings('ratings_enabled') && self::$parent->getParams('comment_allow_ratings')) {

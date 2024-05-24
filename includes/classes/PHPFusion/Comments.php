@@ -73,7 +73,7 @@ class Comments extends Comments\Comments {
 
             self::$key = $key;
 
-            self::$params = $params + self::$params + ["comment_key"=>$key];
+            self::$params = $params + self::$params + ["comment_key" => $key];
 
             self::setInstance($key);
         }
@@ -83,6 +83,7 @@ class Comments extends Comments\Comments {
 
     /**
      * @param string $key
+     * @throws \Exception
      */
     private static function setInstance($key) {
 
@@ -145,16 +146,38 @@ class Comments extends Comments\Comments {
         
         $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
             e.preventDefault();
+            
+            var input = $(this).closest('form').find('textarea[name=\"comment_message\"]');
+            
             var data = $(this).closest('form').serializeArray();
+            
             data.push({name: 'params', value: '" . $this->comment_param_data . "'});
             data.push({name: 'method', value: 'update'});
-            $.post('" . INCLUDES . "api/?api=comment-update', data, function(e) {
-                console.log(e);
-                if (e['status'] === 200) {
-                    var containerId = e['parent_dom'],
-                    dom = e['dom'];
-                    $('#'+containerId).appendHTML(dom);
+            
+            $.post('" . INCLUDES . "api/?api=comment-update', data)
+            .then(response => {
+                var jsonResponse = $.parseJSON(response);
+                if (jsonResponse['status'] === 200) {
+                    return jsonResponse;
+                } 
+            })
+            .then(response => { 
+                if (response['method'] == 'ins') {
+                    var containerId = response['parent_dom'],
+                    dom = response['dom'];
+                    $('#'+containerId).append(dom);
+                    input.val('');
                 }
+                
+                $(this).closest('ul').hide();
+            var nextContainer = $(this).closest('ul').next('ul');
+            nextContainer.show();
+            var params = { id: $(this).data('comment-id'), params: '" . $this->comment_param_data . "' };
+            $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
+                //console.log(e);
+                nextContainer.html(e);
+            });
+                
             });
         });
         ");
@@ -224,7 +247,7 @@ class Comments extends Comments\Comments {
             $html .= display_comments_ui([
                 "comment_title" => $this->getParams("comment_title"),
                 "comment_count" => ($this->getParams("comment_count") ? $this->c_arr["c_info"]["comments_count"] : ""),
-                "comment_container_id" => $this->getParams("comment_key")."-commentsContainer",
+                "comment_container_id" => $this->getParams("comment_key") . "-commentsContainer",
                 "comment_form_container_id" => $this->getParams("comment_key") . "-commentsForm",
                 "comment_ratings" => $ratings_html,
                 "comment_form_title" => ($this->getParams("comment_form_title") ?: $this->locale["c111"]),
@@ -303,17 +326,17 @@ class Comments extends Comments\Comments {
      */
     protected function setComments() {
         $this->comment_data = [
-            'comment_id' => get('comment_id', FILTER_VALIDATE_INT) ?? '0', // isset($_GET['comment_id']) && isnum($_GET['comment_id']) ? $_GET['comment_id'] : 0,
-            'comment_name' => '',
-            'comment_subject' => '',
-            'comment_message' => '',
-            'comment_datestamp' => time(),
-            'comment_item_id' => $this->getParams('comment_item_id'),
-            'comment_type' => $this->getParams('comment_item_type'),
-            'comment_cat' => 0,
-            'comment_ip' => USER_IP,
-            'comment_ip_type' => USER_IP_TYPE,
-            'comment_hidden' => 0,
+            "comment_id" => get("comment_id", FILTER_VALIDATE_INT) ?? "0", // isset($_GET["comment_id"]) && isnum($_GET["comment_id"]) ? $_GET["comment_id"] : 0,
+            "comment_name" => "",
+            "comment_subject" => "",
+            "comment_message" => "",
+            "comment_datestamp" => time(),
+            "comment_item_id" => $this->getParams("comment_item_id"),
+            "comment_type" => $this->getParams("comment_item_type"),
+            "comment_cat" => 0,
+            "comment_ip" => USER_IP,
+            "comment_ip_type" => USER_IP_TYPE,
+            "comment_hidden" => 0,
             "comment_child_count" => 0,
         ];
 
@@ -387,7 +410,7 @@ class Comments extends Comments\Comments {
 
                 self::$c_start = $this->commentStart($root_comment_rows);
 
-                $dbquery = $this->commentsQuery($this->getParams('comment_cat_id'));
+                $dbquery = $this->commentsQuery($this->getParams("comment_cat_id"));
 
                 if (dbrows($dbquery)) {
 
@@ -422,7 +445,7 @@ class Comments extends Comments\Comments {
     /*
      * Parse comment results
      */
-    protected function parseCommentsData($row) {
+    public function parseCommentsData($row, $return=FALSE) {
 
         $can_reply = iMEMBER || fusion_get_settings('guestposts');
 
@@ -455,7 +478,7 @@ class Comments extends Comments\Comments {
         }
 
         // Reply Form
-        if ($this->getParams('comment_allow_reply') && $can_reply) {
+        if ($this->getParams("comment_allow_reply") && $can_reply) {
 
             // Adjust this to array instead of string
             $captcha = (new CommentsViewBuilder($this))->displayCaptchaInput();
@@ -491,8 +514,7 @@ class Comments extends Comments\Comments {
         }
 
         /** formats $row */
-        $row = [
-            //            "i" => $i,
+        $row = array(
             "comment_id" => $row['comment_id'],
             "comment_cat" => $row['comment_cat'],
             "user_avatar_display" => display_avatar($row, $this->getParams("comment_avatar_size")), // isnum($row['comment_name']) ? display_avatar($row, self::$avatar_size) : display_avatar([], self::$avatar_size),
@@ -519,7 +541,7 @@ class Comments extends Comments\Comments {
             "edit_link" => $actions['edit_link'] ?? [],
             "delete_link" => $actions['delete_link'] ?? [],
             "comment_child_count" => dbcount("(comment_id)", DB_COMMENTS, "comment_cat=:cat_id AND comment_hidden=0", [':cat_id' => $row['comment_id']]),
-        ];
+        );
 
 //        if ($row['comment_child_count']) {
 //            $c_result = $this->commentsQuery($row['comment_id']);
@@ -532,12 +554,13 @@ class Comments extends Comments\Comments {
 //            }
 //        }
 
-
         $id = $row['comment_id'];
         $parent_id = $row['comment_cat'] === NULL ? "0" : $row['comment_cat'];
-
         $this->c_arr['c_con'][$parent_id][$id] = $row;
 
+        if ($return === TRUE) {
+            return $row;
+        }
     }
 
     /**
@@ -617,8 +640,8 @@ class Comments extends Comments\Comments {
     public function commentEditQuery() {
 
         return dbquery("SELECT tcm.*
-                        FROM " . DB_COMMENTS . " tcm
-                        WHERE comment_id=:comment_id AND comment_item_id=:comment_item_id AND comment_type=:comment_type AND comment_hidden=:comment_hidden", [
+            FROM " . DB_COMMENTS . " tcm
+            WHERE comment_id=:comment_id AND comment_item_id=:comment_item_id AND comment_type=:comment_type AND comment_hidden=:comment_hidden", [
             ':comment_id' => get('comment_id', FILTER_VALIDATE_INT),
             ':comment_item_id' => $this->getParams('comment_item_id'),
             ':comment_type' => $this->getParams('comment_item_type'),
