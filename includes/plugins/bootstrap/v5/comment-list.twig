@@ -45,27 +45,35 @@
                     {{ get_image('more') }}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="options_{{ comment_list_id }}">
-                    <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_list_id }}"
-                           href="#">
-                            <span class="pe-2">{{ get_image('user') }}</span>Block {{ user_name_display }}
-                        </a>
-                    </li>
-                    <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_list_id }}"
-                           href="#">
-                            <span class="pe-2">{{ get_image('hide') }}</span>Hide comment</a>
-                    </li>
-                    <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_list_id }}"
-                           href="#">
-                            <span class="pe-2">{{ get_image('ban') }}</span>Report content
-                        </a>
-                    </li>
+                    {% if comment_owner %}
+                        <li><a class="dropdown-item" data-comment-action="edit" data-comment-id="{{ comment_id }}" href="#">
+                                Edit
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" data-comment-action="delete" data-comment-id="{{ comment_id }}" href="#">
+                                Delete
+                            </a>
+                        </li>
+                    {% else %}
+                        <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_id }}" href="#">
+                                <span class="pe-2">{{ get_image('user') }}</span>Block {{ user_name_display }}
+                            </a>
+                        </li>
+                        <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_id }}" href="#">
+                                <span class="pe-2">{{ get_image('hide') }}</span>Hide comment</a>
+                        </li>
+                        <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_id }}" href="#">
+                                <span class="pe-2">{{ get_image('ban') }}</span>Report content
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </div>
     <!-- Comment item nested START -->
     {% if comment_child_count %}
-        <ul class="comment-item-nested list-unstyled">
+        <ul id="{{ comment_list_id }}_p" class="comment-item-nested list-unstyled">
             <li class="comment-item">
                 <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_child_count, 'reply|replies') }}</a>
             </li>

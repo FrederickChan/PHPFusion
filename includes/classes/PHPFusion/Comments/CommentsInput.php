@@ -256,6 +256,7 @@ class CommentsInput {
                                 "status" => 200,
                                 "method" => "ins",
                                 "parent_dom" => !empty($comment_data['comment_cat']) ? "c".$comment_data['comment_cat']."_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                                "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c".$comment_data['comment_cat']."_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
                                 "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($rows, self::$parent->getParams()),
                             ];
 

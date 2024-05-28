@@ -164,21 +164,20 @@ class Comments extends Comments\Comments {
             .then(response => { 
                 if (response['method'] == 'ins') {
                     var containerId = response['parent_dom'],
+                    altContainerId = response['alt_parent_dom'],
                     dom = response['dom'];
-                    $('#'+containerId).append(dom);
+                    if ($('#'+containerId).is(':hidden')) {
+                        $('#'+altContainerId).prepend(dom);
+                        $('#'+altContainerId).find('li:last-child > a').text('View more replies');
+                    } else {
+                        $('#'+containerId).append(dom);
+                    }
                     input.val('');
+                    // endif
                 }
-                
-                $(this).closest('ul').hide();
-            var nextContainer = $(this).closest('ul').next('ul');
-            nextContainer.show();
-            var params = { id: $(this).data('comment-id'), params: '" . $this->comment_param_data . "' };
-            $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                //console.log(e);
-                nextContainer.html(e);
+                // end then
             });
-                
-            });
+            // end function
         });
         ");
         }

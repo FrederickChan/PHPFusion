@@ -92,7 +92,7 @@ class CommentsViewBuilder {
 
         $data_api = Defender::encode($options);
 
-        $data += [
+        $data += array(
             "comment_id" => $data["comment_id"],
             "comment_list_id" => "c" . $data["comment_id"],
             "comment_cat_id" => $data["comment_cat"],
@@ -104,9 +104,10 @@ class CommentsViewBuilder {
             "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
             "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
             "comment_reply_form" => ($data["reply_form"] ?? ""),
+            "comment_owner" => ($data["comment_name"] == fusion_get_userdata("user_id")),
             //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
             //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
-        ];
+        );
 
         return display_comments_list($data);
     }
