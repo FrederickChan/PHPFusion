@@ -17,16 +17,20 @@ function get_comments() {
 
         $params = fusion_decode(fusion_decrypt(get("params"), SECRET_KEY));
 
-        if (!empty($params)) {
+        if (!empty($params) && check_get("id")) {
             $params["comment_cat_id"] = str_replace("c", "", get("id"));
         }
 
-        if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"]) && !empty($params["comment_cat_id"])) {
+        if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"])) {
 
             if (get("type") == "input") {
-                $obj = Comments::getInstance($params)->showCommentForm();
+                if (!empty($params["comment_cat_id"])) {
+                    $obj = Comments::getInstance($params)->showCommentForm();
+                }
             } else {
+
                 $obj = Comments::getInstance($params)->showCommentPosts();
+
             }
 
             echo $obj;

@@ -34,10 +34,10 @@ class CommentsViewBuilder {
      */
     public function displayAllComments($c_data, $index, $param) {
         $comments_html = '';
+        if (!empty($c_data)) {
+            foreach ($c_data[$index] as $data) {
 
-        foreach ($c_data[$index] as $data) {
-
-            $comments_html .= $this->displaySingleComment($data, $param);
+                $comments_html .= $this->displaySingleComment($data, $param);
 
 //            $data['comment_ratings'] = '';
 //            if (fusion_get_settings('ratings_enabled') && self::$parent->getParams('comment_allow_ratings')) {
@@ -70,6 +70,7 @@ class CommentsViewBuilder {
 //                //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
 //            ];
 //            $comments_html .= display_comments_list($data);
+            }
         }
 
         return $comments_html;
