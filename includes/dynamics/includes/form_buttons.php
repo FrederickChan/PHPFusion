@@ -63,7 +63,7 @@ function form_button($input_name, $label, $input_value, array $options = []) {
     }
 
     array_walk($options['data'], function ($a, $b) use (&$options_data) {
-        $options_data[] = "data-$b='$a'";
+        $options_data[] = 'data-'.$b.'='.$a.'';
     }, $options_data);
 
     $options['options_data'] = $options_data;

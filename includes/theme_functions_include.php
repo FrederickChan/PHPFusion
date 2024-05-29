@@ -367,7 +367,7 @@ if (!function_exists('openmodal') &&
     function openmodal($id, $title, $options = []) {
         $locale = fusion_get_locale();
 
-        $options += [
+        $options += array(
             'class' => '',
             'body_class' => "",
             'button_id' => '',
@@ -377,7 +377,8 @@ if (!function_exists('openmodal') &&
             'size' => 2,
             'screen_size' => 2,
             'centered' => FALSE,
-        ];
+            "header_class" => "",
+        );
 
         // Identifies trigger element
         $modal_trigger = '';
@@ -420,8 +421,6 @@ if (!function_exists('openmodal') &&
         ];
 
         return fusion_get_template('modal', $info);
-
-        //return fusion_render( TEMPLATES . "html/utils/", "modal.twig", $info, defined('FUSION_DEVELOPMENT') );
     }
 
     /**
@@ -439,8 +438,6 @@ if (!function_exists('openmodal') &&
             "modal" => "footer",
         ];
         return fusion_get_template('modal', $info);
-
-//        return fusion_render( TEMPLATES . "html/utils/", "modal.twig", $info, defined('FUSION_DEVELOPMENT')  );
     }
 
     /**
@@ -450,7 +447,8 @@ if (!function_exists('openmodal') &&
      */
     function closemodal() {
         $info["modal"] = "close";
-        return fusion_render(TEMPLATES . "html/utils/", "modal.twig", $info, TRUE);
+        return fusion_get_template('modal', $info);
+//        return fusion_render(TEMPLATES . "html/utils/", "modal.twig", $info, TRUE);
     }
 }
 

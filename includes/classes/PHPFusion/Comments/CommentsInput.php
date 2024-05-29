@@ -90,6 +90,53 @@ class CommentsInput {
     }
 
     /**
+     * Remove Comment Actions
+     */
+    public function remove() {
+
+        $comment_data = [
+            "comment_id" => post("comment_id", FILTER_VALIDATE_INT) ?? 0,
+            "comment_item_id" => self::$parent->getParams("comment_item_id"),
+            "comment_type" => self::$parent->getParams("comment_item_type"),
+        ];
+
+        $res = self::$parent->commentCheckQuery($comment_data["comment_id"]);
+
+        if (dbrows($res)) {
+
+            $rows = dbarray($res);
+
+            if (self::$parent->isOwner($rows["comment_name"])) {
+
+                self::$parent->shiftChildComment($comment_data["comment_id"]);
+
+                self::$parent->deleteComment($comment_data["comment_id"]);
+
+                return array(
+                    "status" => 200,
+                    "method" => "rm",
+                    "parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                    "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                    "dom" => "c".$comment_data["comment_id"],
+                );
+            }
+
+            // Not owner
+            return array(
+                "status" => 300,
+                "method" => "rm",
+            );
+        }
+
+        // No result
+        return array(
+            "status" => 400,
+            "method" => "rm",
+        );
+    }
+
+
+    /**
      * Execute comment update
      * @throws Exception
      */
@@ -241,7 +288,7 @@ class CommentsInput {
                             $comment_data += array(
                                 "user_id" => $user["user_id"] ?? 0,
                                 "user_name" => $user["user_name"] ?? "",
-                                "user_firstname" => $user["user_firstname"] ?? "" ,
+                                "user_firstname" => $user["user_firstname"] ?? "",
                                 "user_lastname" => $user["user_lastname"] ?? "",
                                 "user_displayname" => $user["user_displayname"] ?? "",
                                 "user_avatar" => $user["user_avatar"] ?? "",
@@ -252,11 +299,12 @@ class CommentsInput {
                             $rows = self::$parent->parseCommentsData($comment_data, TRUE);
 
                             // return the post data.
+                            // if there is a modal then press the delete to return
                             return [
                                 "status" => 200,
                                 "method" => "ins",
-                                "parent_dom" => !empty($comment_data['comment_cat']) ? "c".$comment_data['comment_cat']."_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
-                                "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c".$comment_data['comment_cat']."_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                                "parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                                "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
                                 "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($rows, self::$parent->getParams()),
                             ];
 

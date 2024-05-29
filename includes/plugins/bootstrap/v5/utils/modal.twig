@@ -22,7 +22,7 @@
     <div class="modal-dialog{{ whitespace(modalClass[size]) }}{{ whitespace(sizeClass[size]) }}{{ whitespace(centeredClass) }}">
         <div class="modal-content">
             {% if header_content or dismiss %}
-                <div class="modal-header">
+                <div class="modal-header{{ whitespace(options["header_class"]) }}">
                     {% if header_content %}
                         <h4 class="modal-title" id="{{ id }}ModalLabel">{{ header_content|raw }}</h4>
                     {% endif %}

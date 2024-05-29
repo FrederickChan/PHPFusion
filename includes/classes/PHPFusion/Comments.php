@@ -142,7 +142,57 @@ class Comments extends Comments\Comments {
             });            
             $(this).closest('li.comment-item').addClass('r-open');
             formContainer.addClass('open');
-        });        
+        });      
+        
+        $(document).on('click', '#commentDel, button[name=\"commentDel\"]', function(e) {
+            e.preventDefault();
+            console.log('clicked');
+            
+            var data = { comment_id: $(this).data('comment-id'), method: 'remove', params: '" . $this->comment_param_data . "', 'type':'input' };        
+             $.post('" . INCLUDES . "api/?api=comment-update', data)
+            .then(response => {
+                var jsonResponse = $.parseJSON(response);
+                if (jsonResponse['status'] === 200) {
+                    return jsonResponse;
+                } else {
+                    return {
+                        method: 'xm',                        
+                    };
+                }
+            })
+            .then(response => {
+                  if (response['method'] == 'rm') {
+                    var containerId = response['parent_dom'],
+                    altContainerId = response['alt_parent_dom'],
+                    dom = response['dom'];
+                    $('#'+dom).remove();
+                    // endif
+                }
+                // end then
+            });
+        });
+        
+        $(document).on('hidden.bs.modal', '#commentDelete-Modal', function(e) {
+            $(this).remove();
+        }); 
+       
+        $(document).on('click', 'a[data-comment-action=\"delete\"]', function(e) {
+            e.preventDefault();
+            var params = { id: $(this).data('comment-id'), method: 'remove', params: '" . $this->comment_param_data . "', 'type':'input' };        
+            $.get('".INCLUDES."api/?api=comment-update', params).then(response => {
+                var jsonResponse = $.parseJSON(response);
+                if (jsonResponse['status'] === 200) {
+                    return jsonResponse;
+                }                
+            }).then(response => { 
+             
+                if (response['method'] == 'rm_dialog') {
+                     $('body').append(response['html']);
+                     var modalObj = $('#commentDelete-Modal');
+                     modalObj.modal({	backdrop: 'static',	keyboard: false }).modal('show');            
+                }
+            });
+        });
         
         $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
             e.preventDefault();
@@ -441,10 +491,13 @@ class Comments extends Comments\Comments {
         }
     }
 
+    public function isOwner($comment_name) {
+        return ((iADMIN && checkrights("C")) || (iMEMBER && ($comment_name == fusion_get_userdata("user_id"))));
+    }
     /*
      * Parse comment results
      */
-    public function parseCommentsData($row, $return=FALSE) {
+    public function parseCommentsData($row, $return = FALSE) {
 
         $can_reply = iMEMBER || fusion_get_settings('guestposts');
 
@@ -462,18 +515,18 @@ class Comments extends Comments\Comments {
 
         // get the user? no need.
 //        $row = array_merge($row, isnum($row['comment_name']) ? fusion_get_user($row['comment_name']) : $garray);
-
-        if ((iADMIN && checkrights("C")) || (iMEMBER && $row['comment_name'] == $this->userdata['user_id'] && isset($row['user_name']))) {
-            $actions = [
-                "edit_link" => [
-                    //clean_request('c_action=edit&comment_id='.$row['comment_id'], array('c_action', 'comment_id'),FALSE)."#edit_comment";
-                    'link' => $this->getParams('clink') . "&c_action=edit&comment_id=" . $row['comment_id'] . "#edit_comment",
-                    'name' => $this->locale['edit']],
-                "delete_link" => [
-                    //clean_request('c_action=delete&comment_id='.$row['comment_id'], array('c_action', 'comment_id'), FALSE);
-                    'link' => $this->getParams('clink') . "&c_action=delete&comment_id=" . $row['comment_id'],
-                    'name' => $this->locale['delete']],
-            ];
+        if ($this->isOwner($row["comment_name"])) {
+            $owner = TRUE;
+//            $actions = [
+//                "edit_link" => [
+//                    //clean_request('c_action=edit&comment_id='.$row['comment_id'], array('c_action', 'comment_id'),FALSE)."#edit_comment";
+//                    'link' => $this->getParams('clink') . "&c_action=edit&comment_id=" . $row['comment_id'] . "#edit_comment",
+//                    'name' => $this->locale['edit']],
+//                "delete_link" => [
+//                    //clean_request('c_action=delete&comment_id='.$row['comment_id'], array('c_action', 'comment_id'), FALSE);
+//                    'link' => $this->getParams('clink') . "&c_action=delete&comment_id=" . $row['comment_id'],
+//                    'name' => $this->locale['delete']],
+//            ];
         }
 
         // Reply Form
@@ -536,9 +589,10 @@ class Comments extends Comments\Comments {
             "comment_time" => timer($row['comment_datestamp']),
             "comment_subject" => $row['comment_subject'],
             "comment_message" => parse_text($row['comment_message'], ['decode' => FALSE, 'add_line_breaks' => TRUE]),
+            "comment_owner" => $owner ?? FALSE,
             "comment_name" => isnum($row['comment_name']) ? display_name($row) : $row['comment_name'],
-            "edit_link" => $actions['edit_link'] ?? [],
-            "delete_link" => $actions['delete_link'] ?? [],
+//            "edit_link" => $actions['edit_link'] ?? [],
+//            "delete_link" => $actions['delete_link'] ?? [],
             "comment_child_count" => dbcount("(comment_id)", DB_COMMENTS, "comment_cat=:cat_id AND comment_hidden=0", [':cat_id' => $row['comment_id']]),
         );
 
@@ -631,6 +685,29 @@ class Comments extends Comments\Comments {
         ];
 
         return dbquery($comment_query, $comment_bind);
+    }
+
+    public function commentCheckQuery($comment_id) {
+        return dbquery("SELECT comment_id, comment_name, comment_cat FROM ".DB_COMMENTS." WHERE comment_id=:commentId", array(
+            ":commentId"=>$comment_id));
+    }
+
+    public function deleteComment($comment_id) {
+        return dbquery("DELETE FROM " . DB_COMMENTS . " WHERE comment_id=:commentId", array(
+            ":commentId" =>$comment_id,
+        ));
+    }
+
+    public function shiftChildComment($comment_id) {
+
+        $new_rows = dbresult(dbquery("SELECT comment_cat FROM ".DB_COMMENTS." WHERE comment_id=:commentId", array(
+            ":commentId" =>$comment_id,
+        )),0);
+
+        return dbquery("UPDATE " . DB_COMMENTS . " SET comment_cat=:commentCat WHERE comment_cat=:commentId", array(
+            ":commentId" =>$comment_id,
+            ":commentCat" => $new_rows,
+        ));
     }
 
     /**
