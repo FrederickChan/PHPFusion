@@ -18,7 +18,6 @@
 
     {% set group_class = 'form-group' %}
 
-
     {% set group_class = '' %}
     {% if (input_options['prepend'] or input_options['append']) %}
         {% set group_class = 'form-group' %}
@@ -145,9 +144,9 @@
 
         {% elseif input_options['template_type'] == 'hidden' %}
 
-            {% import 'dynamics/hidden.twig' as hide %}
+            {% import 'dynamics/hidden.twig' as hidden %}
 
-            {{ hide.hidden_input(input_name, input_value, input_options) }}
+            {{ hidden.hidden_input(input_name, input_value, input_options) }}
 
         {% elseif input_options['template_type'] == 'textarea' %}
 

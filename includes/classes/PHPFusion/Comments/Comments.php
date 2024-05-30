@@ -72,9 +72,9 @@ class Comments {
 
     public $comment_params = [];
 
-    protected $comment_param_data = "";
+    public $comment_param_data = "";
 
-    protected $comment_data = [];
+    public $comment_data = [];
 
     protected $cpp;
 

@@ -102,8 +102,8 @@ class CommentsViewBuilder {
             "comment_subject" => $data["comment_subject"],
             "comment_message" => $data["comment_message"],
             "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $data["comment_id"] . "'>" . self::$locale["c112"] . "</a>" : ""),
-            "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
-            "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
+//            "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
+//            "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
             "comment_reply_form" => ($data["reply_form"] ?? ""),
             //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
             //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
@@ -169,8 +169,12 @@ class CommentsViewBuilder {
 
                     // need to get the id.
                     $comments_form_open = openform("inputform", "POST", $form_action, ["form_id" => self::$parent->getParams("comment_key") . "-inputform"]);
+
+                    $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id"=>self::$parent->getParams("comment_key")."_params"]);
+
                     $comments_form_open .= form_hidden("comment_id", "", "", ["input_id" => self::$parent->getParams("comment_key") . "-commentid"]);
-                    $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "", ["input_id" => self::$parent->getParams("comment_key") . "-commentcat"]);
+
+                    $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "0", ["input_id" => self::$parent->getParams("comment_key") . "-commentcat"]);
 
                     // Ratings dropdown
                     if (fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {

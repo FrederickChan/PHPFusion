@@ -60,6 +60,8 @@ function form_textarea($input_name, $label = '', $input_value = '', array $optio
         "inline" => FALSE,
         "length" => 200,
         "error_text" => $locale["error_input_default"],
+        'add_error_notice' => FALSE,
+        'error_text_notice' => '',
         "safemode" => FALSE,
         "form_name" => "input_form",
         "tinymce" => "simple",

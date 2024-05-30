@@ -1157,6 +1157,9 @@ function form_errors( $options ) {
         $class = " has-error";
         if ( !empty( $options['error_text'] ) ) {
             $text = input_error_text( $options['input_name'] );
+            if (!isset($options["add_error_notice"])) {
+                debug_print_backtrace();
+            }
             if ( $options['add_error_notice'] ) {
                 addnotice( "danger", $text );
             }

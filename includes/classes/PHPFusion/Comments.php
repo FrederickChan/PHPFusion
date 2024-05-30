@@ -62,7 +62,7 @@ class Comments extends Comments\Comments {
         $this->cpp = fusion_get_settings("comments_per_page");
         $this->cpp_sort = fusion_get_settings("comments_sorting");
         $this->cpp_start_name = "c_start_" . $this->getParams("comment_key");
-        $this->comment_data = fusion_encrypt(fusion_encode(self::getParams()), SECRET_KEY);
+        $this->comment_param_data = fusion_encrypt(fusion_encode(self::getParams()), SECRET_KEY);
     }
 
     /**
@@ -74,12 +74,16 @@ class Comments extends Comments\Comments {
      * @return static
      */
     public static function getInstance(array $params = [], $key = "Default") {
+
         if (!isset(self::$instances[$key])) {
+
             self::$instances[$key] = new static();
 
             self::$key = $key;
 
-            self::$params = $params + self::$params + ["comment_key" => $key];
+            self::$params = $params + self::$params;
+
+            self::$params["comment_key"] = $key;
 
             self::setInstance($key);
         }
@@ -103,7 +107,7 @@ class Comments extends Comments\Comments {
 
         (new CommentsInput($obj))->removeRatings();
 
-        (new CommentsInput($obj))->update();
+//        (new CommentsInput($obj))->update();
 
         $obj->getComments();
 
@@ -113,141 +117,142 @@ class Comments extends Comments\Comments {
 
     public function setJs() {
         if (!defined("COMMENT_JS")) {
+
             define("COMMENT_JS", TRUE);
+
             add_to_jquery("
-        $(document).on('focus', '.plchr > input', function(e) {
-            var pom = $(this).closest('.plchr'),
-            tom = pom.closest('.plchw').find('.plchx'),
-            tomText = tom.find('textarea');
-            // let us do emoji buttons
-            pom.hide();
-            tom.show();
-            tomText.focus();
-        });
-        
-        $(document).on('click', 'a[data-comment-r=\"view\"]', function(e) {
-            e.preventDefault();
-            $(this).closest('ul').hide();
-            var nextContainer = $(this).closest('ul').next('ul');
-            nextContainer.show();
-            var params = { id: $(this).data('comment-id'), params: '" . $this->comment_param_data . "' };
-            $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                //console.log(e);
-                nextContainer.html(e);
+            $(document).on('focus', '.plchr > input', function(e) {
+                var pom = $(this).closest('.plchr'),
+                tom = pom.closest('.plchw').find('.plchx'),
+                tomText = tom.find('textarea');
+                // let us do emoji buttons
+                pom.hide();
+                tom.show();
+                tomText.focus();
             });
-        });
-        
-        $(document).on('click', 'a[data-comment-r=\"load\"]', function(e) {
-            e.preventDefault();
-            var tgt = $(this).data('comment-target'),           
-            formContainer = $(this).closest('ul');
-            next = $(this).data('comment-next');
-            var params = { " . $this->cpp_start_name . ": next, params: '" . $this->comment_param_data . "' };
-              $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-              // selector has problems
-                formContainer.append(e);
+            
+            $(document).on('click', 'a[data-comment-r=\"view\"]', function(e) {
+                e.preventDefault();
+                $(this).closest('ul').hide();
+                var nextContainer = $(this).closest('ul').next('ul');
+                nextContainer.show();
+                var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "' };
+                $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
+                    //console.log(e);
+                    nextContainer.html(e);
+                });
             });
-        });
-        
-        $(document).on('click', 'a[data-comment-r=\"reply\"]', function(e) {
-            e.preventDefault();   
-            var tgt = $(this).data('comment-target'),
-            formContainer = $(tgt);
-            var params = { id: $(this).data('comment-id'), params: '" . $this->comment_param_data . "', 'type':'input' };            
-             $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                //console.log(e);
-                formContainer.html(e);
-            });            
-            $(this).closest('li.comment-item').addClass('r-open');
-            formContainer.addClass('open');
-        });      
-        
-        $(document).on('click', '#commentDel, button[name=\"commentDel\"]', function(e) {
-            e.preventDefault();
-            console.log('clicked');
             
-            var data = { comment_id: $(this).data('comment-id'), method: 'remove', params: '" . $this->comment_param_data . "', 'type':'input' };        
-             $.post('" . INCLUDES . "api/?api=comment-update', data)
-            .then(response => {
-                var jsonResponse = $.parseJSON(response);
-                if (jsonResponse['status'] === 200) {
-                    return jsonResponse;
-                } else {
-                    return {
-                        method: 'xm',                        
-                    };
-                }
-            })
-            .then(response => {
-                  if (response['method'] == 'rm') {
-                    var containerId = response['parent_dom'],
-                    altContainerId = response['alt_parent_dom'],
-                    dom = response['dom'];
-                    $('#'+dom).remove();
-                    // endif
-                }
-                // end then
+            $(document).on('click', 'a[data-comment-r=\"load\"]', function(e) {
+                e.preventDefault();
+                var tgt = $(this).data('comment-target'),           
+                formContainer = $(this).closest('ul');
+                next = $(this).data('comment-next');
+                var params = { " . $this->cpp_start_name . ": next, comment_params: '" . $this->comment_param_data . "' };
+                  $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
+                  // selector has problems
+                    formContainer.append(e);
+                });
             });
-        });
-        
-        $(document).on('hidden.bs.modal', '#commentDelete-Modal', function(e) {
-            $(this).remove();
-        }); 
-       
-        $(document).on('click', 'a[data-comment-action=\"delete\"]', function(e) {
-            e.preventDefault();
-            var params = { id: $(this).data('comment-id'), method: 'remove', params: '" . $this->comment_param_data . "', 'type':'input' };        
-            $.get('" . INCLUDES . "api/?api=comment-update', params).then(response => {
-                var jsonResponse = $.parseJSON(response);
-                if (jsonResponse['status'] === 200) {
-                    return jsonResponse;
-                }                
-            }).then(response => { 
-             
-                if (response['method'] == 'rm_dialog') {
-                     $('body').append(response['html']);
-                     var modalObj = $('#commentDelete-Modal');
-                     modalObj.modal({	backdrop: 'static',	keyboard: false }).modal('show');            
-                }
-            });
-        });
-        
-        $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
-            e.preventDefault();
             
-            var input = $(this).closest('form').find('textarea[name=\"comment_message\"]');
+            $(document).on('click', 'a[data-comment-r=\"reply\"]', function(e) {
+                e.preventDefault();   
+                var tgt = $(this).data('comment-target'),
+                formContainer = $(tgt);
+                var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "', 'type':'input' };            
+                 $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
+                    //console.log(e);
+                    formContainer.html(e);
+                });            
+                $(this).closest('li.comment-item').addClass('r-open');
+                formContainer.addClass('open');
+            });      
             
-            var data = $(this).closest('form').serializeArray();
-            
-            data.push({name: 'params', value: '" . $this->comment_param_data . "'});
-            data.push({name: 'method', value: 'update'});
-            
-            $.post('" . INCLUDES . "api/?api=comment-update', data)
-            .then(response => {
-                var jsonResponse = $.parseJSON(response);
-                if (jsonResponse['status'] === 200) {
-                    return jsonResponse;
-                } 
-            })
-            .then(response => { 
-                if (response['method'] == 'ins') {
-                    var containerId = response['parent_dom'],
-                    altContainerId = response['alt_parent_dom'],
-                    dom = response['dom'];
-                    if ($('#'+containerId).is(':hidden')) {
-                        $('#'+altContainerId).prepend(dom);
-                        $('#'+altContainerId).find('li:last-child > a').text('View more replies');
+            $(document).on('click', '#commentDel, button[name=\"commentDel\"]', function(e) {
+                e.preventDefault();
+                console.log('clicked');
+                
+                var data = { comment_id: $(this).data('comment-id'), method: 'remove', comment_params: '" . $this->comment_param_data . "', 'type':'input' };        
+                 $.post('" . INCLUDES . "api/?api=comment-update', data)
+                .then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
                     } else {
-                        $('#'+containerId).append(dom);
+                        return {
+                            method: 'xm',                        
+                        };
                     }
-                    input.val('');
-                    // endif
-                }
-                // end then
+                })
+                .then(response => {
+                      if (response['method'] == 'rm') {
+                        var containerId = response['parent_dom'],
+                        altContainerId = response['alt_parent_dom'],
+                        dom = response['dom'];
+                        $('#'+dom).remove();
+                        // endif
+                    }
+                    // end then
+                });
             });
-            // end function
-        });
-        ");
+            
+            $(document).on('hidden.bs.modal', '#commentDelete-Modal', function(e) {
+                $(this).remove();
+            }); 
+           
+            $(document).on('click', 'a[data-comment-action=\"delete\"]', function(e) {
+                e.preventDefault();
+                var params = { id: $(this).data('comment-id'), method: 'remove', comment_params: '" . $this->comment_param_data . "', 'type':'input' };        
+                $.get('" . INCLUDES . "api/?api=comment-update', params).then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    }                
+                }).then(response => { 
+                 
+                    if (response['method'] == 'rm_dialog') {
+                         $('body').append(response['html']);
+                         var modalObj = $('#commentDelete-Modal');
+                         modalObj.modal({	backdrop: 'static',	keyboard: false }).modal('show');            
+                    }
+                });
+            });
+            
+            $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
+                e.preventDefault();
+                
+                var input = $(this).closest('form').find('textarea[name=\"comment_message\"]');
+                
+                var data = $(this).closest('form').serializeArray();
+                
+                data.push({name: 'method', value: 'update'});
+                
+                $.post('" . INCLUDES . "api/?api=comment-update', data)
+                .then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    } 
+                })
+                .then(response => { 
+                    if (response['method'] == 'ins') {
+                        var containerId = response['parent_dom'],
+                        altContainerId = response['alt_parent_dom'],
+                        dom = response['dom'];
+                        if ($('#'+containerId).is(':hidden')) {
+                            $('#'+altContainerId).prepend(dom);
+                            $('#'+altContainerId).find('li:last-child > a').text('View more replies');
+                        } else {
+                            $('#'+containerId).append(dom);
+                        }
+                        input.val('');
+                        // endif
+                    }
+                    // end then
+                });
+                // end function
+            });
+            ");
         }
     }
 
@@ -392,6 +397,7 @@ class Comments extends Comments\Comments {
      * Set empty comment data
      */
     protected function setComments() {
+
         $this->comment_data = [
             "comment_id" => get("comment_id", FILTER_VALIDATE_INT) ?? "0", // isset($_GET["comment_id"]) && isnum($_GET["comment_id"]) ? $_GET["comment_id"] : 0,
             "comment_name" => "",
@@ -416,16 +422,20 @@ class Comments extends Comments\Comments {
      * @return string
      */
     public static function formatClink($clink) {
+
         if (empty(self::$clink[$clink])) {
+
             $fusion_query = [];
-            $url = ((array)parse_url(htmlspecialchars_decode($clink))) + [
+
+            $url = ((array)parse_url(htmlspecialchars_decode($clink))) + array(
                     'path' => '',
                     'query' => '',
-                ];
+                );
+
             if ($url['query']) {
                 parse_str($url['query'], $fusion_query); // this is original.
             }
-            $fusion_query = array_diff_key($fusion_query, array_flip(["comment_reply"]));
+            $fusion_query = array_diff_key($fusion_query, array_flip(array("comment_reply")));
             $prefix = $fusion_query ? '?' : '';
             self::$clink[$clink] = $url['path'] . $prefix . http_build_query($fusion_query);
         }
@@ -496,6 +506,7 @@ class Comments extends Comments\Comments {
                     }
 
                     while ($row = dbarray($dbquery)) {
+
                         $this->parseCommentsData($row);
 
                         // this might not be useful any longer
@@ -536,52 +547,42 @@ class Comments extends Comments\Comments {
 //        $row = array_merge($row, isnum($row['comment_name']) ? fusion_get_user($row['comment_name']) : $garray);
         if ($this->isOwner($row["comment_name"])) {
             $owner = TRUE;
-//            $actions = [
-//                "edit_link" => [
-//                    //clean_request('c_action=edit&comment_id='.$row['comment_id'], array('c_action', 'comment_id'),FALSE)."#edit_comment";
-//                    'link' => $this->getParams('clink') . "&c_action=edit&comment_id=" . $row['comment_id'] . "#edit_comment",
-//                    'name' => $this->locale['edit']],
-//                "delete_link" => [
-//                    //clean_request('c_action=delete&comment_id='.$row['comment_id'], array('c_action', 'comment_id'), FALSE);
-//                    'link' => $this->getParams('clink') . "&c_action=delete&comment_id=" . $row['comment_id'],
-//                    'name' => $this->locale['delete']],
-//            ];
         }
 
         // Reply Form
         if ($this->getParams("comment_allow_reply") && $can_reply) {
 
             // Adjust this to array instead of string
-            $captcha = (new CommentsViewBuilder($this))->displayCaptchaInput();
-
-            $comments_form_open = openform('inputform-' . $row['comment_id'], 'POST', self::formatClink($this->getParams('clink'))) .
-                form_hidden("comment_cat", "", $this->comment_data['comment_cat'], ['input_id' => 'comment_cat-' . $row['comment_id']]);
-
-            $name_input = (iGUEST ? form_text('comment_name', fusion_get_locale('c104'), $this->comment_data['comment_name'],
-                [
-                    'max_length' => 30,
-                    'input_id' => 'comment_name-' . $row['comment_id'],
-                    'form_name' => 'comments_reply_frm-' . $row['comment_id'],
-                ]
-            ) : '');
-
-            $message_input = form_textarea("comment_message", "", $this->comment_data['comment_message'],
-                [
-                    "tinymce" => "simple",
-                    "autosize" => TRUE,
-                    "type" => fusion_get_settings("tinymce_enabled") ? "tinymce" : "bbcode",
-                    "input_id" => "comment_message-" . $row['comment_id'],
-                    "form_name" => "inputform-" . $this->comment_data['comment_cat'],
-                    "required" => TRUE,
-                ]);
-
-            $button = form_button("post_comment", fusion_get_locale('c102'), "post_" . $row['comment_id'], [
-                    "class" => "btn-primary",
-                    "input_id" => "post_comment-" . $row['comment_id'],
-                ]
-            );
-
-            $comments_form_close = closeform();
+//            $captcha = (new CommentsViewBuilder($this))->displayCaptchaInput();
+//
+//            $comments_form_open = openform('inputform-' . (int)$row['comment_id'], 'POST', self::formatClink($this->getParams('clink'))) .
+//                form_hidden("comment_cat", "", (int)$row['comment_cat'], ['input_id' => 'comment_cat-' . $row['comment_id']]);
+//
+//            $name_input = (iGUEST ? form_text('comment_name', fusion_get_locale('c104'), $row['comment_name'],
+//                [
+//                    'max_length' => 30,
+//                    'input_id' => 'comment_name-' . $row['comment_id'],
+//                    'form_name' => 'comments_reply_frm-' . $row['comment_id'],
+//                ]
+//            ) : '');
+//
+//            $message_input = form_textarea("comment_message", "", $row['comment_message'],
+//                [
+//                    "tinymce" => "simple",
+//                    "autosize" => TRUE,
+//                    "type" => fusion_get_settings("tinymce_enabled") ? "tinymce" : "bbcode",
+//                    "input_id" => "comment_message-" . $row['comment_id'],
+//                    "form_name" => "inputform-" . $row['comment_cat'],
+//                    "required" => TRUE,
+//                ]);
+//
+//            $button = form_button("post_comment", fusion_get_locale('c102'), "post_" . $row['comment_id'], [
+//                    "class" => "btn-primary",
+//                    "input_id" => "post_comment-" . $row['comment_id'],
+//                ]
+//            );
+//
+//            $comments_form_close = closeform();
         }
 
         /** formats $row */
@@ -592,15 +593,15 @@ class Comments extends Comments\Comments {
             "user_name_display" => display_name($row),
             "reply_link" => $can_reply == TRUE ? self::formatClink($this->getParams('clink')) . '&comment_reply=' . $row['comment_id'] . '#c' . $row['comment_id'] : '',
             // Comments Form
-            "comment_form_open" => $comments_form_open ?? '',
-            "comment_form_close" => $comments_form_close ?? '',
-            "comment_name_input" => $name_input ?? '',
-            "comment_message_input" => $message_input ?? '',
-            "comment_captcha" => [
-                "captcha" => $captcha['form'] ?? '',
-                "input" => $captcha['input'] ?? '',
-            ],
-            "comment_button" => $button ?? '',
+//            "comment_form_open" => $comments_form_open ?? '',
+//            "comment_form_close" => $comments_form_close ?? '',
+//            "comment_name_input" => $name_input ?? '',
+//            "comment_message_input" => $message_input ?? '',
+//            "comment_captcha" => [
+//                "captcha" => $captcha['form'] ?? '',
+//                "input" => $captcha['input'] ?? '',
+//            ],
+//            "comment_button" => $button ?? '',
             // end form
             "ratings" => $row['ratings'] ?? '',
             "datestamp" => $row['comment_datestamp'],

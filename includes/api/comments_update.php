@@ -42,11 +42,11 @@ function update_comments() {
 
     } else {
 
-        $params = fusion_decode(fusion_decrypt(post("params"), SECRET_KEY));
+        $params = fusion_decode(fusion_decrypt(post("comment_params"), SECRET_KEY));
 
-        if (!empty($params)) {
-            $params["comment_cat_id"] = str_replace("c", "", get("id"));
-        }
+//        if (!empty($params["comment_cat_id"])) {
+//            $params["comment_cat_id"] = str_replace("c", "", get("id"));
+//        }
 
         if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"])) {
 

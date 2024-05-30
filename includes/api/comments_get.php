@@ -15,7 +15,7 @@ function get_comments() {
         require_once INCLUDES . "plugins_include.php";
         require_once INCLUDES . "theme_functions_include.php";
 
-        $params = fusion_decode(fusion_decrypt(get("params"), SECRET_KEY));
+        $params = fusion_decode(fusion_decrypt(get("comment_params"), SECRET_KEY));
 
         if (!empty($params) && check_get("id")) {
             $params["comment_cat_id"] = str_replace("c", "", get("id"));

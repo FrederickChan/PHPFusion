@@ -46,6 +46,9 @@ class CommentsInput {
         }
     }
 
+    /**
+     * Old comment delete actions
+     */
     public function delete() {
         /** Delete */
         if (isset($_GET['c_action']) && iMEMBER) {
@@ -145,12 +148,6 @@ class CommentsInput {
         $settings = fusion_get_settings();
 
 //        $this->replaceParam("comment_user", $this->userdata['user_id']);
-
-        // Non Jquery Actions
-//        if (isset($_GET["comment_reply"])) {
-//            add_to_jquery("scrollTo('comments_reply_form');");
-//        }
-
 
         /**
          * Post Comment, Reply Comment
@@ -324,8 +321,7 @@ class CommentsInput {
                     }
                 }
             } else {
-
-                set_error(E_NOTICE, 'Token Error', FUSION_SELF, 260);
+                set_error(E_NOTICE, 'Comments Token Error', FUSION_SELF, 260);
             }
         }
 
