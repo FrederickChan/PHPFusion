@@ -130,7 +130,7 @@ class CommentsViewBuilder {
 
                 $message_input = $locale["c105"];
 
-                $clink = self::$parent->getParams("clink");
+//                $clink = self::$parent->getParams("clink");
 
                 $edata = [
                     "comment_cat" => 0,
@@ -138,29 +138,19 @@ class CommentsViewBuilder {
                     "comment_message" => "",
                 ];
 
-                if (iMEMBER && (isset($_GET["c_action"]) && $_GET["c_action"] == "edit") && (isset($_GET["comment_id"]) && isnum($_GET["comment_id"]))) {
-
+                if (iMEMBER && (get("method") == "edit") && (check_get("comment_id"))) {
                     $dbquery = self::$parent->commentEditQuery();
-
                     if (dbrows($dbquery)) {
-
                         $edata = dbarray($dbquery);
-
-                        if ((iADMIN && checkrights("C")) || (iMEMBER && $edata["comment_name"] == fusion_get_userdata("user_id") && isset($edata["user_name"]))) {
-                            $clink = self::$parent->getParams("clink") . " &c_action=edit&comment_id=" . $edata["comment_id"];
-                        }
+//                        if ((iADMIN && checkrights("C")) || (iMEMBER && $edata["comment_name"] == fusion_get_userdata("user_id") && isset($edata["user_name"]))) {
+//                            $clink = self::$parent->getParams("clink") . " &c_action=edit&comment_id=" . $edata["comment_id"];
+//                        }
+                    } else {
+                        return "";
                     }
                 }
 
-                $can_post = iMEMBER || fusion_get_settings("guestposts");
-
-                // Comments form
-                //$form_action = fusion_get_settings("site_path").str_replace(" ../", "", self::format_clink($clink));
-                $form_action = self::$parent->formatClink($clink);
-
-                // why would we need to split this?
-
-                if ($can_post) {
+                if (iMEMBER || fusion_get_settings("guestposts")) {
 
                     // Filter ID
                     if (check_get("id")) {
@@ -168,9 +158,9 @@ class CommentsViewBuilder {
                     }
 
                     // need to get the id.
-                    $comments_form_open = openform("inputform", "POST", $form_action, ["form_id" => self::$parent->getParams("comment_key") . "-inputform"]);
+                    $comments_form_open = openform("inputform", "POST", FORM_REQUEST, array("form_id" => self::$parent->getParams("comment_key") . "-inputform"));
 
-                    $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id"=>self::$parent->getParams("comment_key")."_params"]);
+                    $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id" => self::$parent->getParams("comment_key") . "_params"]);
 
                     $comments_form_open .= form_hidden("comment_id", "", "", ["input_id" => self::$parent->getParams("comment_key") . "-commentid"]);
 
@@ -182,13 +172,13 @@ class CommentsViewBuilder {
                         $ratings_input = form_select("comment_rating", $locale["r106"], "",
                             [
                                 "input_id" => self::$parent->getParams("comment_key") . "-commentRating",
-                                "options" => [
+                                "options" => array(
                                     5 => $locale["r120"],
                                     4 => $locale["r121"],
                                     3 => $locale["r122"],
                                     2 => $locale["r123"],
                                     1 => $locale["r124"],
-                                ],
+                                ),
                             ]
                         );
                     }
@@ -208,7 +198,7 @@ class CommentsViewBuilder {
                     $subject_input = self::$parent->getParams("comment_allow_subject") ? form_text("comment_subject", $locale["c113"], $edata["comment_subject"], ["required" => TRUE, "input_id" => self::$parent->getParams("comment_key") . "-commentSubject"]) : "";
 
                     // Add support custom template
-                    $message_input = form_textarea($edata["comment_cat"] ? "comment_message_reply" : "comment_message", "", $edata["comment_message"],
+                    $message_input = form_textarea("comment_message", "", $edata["comment_message"],
                         [
                             "input_id" => self::$parent->getParams("comment_key") . " -commentMessage",
                             "required" => TRUE,
@@ -219,18 +209,26 @@ class CommentsViewBuilder {
                         ]
                     );
 
-                    $button = form_button("post_comment", $edata["comment_message"] ? $locale["c103"] : $locale["c102"], ($edata["comment_message"] ? $locale["c103"] : $locale["c102"]),
-                        [
-                            "class" => "btn-primary spacer-sm post_comment",
+                    $button =
+                        ($edata["comment_id"] ? form_button("cancel_comment", "Cancel", "cancel",
+                        array(
+                            "input_id" => self::$parent->getParams("comment_key")."-cancelComment",
+                            "data" => array(
+                                "comment-id"=> $edata["comment_id"]
+                            )
+                        )) : "").
+                        form_button("post_comment", $edata["comment_message"] ? $locale["c103"] : $locale["c102"], ($edata["comment_message"] ? $locale["c103"] : $locale["c102"]),
+                        array(
+                            "class" => "btn-primary spacer-sm",
                             "input_id" => self::$parent->getParams("comment_key") . "-post_comment",
-                        ]
+                        )
                     );
 
                     $comments_form_close = closeform();
                 }
             }
 
-            return display_comment_form([
+            return display_comment_form(array(
                 "comment_form_open" => $comments_form_open ?? '',
                 "comment_form_close" => $comments_form_close ?? '',
                 "comment_form_id" => self::$parent->getParams("comment_key") . "_edit_comment",
@@ -239,13 +237,13 @@ class CommentsViewBuilder {
                 "comment_subject_input" => $subject_input ?? '',
                 "comment_message_input" => $message_input ?? '',
                 "comment_ratings_input" => $ratings_input ?? '',
-                "comment_captcha" => [
+                "comment_captcha" => array(
                     "captcha" => $captcha['form'] ?? '',
                     "input" => $captcha['input'] ?? '',
-                ],
+                ),
                 "comment_button" => $button ?? '',
                 "comment_form_avatar" => display_avatar(fusion_get_userdata(), self::$parent->getParams("comment_form_avatar_size"), FALSE, FALSE),
-            ]);
+            ));
 
         }
 

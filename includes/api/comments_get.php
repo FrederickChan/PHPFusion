@@ -24,11 +24,27 @@ function get_comments() {
         if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"])) {
 
             if (get("type") == "input") {
-                if (!empty($params["comment_cat_id"])) {
-                    $obj = Comments::getInstance($params)->showCommentForm();
-                }
-            } else {
 
+                if (!empty($params["comment_cat_id"]) || get("method") == "edit") {
+
+                    $obj = Comments::getInstance($params)->showCommentForm();
+
+                    if (!empty($obj)) {
+
+                        $obj = json_encode(array(
+                            "status" => 200,
+                            "method" => "edit",
+                            "parent_dom" => get("comment_id", FILTER_VALIDATE_INT), //!empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : $params["comment_key"] . "-commentsContainer",
+                            "dom" => $obj,
+                        ));
+
+                    } else {
+
+                        $obj = json_encode(array("status"=>300));
+                    }
+                }
+
+            } else {
                 $obj = Comments::getInstance($params)->showCommentPosts();
 
             }

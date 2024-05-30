@@ -28,27 +28,6 @@ if (!function_exists('display_comment_form')) {
     }
 }
 
-if (!function_exists('display_comments_section')) {
-//    function display_comments_section($info) {
-//        return "
-//        <div class='comments-panel'>
-//            ".$info['comment_ratings']."
-//            <div class='comments overflow-hide'>".$info['comments']."</div>
-//        </div>";
-//    }
-}
-
-//if (!function_exists('display_comments_listing')) {
-//    function display_comments_listing($info) {
-//        return "
-//        <ul class='comments clearfix list-style-none'>".$info['comments_list']."</ul>
-//        <div class='clearfix'>
-//            <span class='pull-right'>".$info['comments_admin_link']."</span>
-//            <div class='overflow-hide'>".$info['comments_page']."</div>
-//        </div>";
-//    }
-//}
-
 if (!function_exists('display_no_comments')) {
     function display_no_comments($text) {
         return '<li class="no-comments-text"><p class="text-center">' . $text . '</p></li>';
@@ -94,8 +73,6 @@ if (!function_exists('display_comments_list')) {
     }
 }
 
-
-
 if (!function_exists('display_comments_reply_form')) {
     function display_comments_reply_form($info) {
         $html = "<div class='comments_reply_form m-t-20 m-b-20'>";
@@ -128,44 +105,6 @@ if (!function_exists('display_comments_form')) {
     function display_comments_form($info) {
 
         return fusion_get_template('comments', $info);
-
-
-//        $html = "
-//        <div class='comments-form-panel'>
-//            <div class='comments-form-header'><h4>".$info['comment_form_title']."</h4></div>
-//            <div class='comments-form'>";
-//
-//        if (fusion_get_settings('comments_avatar')) {
-//            $html .= "<div class='pull-left m-r-15 m-t-5'>".$info['user_avatar']."</div>";
-//        }
-//
-//        $html .= "<div class='overflow-hide p-5' id='".$info['comment_form_id']."'>";
-//        $html .= $info['comment_name_input'];
-//        $html .= $info['comment_subject_input'];
-//        $html .= $info['comments_ratings_input'];
-//        $html .= $info['comment_message_input'];
-//
-//        if (!empty($info['comments_captcha']['captcha'])) {
-//            $html .= '<div class="row">';
-//            $html .= '<div class="col-xs-12 col-sm-8 col-md-6">';
-//
-//            $html .= $info['comments_captcha']['captcha'];
-//
-//            $html .= '</div>';
-//            $html .= '<div class="col-xs-12 col-sm-4 col-md-6">';
-//            if (!empty($info['comments_captcha']['input'])) {
-//                $html .= $info['comments_captcha']['input'];
-//            }
-//            $html .= '</div>';
-//            $html .= '</div>';
-//        }
-//
-//        $html .= $info['comment_post'];
-//        $html .= "</div>
-//            </div>
-//        </div>";
-//
-//        return $html;
     }
 }
 

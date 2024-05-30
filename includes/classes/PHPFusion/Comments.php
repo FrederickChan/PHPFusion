@@ -127,13 +127,13 @@ class Comments extends Comments\Comments {
             $(document).on('focus', '.plchr > input', function(e) {
                 var pom = $(this).closest('.plchr'),
                 tom = pom.closest('.plchw').find('.plchx'),
-                tomText = tom.find('textarea');
-                // let us do emoji buttons
+                tomText = tom.find('textarea');             
                 pom.hide();
                 tom.show();
                 tomText.focus();
             });
             
+            // Load subcomments
             $(document).on('click', 'a[data-comment-r=\"view\"]', function(e) {
                 e.preventDefault();
                 $(this).closest('ul').hide();
@@ -146,6 +146,7 @@ class Comments extends Comments\Comments {
                 });
             });
             
+            // Load more replies
             $(document).on('click', 'a[data-comment-r=\"load\"]', function(e) {
                 e.preventDefault();
                 var tgt = $(this).data('comment-target'),           
@@ -158,6 +159,7 @@ class Comments extends Comments\Comments {
                 });
             });
             
+            // Reply Click
             $(document).on('click', 'a[data-comment-r=\"reply\"]', function(e) {
                 e.preventDefault();   
                 var tgt = $(this).data('comment-target'),
@@ -169,11 +171,11 @@ class Comments extends Comments\Comments {
                 });            
                 $(this).closest('li.comment-item').addClass('r-open');
                 formContainer.addClass('open');
-            });      
-            
+            });
+                  
+            // Delete
             $(document).on('click', '#commentDel, button[name=\"commentDel\"]', function(e) {
                 e.preventDefault();
-                console.log('clicked');
                 
                 var data = { comment_id: $(this).data('comment-id'), method: 'remove', comment_params: '" . $this->comment_param_data . "', 'type':'input' };        
                  $.post('" . INCLUDES . "api/?api=comment-update', data)
@@ -202,7 +204,8 @@ class Comments extends Comments\Comments {
             $(document).on('hidden.bs.modal', '#commentDelete-Modal', function(e) {
                 $(this).remove();
             }); 
-           
+            
+           // Delete
             $(document).on('click', 'a[data-comment-action=\"delete\"]', function(e) {
                 e.preventDefault();
                 var params = { id: $(this).data('comment-id'), method: 'remove', comment_params: '" . $this->comment_param_data . "', 'type':'input' };        
@@ -221,6 +224,35 @@ class Comments extends Comments\Comments {
                 });
             });
             
+            // Edit 
+            $(document).on('click', 'a[data-comment-action=\"edit\"]', function(e) {
+                e.preventDefault();
+                var params = { comment_id: $(this).data('comment-id'), type:'input', method:'edit', comment_params: '".$this->comment_param_data."'};
+                
+                 $.get('" . INCLUDES . "api/?api=comment-get', params).then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    }  
+                                  
+                }).then(response => {      
+
+                    if (response['method'] == 'edit') {                    
+                        var tgtDOM = $('#c'+response['parent_dom']);                        
+                        $(response['dom']).insertBefore('#c'+response['parent_dom']);
+                        tgtDOM.hide();
+                    }
+                });
+            });
+            // Cancel edit
+            $(document).on('click', 'button[name=\"cancel_comment\"]', function(e) {
+                var DOM = $('#c'+$(this).data('comment-id'));
+                if (DOM.length) {
+                    DOM.show();
+                    $(this).closest('li').remove();
+                }                
+            });            
+            // Post
             $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
                 e.preventDefault();
                 
@@ -746,7 +778,7 @@ class Comments extends Comments\Comments {
         return dbquery("SELECT tcm.*
             FROM " . DB_COMMENTS . " tcm
             WHERE comment_id=:comment_id AND comment_item_id=:comment_item_id AND comment_type=:comment_type AND comment_hidden=:comment_hidden", [
-            ':comment_id' => get('comment_id', FILTER_VALIDATE_INT),
+            ':comment_id' => get("comment_id", FILTER_VALIDATE_INT),
             ':comment_item_id' => $this->getParams('comment_item_id'),
             ':comment_type' => $this->getParams('comment_item_type'),
             ':comment_hidden' => 0,
