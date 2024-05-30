@@ -1,6 +1,6 @@
 {% set settings = fusion_get_settings() %}
    {% if comment_child_count %}
-{% set h_ = ' h-reply' %}
+       {% set h_ = ' h-reply' %}
    {% endif %}
 
 <li class="comment-item{{ h_ }}" id="{{ comment_list_id }}">
@@ -11,7 +11,7 @@
             {{ user_avatar_display|raw }}
         {% endif %}
         <div class="ms-2">
-{#            <div class="comment-timeline"></div>#}
+            {# <div class="comment-timeline"></div> #}
             <!-- Comment by -->
             <div class="comment-content">
                 <div class="d-flex justify-content-between">
@@ -34,7 +34,8 @@
                     <a class="nav-link" href="#!">Like (3)</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-comment-r="reply" data-comment-id="{{ comment_id }}" data-comment-target="#cr{{ comment_list_id }}">Reply</a>
+                    <a class="nav-link" href="#" data-comment-r="reply" data-comment-id="{{ comment_id }}"
+                       data-comment-target="#cr{{ comment_list_id }}">Reply</a>
                 </li>
             </ul>
         </div>
@@ -46,23 +47,28 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="options_{{ comment_list_id }}">
                     {% if comment_owner %}
-                        <li><a class="dropdown-item" data-comment-action="edit" data-comment-id="{{ comment_id }}" href="#">
+                        <li><a class="dropdown-item" data-comment-action="edit" data-comment-id="{{ comment_id }}"
+                               href="#">
                                 Edit
                             </a>
                         </li>
-                        <li><a class="dropdown-item" data-comment-action="delete" data-comment-id="{{ comment_id }}" href="#">
+                        <li><a class="dropdown-item" data-comment-action="delete" data-comment-id="{{ comment_id }}"
+                               href="#">
                                 Delete
                             </a>
                         </li>
                     {% else %}
-                        <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_id }}" href="#">
+                        <li><a class="dropdown-item" data-comment-action="block" data-comment-id="{{ comment_id }}"
+                               href="#">
                                 <span class="pe-2">{{ get_image('user') }}</span>Block {{ user_name_display }}
                             </a>
                         </li>
-                        <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_id }}" href="#">
+                        <li><a class="dropdown-item" data-comment-action="hide" data-comment-id="{{ comment_id }}"
+                               href="#">
                                 <span class="pe-2">{{ get_image('hide') }}</span>Hide comment</a>
                         </li>
-                        <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_id }}" href="#">
+                        <li><a class="dropdown-item" data-comment-action="flag" data-comment-id="{{ comment_id }}"
+                               href="#">
                                 <span class="pe-2">{{ get_image('ban') }}</span>Report content
                             </a>
                         </li>
@@ -72,14 +78,17 @@
         </div>
     </div>
     <!-- Comment item nested START -->
+    {#    ##style="display:none;"#}
+    <ul id="{{ comment_list_id }}_r" class="comment-item-nested list-unstyled"></ul>
     {% if comment_child_count %}
         <ul id="{{ comment_list_id }}_p" class="comment-item-nested list-unstyled">
             <li class="comment-item">
-                <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View all {{ format_word(comment_child_count, 'reply|replies') }}</a>
+                <a href="#" data-comment-r="view" data-comment-id="{{ comment_id }}">View
+                    all {{ format_word(comment_child_count, 'reply|replies') }}</a>
             </li>
         </ul>
-        <ul id="{{ comment_list_id }}_r" class="comment-item-nested list-unstyled" style="display:none;"></ul>
     {% endif %}
+
     <!-- Comment item nested END -->
     <!-- Comment form nested START -->
     <ul class="comment-item-nested comments-reply-form list-unstyled" id="cr{{ comment_list_id }}"></ul>
@@ -98,8 +107,6 @@
     {# </a> #}
     <!-- Comment item nested END -->
 </li>
-
-
 
 
 {# $html .= "<div><small>"; #}

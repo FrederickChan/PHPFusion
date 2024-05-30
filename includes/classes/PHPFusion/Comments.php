@@ -75,6 +75,10 @@ class Comments extends Comments\Comments {
      */
     public static function getInstance(array $params = [], $key = "Default") {
 
+        if (isset($params["comment_key"])) {
+            $key = $params["comment_key"];
+        }
+
         if (!isset(self::$instances[$key])) {
 
             self::$instances[$key] = new static();
@@ -82,7 +86,6 @@ class Comments extends Comments\Comments {
             self::$key = $key;
 
             self::$params = $params + self::$params;
-
             self::$params["comment_key"] = $key;
 
             self::setInstance($key);
@@ -238,12 +241,15 @@ class Comments extends Comments\Comments {
                     if (response['method'] == 'ins') {
                         var containerId = response['parent_dom'],
                         altContainerId = response['alt_parent_dom'],
-                        dom = response['dom'];
-                        if ($('#'+containerId).is(':hidden')) {
+                        dom = response['dom'],
+                        containerDOM = $('#'+containerId);
+                        
+                        if (containerDOM.is(':hidden')) {
                             $('#'+altContainerId).prepend(dom);
                             $('#'+altContainerId).find('li:last-child > a').text('View more replies');
                         } else {
-                            $('#'+containerId).append(dom);
+                            containerDOM.prepend(dom);
+                            containerDOM.find('li.no-comments-text').hide();
                         }
                         input.val('');
                         // endif
@@ -467,7 +473,7 @@ class Comments extends Comments\Comments {
      */
     protected function getComments() {
 
-        if (fusion_get_settings('comments_enabled')) {
+        if (fusion_get_settings("comments_enabled")) {
 
             $this->c_arr['c_info']['comments_count'] = format_word(0, $this->locale['fmt_comment']);
             $this->c_arr['c_info']['total_comments'] = 0;

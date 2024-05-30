@@ -224,11 +224,11 @@ class CommentsInput {
                             ":comment_id" => $comment_data["comment_id"],
                         ]), 0);
 
-                        dbquery_insert(DB_COMMENTS, $comment_data, 'update');
+                        dbquery_insert(DB_COMMENTS, $comment_data, "update");
 
-                        self::$parent->comment_params[self::$key]['post_id'] = $comment_data['comment_id'];
+                        self::$parent->comment_params[self::$key]['post_id'] = $comment_data["comment_id"];
 
-                        $func = self::$parent->getParams('comment_edit_callback_function');
+                        $func = self::$parent->getParams("comment_edit_callback_function");
 
                         if (is_callable($func)) {
                             $func(self::$parent->getParams());
@@ -257,6 +257,7 @@ class CommentsInput {
                         // $_c = (isset($c_start) && isnum($c_start) ? $c_start : "");
                         // $c_link = $this->getParams("clink");
                         // redirect(self::formatClink("$c_link&c_start=$_c"));
+
                     }
 
                 } else {

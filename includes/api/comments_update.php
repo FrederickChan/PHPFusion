@@ -50,11 +50,9 @@ function update_comments() {
 
         if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"])) {
 
-            // we need all these
-            $obj = Comments::getInstance($params);
+            $obj = Comments::getInstance($params, '');
 
             if (post("method") == "update") {
-
                 $response = (new Comments\CommentsInput($obj))->update();
 
                 echo json_encode($response);

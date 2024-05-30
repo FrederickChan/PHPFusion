@@ -51,7 +51,7 @@ if (!function_exists('display_comments_section')) {
 
 if (!function_exists('display_no_comments')) {
     function display_no_comments($text) {
-        return '<li><p class="text-center">' . $text . '</p></li>';
+        return '<li class="no-comments-text"><p class="text-center">' . $text . '</p></li>';
     }
 }
 
