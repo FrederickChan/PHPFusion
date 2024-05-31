@@ -53,6 +53,7 @@ function update_comments() {
             $obj = Comments::getInstance($params, '');
 
             if (post("method") == "update") {
+
                 $response = (new Comments\CommentsInput($obj))->update();
 
                 echo json_encode($response);

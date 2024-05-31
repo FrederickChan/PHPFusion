@@ -251,14 +251,15 @@ class Comments extends Comments\Comments {
                     DOM.show();
                     $(this).closest('li').remove();
                 }                
-            });            
+            });
+                        
             // Post
             $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
                 e.preventDefault();
                 
-                var input = $(this).closest('form').find('textarea[name=\"comment_message\"]');
-                
-                var data = $(this).closest('form').serializeArray();
+                var input = $(this).closest('form').find('textarea[name=\"comment_message\"]'),
+                formDOM = $(this).closest('li.comment-item');
+                data = $(this).closest('form').serializeArray();
                 
                 data.push({name: 'method', value: 'update'});
                 
@@ -270,7 +271,25 @@ class Comments extends Comments\Comments {
                     } 
                 })
                 .then(response => { 
+                    
+                    if (response['method'] == 'update') {
+                    
+                        formDOM.remove();
+                        var currentDOM = $('#'+response['current_dom']);
+                        
+                        console.log(response);
+                        
+                        console.log(response['current_dom']);
+                        
+                        if (currentDOM.length) {
+                            currentDOM.replaceWith(response['dom']);
+                        } 
+                        
+                        
+                    } 
+                    
                     if (response['method'] == 'ins') {
+                    
                         var containerId = response['parent_dom'],
                         altContainerId = response['alt_parent_dom'],
                         dom = response['dom'],

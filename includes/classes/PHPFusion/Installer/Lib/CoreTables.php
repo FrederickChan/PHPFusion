@@ -404,7 +404,8 @@ class CoreTables {
                 'default' => '0',
             ], //page_widget VARCHAR(100) NOT NULL DEFAULT '',
         ];
-        $table_package['comments'] = [
+
+        $table_package["comments"] = [
             'comment_id' => [
                 'type' => 'BIGINT',
                 'length' => 20,
@@ -450,22 +451,34 @@ class CoreTables {
                 'unsigned' => TRUE,
                 'default' => '0',
             ], //comment_datestamp INT(10) UNSIGNED NOT NULL DEFAULT '0',
-            'comment_ip' => [
+            "comment_edited" => [
+                'type' => 'INT',
+                'length' => 10,
+                'key' => 2, //KEY comment_datestamp (comment_datestamp)
+                'unsigned' => TRUE,
+                'default' => '0',
+            ],
+            "comment_ip" => [
                 'type' => 'VARCHAR',
                 'length' => 45,
                 'default' => '0',
             ], //comment_ip VARCHAR(45) NOT NULL DEFAULT '',
-            'comment_ip_type' => [
+            "comment_ip_type" => [
                 'type' => 'TINYINT',
                 'default' => 4,
                 'length' => 1,
             ], //comment_ip_type TINYINT(1) UNSIGNED NOT NULL DEFAULT '4',
-            'comment_hidden' => [
+            "comment_mood" => [
+                "type" => "TEXT",
+                // prototype: test an array insertion
+            ],
+            "comment_hidden" => [
                 'type' => 'TINYINT',
                 'length' => 1,
                 'default' => '0',
             ], //comment_hidden TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
         ];
+
         $table_package['errors'] = [
             'error_id' => [
                 'type' => 'BIGINT',

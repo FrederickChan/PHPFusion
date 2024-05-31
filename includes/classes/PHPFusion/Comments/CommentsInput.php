@@ -120,7 +120,7 @@ class CommentsInput {
                     "method" => "rm",
                     "parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
                     "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
-                    "dom" => "c".$comment_data["comment_id"],
+                    "dom" => "c" . $comment_data["comment_id"],
                 );
             }
 
@@ -146,6 +146,7 @@ class CommentsInput {
     public function update() {
 
         $settings = fusion_get_settings();
+        $message = "";
 
 //        $this->replaceParam("comment_user", $this->userdata['user_id']);
 
@@ -160,7 +161,7 @@ class CommentsInput {
                 include INCLUDES . "captchas/" . $settings['captcha'] . "/captcha_check.php";
                 if (!$_CAPTCHA_IS_VALID) {
                     fusion_stop();
-                    addnotice("danger", self::$locale['u194']);
+                    $message = self::$locale["u194"];
                 }
             }
 
@@ -185,18 +186,17 @@ class CommentsInput {
                 ":type" => $comment_data["comment_type"],
                 ":name" => $comment_data["comment_name"],
             ]), 0);
-            // edit
+
 
             // Ratings
             $ratings_data = [];
             if (self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote") && check_post("comment_rating")) {
-
                 $ratings_data = [
                     "rating_id" => $ratings_id,
                     "rating_item_id" => self::$parent->getParams("comment_item_id"),
                     "rating_type" => self::$parent->getParams("comment_item_type"),
                     "rating_user" => $comment_data["comment_name"],
-                    "rating_vote" => form_sanitizer($_POST["comment_rating"], 0, "comment_rating"),
+                    "rating_vote" => post("comment_rating"), //sanitizer("comment_rating", 0, "comment_rating"),
                     "rating_datestamp" => time(),
                     "rating_ip" => USER_IP,
                     "rating_ip_type" => USER_IP_TYPE,
@@ -210,26 +210,24 @@ class CommentsInput {
                 if (iMEMBER && $comment_data["comment_id"]) {
 
                     // Update comment
-                    if ((iADMIN && checkrights("C")) || (iMEMBER && dbcount("(comment_id)", DB_COMMENTS, "comment_id=:id
-                        AND comment_item_id=:item_id AND comment_type=:type AND comment_name=:name AND comment_hidden='0'", [
-                                ":id" => $comment_data["comment_id"],
-                                ":item_id" => self::$parent->getParams("comment_item_id"),
-                                ":type" => self::$parent->getParams("comment_item_type"),
+                    if ((iADMIN && checkrights("C")) || (iMEMBER && dbcount("(comment_id)", DB_COMMENTS, "comment_id=:commentId
+                        AND comment_item_id=:itemID AND comment_type=:itemType AND comment_name=:name AND comment_hidden='0'", [
+                                ":commentId" => (int)$comment_data["comment_id"],
+                                ":itemID" => self::$parent->getParams("comment_item_id"),
+                                ":itemType" => self::$parent->getParams("comment_item_type"),
                                 ":name" => self::$parent->userdata["user_id"],
                             ]))) {
 
-                        $c_name_query = "SELECT comment_name FROM " . DB_COMMENTS . " WHERE comment_id=:comment_id";
-
-                        $comment_data['comment_name'] = dbresult(dbquery($c_name_query, [
-                            ":comment_id" => $comment_data["comment_id"],
+                        $comment_data["comment_name"] = dbresult(dbquery("SELECT comment_name FROM " . DB_COMMENTS . " WHERE comment_id=:commentId", [
+                            ":commentId" => (int)$comment_data["comment_id"],
                         ]), 0);
+
+                        $comment_data["comment_edited"] = time();
 
                         dbquery_insert(DB_COMMENTS, $comment_data, "update");
 
-                        self::$parent->comment_params[self::$key]['post_id'] = $comment_data["comment_id"];
-
+                        self::$parent->comment_params[self::$parent->getParams("comment_key")]["post_id"] = $comment_data["comment_id"];
                         $func = self::$parent->getParams("comment_edit_callback_function");
-
                         if (is_callable($func)) {
                             $func(self::$parent->getParams());
                         }
@@ -238,25 +236,36 @@ class CommentsInput {
                             dbquery_insert(DB_RATINGS, $ratings_data, ($ratings_data["rating_id"] ? "update" : "save"));
                         }
 
-                        $c_operator = ">=";
-                        if (fusion_get_settings("comments_sorting") == "ASC") {
-                            $c_operator = "<=";
+                        $message .= self::$locale["c114"];
+
+                        if (iMEMBER) {
+                            $user = fusion_get_user($comment_data["comment_name"]);
+                            $comment_data += array(
+                                "user_id" => $user["user_id"] ?? 0,
+                                "user_name" => $user["user_name"] ?? "",
+                                "user_firstname" => $user["user_firstname"] ?? "",
+                                "user_lastname" => $user["user_lastname"] ?? "",
+                                "user_displayname" => $user["user_displayname"] ?? "",
+                                "user_avatar" => $user["user_avatar"] ?? "",
+                                "user_status" => $user["user_status"] ?? "",
+                            );
                         }
 
-                        $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_id" . $c_operator . " :id
-                            AND comment_item_id=:id2
-                            AND comment_type=:type", [
-                            ":id" => $comment_data["comment_id"],
-                            ":id2" => self::$parent->getParams("comment_item_id"),
-                            ":type" => self::$parent->getParams("comment_item_type"),
-                        ]);
+                        // For DOM rendering only
+                        $comment_data["comment_datestamp"] = time();
 
+                        //Adds $comment_data
+                        $rows = self::$parent->parseCommentsData($comment_data, TRUE);
 
-                        addnotice("success", self::$locale["c114"]);
-                        // $c_start = (ceil($c_count / $this->settings["comments_per_page"]) - 1) * $this->settings["comments_per_page"];
-                        // $_c = (isset($c_start) && isnum($c_start) ? $c_start : "");
-                        // $c_link = $this->getParams("clink");
-                        // redirect(self::formatClink("$c_link&c_start=$_c"));
+                        return array(
+                            "status" => 200,
+                            "method" => "update",
+                            "message" => $message,
+                            "current_dom" => "c" . $comment_data["comment_id"],
+                            "parent_dom" => !empty($comment_data["comment_cat"]) ? "c" . $comment_data["comment_cat"] . "_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                            "alt_parent_dom" => !empty($comment_data["comment_cat"]) ? "c" . $comment_data["comment_cat"] . "_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
+                            "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($rows, self::$parent->getParams()),
+                        );
 
                     }
 
@@ -298,26 +307,14 @@ class CommentsInput {
 
                             // return the post data.
                             // if there is a modal then press the delete to return
-                            return [
+                            return array(
                                 "status" => 200,
+                                "message" => "",
                                 "method" => "ins",
                                 "parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : self::$parent->getParams("comment_key") . "-commentsContainer",
                                 "alt_parent_dom" => !empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_p" : self::$parent->getParams("comment_key") . "-commentsContainer",
                                 "dom" => (new CommentsViewBuilder(self::$parent))->displaySingleComment($rows, self::$parent->getParams()),
-                            ];
-
-
-                            //                            $c_start = 0;
-//                            if ($this->settings["comments_sorting"] == "ASC") {
-//                                $c_count = dbcount("(comment_id)", DB_COMMENTS, "comment_item_id=:item_id AND comment_type=:type", [
-//                                    ":item_id" => $this->getParams("comment_item_id"),
-//                                    ":type" => $this->getParams("comment_item_type"),
-//                                ]);
-//
-//                                $c_start = (ceil($c_count / $this->settings["comments_per_page"]) - 1) * $this->settings["comments_per_page"];
-//                            }
-
-                            //redirect(self::formatClink($this->getParams("clink")) . "&c_start=" . $c_start . "#c" . $id);
+                            );
                         }
                     }
                 }
@@ -326,7 +323,7 @@ class CommentsInput {
             }
         }
 
-        return [];
+        return array("status"=>300);
     }
 
 }

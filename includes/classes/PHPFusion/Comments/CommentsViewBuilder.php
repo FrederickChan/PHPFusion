@@ -162,7 +162,7 @@ class CommentsViewBuilder {
 
                     $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id" => self::$parent->getParams("comment_key") . "_params"]);
 
-                    $comments_form_open .= form_hidden("comment_id", "", "", ["input_id" => self::$parent->getParams("comment_key") . "-commentid"]);
+                    $comments_form_open .= form_hidden("comment_id", "", $edata["comment_id"] ?? 0, ["input_id" => self::$parent->getParams("comment_key") . "-commentid"]);
 
                     $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "0", ["input_id" => self::$parent->getParams("comment_key") . "-commentcat"]);
 
@@ -210,7 +210,7 @@ class CommentsViewBuilder {
                     );
 
                     $button =
-                        ($edata["comment_id"] ? form_button("cancel_comment", "Cancel", "cancel",
+                        (!empty($edata["comment_id"]) ? form_button("cancel_comment", "Cancel", "cancel",
                         array(
                             "input_id" => self::$parent->getParams("comment_key")."-cancelComment",
                             "data" => array(
