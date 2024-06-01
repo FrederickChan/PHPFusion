@@ -468,7 +468,7 @@ class CoreTables {
                 'default' => 4,
                 'length' => 1,
             ], //comment_ip_type TINYINT(1) UNSIGNED NOT NULL DEFAULT '4',
-            "comment_mood" => [
+            "comment_emotes" => [
                 "type" => "TEXT",
                 // prototype: test an array insertion
             ],

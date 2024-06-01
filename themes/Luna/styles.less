@@ -1355,6 +1355,7 @@ pre {
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin: .3rem 0;
   //margin-bottom: 1rem;
 
   .nav-item {
@@ -1399,6 +1400,34 @@ pre {
     //  padding-right: 0.6rem;
     //  opacity: 0.8;
     //}
+  }
+}
+
+.dropdown-like {
+
+  .nav-link.show + .dropdown-menu {
+    display: flex;
+    gap: 0;
+
+    li {
+      display: block;
+      border-radius: 25px;
+      margin: 0;
+      padding: .1rem;
+      font-size: 1rem;
+      width: 30px;
+      height: 30px;
+      transition: all .3s ease-in-out;
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--bs-gray-200);
+        font-size: 1.2rem;
+        width: 32px;
+        height: 32px;
+      }
+    }
   }
 }
 
@@ -1972,6 +2001,8 @@ textarea {
       display: block;
     }
   }
+
+
 }
 
 .comment-item.open {
@@ -1979,6 +2010,21 @@ textarea {
     &:not(:last-child):not(.comments-reply-form):before {
       display: inline-block;
     }
+  }
+}
+
+.comment-mood {
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-left: auto;
+  min-width: 200px;
+
+  span {
+    position: relative;
+    margin-left: -9px;
+    text-shadow: 1px 0 1px var(--bs-card-border-color);
+
   }
 }
 

@@ -9,7 +9,9 @@ const BOOTSTRAP = 5;
  * @throws Exception
  */
 function update_comments() {
+
     require_once INCLUDES . "plugins_include.php";
+
     require_once INCLUDES . "theme_functions_include.php";
 
     if (get("method") == "remove") {
@@ -44,10 +46,6 @@ function update_comments() {
 
         $params = fusion_decode(fusion_decrypt(post("comment_params"), SECRET_KEY));
 
-//        if (!empty($params["comment_cat_id"])) {
-//            $params["comment_cat_id"] = str_replace("c", "", get("id"));
-//        }
-
         if (!empty($params["comment_item_type"]) && !empty($params["comment_item_id"])) {
 
             $obj = Comments::getInstance($params, '');
@@ -69,7 +67,6 @@ function update_comments() {
             }
         }
     }
-
 
 }
 

@@ -36,7 +36,6 @@ class CommentsViewBuilder {
         $comments_html = '';
         if (!empty($c_data)) {
             foreach ($c_data[$index] as $data) {
-
                 $comments_html .= $this->displaySingleComment($data, $param);
 
 //            $data['comment_ratings'] = '';
@@ -51,25 +50,6 @@ class CommentsViewBuilder {
 //                    }
 //                }
 //            }
-//
-//            $data_api = \Defender::encode($options);
-//
-//            $data += [
-//                "comment_id" => $data["comment_id"],
-//                "comment_list_id" => "c" . $data["comment_id"],
-//                "comment_cat_id" => $data["comment_cat"],
-//                "comment_date" => $data["comment_datestamp"],
-//                "comment_ratings" => $data["comment_ratings"],
-//                "comment_subject" => $data["comment_subject"],
-//                "comment_message" => $data["comment_message"],
-//                "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $comments_id . "'>" . self::$locale["c112"] . "</a>" : ""),
-//                "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
-//                "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
-//                "comment_reply_form" => ($data["reply_form"] ?? ""),
-//                //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
-//                //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
-//            ];
-//            $comments_html .= display_comments_list($data);
             }
         }
 
@@ -91,8 +71,6 @@ class CommentsViewBuilder {
             }
         }
 
-        $data_api = Defender::encode($options);
-
         $data += array(
             "comment_id" => $data["comment_id"],
             "comment_list_id" => "c" . $data["comment_id"],
@@ -102,12 +80,10 @@ class CommentsViewBuilder {
             "comment_subject" => $data["comment_subject"],
             "comment_message" => $data["comment_message"],
             "comment_reply_link" => ($data["reply_link"] ? "<a href='" . $data["reply_link"] . "' class='comments-reply display-inline' data-id='" . $data["comment_id"] . "'>" . self::$locale["c112"] . "</a>" : ""),
-//            "comment_edit_link" => ($data["edit_link"] ? "<a href='" . $data["edit_link"]["link"] . "' class='edit-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["edit_link"]["name"] . "</a>" : ""),
-//            "comment_delete_link" => ($data["delete_link"] ? "<a href='" . $data["delete_link"]["link"] . "' class='delete-comment display-inline' data-id='" . $data["comment_id"] . "' data-api='" . $data_api . "' data-type='" . $options["comment_item_type"] . "' data-item='" . $options["comment_item_id"] . "' data-key='" . self::$parent->getParams("comment_key") . "'>" . $data["delete_link"]["name"] . "</a>" : ""),
             "comment_reply_form" => ($data["reply_form"] ?? ""),
-            //"comment_reply_count" => (isset($c_data[$data["comment_id"]]) ? count($c_data[$data["comment_id"]]) : 0),
-            //"comment_nested" => (isset($c_data[$data["comment_id"]]) ? $this->displayAllComments($c_data, $data["comment_id"], $options) : ""),
         );
+
+
         return display_comments_list($data);
     }
 
@@ -211,18 +187,18 @@ class CommentsViewBuilder {
 
                     $button =
                         (!empty($edata["comment_id"]) ? form_button("cancel_comment", "Cancel", "cancel",
-                        array(
-                            "input_id" => self::$parent->getParams("comment_key")."-cancelComment",
-                            "data" => array(
-                                "comment-id"=> $edata["comment_id"]
-                            )
-                        )) : "").
+                            array(
+                                "input_id" => self::$parent->getParams("comment_key") . "-cancelComment",
+                                "data" => array(
+                                    "comment-id" => $edata["comment_id"],
+                                ),
+                            )) : "") .
                         form_button("post_comment", $edata["comment_message"] ? $locale["c103"] : $locale["c102"], ($edata["comment_message"] ? $locale["c103"] : $locale["c102"]),
-                        array(
-                            "class" => "btn-primary spacer-sm",
-                            "input_id" => self::$parent->getParams("comment_key") . "-post_comment",
-                        )
-                    );
+                            array(
+                                "class" => "btn-primary spacer-sm",
+                                "input_id" => self::$parent->getParams("comment_key") . "-post_comment",
+                            )
+                        );
 
                     $comments_form_close = closeform();
                 }

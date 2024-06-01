@@ -119,6 +119,10 @@ class Comments extends Comments\Comments {
     }
 
     public function setJs() {
+
+        $str = 'comment_token';
+        $js_token = fusion_get_token($str);
+
         if (!defined("COMMENT_JS")) {
 
             define("COMMENT_JS", TRUE);
@@ -227,7 +231,7 @@ class Comments extends Comments\Comments {
             // Edit 
             $(document).on('click', 'a[data-comment-action=\"edit\"]', function(e) {
                 e.preventDefault();
-                var params = { comment_id: $(this).data('comment-id'), type:'input', method:'edit', comment_params: '".$this->comment_param_data."'};
+                var params = { comment_id: $(this).data('comment-id'), type:'input', method:'edit', comment_params: '" . $this->comment_param_data . "'};
                 
                  $.get('" . INCLUDES . "api/?api=comment-get', params).then(response => {
                     var jsonResponse = $.parseJSON(response);
@@ -252,7 +256,26 @@ class Comments extends Comments\Comments {
                     $(this).closest('li').remove();
                 }                
             });
-                        
+            
+            // Emotes
+            $(document).on('click', 'ul[data-action-r=\"emotes\"] li', function(e) {
+                $.post('".INCLUDES."api/?api=comment-emotes', { 
+                    id: $(this).parent('ul').data('comment-id'), 
+                    emotes: $(this).text(),
+                    form_id: '".$str."',
+                    fusion_token: '".$js_token."'
+                }).
+                then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    } 
+                })
+                .then(response => {
+                    $('#'+response['target']).html(response['dom']);
+                });
+            });    
+              
             // Post
             $(document).on('click', 'button[name=\"post_comment\"]', function(e) {
                 e.preventDefault();
@@ -649,6 +672,7 @@ class Comments extends Comments\Comments {
             "user_avatar_display" => display_avatar($row, $this->getParams("comment_avatar_size")), // isnum($row['comment_name']) ? display_avatar($row, self::$avatar_size) : display_avatar([], self::$avatar_size),
             "user_name_display" => display_name($row),
             "reply_link" => $can_reply == TRUE ? self::formatClink($this->getParams('clink')) . '&comment_reply=' . $row['comment_id'] . '#c' . $row['comment_id'] : '',
+            "comment_emotes" => !empty($row["comment_emotes"]) ? array_filter(array_unique(fusion_decode($row["comment_emotes"]))) : [],
             // Comments Form
 //            "comment_form_open" => $comments_form_open ?? '',
 //            "comment_form_close" => $comments_form_close ?? '',
@@ -667,9 +691,8 @@ class Comments extends Comments\Comments {
             "comment_subject" => $row['comment_subject'],
             "comment_message" => parse_text($row['comment_message'], ['decode' => FALSE, 'add_line_breaks' => TRUE]),
             "comment_owner" => $owner ?? FALSE,
-            "comment_name" => isnum($row['comment_name']) ? display_name($row) : $row['comment_name'],
-//            "edit_link" => $actions['edit_link'] ?? [],
-//            "delete_link" => $actions['delete_link'] ?? [],
+            "comment_edited" => (!empty($row["comment_edited"]) ? strip_tags(timer($row["comment_edited"])) : ""),
+            "comment_name" => isnum($row["comment_name"]) ? display_name($row) : $row['comment_name'],
             "comment_child_count" => dbcount("(comment_id)", DB_COMMENTS, "comment_cat=:cat_id AND comment_hidden=0", [':cat_id' => $row['comment_id']]),
         );
 

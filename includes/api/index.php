@@ -54,6 +54,7 @@ $endpoints = [
         "error-update" => "errorlogs_update.php", // post
         "comment-get" => "comments_get.php", // post
         "comment-update" => "comments_update.php", // post
+        "comment-emotes" => "comments_emotes.php" // post
     ]
     + get_extended_endpoints();
 

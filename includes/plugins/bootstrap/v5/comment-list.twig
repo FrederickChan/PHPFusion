@@ -31,11 +31,41 @@
                     {{ comment_time|raw }}
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#!">Like (3)</a>
+                    <div class="dropdown dropdown-like">
+                        <a class="nav-link" data-bs-toggle="dropdown" href="#">
+                            Like
+                        </a>
+                        <ul class="dropdown-menu" data-action-r="emotes" data-comment-id="{{ comment_id }}"
+                            data-comment-target="#c{{ comment_id }}">
+                            <li>😀</li>
+                            <li>😭</li>
+                            <li>😰</li>
+                            <li>🤭</li>
+                            <li>😵</li>
+                            <li>😮‍💨</li>
+                            <li>🤡</li>
+                            <li>💩</li>
+                            <li>😡</li>
+                        </ul>
+                    </div>
+
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-comment-r="reply" data-comment-id="{{ comment_id }}"
                        data-comment-target="#cr{{ comment_list_id }}">Reply</a>
+                </li>
+                {% if comment_edited %}
+                    <li class="nav-item">
+                        <abbr title="{{ comment_edited }}">Edited</abbr>
+                    </li>
+                {% endif %}
+                <li id="c_em{{ comment_id }}" class="comment-mood">
+                    {% if comment_emotes %}
+                        <span class="m-0 me-3"><small>{{ comment_emotes|length }}</small></span>
+                        {% for emote in comment_emotes %}
+                            <span>{{ emote }}</span>
+                        {% endfor %}
+                    {% endif %}
                 </li>
             </ul>
         </div>
@@ -78,7 +108,7 @@
         </div>
     </div>
     <!-- Comment item nested START -->
-    {#    ##style="display:none;"#}
+    {# ##style="display:none;" #}
     <ul id="{{ comment_list_id }}_r" class="comment-item-nested list-unstyled"></ul>
     {% if comment_child_count %}
         <ul id="{{ comment_list_id }}_p" class="comment-item-nested list-unstyled">
