@@ -9,11 +9,12 @@
         {{ comment_posts|raw }}
     </ul>
     <!-- Comment wrap END -->
-    <!--Comment Navigation START-->
-    <div class='clearfix'>
-        <span class='pull-right'>{{ comment_admin_link|raw }}</span>
-        <div class='overflow-hide'>{{ comment_pagenav|raw }}</div>
+    <!--Comment extras START-->
+    <div class="clearfix">
+        <span class="pull-right">{{ comment_admin_link|raw }}</span>
+        <div class="overflow-hide">{{ comment_pagenav|raw }}</div>
     </div>
+    <!--Comment extras END-->
 </div>
 <ul class="comment-form list-unstyled">
     {{ comment_form|raw }}

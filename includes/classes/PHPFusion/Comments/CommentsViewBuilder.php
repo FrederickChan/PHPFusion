@@ -91,7 +91,7 @@ class CommentsViewBuilder {
      * Comment Form
      * @return string
      */
-    public function displayCommentForm() {
+    public function displayCommentForm($unique_key) {
 
         $settings = fusion_get_settings();
 
@@ -134,20 +134,20 @@ class CommentsViewBuilder {
                     }
 
                     // need to get the id.
-                    $comments_form_open = openform("inputform", "POST", FORM_REQUEST, array("form_id" => self::$parent->getParams("comment_key") . "-inputform"));
+                    $comments_form_open = openform("inputform", "POST", FORM_REQUEST, array("form_id" => $unique_key . "-inputform"));
 
-                    $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id" => self::$parent->getParams("comment_key") . "_params"]);
+                    $comments_form_open .= form_hidden("comment_params", "", self::$parent->comment_param_data, ["input_id" => $unique_key . "_params"]);
 
-                    $comments_form_open .= form_hidden("comment_id", "", $edata["comment_id"] ?? 0, ["input_id" => self::$parent->getParams("comment_key") . "-commentid"]);
+                    $comments_form_open .= form_hidden("comment_id", "", $edata["comment_id"] ?? 0, ["input_id" => $unique_key . "-commentid"]);
 
-                    $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "0", ["input_id" => self::$parent->getParams("comment_key") . "-commentcat"]);
+                    $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "0", ["input_id" => $unique_key . "-commentcat"]);
 
                     // Ratings dropdown
                     if (fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
 
                         $ratings_input = form_select("comment_rating", $locale["r106"], "",
                             [
-                                "input_id" => self::$parent->getParams("comment_key") . "-commentRating",
+                                "input_id" => $unique_key . "-commentRating",
                                 "options" => array(
                                     5 => $locale["r120"],
                                     4 => $locale["r121"],
@@ -168,15 +168,16 @@ class CommentsViewBuilder {
                         form_text("comment_name", $locale["c104"], "", [
                             "max_length" => 30,
                             "required" => TRUE,
-                            "input_id" => self::$parent->getParams("comment_key") . "-commentName",
+                            "input_id" => $unique_key . "-commentName",
                         ]) : "");
 
-                    $subject_input = self::$parent->getParams("comment_allow_subject") ? form_text("comment_subject", $locale["c113"], $edata["comment_subject"], ["required" => TRUE, "input_id" => self::$parent->getParams("comment_key") . "-commentSubject"]) : "";
+                    $subject_input = self::$parent->getParams("comment_allow_subject") ? form_text("comment_subject", $locale["c113"], $edata["comment_subject"], array(
+                        "required" => TRUE, "input_id" => $unique_key . "-commentSubject")) : "";
 
                     // Add support custom template
                     $message_input = form_textarea("comment_message", "", $edata["comment_message"],
                         [
-                            "input_id" => self::$parent->getParams("comment_key") . " -commentMessage",
+                            "input_id" => $unique_key . "-commentMessage",
                             "required" => TRUE,
                             "autosize" => TRUE,
                             "form_name" => "inputform",
@@ -185,42 +186,43 @@ class CommentsViewBuilder {
                         ]
                     );
 
-                    $button =
-                        (!empty($edata["comment_id"]) ? form_button("cancel_comment", "Cancel", "cancel",
+                    // is for editing
+                    $button = (!empty($edata["comment_id"]) || isset($cid) ?
+                        form_button("cancel_comment", "Cancel", "cancel",
                             array(
-                                "input_id" => self::$parent->getParams("comment_key") . "-cancelComment",
+                                "input_id" => $unique_key . $edata["comment_id"] . "-cancelComment",
                                 "data" => array(
-                                    "comment-id" => $edata["comment_id"],
+                                    "comment-id" => ($cid ?? $edata["comment_id"]),
                                 ),
-                            )) : "") .
+                            )) :
+                        "") .
                         form_button("post_comment", $edata["comment_message"] ? $locale["c103"] : $locale["c102"], ($edata["comment_message"] ? $locale["c103"] : $locale["c102"]),
                             array(
                                 "class" => "btn-primary spacer-sm",
-                                "input_id" => self::$parent->getParams("comment_key") . "-post_comment",
+                                "input_id" => $unique_key . "-post_comment",
                             )
                         );
 
                     $comments_form_close = closeform();
+
+                    return display_comment_form(array(
+                        "comment_form_id" => $unique_key,
+                        "comment_form_open" => $comments_form_open ?? '',
+                        "comment_form_close" => $comments_form_close ?? '',
+                        "comment_postable" => $can_post ?? '',
+                        "comment_name_input" => $name_input ?? '',
+                        "comment_subject_input" => $subject_input ?? '',
+                        "comment_message_input" => $message_input ?? '',
+                        "comment_ratings_input" => $ratings_input ?? '',
+                        "comment_captcha" => array(
+                            "captcha" => $captcha['form'] ?? '',
+                            "input" => $captcha['input'] ?? '',
+                        ),
+                        "comment_button" => $button ?? '',
+                        "comment_form_avatar" => display_avatar(fusion_get_userdata(), self::$parent->getParams("comment_form_avatar_size"), FALSE, FALSE),
+                    ));
                 }
             }
-
-            return display_comment_form(array(
-                "comment_form_open" => $comments_form_open ?? '',
-                "comment_form_close" => $comments_form_close ?? '',
-                "comment_form_id" => self::$parent->getParams("comment_key") . "_edit_comment",
-                "comment_postable" => $can_post ?? '',
-                "comment_name_input" => $name_input ?? '',
-                "comment_subject_input" => $subject_input ?? '',
-                "comment_message_input" => $message_input ?? '',
-                "comment_ratings_input" => $ratings_input ?? '',
-                "comment_captcha" => array(
-                    "captcha" => $captcha['form'] ?? '',
-                    "input" => $captcha['input'] ?? '',
-                ),
-                "comment_button" => $button ?? '',
-                "comment_form_avatar" => display_avatar(fusion_get_userdata(), self::$parent->getParams("comment_form_avatar_size"), FALSE, FALSE),
-            ));
-
         }
 
         return "";

@@ -10,6 +10,8 @@ const BOOTSTRAP = 5;
  */
 function get_comments() {
 
+    $obj = "";
+
     if (fusion_safe()) {
 
         require_once INCLUDES . "plugins_include.php";
@@ -27,29 +29,37 @@ function get_comments() {
 
                 if (!empty($params["comment_cat_id"]) || get("method") == "edit") {
 
-                    $obj = Comments::getInstance($params)->showCommentForm();
+                    $unique_key_id = $params['comment_key'].get('id', FILTER_VALIDATE_INT);
+
+                    $obj = Comments::getInstance($params)->showCommentForm($unique_key_id);
 
                     if (!empty($obj)) {
 
                         $obj = json_encode(array(
                             "status" => 200,
                             "method" => "edit",
+                            "unique_key" => $unique_key_id,
                             "parent_dom" => get("comment_id", FILTER_VALIDATE_INT), //!empty($comment_data['comment_cat']) ? "c" . $comment_data['comment_cat'] . "_r" : $params["comment_key"] . "-commentsContainer",
                             "dom" => $obj,
                         ));
 
                     } else {
-
                         $obj = json_encode(array("status"=>300));
                     }
                 }
-
             } else {
-                $obj = Comments::getInstance($params)->showCommentPosts();
+
+                $obj = json_encode(array(
+                    "status" => 200,
+                    "method" => "display",
+                    "parent_dom" => "",
+                    "dom" => Comments::getInstance($params)->showCommentPosts()
+                ));
 
             }
 
             echo $obj;
+
         }
     }
 }

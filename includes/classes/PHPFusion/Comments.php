@@ -144,39 +144,83 @@ class Comments extends Comments\Comments {
                 var nextContainer = $(this).closest('ul').next('ul');
                 nextContainer.show();
                 var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "' };
-                $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                    //console.log(e);
-                    nextContainer.html(e);
+                $.get('" . INCLUDES . "api/?api=comment-get', params).
+                then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    } else {
+                        return {
+                            method: 'xm',                        
+                        };
+                    }
+                }).
+                then(response => {
+                    nextContainer.html(response['dom']);
+nextContainer.addClass('g-open');
                 });
             });
             
-            // Load more replies
+            // Pagenav
             $(document).on('click', 'a[data-comment-r=\"load\"]', function(e) {
-                e.preventDefault();
-                var tgt = $(this).data('comment-target'),           
-                formContainer = $(this).closest('ul');
-                next = $(this).data('comment-next');
-                var params = { " . $this->cpp_start_name . ": next, comment_params: '" . $this->comment_param_data . "' };
-                  $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                  // selector has problems
-                    formContainer.append(e);
+                e.preventDefault();                
+                var pagenav = $(this), 
+                tgt = $(this).data('comment-target'),           
+                nextLimit = $(this).data('comment-next'),
+                maxLimit = $(this).data('comment-rows'),
+                cpp = ".$this->cpp.";                
+                var params = { " . $this->cpp_start_name . ": nextLimit, comment_params: '" . $this->comment_param_data . "' };                
+                $.get('" . INCLUDES . "api/?api=comment-get', params).
+                then(response => {
+                     var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    } else {
+                        return {
+                            method: 'xm',                        
+                        };
+                    }
+                }).then(response => {                
+                    var nextCount = nextLimit > (maxLimit - cpp) ? 'none' : cpp+nextLimit;                     
+                    if (nextCount == 'none') {
+                        pagenav.remove();
+                    }  else {         
+                        //console.log('new limit is '+ nextCount);      
+                        pagenav.attr('data-comment-next', nextCount);
+                        pagenav.data('comment-next', nextCount);
+                    }
+                    $('#'+tgt).append(response['dom']);
                 });
             });
+            
+            var prevData = '';
             
             // Reply Click
             $(document).on('click', 'a[data-comment-r=\"reply\"]', function(e) {
                 e.preventDefault();   
                 var tgt = $(this).data('comment-target'),
                 formContainer = $(tgt);
-                var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "', 'type':'input' };            
-                 $.get('" . INCLUDES . "api/?api=comment-get', params, function(e) {
-                    //console.log(e);
-                    formContainer.html(e);
-                });            
+                var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "', 'type':'input' };                            
+                $.get('" . INCLUDES . "api/?api=comment-get', params).
+                  then(response => {
+                    var jsonResponse = $.parseJSON(response);
+                    if (jsonResponse['status'] === 200) {
+                        return jsonResponse;
+                    } else {
+                        return {
+                            method: 'xm',                        
+                        };
+                    }
+                }).
+                then(response => {
+                    var containerID = $('#'+response['unique_key']);
+                    if (containerID.length == 0) {                    
+                        formContainer.append(response['dom']).addClass('open').removeClass('g-open');                
+                    } 
+                });                            
                 $(this).closest('li.comment-item').addClass('r-open');
-                formContainer.addClass('open');
             });
-                  
+                 
             // Delete
             $(document).on('click', '#commentDel, button[name=\"commentDel\"]', function(e) {
                 e.preventDefault();
@@ -248,6 +292,7 @@ class Comments extends Comments\Comments {
                     }
                 });
             });
+            
             // Cancel edit
             $(document).on('click', 'button[name=\"cancel_comment\"]', function(e) {
                 var DOM = $('#c'+$(this).data('comment-id'));
@@ -411,7 +456,7 @@ class Comments extends Comments\Comments {
                 "comment_pagenav" => ($this->c_arr["c_info"]["c_makepagenav"] ? " <div class='text-left'>" . $this->c_arr["c_info"]["c_makepagenav"] . "</div>\n" : ""),
                 "comment_posts" => $this->showCommentPosts(),
                 "comment_admin_link" => $this->c_arr["c_info"]["admin_link"],
-                "comment_form" => $this->showCommentForm(),
+                "comment_form" => $this->showCommentForm($this->getParams("comment_key").random_string()),
             ]);
         }
 
@@ -432,8 +477,8 @@ class Comments extends Comments\Comments {
     /**
      * @return string
      */
-    public function showCommentForm() {
-        return (new CommentsViewBuilder($this))->displayCommentForm();
+    public function showCommentForm($unique_id) {
+        return (new CommentsViewBuilder($this))->displayCommentForm($unique_id);
     }
 
 
@@ -532,12 +577,15 @@ class Comments extends Comments\Comments {
 
         self::$c_start = get($this->cpp_start_name, FILTER_VALIDATE_INT) ?? '0';
 
+        //@todo: do sort filter
+        $this->cpp_sort = 'DESC';
+
         // Only applicable if sorting is Ascending. If descending, the default $c_start is always 0 as latest.
-        if ($this->cpp_sort == "ASC") {
-            if (!isset($_GET[$this->cpp_start_name]) && $rows > $this->cpp) {
-                self::$c_start = (ceil($rows / $this->cpp) - 1) * $this->cpp;
-            }
-        }
+//        if ($this->cpp_sort == "ASC") {
+//            if (!isset($_GET[$this->cpp_start_name]) && $rows > $this->cpp) {
+//                self::$c_start = (ceil($rows / $this->cpp) - 1) * $this->cpp;
+//            }
+//        }
 
         return self::$c_start;
     }
@@ -575,8 +623,8 @@ class Comments extends Comments\Comments {
                     $i = ($this->settings['comments_sorting'] == "ASC" ? self::$c_start + 1 : $root_comment_rows - self::$c_start);
 
                     if ($root_comment_rows > $this->cpp) {
-                        // make into load more comments using JS
-                        $this->c_arr['c_info']['c_makepagenav'] = '<a href="#" data-comment-r="load" data-comment-next="' . $this->cpp . '" data-comment-target="' . $this->getParams("comment_key") . '-commentsContainer">Load more replies</a>';
+
+                        $this->c_arr['c_info']['c_makepagenav'] = '<a href="#" data-comment-r="load" data-comment-rows="'.$root_comment_rows.'" data-comment-next="' . $this->cpp . '" data-comment-target="' . $this->getParams("comment_key") . '-commentsContainer">Load more replies</a>';
 //                            makepagenav(self::$c_start, $this->cpp, $root_comment_rows, 3, $this->getParams('clink') . (stristr($this->getParams('clink'), '?') ? "&" : '?'), "c_start_" . $this->getParams('comment_key'));
                     }
 

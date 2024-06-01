@@ -2,7 +2,7 @@
 {% set settings = fusion_get_settings()  %}
 {% set userdata = fusion_get_userdata() %}
 
-<li class="comment-item">
+<li class="comment-item" id="{{ comment_form_id }}">
     <div class="d-flex position-relative w-100">
         {% if settings['comments_avatar'] %}
             <!-- Avatar -->

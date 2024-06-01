@@ -9,8 +9,6 @@ class Comments {
 
     protected static $instances = NULL;
 
-
-
     /**
      * @var array
      * comment_item_type -
