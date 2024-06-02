@@ -142,7 +142,7 @@ class Comments extends Comments\Comments {
                 e.preventDefault();
                 $(this).closest('ul').hide();
                 var nextContainer = $(this).closest('ul').next('ul');
-                nextContainer.show();
+    
                 var params = { id: $(this).data('comment-id'), comment_params: '" . $this->comment_param_data . "' };
                 $.get('" . INCLUDES . "api/?api=comment-get', params).
                 then(response => {
@@ -156,8 +156,15 @@ class Comments extends Comments\Comments {
                     }
                 }).
                 then(response => {
+                
+                    var prevDOM = $('#'+response['parent_dom']);
+                    if (prevDOM.length) {
+                        prevDOM.remove();
+                    }
                     nextContainer.html(response['dom']);
-nextContainer.addClass('g-open');
+                    nextContainer.addClass('g-open');
+     
+                    nextContainer.show();
                 });
             });
             
@@ -342,19 +349,11 @@ nextContainer.addClass('g-open');
                 .then(response => { 
                     
                     if (response['method'] == 'update') {
-                    
-                        formDOM.remove();
+                       formDOM.remove();
                         var currentDOM = $('#'+response['current_dom']);
-                        
-                        console.log(response);
-                        
-                        console.log(response['current_dom']);
-                        
                         if (currentDOM.length) {
                             currentDOM.replaceWith(response['dom']);
-                        } 
-                        
-                        
+                        }                                                
                     } 
                     
                     if (response['method'] == 'ins') {

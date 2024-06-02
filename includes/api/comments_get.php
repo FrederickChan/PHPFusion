@@ -52,7 +52,7 @@ function get_comments() {
                 $obj = json_encode(array(
                     "status" => 200,
                     "method" => "display",
-                    "parent_dom" => "",
+                    "parent_dom" => "c".get("id")."_r",
                     "dom" => Comments::getInstance($params)->showCommentPosts()
                 ));
 

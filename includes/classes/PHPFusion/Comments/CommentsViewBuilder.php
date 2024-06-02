@@ -187,10 +187,10 @@ class CommentsViewBuilder {
                     );
 
                     // is for editing
-                    $button = (!empty($edata["comment_id"]) || isset($cid) ?
+                    $button = (!empty($edata["comment_id"]) || isset($edata["comment_id"]) ?
                         form_button("cancel_comment", "Cancel", "cancel",
                             array(
-                                "input_id" => $unique_key . $edata["comment_id"] . "-cancelComment",
+                                "input_id" => $unique_key . ($edata["comment_id"] ?? $edata["comment_cat"]) . "-cancelComment",
                                 "data" => array(
                                     "comment-id" => ($edata["comment_cat"] ?? $edata["comment_id"]),
                                 ),
