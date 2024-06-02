@@ -128,9 +128,9 @@ class CommentsViewBuilder {
 
                 if (iMEMBER || fusion_get_settings("guestposts")) {
 
-                    // Filter ID
+                    // When initiated new reply
                     if (check_get("id")) {
-                        $cid = ltrim(get("id"), "c");
+                        $edata["comment_cat"] = ltrim(get("id"), "c");
                     }
 
                     // need to get the id.
@@ -140,7 +140,7 @@ class CommentsViewBuilder {
 
                     $comments_form_open .= form_hidden("comment_id", "", $edata["comment_id"] ?? 0, ["input_id" => $unique_key . "-commentid"]);
 
-                    $comments_form_open .= form_hidden("comment_cat", "", $cid ?? "0", ["input_id" => $unique_key . "-commentcat"]);
+                    $comments_form_open .= form_hidden("comment_cat", "", $edata["comment_cat"] ?? "0", ["input_id" => $unique_key . "-commentcat"]);
 
                     // Ratings dropdown
                     if (fusion_get_settings("ratings_enabled") && self::$parent->getParams("comment_allow_ratings") && self::$parent->getParams("comment_allow_vote")) {
@@ -192,7 +192,7 @@ class CommentsViewBuilder {
                             array(
                                 "input_id" => $unique_key . $edata["comment_id"] . "-cancelComment",
                                 "data" => array(
-                                    "comment-id" => ($cid ?? $edata["comment_id"]),
+                                    "comment-id" => ($edata["comment_cat"] ?? $edata["comment_id"]),
                                 ),
                             )) :
                         "") .

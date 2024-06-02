@@ -275,6 +275,7 @@ nextContainer.addClass('g-open');
             // Edit 
             $(document).on('click', 'a[data-comment-action=\"edit\"]', function(e) {
                 e.preventDefault();
+
                 var params = { comment_id: $(this).data('comment-id'), type:'input', method:'edit', comment_params: '" . $this->comment_param_data . "'};
                 
                  $.get('" . INCLUDES . "api/?api=comment-get', params).then(response => {

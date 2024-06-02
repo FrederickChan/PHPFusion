@@ -172,8 +172,8 @@ class CommentsInput {
                 "comment_subject" => !post("comment_cat", FILTER_VALIDATE_INT) && self::$parent->getParams("comment_allow_subject") ? sanitizer("comment_subject", "", "comment_subject") : "",
                 "comment_item_id" => self::$parent->getParams("comment_item_id"),
                 "comment_type" => self::$parent->getParams("comment_item_type"),
-                "comment_cat" => sanitizer("comment_cat", "0", "comment_cat"),
-                "comment_message" => sanitizer("comment_message", "", "comment_message"),
+                "comment_cat" => post("comment_cat", FILTER_VALIDATE_INT),
+                "comment_message" => post("comment_message"),
                 "comment_ip" => USER_IP,
                 "comment_ip_type" => USER_IP_TYPE,
                 "comment_hidden" => 0,
@@ -224,7 +224,7 @@ class CommentsInput {
 
                         $comment_data["comment_edited"] = time();
 
-                        dbquery_insert(DB_COMMENTS, $comment_data, "update");
+                       dbquery_insert(DB_COMMENTS, $comment_data, "update");
 
                         self::$parent->comment_params[self::$parent->getParams("comment_key")]["post_id"] = $comment_data["comment_id"];
                         $func = self::$parent->getParams("comment_edit_callback_function");
