@@ -1,4 +1,5 @@
 $('#user_action_bar').hide();
+
 $('#check_all').bind('click', function () {
     if ($(this).is(':checked')) {
         $('input[name^=user_id]:checkbox').prop('checked', true);

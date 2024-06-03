@@ -225,5 +225,6 @@ function showpolicies() {
     return $html;
 }
 
-require_once __DIR__ . '/functions_include.php';
-require_once __DIR__ . '/notifications_include.php';
+require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/notifications_include.php';
+require_once __DIR__ . '/includes/uip_include.php';

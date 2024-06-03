@@ -400,7 +400,7 @@ class Errors {
     /**
      * @return string
      */
-    private function getErrorLogs() {
+    public function getErrorLogs() {
 
         $locale = self::$locale;
         $form_id = random_string();

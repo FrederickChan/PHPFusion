@@ -1060,6 +1060,22 @@ class CoreTables {
                 'default' => '',
             ], //settings_theme VARCHAR(200) NOT NULL DEFAULT '',
         ];
+        $table_package['site_links_menu'] = [
+            'menu_id'   => [
+                'type'           => 'BIGINT',
+                'length'         => 20,
+                'auto_increment' => TRUE,
+                'key'            => 1, //PRIMARY KEY (link_id)
+                'unsigned'       => TRUE,
+            ],
+            'menu_name' => [
+                'type'     => 'VARCHAR',
+                'length'   => 80,
+                'unsigned' => TRUE,
+                'key'      => 2,
+                'default'  => '0'
+            ],
+        ];
         $table_package['site_links'] = [
             'link_id' => [
                 'type' => 'BIGINT',

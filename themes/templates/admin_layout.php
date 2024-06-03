@@ -20,7 +20,6 @@ use PHPFusion\OutputHandler;
 
 $locale = fusion_get_locale( '', LOCALE . LOCALESET . "admin/main.php" );
 $settings = fusion_get_settings();
-define( "BOOTSTRAP_ENABLED", (defined( 'BOOTSTRAP' ) && BOOTSTRAP == TRUE) || (defined( 'BOOTSTRAP4' ) && BOOTSTRAP4 == TRUE) || (defined( 'BOOTSTRAP5' ) && BOOTSTRAP5 == TRUE) );
 
 header( "Content-Type: text/html; charset=" . $locale['charset'] . "" );
 
@@ -72,8 +71,7 @@ echo "<meta name='googlebot' content='noarchive'>";
 //    }
 //}
 
-fusion_apply_hook( 'fusion_header_include', $custom_file ?? '' );
-
+fusion_apply_hook( "fusion_header_include", $custom_file ?? '' );
 
 if (defined( 'ENTYPO' ) && ENTYPO == TRUE) {
     echo "<link rel='stylesheet' href='" . INCLUDES . "fonts/entypo/entypo.min.css'>\n";
@@ -104,9 +102,9 @@ if (is_array( $core_css_files )) {
     }
 }
 // Theme CSS loading
-echo fusion_load_script( THEMES . "admin_themes/" . $settings["admin_theme"] . "/acp_styles.css", "css", TRUE );
+echo fusion_load_script( THEMES . "templates/acp/styles.css", "css", TRUE);
 
-$theme_css_files = fusion_filter_hook( 'fusion_css_styles' );
+$theme_css_files = fusion_filter_hook( "fusion_css_styles" );
 if (is_array( $theme_css_files )) {
     $theme_css_files = array_filter( $theme_css_files );
     foreach ($theme_css_files as $css_file) {

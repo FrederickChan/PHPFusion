@@ -26,82 +26,199 @@ namespace PHPFusion;
 class Admins {
 
     private static $instance = NULL;
+
+    /**
+     * Administration pages
+     *
+     * @var array
+     */
     private static $admin_pages = [];
+
+    /**
+     * Locale
+     *
+     * @var array
+     */
     private static $locale = [];
+
     /**
      * @var array - default section icons
      */
+
     public $admin_section_icons = [
         '0' => "<i class='fa fa-fw fa-dashboard'></i>",
         '1' => "<i class='fa fa-fw fa-microphone'></i>",
         '2' => "<i class='fa fa-fw fa-users'></i>",
-        '3' => "<i class='fa fa-fw fa-wrench'></i>",
-        '4' => "<i class='fa fa-fw fa-cog'></i>",
-        '5' => "<i class='fa fa-fw fa-cubes'></i>"
+        '3' => "<i class='fa fa-fw fa-cog'></i>",
+        '4' => "<i class='fa fa-fw fa-wrench'></i>",
+        '5' => "<i class='fa fa-fw fa-cubes'></i>",
+        '6' => '<i class="fad fa-atom-simple"></i>',
     ];
+
     /**
      * Default core administration pages
      *
      * @var array
      */
     public $admin_page_icons = [
-        'AD'   => "<i class='admin-ico fa fa-fw fa-user-md'></i>", // Administrators
-        'APWR' => "<i class='admin-ico fa fa-fw fa-medkit'></i>", // Admin Password Reset
-        'B'    => "<i class='admin-ico fa fa-fw fa-ban'></i>", // Blacklist
-        'BB'   => "<i class='admin-ico fa fa-fw fa-bold'></i>", // BB Codes
-        'C'    => "<i class='admin-ico fa fa-fw fa-comments'></i>", // Comments
-        'CP'   => "<i class='admin-ico fa fa-fw fa-leaf'></i>", // Custom Pages
-        'DB'   => "<i class='admin-ico fa fa-fw fa-history'></i>", // Database Backup
-        'ERRO' => "<i class='admin-ico fa fa-fw fa-bug'></i>", // Error Log
-        'FM'   => "<i class='admin-ico fa fa-fw fa-folder-open'></i>", // Fusion File Manager
-        'I'    => "<i class='admin-ico fa fa-fw fa-cubes'></i>", // Infusions
-        'IM'   => "<i class='admin-ico fa fa-fw fa-picture-o'></i>", // Images
-        'LANG' => "<i class='admin-ico fa fa-fw fa-flag'></i>", // Language Settings
-        'M'    => "<i class='admin-ico fa fa-fw fa-user'></i>", // Members
-        'MAIL' => "<i class='admin-ico fa fa-fw fa-send'></i>", // Email Templates
-        'MI'   => "<i class='admin-ico fa fa-fw fa-barcode'></i>", // Migration Tool
-        'P'    => "<i class='admin-ico fa fa-fw fa-desktop'></i>", // Panels
-        'PI'   => "<i class='admin-ico fa fa-fw fa-info-circle'></i>", // Server Info
-        'PL'   => "<i class='admin-ico fa fa-fw fa-puzzle-piece'></i>", // Permalinks
-        'ROB'  => "<i class='admin-ico fa fa-fw fa-android'></i>", // robots.txt
-        'S1'   => "<i class='admin-ico fa fa-fw fa-hospital-o'></i>", // Main Settings
-        'S2'   => "<i class='admin-ico fa fa-fw fa-clock-o'></i>", // Time and Date
-        'S4'   => "<i class='admin-ico fa fa-fw fa-key'></i>", // Registration Settings
-        'S6'   => "<i class='admin-ico fa fa-fw fa-gears'></i>", // Miscellaneous Settings
-        'S7'   => "<i class='admin-ico fa fa-fw fa-envelope-square'></i>", // PM Settings
-        'S9'   => "<i class='admin-ico fa fa-fw fa-users'></i>", // User Management
-        'S12'  => "<i class='admin-ico fa fa-fw fa-shield'></i>", // Security Settings
-        'SB'   => "<i class='admin-ico fa fa-fw fa-language'></i>", // Banners
-        'SL'   => "<i class='admin-ico fa fa-fw fa-link'></i>", // Site Links
-        'SM'   => "<i class='admin-ico fa fa-fw fa-smile-o'></i>", // Smileys
-        'TS'   => "<i class='admin-ico fa fa-fw fa-magic'></i>", // Theme Manager
-        'U'    => "<i class='admin-ico fa fa-fw fa-database'></i>", // Upgrade
-        'UF'   => "<i class='admin-ico fa fa-fw fa-table'></i>", // User Fields
-        'UG'   => "<i class='admin-ico fa fa-fw fa-users'></i>", // User Groups
-        'UL'   => "<i class='admin-ico fa fa-fw fa-coffee'></i>", // User Log
+        'AD' => "<i class='admin-ico fad fa-fw fa-user-md'></i>", // Administrators
+        'APWR' => "<i class='admin-ico fad fa-fw fa-medkit'></i>", // Admin Password Reset
+        'B' => "<i class='admin-ico fad fa-fw fa-ban'></i>", // Blacklist
+        'BB' => "<i class='admin-ico fad fa-fw fa-bold'></i>", // BB Codes
+        'C' => "<i class='admin-ico fad fa-fw fa-comments'></i>", // Comments
+        'CP' => "<i class='admin-ico fad fa-fw fa-leaf'></i>", // Custom Pages
+        'DB' => "<i class='admin-ico fad fa-fw fa-history'></i>", // Database Backup
+        'ERRO' => "<i class='admin-ico fad fa-fw fa-bug'></i>", // Error Log
+        'FM' => "<i class='admin-ico fad fa-fw fa-folder-open'></i>", // Fusion File Manager
+        'I' => "<i class='admin-ico fad fa-fw fa-cubes'></i>", // Infusions
+        'IM' => "<i class='admin-ico fad fa-fw fa-picture-o'></i>", // Images
+        'LANG' => "<i class='admin-ico fad fa-fw fa-flag'></i>", // Language Settings
+        'M' => "<i class='admin-ico fad fa-fw fa-user'></i>", // Members
+        'MAIL' => "<i class='admin-ico fad fa-fw fa-send'></i>", // Email Templates
+        'MI' => "<i class='admin-ico fad fa-fw fa-barcode'></i>", // Migration Tool
+        'P' => "<i class='admin-ico fad fa-fw fa-desktop'></i>", // Panels
+        'PI' => "<i class='admin-ico fad fa-fw fa-info-circle'></i>", // PHP Info
+        'PL' => "<i class='admin-ico fad fa-fw fa-puzzle-piece'></i>", // Permalinks
+        'ROB' => "<i class='admin-ico fad fa-fw fa-android'></i>", // robots.txt
+        'S1' => "<i class='admin-ico fad fa-fw fa-hospital-o'></i>", // Main Settings
+        'S2' => "<i class='admin-ico fad fa-fw fa-clock-o'></i>", // Time and Date
+        'S3' => "<i class='admin-ico fad fa-fw fa-magic'></i>", // Theme Settings
+        'S4' => "<i class='admin-ico fad fa-fw fa-key'></i>", // Registration Settings
+        'S6' => "<i class='admin-ico fad fa-fw fa-gears'></i>", // Miscellaneous Settings
+        'S7' => "<i class='admin-ico fad fa-fw fa-envelope-square'></i>", // PM Settings
+        'S9' => "<i class='admin-ico fad fa-fw fa-users'></i>", // User Management
+        'S12' => "<i class='admin-ico fad fa-fw fa-shield'></i>", // Security Settings
+        'SB' => "<i class='admin-ico fad fa-fw fa-language'></i>", // Banners
+        'SL' => "<i class='admin-ico fad fa-fw fa-link'></i>", // Site Links
+        'SM' => "<i class='admin-ico fad fa-fw fa-smile-o'></i>", // Smileys
+        'TS' => "<i class='admin-ico fad fa-fw fa-magic'></i>", // Theme Manager
+        'U' => "<i class='admin-ico fad fa-fw fa-database'></i>", // Upgrade
+        'UF' => "<i class='admin-ico fad fa-fw fa-table'></i>", // User Fields
+        'UG' => "<i class='admin-ico fad fa-fw fa-users'></i>", // User Groups
+        'UL' => "<i class='admin-ico fad fa-fw fa-coffee'></i>", // User Log
+        'ST' => "<i class='admin-ico fad fa-fw fa-box-full'></i>", // User Log
     ];
+
+    protected $settings_uri;
+
+    protected $dashboard_uri;
+
+    private $custom_icons = [
+        'C' => 'fad fa-comments-alt', // Comments
+        'CP' => 'fad fa-edit', // Custom page
+        'F' => 'fad fa-comment-alt-lines', // Forum
+        'FM' => 'fad fa-folder', // File Manager
+        'IM' => 'fad fa-image', // Images
+        'UL' => 'fad fa-user-edit', // User Log
+        'UF' => 'fad fa-id-card-alt', // User Fields
+        'UG' => 'fad fa-users', // User Groups
+        'MI' => 'fad fa-taxi', // Migration Tool
+        'M' => 'fad fa-user', //Members
+        'B' => 'fad fa-user-secret', //Blacklist
+        'APWR' => 'fad fa-user-lock', //Admin Password Reset
+        'AD' => 'fad fa-user-tie', // Administrators
+        'MAIL' => 'fad fa-mailbox', // Email
+        'ROB' => 'fad fa-robot', //Robots
+        'TS' => 'fad fa-rocket-launch', // Theme
+        'SM' => 'fad fa-grin-beam', // Smileys
+        'SL' => 'fad fa-link', // Sitelinks
+        'PI' => 'fab fa-php', // PHP Info
+        'PL' => 'fad fa-anchor', // Permalinks
+        'P' => 'fad fa-window-alt', //Panels
+        'I' => 'fad fa-magnet', // Infusions
+        'ERRO' => 'fad fa-bug', // Error
+        'DB' => 'fad fa-database',
+        'BB' => 'fad fa-star-shooting', // bbcode
+        'SB' => 'fad fa-image-polaroid', // banner
+        'LANG' => 'fad fa-language', // Language Settings
+        'S12' => 'fad fa-lock', // Security
+        'S9' => 'fad fa-user-md', // User Management
+        'S7' => 'fad fa-comments', // PM
+        'S6' => 'fad fa-box', //Miscellaneous
+        'S4' => 'fad fa-lock', // Registration
+        'S3' => 'fad fa-cogs', // Theme Settings
+        'S2' => 'fad fa-clock', // Time and Date
+        'S1' => 'fad fa-tools', // Settings Main,
+        'ST' => 'fad fa-box-full',
+    ];
+
     /**
      * @var array
      */
-    private $admin_sections = [1 => FALSE, 2 => FALSE, 3 => FALSE, 4 => FALSE, 5 => FALSE];
+    private $admin_sections = [1 => FALSE, 2 => FALSE, 3 => FALSE, 4 => FALSE, 5 => FALSE, 6 => FALSE];
+
     /**
      * @var array
      */
     private $admin_page_link = [];
+
     /**
      *    Constructor class. No Params
      */
     private $current_page = '';
+
     private $comment_type = [];
+
     private $submit_type = [];
+
     private $submit_link = [];
+
     private $link_type = [];
+
     private $submit_data = [];
+
     private $folder_permissions = [];
-    private $custom_folders = [];
+
+    private $customfolders = [];
+
+    private $icon_color = [
+        'S1' => '#D89217', // Main
+        'S2' => '#384146', // Time and Date
+        'S3' => '#A12669', // Theme Settings
+        'S4' => '#3F0760', // Registration
+        'S6' => '#092133', // Misc
+        'S7' => '#373C4F', // PM
+        'S9' => '#075571', // User Management
+        'S12' => '#01ADB5', // Security
+        'LANG' => '#FD7115', // Languages
+
+        'SB' => '#0C419C', // system banner
+        'BB' => '#075571', // BBcode
+        'DB' => '#3A3F70', // DB
+        'ERRO' => '#3E2F50', // Error logs
+        'I' => '#F30B4A', // Infusions
+        'P' => '#0E64A5',  // Panels
+        'PL' => '#012040', // Permalink
+        'PI' => '#5828A3', // Php Info
+        'SL' => '#571151', // Sitelinks
+        'SM' => '#232932', // Smileys
+        'TS' => '#308886', // Theme Settings
+        'ROB' => '#29485D', // Robots
+        'MAIL' => '#C32CAD', // Email
+        //'MAIL'=>'#2B2539',
+        'AD' => '#554279', // Administrator
+        'APWR' => '#31485F', // Admin Password Reset
+        'B' => '#212141', //Blacklist
+        'M' => '#CB3C3C', //Members
+        'MI' => '#293F57', //Migration
+        'UG' => '#1A89AC', //User groups
+        'UF' => '#970848', // User fields
+        'UL' => '#F3C624', //User Logs,
+        'ST' => '#D89327',
+    ];
 
     public function __construct() {
-        self::$locale = fusion_get_locale('', LOCALE.LOCALESET.'admin/main.php');
+
+        self::$locale = self::getAdminLocale();
+    }
+
+    public static function getAdminLocale() {
+
+        if (empty(self::$locale)) {
+            self::$locale = fusion_get_locale('', LOCALE . LOCALESET . 'admin/main.php');
+        }
+
+        return self::$locale;
     }
 
     /**
@@ -109,7 +226,8 @@ class Admins {
      *
      * @return static
      */
-    public static function getInstance() {
+    public static function getInstance(): ?Admins {
+
         if (empty(self::$instance)) {
             self::$instance = new static();
         }
@@ -120,15 +238,70 @@ class Admins {
     /**
      * Cache the Current Field Inputs within Login session.
      *
-     * @param string $form_id
-     * @param string $form_type
-     * @param int    $item_id
-     * @param array  $callback_fields
-     * @param int    $cache_time
+     * @param       $form_id
+     * @param       $form_type
+     * @param       $item_id
+     * @param array $callback_fields
+     * @param int $cache_time
      *
      * @return string
      */
-    public function requestCache($form_id, $form_type, $item_id, array $callback_fields = [], $cache_time = 30000) {
+    public function requestCache($form_id, $form_type, $item_id, array $callback_fields = [], int $cache_time = 30000): string {
+
+        /*
+        add_to_footer("<script src='".INCLUDES."jquery/confirm/jquery-confirm.min.js'></script>");
+        add_to_head("<link rel='stylesheet' href='".INCLUDES."jquery/confirm/jquery-confirm.min.css'>");
+        add_to_jquery("
+            var input_fields = $('#$form_id').serialize();
+            $.confirm({
+            title: 'Restore Editing Session',
+            content: 'There is a draft found for your previous editing session. Do you wish to restore?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        url: '$remote',
+                        type: 'post',
+                        data: {
+                        'fusion_token': '$token',
+                        'aidlink': '".fusion_get_aidlink()."',
+                        'fields': input_fields,
+                        'form_id' : '$form_id',
+                        'item_id':'$item_id',
+                        'form_type':'$form_type',
+                        'callback':'read_cache'
+                        },
+                        dataType: 'json',
+                        success: function (e) {
+                            if (e.response == 200) {
+                                $.each(e.data, function(key, value) {
+                                    $('#'+key).val( value );
+                                });
+                                setTimeout(function(e) {
+                                    //$.alert('Your editing session has been restored');
+                                    setTimeout( function(e) {UpdateAdminCache() }, $cache_time);
+                                }, 100);
+                            }
+                        },
+                        error: function(e) {
+                        }
+                   });
+                },
+                cancel: function () {
+                    //$.alert('Canceled!');
+                }
+                /*somethingElse: {
+                    text: 'Something else',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        $.alert('Something else?');
+                    }
+                }
+            }
+        });
+        ");*/
+        $remote = fusion_get_settings('site_path') . "administration/includes/cache_update.php";
+        $token = fusion_get_token($form_id, 5);
         add_to_jquery("
         function timedCacheRequest(timeout) {
             setTimeout(UpdateAdminCache, timeout);
@@ -137,12 +310,12 @@ class Admins {
             var input_fields = $('#$form_id').serialize();
             var ttl = '$cache_time';
             $.ajax({
-            url: '".ADMIN."includes/?api=cache-update',
+            url: '$remote',
             type: 'post',
             dataType: 'html',
             data: {
-                'fusion_token': '".fusion_get_token($form_id)."',
-                'aidlink': '".fusion_get_aidlink()."',
+                'fusion_token': '$token',
+                'aidlink': '" . fusion_get_aidlink() . "',
                 'fields': input_fields,
                 'form_id' : '$form_id',
                 'form_type':'$form_type',
@@ -161,7 +334,7 @@ class Admins {
             });
         }
         // add abort long poll once we change fields.
-        $('#".$form_id." :input').blur(function(e) {
+        $('#" . $form_id . " :input').blur(function(e) {
             UpdateAdminCache(1);
         });
         ");
@@ -173,13 +346,17 @@ class Admins {
         $html = "";
         if (!empty($_SESSION['form_cache'][$form_id][$form_type][$item_id])) {
 
-            $html .= "<div class='list-group text-normal m-t-10 m-b-10'><div class='list-group-item'>".self::$locale['290']." <a href='".clean_request('autosave=view', ['autosave'], FALSE)."'>".self::$locale['291']."</a></div></div>";
+            $html .= "<label class='list-group-item text-normal spacer-xs p-15 m-b-10'>" . self::$locale['290'] . " <a href='" . clean_request('autosave=view',
+                    ['autosave'],
+                    FALSE) . "'>" . self::$locale['291'] . "</a></label>";
 
             if (isset($_GET['autosave']) && $_GET['autosave'] == 'view') {
 
                 $html .= "<div id='rev-window'>\n";
-                $html .= fusion_get_function('openside', "<h4><i class='fas fa-thumbtack m-r-10'></i>".self::$locale['292']."</h4>");
+                $html .= fusion_get_function('openside',
+                    "<h4><i class='fas fa-thumbtack m-r-10'></i>" . self::$locale['292'] . "</h4>");
                 $session = htmlspecialchars_decode($_SESSION['form_cache'][$form_id][$form_type][$item_id]);
+                $session = descript($session);
                 $session = str_replace('&#039;', "'", $session);
                 parse_str($session, $data);
                 unset($data['form_id']);
@@ -188,47 +365,47 @@ class Admins {
                 $html .= "<dl id='restore_results' class='dl-horizontal'>\n";
                 $fill_js = "";
                 foreach ($data as $field_name => $value) {
-                    $value = descript($value);
                     if (isset($callback_fields[$field_name])) {
-                        $html .= "<dt>".$callback_fields[$field_name]."</dt>\n";
+                        $html .= "<dt>" . $callback_fields[$field_name] . "</dt>\n";
                         $html .= "<dd class='m-b-15'><samp>";
                         $html .= nl2br(html_entity_decode($value));
-                        $html .= "</samp>".form_hidden('s_'.$field_name, '', str_replace("'", '&#039;', $value))."</dd>\n";
+                        $html .= "</samp>" . form_hidden('s_' . $field_name,
+                                '',
+                                str_replace("'", '&#039;', $value)) . "</dd>\n";
                         $fill_js .= "
                             var c = $('#s_$field_name').val();
-                            $('#".$field_name."').val(c);
+                            $('#" . $field_name . "').val(c);
                         ";
                     }
                 }
                 $html .= "</dl>\n";
                 $html .= "<div class='text-right'>\n";
-                $html .= "<button name='cancel_session' type='button' class='btn btn-default' value='cancel_session'>".self::$locale['cancel']."</button>\n";
-                $html .= "<button name='fill_session' type='button' class='btn btn-primary' value='fill_session'>".self::$locale['293']."</button>\n";
+                $html .= "<button name='cancel_session' type='button' class='btn btn-default' value='cancel_session'>" . self::$locale['cancel'] . "</button>\n";
+                $html .= "<button name='fill_session' type='button' class='btn btn-primary' value='fill_session'>" . self::$locale['293'] . "</button>\n";
                 $html .= "</div>\n";
                 $html .= fusion_get_function('closeside', '');
                 $html .= "</div>\n";
                 add_to_jquery("
-                    $('button[name^=\"fill_session\"]').bind('click', function(e) {
-                        $fill_js
-                        $('#rev-window').hide();
-                        UpdateAdminCache();
-                    });
-                    $('button[name^=\"cancel_session\"]').bind('click', function(e) {
-                        $('#rev-window').hide();
-                        UpdateAdminCache();
-                    });
-            ");
+                $('button[name^=\"fill_session\"]').on('click', function(e) {
+                    $fill_js
+                    $('#rev-window').hide();
+                    UpdateAdminCache();
+                });
+                $('button[name^=\"cancel_session\"]').on('click', function(e) {
+                    $('#rev-window').hide();
+                    UpdateAdminCache();
+                });
+                ");
             }
         }
 
         return $html;
     }
 
-    /**
-     * Set admin sections
-     */
-    public function setAdminPages() {
+    public function setAdmin() {
+
         self::$admin_pages = $this->getAdminPages();
+
         $this->admin_sections = array_filter(array_merge([
             0 => self::$locale['ac00'],
             1 => self::$locale['ac01'],
@@ -236,47 +413,92 @@ class Admins {
             3 => self::$locale['ac03'],
             4 => self::$locale['ac04'],
             5 => self::$locale['ac05'],
+            6 => 'PHPFusion',
         ], $this->admin_sections));
+
         $this->admin_sections = array_values($this->admin_sections);
-        $this->current_page = $this->currentPage();
+
+        $this->current_page = $this->_currentPage();
+
+        $this->settings_uri = ADMIN . fusion_get_aidlink() . '&s=settings';
+
+        $this->dashboard_uri = ADMIN . fusion_get_aidlink() . '&s=dashboard';
     }
 
     /**
-     * @param int $page
-     *
      * @return array
      */
-    public function getAdminPages($page = NULL) {
+    public function getAdminPages(): array {
+
+        $aidlink = fusion_get_aidlink();
+
         $locale = fusion_get_locale();
 
         self::$admin_pages = array_filter(self::$admin_pages);
+
         if (empty(self::$admin_pages)) {
-            $result = cdquery('adminpages', "SELECT * FROM ".DB_ADMIN." WHERE admin_language='".LANGUAGE."' ORDER BY admin_page DESC, admin_id ASC, admin_title ASC");
-            if (cdrows($result)) {
-                while ($data = cdarray($result)) {
-                    if (file_exists(ADMIN.$data['admin_link']) || file_exists(INFUSIONS.$data['admin_link'])) {
-                        if (checkrights($data['admin_rights']) && $data['admin_link'] != "reserved") {
-                            $data['admin_title'] = isset($locale[$data['admin_rights']]) ? $locale[$data['admin_rights']] : $data['admin_title'];
+
+            $result = dbquery("SELECT * FROM " . DB_ADMIN . " WHERE admin_language='" . LANGUAGE . "' ORDER BY admin_page DESC, admin_id ASC, admin_title ASC");
+
+            $rows = dbrows($result);
+
+            if ($rows) {
+                while ($data = dbarray($result)) {
+
+                    if (checkrights($data['admin_rights']) && $data['admin_link'] != "reserved") {
+
+                        if (is_file(ADMIN . $data['admin_link']) || is_file(ADMIN . 'contents/' . $data['admin_link']) || is_file($data['admin_link'])) {
+
+                            $data['admin_title'] = preg_replace("/&(?!(#\d+|\w+);)/", "&amp;", $data['admin_title']);
+
+                            // $apage['admin_title'] = isset($locale[$data['admin_rights']]) && $locale[$data['admin_rights']] ? $locale[$data['admin_rights']] : $data['admin_title'];
+
+                            $data['admin_description'] = isset($locale[$data['admin_rights'] . 'D']) && $locale[$data['admin_rights'] . 'D'] ? $locale[$data['admin_rights'] . 'D'] : ($locale[$data['admin_rights']] ?? '');
+
+                            $data['admin_icon_color'] = $this->icon_color[$data['admin_rights']] ?? '';
+
+                            $data['admin_icon'] = $this->custom_icons[$data['admin_rights']] ?? 'fad fa-book';
+                            // check files
+
+                            $admin_link = $data['admin_link'] . $aidlink;
+
+                            if (is_file(ADMIN . 'contents/' . $data['admin_link'])) {
+                                $admin_link = ADMIN . $aidlink . '&p=' . strtolower($data['admin_rights']);
+                            } else if (is_file(APPS . $data['admin_link'])) {
+                                $admin_link = ADMIN . $aidlink . '&inf=' . strtolower($data['admin_rights']);
+                            }
+
+                            $data['admin_link'] = $admin_link;
+
                             self::$admin_pages[$data['admin_page']][] = $data;
                         }
+                        // else {
+                        //     print_p($data['admin_link'] . ' could not be found');
+                        // }
                     }
+                    // else {
+                    //
+                    //     print_p($data['admin_title'].' could not be loaded because there are no rights');
+                    // }
                 }
             }
         }
-        return $page === NULL ? self::$admin_pages : (isset(self::$admin_pages[$page]) ? self::$admin_pages[$page] : self::$admin_pages);
+
+        return self::$admin_pages;
     }
 
     /**
      * Build a return that always synchronize with the DB_ADMIN url.
      */
-    public function currentPage() {
+    public function _currentPage() {
+
         $path = $_SERVER['PHP_SELF'];
         if (defined('START_PAGE')) {
-            $path_info = pathinfo(strtok(START_PAGE, '?'));
+            $path_info = pathinfo(START_PAGE);
             if (stristr(FUSION_REQUEST, '/administration/')) {
-                $path = $path_info['filename'].'.php';
+                $path = $path_info['filename'] . '.php';
             } else {
-                $path = '../'.$path_info['dirname'].'/'.$path_info['filename'].'.php';
+                $path = '../' . $path_info['dirname'] . '/' . $path_info['filename'] . '.php';
             }
         }
 
@@ -284,11 +506,42 @@ class Admins {
     }
 
     /**
+     * @param $page          - 0-5 is core section pages. 6 and above are free to use.
+     * @param $section_title - Section title
+     * @param $icons         - Section Icons
+     */
+    public function addAdminSection($page, $section_title, $icons) {
+
+        $this->admin_sections[$page] = $section_title;
+        $this->admin_section_icons[$page] = $icons;
+        self::$admin_pages[$page] = [];
+    }
+
+    public function setAdminBreadcrumbs() {
+
+        add_breadcrumb([
+            'link' => ADMIN . 'index.php' . fusion_get_aidlink() . '&amp;pagenum=0',
+            'title' => self::$locale['ac10'],
+        ]);
+
+        $acTab = (isset($_GET['pagenum']) && isnum($_GET['pagenum'])) ? $_GET['pagenum'] : $this->_isActive();
+
+        if ($acTab != 0 && $acTab <= 5) {
+            add_breadcrumb([
+                'link' => ADMIN . fusion_get_aidlink() . "&amp;pagenum=" . $acTab,
+                'title' => self::$locale['ac0' . $acTab],
+            ]);
+        }
+
+    }
+
+    /**
      * Determine which section is currently active.
      *
      * @return int|string
      */
-    public function isActive() {
+    public function _isActive() {
+
         $active_key = 0;
         self::$admin_pages = $this->getAdminPages();
         if (empty($active_key) && !empty(self::$admin_pages)) {
@@ -298,7 +551,7 @@ class Admins {
                     $link[] = $admin_data['admin_link'];
                 }
                 $data_link = array_flip($link);
-                if (isset($data_link[$this->currentPage()])) {
+                if (isset($data_link[$this->_currentPage()])) {
                     return $key;
                 }
             }
@@ -308,111 +561,66 @@ class Admins {
     }
 
     /**
-     * @param int    $page          0-5 is core section pages. 6 and above are free to use.
-     * @param string $section_title Section title
-     * @param string $icon          Section icon
-     */
-    public function addAdminSection($page, $section_title, $icon) {
-        $this->admin_sections[$page] = $section_title;
-        $this->admin_section_icons[$page] = $icon;
-        self::$admin_pages[$page] = [];
-    }
-
-    /**
-     * Set admin breadcrumbs
-     */
-    public function setAdminBreadcrumbs() {
-        add_breadcrumb([
-            'link'  => ADMIN.'index.php'.fusion_get_aidlink().'&amp;pagenum=0',
-            'title' => self::$locale['ac10']
-        ]);
-        $acTab = (isset($_GET['pagenum']) && isnum($_GET['pagenum'])) ? $_GET['pagenum'] : $this->isActive();
-        if ($acTab != 0 && $acTab <= 5) {
-            add_breadcrumb([
-                'link'  => ADMIN.fusion_get_aidlink()."&amp;pagenum=".$acTab,
-                'title' => self::$locale['ac0'.$acTab]
-            ]);
-        }
-
-    }
-
-    /**
-     * @return array
-     */
-    public function getAdminPageIcons() {
-        return $this->admin_page_icons;
-    }
-
-    /**
-     * @param string $rights
-     * @param string $icons
+     * @param $rights
+     * @param $icons
      */
     public function setAdminPageIcons($rights, $icons) {
+
         $this->admin_page_icons[$rights] = $icons;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return array|mixed|null
-     */
     public function getLinkType($type = NULL) {
-        return ($type !== NULL ? (isset($this->link_type[$type]) ? $this->link_type[$type] : NULL) : $this->link_type);
+
+        return ($type !== NULL ? ($this->link_type[$type] ?? NULL) : $this->link_type);
     }
 
     /**
-     * @param string $type Link prefix
-     * @param string $link Link url
+     * @param $type - link prefix
+     * @param $link - link url
      */
     public function setLinkType($type, $link) {
+
         $this->link_type[$type] = $link;
     }
 
     /**
-     * Get submit type
+     * Get Submit Type
      *
-     * @param string $type submit stype prefix
+     * @param null $type submit stype prefix
      *
      * @return array|mixed|null
      */
     public function getSubmitType($type = NULL) {
-        return ($type !== NULL ? (isset($this->submit_type[$type]) ? $this->submit_type[$type] : NULL) : $this->submit_type);
+
+        return ($type !== NULL ? ($this->submit_type[$type] ?? NULL) : $this->submit_type);
     }
 
     /**
-     * @param string $type  Submissions prefix
-     * @param string $title Title
+     * @param $type  - submissions prefix
+     * @param $title - title
      */
     public function setSubmitType($type, $title) {
+
         $this->submit_type[$type] = $title;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return array|mixed|null
-     */
     public function getSubmitData($type = NULL) {
-        return ($type !== NULL ? (isset($this->submit_data[$type]) ? $this->submit_data[$type] : NULL) : $this->submit_data);
+
+        return ($type !== NULL ? ($this->submit_data[$type] ?? NULL) : $this->submit_data);
     }
 
     /**
-     * @param string $type    Submissions prefix
-     * @param array  $options array(infusion_name, link, submit_link, submit_locale, title,admin_link)
+     * @param $type    - submissions prefix
+     * @param $options - array(infusion_name, link, submit_link, submit_locale, title,admin_link)
      */
     public function setSubmitData($type, array $options = []) {
-        if (defined(strtoupper($options['infusion_name']).'_EXISTS')) {
-            $this->submit_data[$type] = $options;
-        }
+
+        defined(strtoupper($options['infusion_name']) . '_EXISTS') ? $this->submit_data[$type] = $options : NULL;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return array|mixed|null
-     */
     public function getSubmitLink($type = NULL) {
-        return ($type !== NULL ? (isset($this->submit_link[$type]) ? $this->submit_link[$type] : NULL) : $this->submit_link);
+
+        return ($type !== NULL ? ($this->submit_link[$type] ?? NULL) : $this->submit_link);
     }
 
     /**
@@ -420,89 +628,94 @@ class Admins {
      * @param string $type Submissions stype prefix
      */
     public function setSubmitLink($type, $link) {
+
         $this->submit_link[$type] = $link;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return array|mixed|null
-     */
     public function getCommentType($type = NULL) {
-        return ($type !== NULL ? (isset($this->comment_type[$type]) ? $this->comment_type[$type] : NULL) : $this->comment_type);
+
+        return ($type !== NULL ? ($this->comment_type[$type] ?? NULL) : $this->comment_type);
     }
 
     /**
-     * @param string $type  Comment prefix
-     * @param string $title Title
+     * @param $type  - comment prefix
+     * @param $title - title
      */
     public function setCommentType($type, $title) {
+
         $this->comment_type[$type] = $title;
     }
 
     /**
-     * @param string $type Infusion name
+     * @param $type - infusion_name
      */
     public function getFolderPermissions($type = NULL) {
-        return ($type !== NULL ? (isset($this->folder_permissions[$type]) ? $this->folder_permissions[$type] : NULL) : $this->folder_permissions);
+
+        return ($type !== NULL ? ($this->folder_permissions[$type] ?? NULL) : $this->folder_permissions);
     }
 
     /**
-     * @param string $type    Infusion name
-     * @param array  $options array(image_folder => TRUE or FALSE)
+     * @param $type    - infusion_name
+     * @param $options - array(image_folder => TRUE or FALSE)
      */
     public function setFolderPermissions($type, array $options = []) {
-        if (defined(strtoupper($type).'_EXISTS')) {
-            $this->folder_permissions[$type] = $options;
-        }
+
+        defined(strtoupper($type) . '_EXISTS') ? $this->folder_permissions[$type] = $options : NULL;
     }
 
     /**
-     * @param string $rights
+     * @param null $rights
      *
      * @return array|null
      */
     public function getCustomFolders($rights = NULL) {
-        return ($rights !== NULL ? (isset($this->custom_folders[$rights]) ? $this->custom_folders[$rights] : NULL) : $this->custom_folders);
+
+        return ($rights !== NULL ? ($this->customfolders[$rights] ?? NULL) : $this->customfolders);
     }
 
     /**
      * A custom folder that appears in the file manager
      *
-     * @param string $rights
-     * @param array  $options setCustomFolder('N', [['path' => IMAGES_N, 'URL' => fusion_get_settings('siteurl').'infusions/news/images/', 'alias' => 'news']]);
+     * @param $rights
+     * @param $options - setCustomFolder('N', [['path' => IMAGES_N, 'URL' => fusion_get_settings('siteurl').'infusions/news/images/', 'alias' => 'news']]);
      */
     public function setCustomFolder($rights, $options = []) {
-        $this->custom_folders[$rights] = $options;
+
+        $this->customfolders[$rights] = $options;
     }
 
     /**
      * @return array
      */
     public function getAdminPageLink() {
+
         return $this->admin_page_link;
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getCurrentPage() {
+
         return $this->current_page;
     }
+
 
     /**
      * @return array
      */
-    public function getAdminSections() {
+    public function getAdminSections(): array {
+
         return $this->admin_sections;
     }
 
     /**
-     * @param int $page_number
+     * @param $page_number
      *
      * @return string
      */
-    public function getAdminSectionIcons($page_number) {
+    public function get_admin_section_icons($page_number) {
+
         if (!empty($this->admin_section_icons[$page_number]) && $this->admin_section_icons[$page_number]) {
             return $this->admin_section_icons[$page_number];
         }
@@ -513,23 +726,25 @@ class Admins {
     /**
      * Replace admin page icons
      *
-     * @param int    $page
-     * @param string $icon
+     * @param $page
+     * @param $icons
      */
-    public function setAdminSectionIcons($page, $icon) {
+    public function setAdminSectionIcons($page, $icons) {
+
         if (isset($this->admin_section_icons[$page])) {
-            $this->admin_section_icons[$page] = $icon;
+            $this->admin_section_icons[$page] = $icons;
         }
     }
 
     /**
      * Get the administration page icons
      *
-     * @param string $admin_rights
+     * @param $admin_rights
      *
      * @return bool
      */
-    public function getAdminIcons($admin_rights) {
+    public function get_admin_icons($admin_rights) {
+
         // admin rights might not yield an icon & admin_icons override might not have the key.
         if (isset($this->admin_page_icons[$admin_rights]) && $this->admin_page_icons[$admin_rights]) {
             return $this->admin_page_icons[$admin_rights];
@@ -539,133 +754,24 @@ class Admins {
     }
 
     /**
-     * Displays vertical collapsible administration navigation
-     *
-     * @param bool $image_icon
-     *
-     * @return string
-     */
-    public function verticalAdminNav($image_icon = FALSE) {
-        $aidlink = fusion_get_aidlink();
-        $admin_sections = self::getAdminSections();
-        $admin_pages = self::getAdminPages();
-
-        add_to_jquery('$("[data-toggle=collapse]").click(function () {$(this).find(".adl-drop i").toggleClass("fa-angle-left fa-angle-down");});');
-
-        $html = "<ul id='adl' class='admin-vertical-link'>\n";
-
-        foreach ($admin_sections as $i => $section_name) {
-            $active = ((isset($_GET['pagenum']) && $_GET['pagenum'] == $i) || (!isset($_GET['pagenum']) && $this->isActive() == $i));
-
-            $html .= "<li class='".($active ? 'active panel' : 'panel')."' >\n";
-
-            if (!empty($admin_pages[$i]) && is_array($admin_pages[$i])) {
-                $html .= "<a class='adl-link ".($active ? '' : 'collapsed')."' data-parent='#adl' data-toggle='collapse' href='#adl-$i' aria-expanded='false' aria-controls='#adl-$i'>".$this->getAdminSectionIcons($i)." <span class='adl-section-name'>".$section_name."</span> ".($i > 0 ? "<span class='adl-drop pull-right'><i class='fa fa-angle-".($active ? "left" : "down")."'></i></span>" : '')."</a>\n";
-                $html .= "<ul id='adl-$i' class='admin-submenu collapse ".($active ? 'in' : '')."'>\n";
-
-                foreach ($admin_pages[$i] as $data) {
-                    $secondary_active = $data['admin_link'] == $this->currentPage();
-                    $icons = ($image_icon === TRUE) ? "<img class='admin-image' src='".get_image("ac_".$data['admin_rights'])."' alt='".$data['admin_title']."'>" : $this->getAdminIcons($data['admin_rights']);
-
-                    $html .= checkrights($data['admin_rights']) ? "<li".($secondary_active ? " class='active'" : '')."><a href='".ADMIN.$data['admin_link'].$aidlink."'>".$icons." <span class='adl-submenu-title'>".$data['admin_title']."</span></a></li>\n" : "";
-                }
-
-                $html .= "</ul>\n";
-            } else {
-                $html .= "<a class='adl-link' href='".ADMIN."index.php".$aidlink."&amp;pagenum=0'>".$this->getAdminSectionIcons($i)." <span class='adl-section-name'>".$section_name."</span> ".($i > 0 ? "<span class='adl-drop pull-right'></span>" : '')."</a>\n";
-            }
-            $html .= "</li>\n";
-        }
-
-        $html .= "</ul>\n";
-
-        return $html;
-    }
-
-    /**
      * Displays horizontal administration navigation
      *
      * @param bool $icon_only
      *
      * @return string
      */
-    public function horizontalAdminNav($icon_only = FALSE) {
+    public function horizontal_admin_nav($icon_only = FALSE) {
+
         $aidlink = fusion_get_aidlink();
         $html = "<ul class='admin-horizontal-link'>\n";
         foreach ($this->admin_sections as $i => $section_name) {
-            $active = (isset($_GET['pagenum']) && $_GET['pagenum'] == $i || !isset($_GET['pagenum']) && $this->isActive() == $i) ? 1 : 0;
-            $admin_text = $icon_only == FALSE ? " ".$section_name : "";
-            $html .= "<li ".($active ? "class='active'" : '')."><a title='".$section_name."' href='".ADMIN.$aidlink."&amp;pagenum=$i'>".$this->getAdminSectionIcons($i).$admin_text."</a></li>\n";
+            $active = (isset($_GET['pagenum']) && $_GET['pagenum'] == $i || !isset($_GET['pagenum']) && $this->_isActive() == $i) ? 1 : 0;
+            $admin_text = $icon_only == FALSE ? " " . $section_name : "";
+            $html .= "<li " . ($active ? "class='active'" : '') . "><a title='" . $section_name . "' href='" . ADMIN . $aidlink . "&amp;pagenum=$i'>" . $this->get_admin_section_icons($i) . $admin_text . "</a></li>\n";
         }
         $html .= "</ul>\n";
 
         return $html;
     }
 
-    /**
-     * Build a return that always synchronize with the DB_ADMIN url.
-     *
-     * @deprecated use currentPage()
-     */
-    public function _currentPage() {
-        return $this->currentPage();
-    }
-
-    /**
-     * Determine which section is currently active.
-     *
-     * @return int|string
-     *
-     * @deprecated use isActive()
-     */
-    public function _isActive() {
-        return $this->isActive();
-    }
-
-    /**
-     * Displays vertical collapsible administration navigation
-     *
-     * @param bool $image_icon
-     *
-     * @return string
-     *
-     * @deprecated use verticalAdminNav()
-     */
-    public function vertical_admin_nav($image_icon = FALSE) {
-        return $this->verticalAdminNav($image_icon);
-    }
-
-    /**
-     * Displays horizontal administration navigation
-     *
-     * @param bool $icon_only
-     *
-     * @return string
-     * @deprecated use horizontalAdminNav()
-     */
-    public function horizontal_admin_nav($icon_only = FALSE) {
-        return $this->horizontalAdminNav($icon_only);
-    }
-
-    /**
-     * Get the administration page icons
-     *
-     * @param string $admin_rights
-     *
-     * @return bool
-     * @deprecated use getAdminIcons()
-     */
-    public function get_admin_icons($admin_rights) {
-        return $this->getAdminIcons($admin_rights);
-    }
-
-    /**
-     * @param int $page_number
-     *
-     * @return string
-     * @deprecated use getAdminSectionIcons()
-     */
-    public function get_admin_section_icons($page_number) {
-        return $this->getAdminSectionIcons($page_number);
-    }
 }

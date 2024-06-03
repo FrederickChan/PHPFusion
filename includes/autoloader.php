@@ -113,6 +113,10 @@ if (!defined('BASEDIR')) {
     define("BASEDIR", strpos(fusion_get_config(), '/') === FALSE ? '' : dirname(fusion_get_config()) . '/');
 }
 
+if (!defined('APPS')) {
+    define('APPS', BASEDIR.'apps/');
+}
+
 /*
  * Include core files that is required in working order
  */
