@@ -72,6 +72,7 @@ class Comments extends Comments\Comments {
      * @param string $key
      *
      * @return static
+     * @throws \Exception
      */
     public static function getInstance(array $params = [], $key = "Default") {
 
@@ -109,8 +110,6 @@ class Comments extends Comments\Comments {
         (new CommentsAccess($obj))->checkPermissions();
 
         (new CommentsInput($obj))->removeRatings();
-
-//        (new CommentsInput($obj))->update();
 
         $obj->getComments();
 

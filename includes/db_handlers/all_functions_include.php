@@ -123,6 +123,10 @@ function dbkeys($table) {
     }, array_flip($col_names[$table])) : [];
 }
 
+function dbblank() {
+    return DatabaseFactory::getConnection('default')->query("SELECT admin_id FROM ".DB_ADMIN." WHERE admin_id=0");
+}
+
 /**
  * Send a database query
  *

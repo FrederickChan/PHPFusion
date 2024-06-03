@@ -1928,6 +1928,12 @@ class CoreTables {
             ],
         ];
 
+        // Add extras in
+        $additional_packages = fusion_filter_hook('fusion_packages');
+        if (!empty($additional_packages)) {
+            $table_package += flatten_array($additional_packages);
+        }
+
         return $table_package;
     }
 }

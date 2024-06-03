@@ -16,14 +16,14 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 const BASEDIR = '';
-
 const IN_FUSION = TRUE;
-
-const iDEVELOPER = FALSE;
-
 const BOOTSTRAP = 3;
 
 require_once __DIR__ . '/includes/autoloader.php';
+
+if (file_exists(INCLUDES."header_includes.php")) {
+    require_once INCLUDES."header_includes.php";
+}
 
 require_once INCLUDES . 'plugins_include.php';
 
