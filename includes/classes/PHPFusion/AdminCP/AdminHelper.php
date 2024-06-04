@@ -105,7 +105,7 @@ class AdminHelper extends Admins {
             foreach ($admin_sections as $index => $section) {
                 $admin_sections[$index] = [
                     'title' => $section,
-                    'icon'  => $this->custom_section_icon[$index]
+                    'icon'  => get_image($this->custom_section_icon[$index])
                 ];
             }
         }

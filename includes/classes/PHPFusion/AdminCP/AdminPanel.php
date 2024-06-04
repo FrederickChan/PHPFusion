@@ -35,7 +35,7 @@ class AdminPanel {
      * @var Errors
      */
     private $errorClass;
-    private $info;
+
 
     public function __construct() {
 

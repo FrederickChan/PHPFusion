@@ -104,7 +104,7 @@ class Admins {
     protected $dashboard_uri;
 
     private $custom_icons = [
-        'C' => 'fad fa-comments-alt', // Comments
+        "C" => "comments", // Comments
         'CP' => 'fad fa-edit', // Custom page
         'F' => 'fad fa-comment-alt-lines', // Forum
         'FM' => 'fad fa-folder', // File Manager

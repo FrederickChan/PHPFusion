@@ -44,7 +44,12 @@
                                 {% if admin_pages[1] %}
                                     {% for pages in admin_pages[1] %}
                                         <li><a href="{{ pages.admin_link }}">
-                                                <i class="{{ pages.admin_icon }}"></i>
+                                                <span class="acp-icon">
+                                                    {{ get_image(pages.admin_icon) }}
+                                                </span>
+
+
+{#                                                <i class="{{ pages.admin_icon }}"></i>#}
                                                 {{ pages.admin_title }}
                                             </a></li>
                                     {% endfor %}
