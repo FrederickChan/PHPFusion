@@ -233,13 +233,13 @@ class ImageRepo {
             'email' => IMAGES . 'icons/email.svg',
             'edit' => IMAGES . 'icons/pencil.svg',
 
-
             //F
             //G
             "google_play" => IMAGES . "icons/google-play.svg",
             'gender_male' => IMAGES . 'icons/male.svg',
             'gender_female' => IMAGES . 'icons/female.svg',
             'gender_trans' => IMAGES . 'icons/trans.svg',
+            "cog" => IMAGES."icons/cog.svg",
 
             //H
             'heart' => IMAGES . 'icons/heart.svg',
@@ -304,6 +304,7 @@ class ImageRepo {
             'shop' => IMAGES . 'icons/shop.svg',
             'school' => IMAGES . 'icons/school.svg',
             'share' => IMAGES . 'icons/share.svg',
+            'settings' => IMAGES."icons/settings.svg",
 
 
             //T

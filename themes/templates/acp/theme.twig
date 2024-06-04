@@ -47,9 +47,6 @@
                                                 <span class="acp-icon">
                                                     {{ get_image(pages.admin_icon) }}
                                                 </span>
-
-
-{#                                                <i class="{{ pages.admin_icon }}"></i>#}
                                                 {{ pages.admin_title }}
                                             </a></li>
                                     {% endfor %}
@@ -91,7 +88,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <a href="{{ settings_uri|raw }}" class="pf-admin-settings"><i class="fal fa-bullseye fa-lg"></i></a>
+                                        <a href="{{ settings_uri|raw }}" class="pf-admin-settings">{{ get_image("settings") }}</a>
                                     </div>
                                 </div>
                             </div>

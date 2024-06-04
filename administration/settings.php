@@ -33,47 +33,46 @@ function pf_view() {
     // get the admin class and get the icons for the page
     $admin_pages = (new Admins())->getAdminPages();
 
-    echo '<h6>System Settings</h6>';
+    echo '<div class="pf-settings-title">System Settings</div>';
     opengrid(3);
     if (!empty($admin_pages[4])) {
         foreach ($admin_pages[4] as $page) {
-
             echo '<a href="'.$page['admin_link'].'" class="pf-settings-group">';
-            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'"><i class="'.$page['admin_icon'].'"></i></span>';
-            echo '<div><h4>'.$page['admin_title'].'</h4><p>'.$page['admin_description'].'</p></div>';
+            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'">'.get_image($page['admin_icon']).'</span>';
+            echo '<div><strong>'.$page['admin_title'].'</strong><p>'.$page['admin_description'].'</p></div>';
             echo '</a>';
         }
     }
     closegrid();
-    echo '<h6>System Preferences</h6>';
+    echo '<div class="pf-settings-title">System Preferences</div>';
     opengrid(3);
     if (!empty($admin_pages[3])) {
         foreach ($admin_pages[3] as $page) {
             echo '<a href="'.$page['admin_link'].'" class="pf-settings-group">';
-            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'"><i class="'.$page['admin_icon'].'"></i></span>';
-            echo '<div><h4>'.$page['admin_title'].'</h4><p>'.$page['admin_description'].'</p></div>';
+            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'">'.get_image($page['admin_icon']).'</i></span>';
+            echo '<div><strong>'.$page['admin_title'].'</strong><p>'.$page['admin_description'].'</p></div>';
             echo '</a>';
         }
     }
     closegrid();
-    echo '<h6>Membership</h6>';
+    echo '<div class="pf-settings-title">Membership</div>';
     opengrid(3);
     if (!empty($admin_pages[2])) {
         foreach ($admin_pages[2] as $page) {
             echo '<a href="'.$page['admin_link'].'" class="pf-settings-group">';
-            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'"><i class="'.$page['admin_icon'].'"></i></span>';
-            echo '<div><h4>'.$page['admin_title'].'</h4><p>'.$page['admin_description'].'</p></div>';
+            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'">'.get_image($page['admin_icon']).'</span>';
+            echo '<div><strong>'.$page['admin_title'].'</strong><p>'.$page['admin_description'].'</p></div>';
             echo '</a>';
         }
     }
     closegrid();
-    echo '<h6>PHPFusion</h6>';
+    echo '<div class="pf-settings-title">PHPFusion</div>';
     opengrid(3);
     if (!empty($admin_pages[6])) {
         foreach ($admin_pages[6] as $page) {
             echo '<a href="'.$page['admin_link'].'" class="pf-settings-group">';
-            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'"><i class="'.$page['admin_icon'].'"></i></span>';
-            echo '<div><h4>'.$page['admin_title'].'</h4><p>'.$page['admin_description'].'</p></div>';
+            echo '<span class="'.add_icon_color($page['admin_rights'].'-icon', $page['admin_icon_color']).'">'.get_image($page['admin_icon']).'</span>';
+            echo '<div><strong>'.$page['admin_title'].'</strong><p>'.$page['admin_description'].'</p></div>';
             echo '</a>';
         }
     }

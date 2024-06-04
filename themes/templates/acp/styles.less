@@ -716,6 +716,13 @@ h6 {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 
+    .pf-settings-title {
+      text-transform: uppercase;
+      font-weight: bold;
+      color:#fff;
+      font-size:.8rem;
+    }
+
     .pf-grid {
       display: grid;
       //grid-template-columns: 1fr 1fr 1fr;
@@ -732,6 +739,7 @@ h6 {
       @media (max-width: 680px) {
         grid-template-columns: 1fr;
       }
+
 
 
       .pf-settings-group {
@@ -756,8 +764,8 @@ h6 {
           border-radius: 999px;
           color: #fff;
 
-          i {
-            font-size: 1.6em;
+          svg {
+            fill: #fff;
           }
         }
 

@@ -105,14 +105,14 @@ class Admins {
 
     private $custom_icons = [
         "C" => "comments", // Comments
-        'CP' => 'fad fa-edit', // Custom page
-        'F' => 'fad fa-comment-alt-lines', // Forum
-        'FM' => 'fad fa-folder', // File Manager
-        'IM' => 'fad fa-image', // Images
+        "CP" => "cp", // Custom page
+        'F' => 'forum', // Forum
+        'FM' => 'filemanager', // File Manager
+        'IM' => 'photos', // Images
         'UL' => 'fad fa-user-edit', // User Log
         'UF' => 'fad fa-id-card-alt', // User Fields
         'UG' => 'fad fa-users', // User Groups
-        'MI' => 'fad fa-taxi', // Migration Tool
+        'MI' => 'delivery', // Migration Tool
         'M' => 'fad fa-user', //Members
         'B' => 'fad fa-user-secret', //Blacklist
         'APWR' => 'fad fa-user-lock', //Admin Password Reset
@@ -208,7 +208,6 @@ class Admins {
     ];
 
     public function __construct() {
-
         self::$locale = self::getAdminLocale();
     }
 
@@ -457,7 +456,8 @@ class Admins {
 
                             $data['admin_icon_color'] = $this->icon_color[$data['admin_rights']] ?? '';
 
-                            $data['admin_icon'] = $this->custom_icons[$data['admin_rights']] ?? 'fad fa-book';
+                            $data['admin_icon'] = $this->custom_icons[$data['admin_rights']] ?? 'book';
+
                             // check files
 
                             $admin_link = $data['admin_link'] . $aidlink;
