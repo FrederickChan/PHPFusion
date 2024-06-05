@@ -138,7 +138,7 @@ class Admins {
         'S4' => 'fad fa-lock', // Registration
         'S3' => 'fad fa-cogs', // Theme Settings
         'S2' => 'fad fa-clock', // Time and Date
-        'S1' => 'fad fa-tools', // Settings Main,
+        'S1' => 'cog', // Settings Main,
         'ST' => 'fad fa-box-full',
     ];
 
