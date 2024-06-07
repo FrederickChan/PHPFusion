@@ -152,8 +152,11 @@ class InstallCore extends Infusions {
 
             self::$localeset = filter_input( INPUT_GET, 'localeset' ) ?: ($settings['locale'] ?? 'English');
             define( 'LANGUAGE', is_dir( LOCALE . self::$localeset ) ? self::$localeset : 'English' );
-            define( 'LOCALESET', LANGUAGE . "/" );
+
+            define_localeset(LANGUAGE);
+
             self::$locale = fusion_get_locale( '', [LOCALE . LOCALESET . "global.php", LOCALE . LOCALESET . "setup.php"] );
+
             self::$locale_files = fusion_get_detected_languages();
 
             self::detectSystemUpgrade();
@@ -243,7 +246,7 @@ class InstallCore extends Infusions {
 
                             define( 'DB_PREFIX', self::$connection['DB_PREFIX'] );
                         }
-                        //self::set_empty_prefix();
+
                     }
                 }
             }

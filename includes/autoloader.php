@@ -117,6 +117,13 @@ if (!defined('APPS')) {
     define('APPS', BASEDIR.'apps/');
 }
 
+function define_localeset($locale = "English") {
+    if (!defined("LOCALESET")) {
+        define("LOCALESET", $locale."/");
+    }
+}
+
+
 /*
  * Include core files that is required in working order
  */

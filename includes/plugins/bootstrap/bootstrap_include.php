@@ -24,7 +24,7 @@
  * @param bool $php
  * @return string
  */
-function get_bootstrap($part, $version = '3', $php = FALSE) {
+function get_bootstrap($part, $version = '5', $php = FALSE) {
     static $framework_paths = [];
 
     if (empty($framework_paths)) {
@@ -37,56 +37,50 @@ function get_bootstrap($part, $version = '3', $php = FALSE) {
         $version = 'v' . $version;
 
         // Headers and footers
-        require_once __DIR__ . '/' . $version . '/index.php';
+        require_once __DIR__ . "/" . $version . "/index.php";
 
-        $_dir = __DIR__ . '/' . $version . '/';
+        $_dir = __DIR__ . "/" . $version . "/";
 
-        $framework_paths['php'] = [
-            'showsublinks' => ['dir' => $_dir, 'file' => 'navbar.php'],
-            'form_inputs' => ['dir' => $_dir, 'file' => 'dynamics.php'],
-            'collapse' => ['dir' => $_dir, 'file' => 'collapse.php'],
+        $framework_paths["php"] = [
+            "showsublinks" => ["dir" => $_dir, "file" => "navbar.php"],
+            "form_inputs" => ["dir" => $_dir, "file" => "dynamics.php"],
+            "collapse" => ["dir" => $_dir, "file" => "collapse.php"],
         ];
 
         // Template paths
-        $framework_paths['twig'] = [
-            'showsublinks' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'navbar.twig'],
-            'form_inputs' => ['dir' => __DIR__ . '/' . $version . '/', 'file' => 'dynamics.twig'],
-            'modal' => ['dir' => __DIR__ . '/' . $version . '/utils/', 'file' => 'modal.twig'],
-            'register' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'register.twig'],
-            'login' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login.twig'],
-            'login_auth' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'login_auth.twig'],
-            'profile' => ['dir' => TEMPLATES . 'html/public/', 'file' => 'profile.twig'],
-            'comments' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comments.twig'],
-            'comment-list' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comment-list.twig'],
-            'comment-form' =>     ['dir' => __DIR__ . '/'.$version.'/', 'file' => 'comment-form.twig'],
+        $framework_paths["twig"] = [
+            "showsublinks" => ["dir" => __DIR__ . "/" . $version . "/utils/", "file" => "navbar.twig"],
+            "form_inputs" => ["dir" => __DIR__ . "/" . $version . "/", "file" => "dynamics.twig"],
+            "modal" => ["dir" => __DIR__ . "/" . $version . "/utils/", "file" => "modal.twig"],
+            "register" => ["dir" => TEMPLATES . "html/public/", "file" => "register.twig"],
+            "login" => ["dir" => TEMPLATES . "html/public/", "file" => "login.twig"],
+            "login_auth" => ["dir" => TEMPLATES . "html/public/", "file" => "login_auth.twig"],
+            "profile" => ["dir" => TEMPLATES . "html/public/", "file" => "profile.twig"],
+            "comments" =>     ["dir" => __DIR__ . "/".$version."/", "file" => "comments.twig"],
+            "comment-list" =>     ["dir" => __DIR__ . "/".$version."/", "file" => "comment-list.twig"],
+            "comment-form" =>     ["dir" => __DIR__ . "/".$version."/", "file" => "comment-form.twig"],
 
             // Profile Settings
-            'up_notify' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'notify.twig'],
-            'up_close' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'close.twig'],
-            'up_privacy' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'privacy.twig'],
-            'up_home' => ['dir' => TEMPLATES . 'html/public/profile_settings/', 'file' => 'home.twig'],
+            "up_notify" => ["dir" => TEMPLATES . "html/public/profile_settings/", "file" => "notify.twig"],
+            "up_close" => ["dir" => TEMPLATES . "html/public/profile_settings/", "file" => "close.twig"],
+            "up_privacy" => ["dir" => TEMPLATES . "html/public/profile_settings/", "file" => "privacy.twig"],
+            "up_home" => ["dir" => TEMPLATES . "html/public/profile_settings/", "file" => "home.twig"],
             // Home settings
-            'up_home_details' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'details.twig'],
-            'up_home_password' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'password.twig'],
-            'up_home_adm_password' => ['dir' => TEMPLATES . 'html/public/profile_settings/home/', 'file' => 'adm_password.twig'],
+            "up_home_details" => ["dir" => TEMPLATES . "html/public/profile_settings/home/", "file" => "details.twig"],
+            "up_home_password" => ["dir" => TEMPLATES . "html/public/profile_settings/home/", "file" => "password.twig"],
+            "up_home_adm_password" => ["dir" => TEMPLATES . "html/public/profile_settings/home/", "file" => "adm_password.twig"],
 
             // Privacy Settings
-            'up_data' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'data.twig'],
-            'up_privacy_twofactor' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'two_factor.twig'],
-            'up_privacy_settings' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'settings.twig'],
-            'up_privacy_pm' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'messaging.twig'],
-            'up_privacy_login' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'login.twig'],
-            'up_privacy_blacklist' => ['dir' => TEMPLATES . 'html/public/profile_settings/privacy/', 'file' => 'blacklist.twig'],
+            "up_data" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "data.twig"],
+            "up_privacy_twofactor" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "two_factor.twig"],
+            "up_privacy_settings" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "settings.twig"],
+            "up_privacy_pm" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "messaging.twig"],
+            "up_privacy_login" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "login.twig"],
+            "up_privacy_blacklist" => ["dir" => TEMPLATES . "html/public/profile_settings/privacy/", "file" => "blacklist.twig"],
         ];
     }
 
     $_type = $php ? 'php' : 'twig';
-
-//    static $debug;
-//    if (empty($debug)) {
-//        $debug = $framework_paths['twig'];
-//        print_p($debug);
-//    }
 
     return $framework_paths[$_type][$part] ?? '';
 }

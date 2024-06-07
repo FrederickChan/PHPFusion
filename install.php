@@ -17,15 +17,15 @@
 +--------------------------------------------------------*/
 const BASEDIR = '';
 const IN_FUSION = TRUE;
-const BOOTSTRAP = 3;
+const BOOTSTRAP = 5;
 
 require_once __DIR__ . '/includes/autoloader.php';
 
-if (file_exists(INCLUDES."header_includes.php")) {
-    require_once INCLUDES."header_includes.php";
-}
+//if (file_exists(INCLUDES."header_includes.php")) {
+//    require_once INCLUDES."header_includes.php";
+//}
 
-require_once INCLUDES . 'plugins_include.php';
+require_once INCLUDES . "plugins_include.php";
 
 // Start the installer
 PHPFusion\Installer\InstallCore::getInstallInstance()->installPhpfusion();
