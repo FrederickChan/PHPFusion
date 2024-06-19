@@ -25,11 +25,10 @@ const ADMIN_ERROR_DIR = ADMIN_DIR . '&p=404';
 
 /* Reverse load breadcrumb support*/
 require_once INCLUDES . 'breadcrumbs.php';
+require_once __DIR__ . '/../themes/templates/admin_header.php'; // Load the theme
 
 /* Loads up administration file */
 $contents = load_administration(); // Load the file
-
-require_once __DIR__ . '/../themes/templates/admin_header.php'; // Load the theme
 
 if (isset($contents['files'])) {
     if (is_array($contents['files'])) {
@@ -77,7 +76,6 @@ fusion_apply_hook('pf_admin_view')[0];
 
 /* Run js hook */
 if ($js = fusion_filter_hook('pf_admin_js')) {
-
     if (isset($js[0])) {
         add_to_jquery($js[0]);
     }
@@ -160,16 +158,22 @@ function load_administration(): array {
         ];
 
         if (isset($acceptable[$s])) {
-            $admin_link = ADMIN . $aidlink . '&s=' . $acceptable[$s];
+//            $admin_link = ADMIN . $aidlink . '&s=' . $acceptable[$s];
+
             include ADMIN . $acceptable[$s];
+
+
         } else {
 
             include ADMIN . "contents/error_na.php";
         }
 
-    } else if ($p = get('p')) {
+    }
 
-        $result = dbquery("SELECT admin_rights, admin_title, admin_link, admin_page FROM " . DB_ADMIN . " WHERE admin_rights=:page",
+    else if ($p = get('p')) {
+
+        $result = dbquery("SELECT admin_rights, admin_title, admin_link, admin_page 
+        FROM " . DB_ADMIN . " WHERE admin_rights=:page",
             [':page' => strtoupper($p)]);
 
         if (dbrows($result)) {
@@ -180,17 +184,21 @@ function load_administration(): array {
 
             $admin_title = $locale[$data['admin_rights']] ?? $data['admin_title'];
 
+            $locale = fusion_get_locale();
+
+            add_to_title($locale['global_201'].$admin_title);
+
             if ($data['admin_page'] != '5') {
                 $c_admin_link = ADMIN . 'contents/' . $data['admin_link'];
             }
 
-
             if (is_file($c_admin_link)) {
 
                 // with the p
-                $admin_link = ADMIN_CURRENT_DIR;
+//                $admin_link = ADMIN_CURRENT_DIR;
 
                 include $c_admin_link;
+
                 // run page access
                 pageaccess($data['admin_rights']);
 
@@ -202,10 +210,12 @@ function load_administration(): array {
             // show page 404
             include ADMIN . 'contents/error_na.php';
         }
+
     } else {
         // show page 404
         include ADMIN . 'contents/error_na.php';
     }
+
 
     if (isset($contents['actions']['post'])) {
 
@@ -317,7 +327,7 @@ function load_administration(): array {
     }
 
     if (!empty($contents['view']) && is_callable($contents['view'])) {
-        fusion_add_hook('pf_admin_view', $contents['view']);
+        fusion_add_hook("pf_admin_view", $contents['view']);
     }
 
     return $contents;

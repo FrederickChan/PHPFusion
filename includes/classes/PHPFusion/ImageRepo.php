@@ -86,8 +86,8 @@ class ImageRepo {
             "app_store" => IMAGES . "icons/apple.svg",
             "archive" => IMAGES . "icons/archive.svg",
             "auto_mode" => IMAGES . "icons/auto_mode.svg",
-            "admin" => IMAGES."icons/admin.svg",
-            "admin_pass" => IMAGES."icons/adminpass.svg",
+            "admin" => IMAGES . "icons/admin.svg",
+            "admin_pass" => IMAGES . "icons/adminpass.svg",
 
             //B
             "birthdays" => IMAGES . "icons/birthdays.svg",
@@ -109,7 +109,7 @@ class ImageRepo {
             "brush" => IMAGES . "icons/brush.svg",
             "bonus" => IMAGES . "icons/bonus.svg",
             "bookmark" => IMAGES . "icons/bookmark.svg",
-            "blacklist" => IMAGES."icons/blacklist.svg",
+            "blacklist" => IMAGES . "icons/blacklist.svg",
 
             //C
             "cart" => IMAGES . "icons/cart.svg",
@@ -231,9 +231,9 @@ class ImageRepo {
             "upgrades" => IMAGES . "icons/upgrades.svg",
             "user" => IMAGES . "icons/profile.svg",
             "users" => IMAGES . "icons/users.svg",
-            "usergroups" => IMAGES."icons/usergroups.svg",
-            "user_fields" => IMAGES."icons/userfields.svg",
-            "user_logs" => IMAGES."icons/log.svg",
+            "usergroups" => IMAGES . "icons/usergroups.svg",
+            "user_fields" => IMAGES . "icons/userfields.svg",
+            "user_logs" => IMAGES . "icons/log.svg",
             "user_pending" => IMAGES . "icons/find_user.svg",
             "user_admin" => IMAGES . "icons/admin_user.svg",
             "user_add" => IMAGES . "icons/add_user.svg",
@@ -269,7 +269,7 @@ class ImageRepo {
             'at' => IMAGES . 'icons/at.svg',
             //B
             'ban' => IMAGES . 'icons/block.svg',
-            "banner" => IMAGES."icons/banner.svg",
+            "banner" => IMAGES . "icons/banners.svg",
             'birthdays' => IMAGES . 'icons/birthdays.svg',
             "bbcode" => IMAGES . "icons/bbcode.svg",
             'bbcode_bold' => INCLUDES . 'bbcodes/images/b.svg',
@@ -311,7 +311,7 @@ class ImageRepo {
             'events' => IMAGES . 'icons/events.svg',
             'email' => IMAGES . 'icons/email.svg',
             'explore' => IMAGES . 'icons/explore.svg',
-            "errors" => IMAGES."icons/errors.svg",
+            "errors" => IMAGES . "icons/errors.svg",
             //F
             'follow' => IMAGES . 'icons/follow.svg',
             'flag' => IMAGES . 'icons/flag.svg',
@@ -327,7 +327,7 @@ class ImageRepo {
             'inbox' => IMAGES . 'icons/inbox.svg',
             "imagenotfound" => IMAGES . "imagenotfound.jpg",
             'icecream' => IMAGES . 'icons/icecream.svg',
-            "infusion" => IMAGES."icons/infusion.svg",
+            "infusion" => IMAGES . "icons/infusion.svg",
             //J
             //K
             'ko' => IMAGES . 'icons/cancel.svg',
@@ -354,6 +354,7 @@ class ImageRepo {
             'objects' => IMAGES . 'icons/objects.svg',
 
             //P
+            "panel" => IMAGES."icons/panels.svg",
             'password' => IMAGES . 'icons/password.svg',
             'passkey' => IMAGES . 'icons/passkey.svg',
             "panel_on" => IMAGES . "icons/panel_on.gif",
@@ -369,18 +370,21 @@ class ImageRepo {
             //R
             'right' => IMAGES . 'icons/right.svg',
             'restart' => IMAGES . 'icons/restart.svg',
-            "robot" => IMAGES."icons/robot.svg",
+            "robot" => IMAGES . "icons/robot.svg",
 
             //S
             'secured' => IMAGES . 'icons/secured.svg',
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',
             'sports' => IMAGES . 'icons/sports.svg',
+            "sitelinks"=>IMAGES."icons/sitelinks.svg",
             'store' => IMAGES . 'icons/store.svg',
             "smileys" => IMAGES . "icons/smileys.svg",
             "security" => IMAGES . "icons/security.svg",
 
             //T
             'trophy' => IMAGES . 'icons/trophy.svg',
+            "theme" => IMAGES . "icons/theme.svg",
+
             //U
             'up' => IMAGES . "icons/up.svg",
             'updates' => IMAGES . 'icons/updates.svg',

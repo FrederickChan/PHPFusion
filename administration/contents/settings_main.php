@@ -45,7 +45,7 @@ function pf_post() {
 
     $inputData = [
         'siteintro'          => form_sanitizer(addslashes($_POST['siteintro']), '', 'siteintro'),
-        'sitename'           => form_sanitizer($_POST['sitename'], '', 'sitename'),
+        'sitename'           => sanitizer("sitename", "", "sitename"),
         'sitebanner'         => form_sanitizer($_POST['sitebanner'], '', 'sitebanner'),
         'siteemail'          => form_sanitizer($_POST['siteemail'], '', 'siteemail'),
         'siteusername'       => form_sanitizer($_POST['siteusername'], '', 'siteusername'),
@@ -88,7 +88,7 @@ function pf_post() {
                 ':settings_name'  => $settings_name
             ]);
         }
-        add_notice('success', $locale['900']);
+        addnotice('success', $locale['900']);
         redirect(FUSION_REQUEST);
     }
 
@@ -99,8 +99,7 @@ function pf_post() {
  *
  * @return array
  */
-function getServerConfig(array $inputData)
-: array {
+function getServerConfig(array $inputData): array {
 
     if ( strpos($inputData['site_host'], "/") !== FALSE ) {
         $inputData['site_host'] = explode("/", $inputData['site_host'], 2);
