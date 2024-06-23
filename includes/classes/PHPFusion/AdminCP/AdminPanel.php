@@ -35,12 +35,14 @@ class AdminPanel {
      * @var Errors
      */
     private $errorClass;
+    private $buttons;
+    private array $filters;
+    private $title;
+    private $pageNav;
+    private $fullWidth;
 
 
     public function __construct() {
-
-//        fusion_load_script(THEMES."templates/acp/styles.css", "css");
-//        fusion_load_script(INCLUDES."jquery/admin.js");
 
         echo "<noscript>";
         echo "<style>
@@ -99,17 +101,62 @@ class AdminPanel {
             'settings_uri' => $this->helper->getSettingsURI(),
             'dashboard_uri' => $this->helper->getDashboardURI(),
             'admin_notices' => $this->helper->getAdminNotices(),
-            'admin_buttons' => fusion_filter_hook('pf_admin_buttons') ?? '',
-            'admin_filters' => fusion_filter_hook('pf_admin_filters')[0] ?? '',
-            'admin_page_title' => fusion_filter_hook('pf_admin_page_title')[0] ?? '',
-            'admin_page_nav' => fusion_filter_hook('pf_admin_left_nav')[0] ?? '', // this one will pass content
             'content' => CONTENT,
-            'main_width_class' => fusion_filter_hook('pf_admin_full_width')[0] ?? '',
+
+            // All hooks malfunctioned and did not register
+            'admin_buttons' => $this->getButtons(),
+//            'admin_filters' => $this->getFilters(),
+//            'admin_page_title' => $this->getTitle(),
+//            'admin_page_nav' => $this->getPageNav(), //fusion_filter_hook('pf_admin_left_nav')[0] ?? '', // this one will pass content
+//            'main_width_class' => $this->getFullWidth(),
+
             'footer_errors' => $this->footerErrors($errors, $new_errors),
             'new_errors' => $new_errors,
         );
+        // Debug
 
-        echo fusion_render(THEMES . "templates/acp/", 'theme.twig', $info, TRUE);
+        return fusion_render(THEMES . "templates/acp/", 'theme.twig', $info, TRUE);
+    }
+
+
+    public function getFullWidth() {
+        return $this->pageNav;
+    }
+
+    public function setFullWidth($value) {
+        $this->fullWidth = $value;
+    }
+
+    public function getPageNav() {
+        return $this->pageNav;
+    }
+
+    public function setPageNav($value) {
+        $this->pageNav = $value;
+    }
+
+    public function setTitle($value) {
+        $this->title = $value;
+    }
+
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function getFilters() {
+        return $this->filters;
+    }
+
+    public function setFilters($value) {
+        $this->filters[] = $value;
+    }
+
+    public function setButtons($value) {
+        $this->buttons = $value;
+    }
+
+    public function getButtons() {
+        return $this->buttons;
     }
 
     /**

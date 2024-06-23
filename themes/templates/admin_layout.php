@@ -131,7 +131,6 @@ echo "</head>\n";
  * replace <body> tags with your own theme definition body tags. Some body tags require additional params
  * for the theme purposes.
  */
-
 if (!defined("THEME_BODY")) {
     echo "<body>\n";
 } else {
@@ -140,11 +139,13 @@ if (!defined("THEME_BODY")) {
 
 // Check if the user is logged in
 if (!check_admin_pass('')) {
+
     if (empty(fusion_get_userdata("user_admin_password"))) {
         redirect(BASEDIR . "edit_profile.php");
     } else {
         render_admin_login();
     }
+
 } else {
 
     echo '<script src="' . ADMIN . 'includes/update/update.js?v=' . filemtime(ADMIN . 'includes/update/update.js') . '"></script>';

@@ -18,6 +18,12 @@ $locale['admins_411'] = "Separate each word with a comma";
 $locale['admins_412'] = "Site footer:";
 $locale['admins_413'] = "Site opening page:";
 
+$locale['admins_414'] = "Logo Position";
+$locale['admins_414a'] = "Mobile";
+$locale['admins_414b'] = "Tablet";
+$locale['admins_414c'] = "Laptop";
+$locale['admins_414d'] = "Desktop";
+
 $locale['admins_415'] = "Single Column";
 $locale['admins_416'] = "Double Column";
 $locale['admins_417'] = "Site locale:";

@@ -519,10 +519,10 @@ class Admins {
 
     public function setAdminBreadcrumbs() {
 
-        add_breadcrumb([
-            'link' => ADMIN . 'index.php' . fusion_get_aidlink() . '&amp;pagenum=0',
-            'title' => self::$locale['ac10'],
-        ]);
+//        add_breadcrumb([
+//            'link' => ADMIN . 'index.php' . fusion_get_aidlink() . '&amp;pagenum=0',
+//            'title' => self::$locale['ac10'],
+//        ]);
 
         $acTab = (isset($_GET['pagenum']) && isnum($_GET['pagenum'])) ? $_GET['pagenum'] : $this->_isActive();
 

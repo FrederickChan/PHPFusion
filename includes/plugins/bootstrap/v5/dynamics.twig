@@ -14,6 +14,11 @@
 
     {% set ct_width = (input_options['width'] and input_label|length == 0 ? 'style="width:'~input_options['width']~';"' : '') %}
 
+    {% set ct_basis = '' %}
+    {% if input_options['flex'] %}
+        {% set ct_basis = 'style=flex-basis:100%;' %}
+    {% endif %}
+
     {% set checkbox_tip = '' %}
 
     {% set group_class = 'form-group' %}
@@ -104,8 +109,12 @@
 
     {% endif %}
 
-    <div id="{{ input_options['input_id'] }}-field"
-         class="{{ group_class }}{{ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) }}"{{ whitespace(ct_width) }}>
+    {% set fieldGroupClass = group_class ~ whitespace(ct_row_offset) ~ whitespace(ct_checkbox_class) ~ whitespace(input_options['error_class']) ~ whitespace(input_options['class']) ~ whitespace(ct_icon_class) %}
+    {% if fieldGroupClass %}
+        {% set fieldGroupClass = 'class="'~fieldGroupClass~'"' %}
+    {% endif %}
+
+    <div id="{{ input_options['input_id'] }}-field" {{ fieldGroupClass|raw ~ whitespace(ct_width)|raw~ whitespace(ct_basis)|raw}}>
 
         {{ prepend_checkbox_input|raw }}
 

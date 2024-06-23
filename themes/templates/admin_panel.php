@@ -25,22 +25,14 @@ defined('IN_FUSION') || exit;
 
 const BOOTSTRAP = 5;
 const FONTAWESOME = TRUE;
-
 const ADMIN_THEME_LOCALE = LOCALE . LOCALESET . "admin/admin_theme.php";
 
 define('THEME_BODY', admin_theme_body());
 
-/* Gets admin theme body definition */
-function admin_theme_body() {
-    if (!check_admin_pass('')) {
-        return '<body class="hold-transition lockscreen">';
-    }
-    return '<body class="hold-transition skin-blue sidebar-mini">';
-}
 
 /* Admin Panel */
 function render_admin_panel() {
-    AdminPanel::getInstance()->viewTheme();
+    echo AdminPanel::getInstance()->viewTheme();
 }
 
 /* Admin Login */
@@ -50,6 +42,14 @@ function render_admin_login() {
 /* Dashboard */
 function render_admin_dashboard() {
     return AdminPanel::getInstance()->viewDashboard();
+}
+
+/* Gets admin theme body definition */
+function admin_theme_body() {
+    if (!check_admin_pass('')) {
+        return '<body class="hold-transition lockscreen">';
+    }
+    return '<body class="hold-transition skin-blue sidebar-mini">';
 }
 
 /* Side */

@@ -8,7 +8,7 @@
                 <header class="pf-nav-menu">
                     <div class="pf-nav-details">
                         {% if sitebanner %}
-                            <div class="brand">{{ sitebanner|raw }}</div>
+                            <div class="brand"><img src="{{ IMAGES }}phpfusion-logo.svg" alt="PHPFusion"></div>
                         {% else %}
                             <div class="title">{{ settings.sitename|raw }}</div>
                         {% endif %}
@@ -33,13 +33,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" title="Wang Ye">
+                                    <a href="#" title="View Site">
                                         <i class="fad fa-window fa-lg m-r-10"></i>View Site
                                     </a>
                                 </li>
                             </ul>
                             <ul class="sections">
-
                                 {# Just view the contents and packages and also the 5th one #}
                                 {% if admin_pages[1] %}
                                     {% for pages in admin_pages[1] %}
@@ -88,7 +87,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <a href="{{ settings_uri|raw }}" class="pf-admin-settings">{{ get_image("settings") }}</a>
+                                        <a href="{{ settings_uri|raw }}"
+                                           class="pf-admin-settings">{{ get_image("settings") }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +105,10 @@
                             {% set index = 0 %}
                             {% for breadcrumbs in admin_breadcrumbs %}
                                 {% if index %}
-                                    <span><svg fill="none" viewBox="0 0 24 26"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.793 1.043a1 1 0 011.414 0l10.72 10.72a1.748 1.748 0 010 2.475l-10.72 10.72a1 1 0 01-1.414-1.415L15.336 13 4.793 2.457a1 1 0 010-1.414z" fill="#e8ebed"></path></svg></span>
+                                    <span><svg fill="none" viewBox="0 0 24 26"><path fill-rule="evenodd"
+                                                                                     clip-rule="evenodd"
+                                                                                     d="M4.793 1.043a1 1 0 011.414 0l10.72 10.72a1.748 1.748 0 010 2.475l-10.72 10.72a1 1 0 01-1.414-1.415L15.336 13 4.793 2.457a1 1 0 010-1.414z"
+                                                                                     fill="#e8ebed"></path></svg></span>
                                 {% endif %}
                                 {% if loop.last or breadcrumbs["link"] is empty %}
                                     {{ breadcrumbs["title"]|raw }}
@@ -115,22 +118,26 @@
                                 {% set index = index + 1 %}
                             {% endfor %}
                         {% endif %}</h2>
-
                     {% if admin_buttons %}
                         <noscript>
                             <style>
                                 .admin-buttons {
                                     display: none;
                                 }
+
                                 .admin-buttons-legacy {
                                     display: block;
                                 }
                             </style>
                         </noscript>
                         <div class="admin-buttons">
-                            {% for elem in admin_buttons %}
-                                {{ elem|raw }}
-                            {% endfor %}
+                            {% if admin_buttons[0] is not defined %}
+                                {{ admin_buttons|raw }}
+                            {% else %}
+                                {% for elem in admin_buttons %}
+                                    {{ elem|raw }}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 </header>

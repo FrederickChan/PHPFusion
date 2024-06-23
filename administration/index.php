@@ -15,7 +15,12 @@
 | copyright header is strictly prohibited without
 | written permission from the original author(s).
 +--------------------------------------------------------*/
+
+use PHPFusion\AdminCP\AdminPanel;
+
 require_once __DIR__ . '/../maincore.php';
+
+fusion_load_script(INCLUDES . "jquery/admin.js");
 
 define('ADMIN_DIR', ADMIN . fusion_get_aidlink());
 
@@ -23,13 +28,15 @@ define('ADMIN_CURRENT_DIR', ADMIN_DIR . (check_get('p') ? '&p=' . get('p') : '')
 
 const ADMIN_ERROR_DIR = ADMIN_DIR . '&p=404';
 
+require_once __DIR__ . '/../themes/templates/admin_header.php'; // Load the theme
+
 /* Reverse load breadcrumb support*/
 require_once INCLUDES . 'breadcrumbs.php';
-require_once __DIR__ . '/../themes/templates/admin_header.php'; // Load the theme
 
 /* Loads up administration file */
 $contents = load_administration(); // Load the file
 
+// Load external files
 if (isset($contents['files'])) {
     if (is_array($contents['files'])) {
         foreach ($contents['files'] as $file_path) {
@@ -41,12 +48,17 @@ if (isset($contents['files'])) {
 }
 
 /* Run breadcrumbs */
-if (isset($contents['title']) && isset($contents['link'])) {
+if (isset($contents['title'])) {
+
     if (isset($contents['settings'])) {
         add_breadcrumb(['link' => ADMIN . fusion_get_aidlink() . '&s=settings', 'title' => 'Settings']);
     }
-    //https://firstcamp.test/administration/?aid=5d7df8bfa0034f6a&p=erro
-    add_breadcrumb(['link' => $contents['link'], 'title' => $contents['title']]);
+
+    add_breadcrumb(array(
+        'link' => (!empty($contents['link']) ? $contents['link'] : FUSION_SELF),
+        'title' => $contents['title'],
+    ));
+
     add_to_title($contents['title']);
 }
 
@@ -57,28 +69,29 @@ if ($filter = fusion_filter_hook('pf_admin_data')) {
     }
 }
 
-/* Run POST hook */
+/* Run POST */
 if (isset($contents['actions']['post'])) {
     if (is_array($contents['actions']['post'])) {
         foreach ($contents['actions']['post'] as $button_name => $form_id) { // savesettings, clearcache
             if (post('form_id') == $form_id) {
-                fusion_apply_hook('pf_admin_post');
+                call_user_func($contents['actions']['post'][$button_name]);
             }
         }
     } else if (check_post($contents['actions']['post'])) {
-        fusion_apply_hook('pf_admin_post');
+        call_user_func($contents['actions']['post']);
     }
 }
 
-
-/* Run view hook */
-fusion_apply_hook('pf_admin_view')[0];
-
 /* Run js hook */
-if ($js = fusion_filter_hook('pf_admin_js')) {
-    if (isset($js[0])) {
-        add_to_jquery($js[0]);
+if (isset($contents['js'])) {
+    if ($js = call_user_func($contents['js'])) {
+        add_to_jquery($js);
     }
+}
+
+/* Run view hook -- echo */
+if (isset($contents['view'])) {
+    call_user_func($contents['view']);
 }
 
 require_once __DIR__ . '/../themes/templates/footer.php';
@@ -145,10 +158,13 @@ function admin_post($key): bool {
     return (post('form_action') === $key);
 }
 
+/**
+ * Register page hooks
+ * @return array
+ */
 function load_administration(): array {
 
     $contents = [];
-    $aidlink = fusion_get_aidlink();
 
     if ($s = get('s')) {
 
@@ -168,9 +184,7 @@ function load_administration(): array {
             include ADMIN . "contents/error_na.php";
         }
 
-    }
-
-    else if ($p = get('p')) {
+    } else if ($p = get('p')) {
 
         $result = dbquery("SELECT admin_rights, admin_title, admin_link, admin_page 
         FROM " . DB_ADMIN . " WHERE admin_rights=:page",
@@ -186,7 +200,7 @@ function load_administration(): array {
 
             $locale = fusion_get_locale();
 
-            add_to_title($locale['global_201'].$admin_title);
+            add_to_title($locale['global_201'] . $admin_title);
 
             if ($data['admin_page'] != '5') {
                 $c_admin_link = ADMIN . 'contents/' . $data['admin_link'];
@@ -215,7 +229,6 @@ function load_administration(): array {
         // show page 404
         include ADMIN . 'contents/error_na.php';
     }
-
 
     if (isset($contents['actions']['post'])) {
 
@@ -280,7 +293,7 @@ function load_administration(): array {
                             button_ct = button.children("span"),
                             button_text = button_ct.text();
 
-                        console.log(button_class);
+                             console.log(button_class);
                         
                             button.addClass("' . $button_class . '");
                             button_ct.html("' . $button_text . '");
@@ -297,42 +310,44 @@ function load_administration(): array {
         }
     }
 
+    $ap = AdminPanel::getInstance();
+    // Set Admin Properties
+
     if (isset($contents['left_nav']) && is_callable($contents['left_nav'])) {
-        fusion_add_hook('pf_admin_left_nav', $contents['left_nav']);
+        $ap->setPageNav($contents['left_nav']);
     }
 
     if (isset($contents['fullwidth']) && $contents['fullwidth']) {
-        fusion_add_hook('pf_admin_full_width', 'fullwidth');
+        $ap->setFullWidth($contents['fullwidth']);
     }
 
-    if (!empty($contents['js']) && is_callable($contents['js'])) {
-        fusion_add_hook('pf_admin_js', $contents['js']);
+    if (!empty($contents['js']) && !is_callable($contents['js'])) {
+        unset($contents['js']);
     }
 
     if (!empty($contents['post'])) {
         // do we need to have this in array?
         if (is_array($contents['post'])) {
             foreach ($contents['post'] as $key) {
-                if (is_callable($key)) {
-                    fusion_add_hook('pf_admin_post', $key);
+                if (!is_callable($key)) {
+                    unset($contents['post'][$key]);
                 }
             }
-        } else if (is_callable($contents['post'])) {
-            fusion_add_hook('pf_admin_post', $contents['post']);
+        } else if (!is_callable($contents['post'])) {
+            unset($contents['post']);
         }
     }
 
     if (!empty($contents['button']) && is_callable($contents['button'])) {
-        fusion_add_hook('pf_admin_buttons', $contents['button']);
+        AdminPanel::getInstance()->setButtons(fusion_get_function($contents['button']));
     }
 
-    if (!empty($contents['view']) && is_callable($contents['view'])) {
-        fusion_add_hook("pf_admin_view", $contents['view']);
+    if (!empty($contents['view']) && !is_callable($contents['view'])) {
+        unset($contents['view']);
     }
 
     return $contents;
 }
-
 
 /**
  * @param $data

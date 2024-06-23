@@ -74,6 +74,8 @@ class AdminHelper extends Admins {
     ];
 
     /* Constructor */
+    private $buttons;
+
     public function __construct() {
         $this->setAdmin();
     }
@@ -97,6 +99,7 @@ class AdminHelper extends Admins {
 
         return $this->getAdminPages();
     }
+
 
     /* Admin sections */
     public function viewThemeAdminSections(): array {
@@ -130,11 +133,10 @@ class AdminHelper extends Admins {
      * @return array
      */
     public function getAdminBreadcrumbs(): array {
-        $breadcrumbs = BreadCrumbs::getInstance('default');
+        $breadcrumbs = BreadCrumbs::getInstance();
         $arr = $breadcrumbs->toArray();
-
+        // Unset Home
         unset($arr[0]);
-        unset($arr[1]);
 
         return $arr;
     }
@@ -143,6 +145,7 @@ class AdminHelper extends Admins {
     public function getAdminNotices(): string {
         return $this->renderNotices(getNotices());
     }
+
 
     private function renderNotices($notices) {
 
