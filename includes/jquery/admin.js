@@ -15,7 +15,7 @@ $(document).on('click', '.section-view', function(event) {
     }
 });
 
-
+// slider
 $(document).on('click', 'button[data-toggle="sidex"]', function(e) {
    e.preventDefault();
    let side_body = $(this).closest('.pf-side').find('.pf-side-body'),
@@ -29,7 +29,7 @@ $(document).on('click', 'button[data-toggle="sidex"]', function(e) {
     }
 });
 
-/* FusionPro 404 Logo*/
+/* Fusion 404 Logo*/
 let animate_fusionpro404 = function() {
     let select = s => document.querySelector(s),  selectAll = s =>  document.querySelectorAll(s);
 
@@ -115,3 +115,5 @@ let animate_fusionpro404 = function() {
 
     gsap.globalTimeline.timeScale(0.75)
 }
+
+// Post button

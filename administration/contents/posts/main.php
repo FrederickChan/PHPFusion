@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Post Non-js
  */

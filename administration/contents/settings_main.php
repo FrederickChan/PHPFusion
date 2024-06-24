@@ -18,21 +18,26 @@
 
 defined('IN_FUSION') || exit;
 
-$locale = fusion_get_locale('', LOCALE.LOCALESET.'admin/settings.php');
+$locale = fusion_get_locale('', LOCALE . LOCALESET . 'admin/settings.php');
 
 $settings = fusion_get_settings();
 
+/**
+ * @uses main_post()
+ */
 $contents = [
-    'settings'    => TRUE,
-    'post'        => 'main_post',
-    'view'        => 'main_views',
-    'button'      => 'main_button',
-    'js'          => 'pf_js',
-    'link'        => ($admin_link ?? ''),
-    'title'       => $locale['admins_main_settings'],
+    'settings' => TRUE,
+    'view' => 'main_views',
+    'button' => 'main_button',
+    'js' => 'pf_js',
+    'link' => ($admin_link ?? ''),
+    'title' => $locale['admins_main_settings'],
     'description' => $locale['admins_main_description'],
-    'actions'     => array('post' => array('savesettings'=>'settingsFrm')),
+    'actions' => array('post' => array(
+        'savesettings' =>
+            array('id' => 'settingsFrm', 'callback' => 'main_post'),
+    )),
 ];
 
-include __DIR__."/posts/main.php";
-include __DIR__."/views/main.php";
+include __DIR__ . "/posts/main.php";
+include __DIR__ . "/views/main.php";

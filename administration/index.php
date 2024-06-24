@@ -59,7 +59,7 @@ if (isset($contents['title'])) {
         'title' => $contents['title'],
     ));
 
-    add_to_title($contents['title']);
+
 }
 
 /* Run data callback hook */
@@ -69,25 +69,9 @@ if ($filter = fusion_filter_hook('pf_admin_data')) {
     }
 }
 
-/* Run POST */
-if (isset($contents['actions']['post'])) {
-    if (is_array($contents['actions']['post'])) {
-        foreach ($contents['actions']['post'] as $button_name => $form_id) { // savesettings, clearcache
-            if (post('form_id') == $form_id) {
-                call_user_func($contents['actions']['post'][$button_name]);
-            }
-        }
-    } else if (check_post($contents['actions']['post'])) {
-        call_user_func($contents['actions']['post']);
-    }
-}
+handle_admin_post($contents);
+handle_admin_js($contents);
 
-/* Run js hook */
-if (isset($contents['js'])) {
-    if ($js = call_user_func($contents['js'])) {
-        add_to_jquery($js);
-    }
-}
 
 /* Run view hook -- echo */
 if (isset($contents['view'])) {
@@ -196,11 +180,12 @@ function load_administration(): array {
 
             $c_admin_link = $data['admin_link'];
 
-            $admin_title = $locale[$data['admin_rights']] ?? $data['admin_title'];
+            // Admin title no longer uses the DB entry as it is not multilocale.
+            // $admin_title = $locale[$data['admin_rights']] ?? $data['admin_title'];
 
             $locale = fusion_get_locale();
 
-            add_to_title($locale['global_201'] . $admin_title);
+            //            add_to_title($locale['global_201'] . $admin_title);
 
             if ($data['admin_page'] != '5') {
                 $c_admin_link = ADMIN . 'contents/' . $data['admin_link'];
@@ -215,6 +200,8 @@ function load_administration(): array {
 
                 // run page access
                 pageaccess($data['admin_rights']);
+
+                set_title('Settings' . $locale['global_201'] . $contents['title']);
 
             } else {
                 // show page 404
@@ -236,45 +223,46 @@ function load_administration(): array {
         if (is_array($contents['actions']['post'])) {
 
             $button_names = [];
+
             if ($notices = getnotices(FUSION_SELF, FALSE)) {
                 $notices = array_keys($notices);
                 $button_class = 'btn-danger';
-                $button_text = '<i class=\'fad fa-times m-r-10\'></i>Error!';
+                $button_text = get_image('warning') . 'Error!';
                 if (in_array('success', $notices)) {
                     $button_class = 'btn-success';
-                    $button_text = '<i class=\'fad fa-check m-r-10\'></i>Success!';
+                    $button_text = get_image('success') . 'Success!';
                 }
             }
 
-            foreach ($contents['actions']['post'] as $button_name => $form_id) {
+            foreach ($contents['actions']['post'] as $button_name => $form) {
+
+                $form_id = $form['id'];
 
                 $button_name_js = 'button[name=\"' . $button_name . '\"]';
 
                 $_js .= /** @lang JavaScript */
                     '$(document).on("click", "' . $button_name_js . '", function(event) {
                     event.preventDefault();
-                    let button = $(this),
-                        button_ct = button.children("span"),
-                        button_text = button_ct.text(),
+                    let button = $(this),                   
+                        button_text = button.text(),
                         button_name = "' . $button_name . '",
                         event_url = "' . ADMIN . 'api/?api=nts",
                         form = $("#' . $form_id . '"),
                         form_action = $("input[name=\'form_action\'");
-  
-                        button_ct.html("<i class=\'fad fa-spinner fa-spin m-r-10\'></i>"+ button_text);
+                        button.html("..."+ button_text);
                         button.prop("disabled", true);
                         
-                        if (form_action.length) {
+                        if (form.length) {
                             
-                            form_action.val("' . $button_name . '");
-                            
+                            // the $_POST name
+//                            form_action.val("' . $button_name . '");
                             // add button to session
-                            $.post(event_url, {"name": button_name});
+                            // $.post(event_url, {"name": "' . $button_name . '"});
                             
                             form.trigger("submit");
                             
                         } else {
-                            alert("The form has some anomaly and should be injected with a hidden field");
+                            alert("The form could not be submitted.");
                         }
                 });';
 
@@ -325,19 +313,6 @@ function load_administration(): array {
         unset($contents['js']);
     }
 
-    if (!empty($contents['post'])) {
-        // do we need to have this in array?
-        if (is_array($contents['post'])) {
-            foreach ($contents['post'] as $key) {
-                if (!is_callable($key)) {
-                    unset($contents['post'][$key]);
-                }
-            }
-        } else if (!is_callable($contents['post'])) {
-            unset($contents['post']);
-        }
-    }
-
     if (!empty($contents['button']) && is_callable($contents['button'])) {
         AdminPanel::getInstance()->setButtons(fusion_get_function($contents['button']));
     }
@@ -347,6 +322,32 @@ function load_administration(): array {
     }
 
     return $contents;
+}
+
+function handle_admin_post($contents) {
+    if (!empty($contents['actions']['post'])) {
+        if (is_array($contents['actions']['post'])) {
+            foreach ($contents['actions']['post'] as $button_name => $form) { // savesettings, clearcache
+                if (!empty($form['id']) && !empty($form['callback'])) {
+                    if (post('form_id') == $form['id']) {
+                        if (is_callable($form['callback'])) {
+                            call_user_func($form['callback']);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function handle_admin_js($contents) {
+    /* Run js hook */
+    if (isset($contents['js'])) {
+        if ($js = call_user_func($contents['js'])) {
+            add_to_jquery($js);
+        }
+    }
+
 }
 
 /**
