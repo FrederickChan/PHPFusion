@@ -35,7 +35,6 @@
     {# Sizing #}
     {% if (input_options['size']) %}
         {% set sizeClass = '' %}
-
         {% if (input_options['size'] == 2) %}
             {% set sizeClass = ' input-group-md' %}
         {% elseif (input_options['size'] == 3) %}
@@ -114,7 +113,8 @@
         {% set fieldGroupClass = 'class="'~fieldGroupClass~'"' %}
     {% endif %}
 
-    <div id="{{ input_options['input_id'] }}-field" {{ fieldGroupClass|raw ~ whitespace(ct_width)|raw~ whitespace(ct_basis)|raw}}>
+    <div id="{{ input_options['input_id'] }}-field" {{ fieldGroupClass|raw }}
+            {{ whitespace(ct_width)|raw }} {{ whitespace(ct_basis)|raw}}>
 
         {{ prepend_checkbox_input|raw }}
 

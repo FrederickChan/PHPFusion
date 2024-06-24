@@ -195,6 +195,7 @@ h6 {
   max-height: 100%;
 }
 
+/* Login */
 .pf-login-viewport {
   flex-grow: 1;
   flex-shrink: 0;
@@ -296,6 +297,7 @@ h6 {
   color: @p-text-color;
 }
 
+/*ACP */
 .pf-viewport {
   color: #e8ebed;
 
@@ -952,6 +954,7 @@ h6 {
     .btn-group {
       margin: 0 24px;
     }
+
   }
 
   .pf-admin-dropup {
@@ -1140,6 +1143,11 @@ h6 {
       margin: 18px -24px -17px;
       padding: 0 24px 20px;
       display: none;
+
+      svg {
+        fill: var(--bs-gray-700);
+      }
+
 
       .form-group {
         &.row {
@@ -1410,7 +1418,7 @@ h6 {
   }
 }
 
-.form-control, select {
+.form-control, select, .select2-container.select2-container--open .select2-dropdown .select2-search__field {
   display: block;
   width: 100%;
   height: 38px;
@@ -1435,8 +1443,20 @@ h6 {
     box-shadow: inset 0 0 0 1px @admin-success;
     background: #111213;
   }
+
+  &::placeholder {
+    color: var(--bs-gray-600);
+  }
 }
 
+.form-floating > .form-control-plaintext ~ label, .form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
+  color: var(--bs-gray-500);
+}
+
+.form-floating > .form-control-plaintext ~ label::after, .form-floating > .form-control:focus ~ label::after, .form-floating > .form-control:not(:placeholder-shown) ~ label::after, .form-floating > .form-select ~ label::after {
+  background: none;
+  border: none;
+}
 
 .input-tip {
   display: block;
@@ -1871,8 +1891,6 @@ h6 {
 
 /* NewSelect2 */
 
-
-/* Old Select2 */
 .select2-container {
 
   .select2-selection--single {
@@ -1908,15 +1926,35 @@ h6 {
       border: 2px solid @admin-success;
     }
   }
+
 }
 
-.select2-dropdown {
-  border-color: @admin-form-control-bg !important;
-  box-shadow: none;
+.form-floating {
+  .select2-container {
+    .select2-selection--single {
+      padding: 1.75rem .75rem 1.85rem;
+    }
+  }
+
+  .select2 + label {
+    line-height: 8px;
+    transform: scale(0.85);
+    color: var(--bs-gray-500);
+  }
 }
 
-.select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected, .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
+.select2-container.select2-container--open {
+  .select2-dropdown {
+    border-color: @admin-success !important;
+    background-color: @admin-form-control-bg;
+    box-shadow: none;
+  }
+}
+
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--selected, .select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
   background-color: @admin-success-hover !important;
+  border-left-color: @admin-success-hover;
+  border-right-color: @admin-success-hover;
 }
 
 .select2-container--bootstrap-5.select2-container--focus .select2-selection,
@@ -1925,6 +1963,10 @@ h6 {
   border: 2px solid @admin-success;
 }
 
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options .select2-results__option.select2-results__option--highlighted {
+  background-color: @admin-inverse-focus;
+  color: #fff;
+}
 
 .select2-container-multi {
 
@@ -2044,6 +2086,7 @@ h6 {
 
 
 /* Alerts, dismissables and attentions */
+
 .alert {
 
   &.alert-danger {
@@ -2079,7 +2122,6 @@ h6 {
   }
 }
 
-
 .fusion-pro-logo {
   svg {
     width: 100%;
@@ -2089,6 +2131,7 @@ h6 {
 }
 
 /* Theme browser */
+
 .theme-preview-container {
   display: flex;
   flex-direction: column;
@@ -2424,6 +2467,7 @@ h6 {
 }
 
 /* Table */
+
 table.dataTable thead th[data-is-resizable=true] {
   border-right: 2px dashed @admin-border-color !important;
 }
@@ -2570,6 +2614,7 @@ table.dataTable > tbody > tr.child ul.dtr-details {
 }
 
 /* Modal */
+
 .modal.in {
   display: flex !important;
   flex-direction: row;
@@ -2649,6 +2694,7 @@ pre.language-php {
 }
 
 /*Utils*/
+
 .flex {
   display: flex;
   //word-break: break-all;
@@ -2757,6 +2803,7 @@ dl {
 }
 
 /* Member admin */
+
 #view-filter {
   background: #212326;
   padding: 15px;
@@ -3018,6 +3065,7 @@ dl {
 }
 
 /* Uploader */
+
 .pf--uploader {
   background: #292a2d;
   margin: 0 0 20px;
@@ -3173,3 +3221,4 @@ td > a.single-cell {
     margin-right: 10px;
   }
 }
+

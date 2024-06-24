@@ -377,7 +377,7 @@ class ImageRepo {
             'subscriptions' => IMAGES . 'icons/subscriptions.svg',
             'sports' => IMAGES . 'icons/sports.svg',
             "sitelinks"=>IMAGES."icons/sitelinks.svg",
-            'store' => IMAGES . 'icons/store.svg',
+            "store" => IMAGES . "icons/store.svg",
             "smileys" => IMAGES . "icons/smileys.svg",
             "security" => IMAGES . "icons/security.svg",
 
