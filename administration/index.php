@@ -201,7 +201,7 @@ function load_administration(): array {
                 // run page access
                 pageaccess($data['admin_rights']);
 
-                set_title('Settings' . $locale['global_201'] . $contents['title']);
+                set_title($locale['admins_sm_400'] . $locale['global_201'] . $contents['title']);
 
             } else {
                 // show page 404

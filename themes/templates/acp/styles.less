@@ -1214,9 +1214,9 @@ h6 {
 
       &:first-of-type {
         background: transparent;
-        font-size: 1.5rem;
+        font-size: 1rem;
         font-weight: 600;
-        color: #fafafb;
+        color: var(--bs-gray-400);
         margin: 0;
         padding: 0;
       }
@@ -1948,6 +1948,8 @@ h6 {
     border-color: @admin-success !important;
     background-color: @admin-form-control-bg;
     box-shadow: none;
+    border-left-width: 2px;
+    border-right-width: 2px;
   }
 }
 
@@ -2417,6 +2419,9 @@ h6 {
   }
 }
 
+.emphasis {
+  color: var(--bs-gray-100);
+}
 
 .table {
 
@@ -2432,10 +2437,6 @@ h6 {
     span {
       color: #60666c;
       font-weight: 400;
-
-      &.emphasis {
-        color: #fff;
-      }
     }
 
     &::before {

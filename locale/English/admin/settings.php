@@ -70,17 +70,22 @@ $locale['admins_448'] = "Panels Settings";
 
 // Time & Date Settings
 $locale['admins_450'] = "Time and Date";
-$locale['admins_451'] = "Short date format:";
-$locale['admins_452'] = "Long date format:";
-$locale['admins_453'] = "Forum date format:";
-
+$locale['admins_451'] = "Short date format";
+$locale['admins_452'] = "Long date format";
+$locale['admins_453'] = "Forum date format";
+$locale['admins_454'] = "Sub-header date format:";
 $locale['admins_455'] = "-- Select a Format --";
-
+$locale['admins_456'] = "Guests offset";
 $locale['admins_457'] = "News &amp; Articles date format:";
-$locale['admins_458'] = "Time";
-
+$locale['admins_458'] = "Site Timezone";
+$locale['admins_459'] = "Server";
+$locale['admins_460'] = "You";
+$locale['admins_461'] = "Guests";
+$locale['admins_462'] = "Server offset";
+$locale['admins_463'] = "Set this so server time is GMT 0";
 $locale['admins_464'] = "Default timezone";
 $locale['admins_465'] = "First day of week";
+$locale['admins_466'] = "Default for New Users";
 
 // Registration Settings
 $locale['admins_550'] = "Registration";
