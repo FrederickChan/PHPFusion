@@ -809,7 +809,6 @@ h6 {
         background: @admin-form-control-bg;
         color: #fff;
         border: 1px solid @admin-form-control-bg;
-        margin-bottom: 1rem;
 
         &[disabled], &[readonly] {
           color: @admin-default;
@@ -1353,20 +1352,16 @@ h6 {
   user-select: text;
 
   .input-group {
-    .input-group-addon {
+
+    .input-group-text {
       padding: 6px 12px;
+      color: @admin-desc-color;
       font-size: 14px;
-      font-weight: 400;
+      font-weight: 600;
       text-align: left;
       border-radius: 4px;
       background: #1C1E21;
       border: 1px solid #2b2d31;
-
-      .input-group-text {
-        font-size: 13px;
-        font-weight: 600;
-        color: @admin-desc-color;
-      }
     }
   }
 
