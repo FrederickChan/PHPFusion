@@ -1,4 +1,4 @@
-$(document).on('click', '.section-view', function(event) {
+$(document).on('click', '.section-view', function (event) {
     event.preventDefault();
     let container = $(this).siblings('ul.menu-container'),
         caret = $(this).find('i');
@@ -16,10 +16,11 @@ $(document).on('click', '.section-view', function(event) {
 });
 
 // slider
-$(document).on('click', 'button[data-toggle="sidex"]', function(e) {
-   e.preventDefault();
-   let side_body = $(this).closest('.pf-side').find('.pf-side-body'),
-       span = $(this).children('span');
+
+$(document).on('click', 'button[data-toggle="sidex"]', function (e) {
+    e.preventDefault();
+    let side_body = $(this).closest('.pf-side').find('.pf-side-body'),
+        span = $(this).children('span');
     if (side_body.is(':visible')) {
         span.text('Expand');
         side_body.slideUp();
@@ -29,16 +30,35 @@ $(document).on('click', 'button[data-toggle="sidex"]', function(e) {
     }
 });
 
+
+let checkboxToggle = function (eInput, eDOM) {
+
+    if (eInput.length) {
+        $(document).on('change', '#' + eInput, function (e) {
+            var inputDOM = $('#' + eInput);
+            var elemDOM = $('#' + eDOM);
+
+            if (inputDOM.is(':checked')) {
+                elemDOM.slideDown();
+            } else {
+                elemDOM.slideUp();
+            }
+
+        });
+    }
+
+}
+
 /* Fusion 404 Logo*/
-let animate_fusionpro404 = function() {
-    let select = s => document.querySelector(s),  selectAll = s =>  document.querySelectorAll(s);
+let animate_fusionpro404 = function () {
+    let select = s => document.querySelector(s), selectAll = s => document.querySelectorAll(s);
 
     gsap.set('svg', {
         visibility: 'visible'
     })
 
     let svgns = "http://www.w3.org/2000/svg";
-    let container  = select("#container");
+    let container = select("#container");
     let twoPi = Math.PI * 2;
 
     for (let i = 0; i < 25; i++) {
@@ -54,14 +74,14 @@ let animate_fusionpro404 = function() {
 
 
         gsap.set(circle, {
-            attr: { r: gsap.utils.random(5, 12), cx: "50%", cy: 170},
+            attr: {r: gsap.utils.random(5, 12), cx: "50%", cy: 170},
             x: gsap.utils.random(-twoPi, twoPi),
             y: gsap.utils.random(-twoPi, twoPi)
         });
 
         let swarmTl = gsap.timeline();
-        swarmTl.to(circle,  {
-            duration:gsap.utils.random(2, 6),
+        swarmTl.to(circle, {
+            duration: gsap.utils.random(2, 6),
             x: "+=" + twoPi,
             repeat: -1,
             modifiers: {

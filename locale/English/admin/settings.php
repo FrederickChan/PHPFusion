@@ -105,7 +105,7 @@ $locale['admins_605'] = "Maximum file size (bytes):";
 $locale['admins_606'] = "Thumb compression method";
 $locale['admins_607'] = "GD1";
 $locale['admins_608'] = "GD2";
-$locale['admins_609'] = "Development Mode";
+$locale['admins_609'] = "Development mode"; // This one can be disabled
 $locale['admins_610'] = "Update checker";
 $locale['admins_611'] = "Number Delimiter";
 $locale['admins_612'] = "Thousands separator";
@@ -117,6 +117,11 @@ $locale['admins_651'] = "Bad words list:";
 $locale['admins_652'] = "Enter one word per line.";
 $locale['admins_653'] = "Leave empty if not required.";
 $locale['admins_654'] = "Bad word replacement:";
+
+$locale['admins_655'] = "Allow all guests to post";
+$locale['admins_656'] = "Display comments avatar"; // ? This one is not needed.
+$locale['admins_656a'] = "Enable jquery comments"; // This is also not needed
+$locale['admins_656b'] = "Please set to high number comments per page if turn on Jquery for best view"; // Not needed
 
 $locale['admins_657'] = "Maintenance mode:";
 $locale['admins_658'] = "Maintenance mode message:";
@@ -130,6 +135,7 @@ $locale['admins_665'] = "Leave empty if sendmail is enabled.";
 $locale['admins_666'] = "SMTP Username";
 $locale['admins_667'] = "SMTP Password";
 $locale['admins_668'] = "Allow users to change theme";
+
 $locale['admins_668ML'] = "Tables with multilanguage content";
 $locale['admins_669ML'] = "Select tables that will contain multilanguage data";
 $locale['admins_670ML'] = "Articles";
@@ -157,18 +163,23 @@ $locale['admins_670a'] = "Language pack %s has been downloaded.";
 $locale['admins_670b'] = "Language pack";
 $locale['admins_670c'] = "Download";
 
-$locale['admins_672'] = "Enable ratings system?";
+$locale['admins_671'] = "Enable comment system";
+$locale['admins_672'] = "Enable ratings system";
 $locale['admins_673'] = "Hide user profiles from public";
 $locale['admins_674'] = "SMTP Port";
 $locale['admins_675'] = "Maintenance level:";
 $locale['admins_676'] = "Administrators";
 $locale['admins_677'] = "Super Administrators";
 $locale['admins_678'] = "Site Owner";
-$locale['admins_679'] = "Enable visitor counter?";
+$locale['admins_679'] = "Enable visitor counter";
 $locale['admins_680'] = "Flood Auto Ban";
 $locale['admins_681'] = "Maintenance";
 $locale['admins_682'] = "Flood Settings";
 $locale['admins_683'] = "Security Settings";
+$locale['admins_684'] = "Comments Sorting";
+
+$locale['admins_685'] = "Ascending";
+$locale['admins_686'] = "Descending";
 
 $locale['admins_687'] = "Bad Words";
 $locale['admins_688'] = "Display render time";
@@ -222,8 +233,8 @@ $locale['admins_820'] = "Privacy Policy";
 
 // Banners Settings
 $locale['admins_850'] = "Banners";
-$locale['admins_851'] = "Banner 1";
-$locale['admins_852'] = "Banner 2";
+$locale['admins_851'] = "Site Banner Path";
+
 $locale['admins_853'] = "Admin Password:";
 $locale['admins_854'] = "Save Banners";
 $locale['admins_855'] = "Preview Banners";
@@ -232,6 +243,8 @@ $locale['admins_855'] = "Preview Banners";
 $locale['admins_900'] = "Settings successfully updated";
 $locale['admins_901'] = "Database update error occurs: Settings were not Updated!";
 $locale['admins_902'] = "Site host can not be left empty!";
+
+$locale['admins_913'] = "Base Comments per page";
 
 // User Management
 $locale['admins_1001'] = "Avatar ratio:";
@@ -255,7 +268,7 @@ $locale['admins_1016'] = "Height";
 $locale['admins_1020'] = [1 => 'Bytes (bytes)', 1024 => 'KB (Kilobytes)', 1048576 => 'MB (Megabytes)'];
 
 // Social integration
-$locale['admins_1030'] = "Create OpenGraph meta tags for Social networks";
+$locale['admins_1030'] = "Create OpenGraph meta tags for social networks";
 $locale['admins_1031'] = "Allow index URLs in BB Codes";
 $locale['admins_1032'] = "Allow index URLs in user profiles";
 
