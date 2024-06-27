@@ -181,12 +181,12 @@ class CoreSettings {
             'insert' => [
                 [
                     'mlt_rights' => 'SL',
-                    'mlt_title'  => $locale['setup_3023'],
+                    'mlt_title'  => $locale['setup_3210'],
                     'mlt_status' => 1
                 ],
                 [
                     'mlt_rights' => 'CP',
-                    'mlt_title'  => $locale['setup_3201'],
+                    'mlt_title'  => $locale['setup_3007'],
                     'mlt_status' => 1
                 ],
                 [
