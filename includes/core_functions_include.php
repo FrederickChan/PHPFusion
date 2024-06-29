@@ -26,7 +26,7 @@ use PHPFusion\QuantumFields;
  * Get currency symbol by using a 3-letter ISO 4217 currency code
  * Note that if INTL pecl package is not installed, signs will degrade to ISO4217 code itself
  *
- * @param string $iso 3-letter ISO 4217
+ * @param string $iso       3-letter ISO 4217
  * @param bool $description Set to false for just symbol
  *
  * @return array|string Array of currencies or string with one currency.
@@ -135,7 +135,7 @@ function compress($buffer) {
 /**
  * Generate random string.
  *
- * @param int $length The length of the string.
+ * @param int $length        The length of the string.
  * @param bool $letters_only Only letters.
  *
  * @return string
@@ -190,7 +190,7 @@ function parsesmileys($message) {
  * Show smiley's button which will insert the smileys to the given textarea and form.
  *
  * @param string $textarea The id of the textarea
- * @param string $form The form id in which the textarea is located.
+ * @param string $form     The form id in which the textarea is located.
  *
  * @return string  Option for users to insert smileys in a post by displaying the smiley's button.
  */
@@ -219,12 +219,26 @@ function cache_bbcode() {
 
     static $bbcode_cache = [];
     if (empty($bbcode_cache)) {
+
+        // load all bbcode language in system
+        $files = makefilelist(LOCALE . LOCALESET . 'bbcodes/');
+        if (!empty($files)) {
+            foreach ($files as $filename) {
+                $_bbcode_files[] = LOCALE . LOCALESET . 'bbcodes/' . $filename;
+            }
+            if (!empty($_bbcode_files)) {
+                fusion_get_locale('', $_bbcode_files);
+            }
+        }
+
+        // Cache enabled bbcodes
         $bbcode_cache = [];
         $result = cdquery('bbcodes_cache', "SELECT bbcode_name FROM " . DB_BBCODES . " ORDER BY bbcode_order");
         while ($data = cdarray($result)) {
             $bbcode_cache[] = $data['bbcode_name'];
         }
     }
+
 
     return $bbcode_cache;
 }
@@ -233,7 +247,7 @@ function cache_bbcode() {
  * Parse and force image/ to own directory.
  * Neutralize all image dir levels and convert image to pf image folder
  *
- * @param string $data String to parse.
+ * @param string $data    String to parse.
  * @param string $prefix_ Image folder.
  *
  * @return string Parsed string.
@@ -248,7 +262,7 @@ function parse_image_dir($data, $prefix_ = "") {
 /**
  * Parse BBCodes, smileys and any special characters to HTML string.
  *
- * @param string $value String with unparsed text.
+ * @param string $value  String with unparsed text.
  * @param array $options Array of options.
  *
  * @return string
@@ -298,9 +312,9 @@ function parse_text($value, $options = []) {
 /**
  * Parse BBCodes in the given string.
  *
- * @param string $text A string that contains the text to be parsed.
+ * @param string $text     A string that contains the text to be parsed.
  * @param string $selected The names of the required bbcodes to parse, separated by |.
- * @param bool $descript Sanitize text.
+ * @param bool $descript   Sanitize text.
  *
  * @return string Parsed string.
  */
@@ -363,8 +377,8 @@ function parseubb($text, $selected = "", $descript = TRUE) {
  * Hide email from robots that have JavaScript disabled, as it requires JavaScript to view email.
  * Create a "mailto" link for the email address
  *
- * @param string $email The email you want to hide from robots.
- * @param string $title The text of the link.
+ * @param string $email   The email you want to hide from robots.
+ * @param string $title   The text of the link.
  * @param string $subject A subject for a mail message if someone opens a link, and it opens in the mail client.
  *
  * @return string If browser has JavaScript enabled, email will be displayed correctly,
@@ -428,7 +442,7 @@ function hide_email($email, $title = "", $subject = "") {
 /**
  * Highlights given words in string.
  *
- * @param array $words The words to highlight.
+ * @param array $words    The words to highlight.
  * @param string $subject Text that contains a word (s) that should be highlighted.
  *
  * @return string Words highlighted in the string.
@@ -470,7 +484,7 @@ function verify_image($file) {
  * Check the user has rights and redirect if the user does not have rights for the page.
  *
  * @param string $rights Rights you want to check for the administrator.
- * @param bool $debug For debugging purposes.
+ * @param bool $debug    For debugging purposes.
  */
 function pageaccess($rights, $debug = FALSE) {
 
@@ -507,10 +521,10 @@ function pageaccess($rights, $debug = FALSE) {
 /**
  * Create a list of files or folders and store them in an array.
  *
- * @param string $folder Path to folder.
- * @param string $filter The names of the filtered folders and files separated by |, false to use default filter.
- * @param bool $sort False if you don't want to sort the result.
- * @param string $type Possible value: files, folders.
+ * @param string $folder     Path to folder.
+ * @param string $filter     The names of the filtered folders and files separated by |, false to use default filter.
+ * @param bool $sort         False if you don't want to sort the result.
+ * @param string $type       Possible value: files, folders.
  * @param string $ext_filter File extensions separated by |, only when $type is 'files'.
  *
  * @return array Array of all items.
@@ -565,13 +579,13 @@ function makefilelist($folder, $filter = "", $sort = TRUE, $type = "files", $ext
 /**
  * Creates page navigation.
  *
- * @param int $rowstart The number of the first listed item.
- * @param int $count The number of entries displayed on one page.
- * @param int $total The total entries which should be displayed.
- * @param int $range The number of page buttons displayed and the range of them.
- * @param string $link The base url before the appended part.
+ * @param int $rowstart   The number of the first listed item.
+ * @param int $count      The number of entries displayed on one page.
+ * @param int $total      The total entries which should be displayed.
+ * @param int $range      The number of page buttons displayed and the range of them.
+ * @param string $link    The base url before the appended part.
  * @param string $getname The name of the $_GET parameter that contains the start number.
- * @param bool $button Displays as button.
+ * @param bool $button    Displays as button.
  *
  * @return string|bool HTML navigation. False if $count is invalid.
  */
@@ -678,7 +692,7 @@ function makepagenav($rowstart, $count, $total, $range = 3, $link = "", $getname
 
     // if there is a request, we can redirect
     if (check_post($getname . '_pg')) {
-        if ($val = post($getname.'pg', FILTER_VALIDATE_INT)) {
+        if ($val = post($getname . 'pg', FILTER_VALIDATE_INT)) {
             redirect(clean_request($getname . '=' . ($val * $count - $count), [$getname], FALSE));
         } else {
             redirect(clean_request('', [$getname], FALSE));
@@ -686,9 +700,9 @@ function makepagenav($rowstart, $count, $total, $range = 3, $link = "", $getname
     }
 
     $cur_page_field = openform(random_string(5), 'POST', FORM_REQUEST, ['class' => 'display-inline-block']) .
-        form_text($getname . '_pg', '', $cur_page, [ 'inline' => TRUE, 'inner_class' => 'form-control-sm']) . closeform();
+        form_text($getname . '_pg', '', $cur_page, ['inline' => TRUE, 'inner_class' => 'form-control-sm']) . closeform();
 
-    return '<label for="'.$getname.'_pg">'.$locale['global_092'].'</label>'.sprintf($tpl_global,  $cur_page_field . " " . $locale['global_093'] . " " . $pg_cnt, $res);
+    return '<label for="' . $getname . '_pg">' . $locale['global_092'] . '</label>' . sprintf($tpl_global, $cur_page_field . " " . $locale['global_093'] . " " . $pg_cnt, $res);
 }
 
 /**
@@ -720,10 +734,10 @@ function rowstart_count($total, $count, $range = 3) {
  * Hierarchy Page Breadcrumbs, generates breadcrumbs on all your category needs.
  *
  * @param array $tree_index dbquery_tree() or tree_index().
- * @param array $tree_full dbquery_tree_full().
- * @param string $id_col The name of the category id column.
+ * @param array $tree_full  dbquery_tree_full().
+ * @param string $id_col    The name of the category id column.
  * @param string $title_col The name of the category nmae column.
- * @param string $getname The name of the $_GET parameter.
+ * @param string $getname   The name of the $_GET parameter.
  */
 function make_page_breadcrumbs($tree_index, $tree_full, $id_col, $title_col, $getname = "rownav") {
 
@@ -903,7 +917,7 @@ function fusion_detect_installation() {
  * It is needed when you create a file dynamically and want to include it
  * before the cache is invalidated. Redirection does not matter.
  *
- * @param string $file File path.
+ * @param string $file       File path.
  * @param string|array $data The data to write.
  * @param int $flags
  *
@@ -1004,7 +1018,7 @@ function fusion_get_contents($url) {
  *
  * @param string $file_path The source file.
  * @param string $file_type Possible value: script, css.
- * @param bool $html Return as html tags instead add to output handler.
+ * @param bool $html        Return as html tags instead add to output handler.
  *
  * @return string|null
  */
@@ -1015,19 +1029,19 @@ function fusion_load_script($file_path, $file_type = 'script', $html = FALSE) {
 
         $_fileinfo = pathinfo($file_path);
 
-        $base_file = $_fileinfo['dirname'].'/'.$_fileinfo['filename'].'.'.$_fileinfo['extension'];
+        $base_file = $_fileinfo['dirname'] . '/' . $_fileinfo['filename'] . '.' . $_fileinfo['extension'];
         if (is_file($base_file)) {
             $file_path = $base_file;
             if (!defined('FUSION_DEVELOPMENT')) {
-                $file_path = $base_file.'?v='.filemtime($base_file);
+                $file_path = $base_file . '?v=' . filemtime($base_file);
             }
         }
 
-        $min_file = $_fileinfo['dirname'].'/'.$_fileinfo['filename'].(strpos($_fileinfo['filename'], '.min') ? '.' : '.min.').$_fileinfo['extension'];
+        $min_file = $_fileinfo['dirname'] . '/' . $_fileinfo['filename'] . (strpos($_fileinfo['filename'], '.min') ? '.' : '.min.') . $_fileinfo['extension'];
         if (is_file($min_file)) {
             $file_path = $min_file;
             if (!defined('FUSION_DEVELOPMENT')) {
-                $file_path = $min_file.'?v='.filemtime($min_file);
+                $file_path = $min_file . '?v=' . filemtime($min_file);
             }
         }
 
@@ -1104,9 +1118,9 @@ function maintenance_mode($maintenance = TRUE) {
 /**
  * Recursive in_array
  *
- * @param mixed $needle The searched value.
+ * @param mixed $needle   The searched value.
  * @param array $haystack The array.
- * @param bool $strict If the third parameter strict is set to true then the in_array() function will also check the types of the needle in the
+ * @param bool $strict    If the third parameter strict is set to true then the in_array() function will also check the types of the needle in the
  *                        haystack.
  *
  * @return bool

@@ -16,7 +16,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
+$locale = fusion_get_locale();
 $__BBCODE__[] = [
     "description"    => $locale['bb_ulist_description'],
     "value"          => "ulist", "bbcode_start" => "[ulist=TYPE]", "bbcode_end" => "[/ulist]",
@@ -30,5 +30,5 @@ $__BBCODE__[] = [
     ],
     'dropdown'       => TRUE,
     'dropdown_style' => 'min-width: 50px;',
-    'svg'            => '<i class="fas fa-list-ul fa-lg"></i>'
+    'svg'            => "bbcode_ulist",
 ];

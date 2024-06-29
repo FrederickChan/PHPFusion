@@ -16,9 +16,10 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
-$__BBCODE__[] = [
+$locale = fusion_get_locale();
+$__BBCODE__[] = array(
     "description" => $locale['bb_autolink_description'],
-    "value"       => "!autolink",
-    "usage"       => $locale['bb_autolink_usage']
-];
+    "value" => "!autolink",
+    "usage" => $locale['bb_autolink_usage'],
+    "svg" => "bbcode_autolink",
+);

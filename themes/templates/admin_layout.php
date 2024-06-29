@@ -24,7 +24,7 @@ $settings = fusion_get_settings();
 header("Content-Type: text/html; charset=" . $locale['charset'] . "");
 
 echo "<!DOCTYPE html>";
-echo "<html lang='" . $locale['xml_lang'] . "' dir='" . $locale['text-direction'] . "'>";
+echo "<html lang='" . $locale['xml_lang'] . "' dir='" . $locale['text-direction'] . "' data-bs-theme='dark'>";
 echo "<head>";
 echo "<title>" . $settings['sitename'] . "</title>";
 echo "<meta charset='" . $locale['charset'] . "'>";

@@ -287,6 +287,9 @@ $locale['admins_time_description'] = "The configuration settings for server Time
 $locale['admins_user_description'] = "The configuration settings for Users Management system";
 $locale['admins_theme_description'] = "The configuration settings for Themes";
 $locale['admins_blog_settings'] = "Blog Settings";
+$locale['admins_bbcode_settings'] = "BBCode Settings";
+$locale['admins_bbcode_description'] = "The configuration settings for enabled BBcodes";
+
 $locale['admins_download_settings'] = "Download Settings";
 $locale['admins_forum_settings'] = "Forum Settings";
 $locale['admins_photo_settings'] = "Gallery Settings";

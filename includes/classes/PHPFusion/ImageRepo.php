@@ -91,20 +91,34 @@ class ImageRepo {
 
             //B
             "birthdays" => IMAGES . "icons/birthdays.svg",
+
+            "bbcode_autolink"=> INCLUDES."bbcodes/images/autolink.svg",
             "bbcode_bold" => INCLUDES . "bbcodes/images/b.svg",
             "bbcode_big" => INCLUDES . "bbcodes/images/big.svg",
+            "bbcode_bcolor" => INCLUDES . "bbcodes/images/bcolor.svg",
+            "bbcode_color" => INCLUDES . "bbcodes/images/color.svg",
             "bbcode_i" => INCLUDES . "bbcodes/images/i.svg",
-            "bbcode_u" => INCLUDES . "bbcodes/images/u.svg",
+            "bbcode_u" => INCLUDES . "bbcodes/images/underline.svg",
+            "bbcode_hide" => INCLUDES . "bbcodes/images/hide.svg",
             "bbcode_smiley" => INCLUDES . "bbcodes/images/smiley.svg",
+            "bbcode_strike" => INCLUDES . "bbcodes/images/strike.svg",
             "bbcode_url" => INCLUDES . "bbcodes/images/url.svg",
             "bbcode_small" => INCLUDES . "bbcodes/images/small.svg",
             "bbcode_mail" => INCLUDES . "bbcodes/images/mail.svg",
-            "bbcode_img" => INCLUDES . "bbcodes/images/img.svg",
-            "bbcode_aleft" => INCLUDES . "bbcodes/images/left.svg",
-            "bbcode_acenter" => INCLUDES . "bbcodes/images/center.svg",
-            "bbcode_aright" => INCLUDES . "bbcodes/images/right.svg",
+            "bbcode_image" => INCLUDES . "bbcodes/images/img.svg",
+            "bbcode_left" => INCLUDES . "bbcodes/images/left.svg",
+            "bbcode_center" => INCLUDES . "bbcodes/images/center.svg",
+            "bbcode_right" => INCLUDES . "bbcodes/images/right.svg",
+            "bbcode_justified" => INCLUDES . "bbcodes/images/justify.svg",
             "bbcode_code" => INCLUDES . "bbcodes/images/code.svg",
             "bbcode_quote" => INCLUDES . "bbcodes/images/quote.svg",
+            "bbcode_olist" => INCLUDES . "bbcodes/images/olist.svg",
+            "bbcode_ulist" => INCLUDES . "bbcodes/images/ulist.svg",
+            "bbcode_size" => INCLUDES . "bbcodes/images/size.svg",
+            "bbcode_search" => INCLUDES . "bbcodes/images/search.svg",
+            "bbcode_language" => INCLUDES . "bbcodes/images/language.svg",
+            "bbcode_youtube" => INCLUDES."bbcodes/images/youtube.svg",
+
             "block" => IMAGES . "icons/block.svg",
             "brush" => IMAGES . "icons/brush.svg",
             "bonus" => IMAGES . "icons/bonus.svg",
@@ -504,6 +518,7 @@ class ImageRepo {
         if ($style) {
             $style = " style='$style'";
         }
+
         if ($title) {
             $title = " title='" . $title . "'";
         }

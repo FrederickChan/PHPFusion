@@ -17,10 +17,10 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
+$locale = fusion_get_locale();
 $__BBCODE__[] = [
     "description" => $locale['bb_justify_description'],
     "value"       => "justify", "bbcode_start" => "[justify]", "bbcode_end" => "[/justify]",
     "usage"       => "[justify]".$locale['bb_justify_usage']."[/justify]",
-    'svg'         => show_icon('align-justified'),
+    'svg'         => "bbcode_justified",
     ];

@@ -16,15 +16,15 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
+$locale = fusion_get_locale();
 if (iADMIN) {
-    $__BBCODE__[] = [
+    $__BBCODE__[] = array(
         "description"  => $locale['bb_hide_description'],
         "value"        => "hide",
         "bbcode_start" => "[hide]", "bbcode_end" => "[/hide]",
         "usage"        => "[hide]".$locale['bb_hide_usage']."[/hide]",
-        'svg'          => '<i class="fas fa-eye-slash"></i>'
-    ];
+        'svg'          => "bbcode_hide",
+    );
 } else {
     $__BBCODE_NOT_QUOTABLE__[] = "hide";
 }

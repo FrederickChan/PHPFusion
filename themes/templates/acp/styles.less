@@ -1673,12 +1673,12 @@ h6 {
   user-select: none;
   fill: #111213;
   font-weight: 500;
-  height: 34px;
-  border-radius: 3px;
+  //height: 34px;
+  //border-radius: 3px;
   transition: all .2s ease;
   transition-property: color, border-color, background, width, height, box-shadow;
   -webkit-font-smoothing: subpixel-antialiased;
-  padding: 0;
+  //padding: 0;
 
   &.disabled {
     opacity: .1;
@@ -2421,6 +2421,10 @@ h6 {
   color: var(--bs-gray-100);
 }
 
+/**
+Table
+ */
+
 .table {
 
   thead > tr > th {
@@ -2449,19 +2453,10 @@ h6 {
       max-width: 70%;
     }
 
+  }
 
-    .btn {
-
-      background: #2B2D31;
-      border: 0;
-      box-shadow: none;
-
-      &:hover, &:focus, &:active {
-        color: #fff;
-        background: #151719;
-      }
-    }
-
+  svg {
+    fill: var(--bs-gray-400) !important;
   }
 }
 

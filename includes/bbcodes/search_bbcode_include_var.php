@@ -16,6 +16,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
+$locale = fusion_get_locale();
 
 if (!function_exists("generate_search_opts")) {
     function generate_search_opts($textarea_name, $inputform_name) {
@@ -94,5 +95,5 @@ $__BBCODE__[] = [
     'dropdown_style' => 'min-width: 150px;',
     'dropdown'       => TRUE,
     'dropdown_items' => generate_search_opts($textarea_name, $inputform_name),
-    'svg'            => "<i class='fas fa-search fa-lg'></i>"
+    'svg'            => "bbcode_search"
 ];

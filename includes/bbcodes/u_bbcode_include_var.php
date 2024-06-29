@@ -16,6 +16,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
+$locale = fusion_get_locale();
 
 $__BBCODE__[] = [
     "description"  => $locale['bb_u_description'],
@@ -23,5 +24,5 @@ $__BBCODE__[] = [
     "bbcode_start" => "[u]",
     "bbcode_end"   => "[/u]",
     "usage"        => "[u]".$locale['bb_u_usage']."[/u]",
-    "svg"          => get_image('bbcode_u', $locale['bb_u_usage']),
+    "svg"          => "bbcode_u",
 ];

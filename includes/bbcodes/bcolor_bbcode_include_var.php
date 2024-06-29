@@ -16,10 +16,12 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
-$__BBCODE__[] = [
+$locale = fusion_get_locale();
+$__BBCODE__[] = array(
     "description"    => $locale['bb_bcolor_description'],
-    "value"          => "bcolor", "bbcode_start" => "[bcolor=#000000]", "bbcode_end" => "[/bcolor]",
+    "value"          => "bcolor",
+    "bbcode_start" => "[bcolor=#000000]",
+    "bbcode_end" => "[/bcolor]",
     "usage"          => "[bcolor=#".$locale['bb_bcolor_hex']."]".$locale['bb_bcolor_usage']."[/bcolor]",
     'id'             => 'bbcode_bcolor_map_'.$textarea_name,
     "onclick"        => "return false;",
@@ -28,5 +30,5 @@ $__BBCODE__[] = [
     "calljscript"    => "BColorMap('".$textarea_name."', '".$inputform_name."');",
     "html_end"       => "</div>",
     'dropdown'       => TRUE,
-    'svg'            => '<i class="fa fa-highlighter"></i>'
-];
+    'svg'            => "bbcode_bcolor"
+);

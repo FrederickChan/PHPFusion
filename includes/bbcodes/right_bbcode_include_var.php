@@ -17,12 +17,12 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
-$__BBCODE__[] = [
-    "description"  => $locale['bb_right_description'],
-    "value"        => "right",
+$locale = fusion_get_locale();
+$__BBCODE__[] = array(
+    "description" => $locale['bb_right_description'],
+    "value" => "right",
     "bbcode_start" => "[right]",
-    "bbcode_end"   => "[/right]",
-    "usage"        => "[right]".$locale['bb_right_usage']."[/right]",
-    "svg"         => get_image( 'bbcode_aright', $locale['bb_right_usage'] ),
-];
+    "bbcode_end" => "[/right]",
+    "usage" => "[right]" . $locale['bb_right_usage'] . "[/right]",
+    "svg" => "bbcode_right",
+);

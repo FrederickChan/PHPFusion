@@ -17,7 +17,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
+$locale = fusion_get_locale();
 $__BBCODE__[] = [
     "description"    => $locale['bb_size_description'],
     "value"          => "size",
@@ -39,6 +39,6 @@ $__BBCODE__[] = [
     //                      <input type='button' value='32 px' class='button btn btn-link btn-block btn-xs' onclick=\"addText('".$textarea_name."', '[size=32]', '[/size]', '".$inputform_name."');return false;\"/>",
     'dropdown'       => TRUE,
     'dropdown_style' => 'min-width: 50px;',
-    "svg"            => show_icon('font-size'),
+    "svg"            => "bbcode_size",
 ];
 

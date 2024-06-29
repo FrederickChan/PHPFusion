@@ -16,10 +16,10 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
-
-$__BBCODE__[] = [
+$locale = fusion_get_locale();
+$__BBCODE__[] = array(
     "description" => $locale['bb_quote_description'],
     "value"       => "quote", "bbcode_start" => "[quote]", "bbcode_end" => "[/quote]",
     "usage"       => "[quote]".$locale['bb_quote_usage']."[/quote]",
-    "svg"          => get_image('bbcode_quote', $locale['bb_quote_description']),
-];
+    "svg"          => "bbcode_quote"
+);

@@ -16,6 +16,7 @@
 | written permission from the original author(s).
 +--------------------------------------------------------*/
 defined('IN_FUSION') || exit;
+$locale = fusion_get_locale();
 
 $__BBCODE__[] = [
     'description'    => $locale['bb_olist_description'],
@@ -32,5 +33,5 @@ $__BBCODE__[] = [
     ],
     'dropdown'       => TRUE,
     'dropdown_style' => 'min-width: 50px;',
-    'svg'            => show_icon('list-options'),
+    'svg'            => "bbcode_olist",
 ];
