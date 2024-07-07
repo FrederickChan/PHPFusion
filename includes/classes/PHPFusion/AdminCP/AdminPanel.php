@@ -191,20 +191,22 @@ class AdminPanel {
 
     /* Admin login */
     public function viewLogin() {
+        add_to_title('Login');
 
         $sitebanner = str_replace('images/', IMAGES, fusion_get_settings('sitebanner'));
 
-        $info = [
-            'openform' => openform('adminLoginfrm', 'POST'),
+        $info = array(
+            'openform' => openform('adminLoginfrm'),
             'closeform' => closeform(),
             'settings' => fusion_get_settings(),
             'sitebanner' => $sitebanner,
-            'password_input' => form_text('admin_password',
-                'Password',
-                '',
-                ['required' => TRUE, 'type' => 'password']),
-            'button' => form_button('admin_login', 'Sign in', 'admin_login'),
-        ];
+            'password_input' => form_text('admin_password','', '',
+                array('placeholder'=>'Login password',
+                    'required' => TRUE,
+                    'type' => 'password')
+            ),
+            'button' => form_button('admin_login', 'Sign In', 'admin_login'),
+        );
 
         echo fusion_render(THEMES . "templates/acp/", 'login.twig', $info, TRUE);
     }

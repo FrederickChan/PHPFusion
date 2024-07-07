@@ -22,9 +22,12 @@ $locale = fusion_get_locale('', LOCALE . LOCALESET . "admin/main.php");
 $settings = fusion_get_settings();
 
 header("Content-Type: text/html; charset=" . $locale['charset'] . "");
-
+$theme_scheme = 'dark';
+if (!check_admin_pass('')) {
+    $theme_scheme = 'light';
+}
 echo "<!DOCTYPE html>";
-echo "<html lang='" . $locale['xml_lang'] . "' dir='" . $locale['text-direction'] . "' data-bs-theme='dark'>";
+echo "<html lang='" . $locale['xml_lang'] . "' dir='" . $locale['text-direction'] . "' data-bs-theme='".$theme_scheme."'>";
 echo "<head>";
 echo "<title>" . $settings['sitename'] . "</title>";
 echo "<meta charset='" . $locale['charset'] . "'>";

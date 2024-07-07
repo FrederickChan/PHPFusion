@@ -23,7 +23,9 @@ defined('IN_FUSION') || exit;
 const ADMIN_PANEL = TRUE;
 
 $settings = fusion_get_settings();
+
 $userdata = fusion_get_userdata();
+
 $locale = fusion_get_locale();
 
 if ($settings['maintenance'] == "1" && ((iMEMBER && $settings['maintenance_level'] == USER_LEVEL_MEMBER && $userdata['user_id'] != "1") || ($settings['maintenance_level'] < $userdata['user_level']))) {

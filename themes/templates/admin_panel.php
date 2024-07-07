@@ -32,11 +32,13 @@ define('THEME_BODY', admin_theme_body());
 
 /* Admin Panel */
 function render_admin_panel() {
+    define('THEME_SCHEME', 'dark');
     echo AdminPanel::getInstance()->viewTheme();
 }
 
 /* Admin Login */
 function render_admin_login() {
+    define('THEME_SCHEME', 'light');
     AdminPanel::getInstance()->viewLogin();
 }
 /* Dashboard */

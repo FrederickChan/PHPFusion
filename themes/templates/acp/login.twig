@@ -2,8 +2,8 @@
     <div class="pf-login-viewport">
         <div class="login">
             <div>
-                <img alt="{{ settings.sitename|raw }}" class="icon" src="{{ sitebanner|raw }}"/>
-                <h1>Sign in to {{ settings.sitename|raw }}.</h1>
+                <img alt="{{ settings['sitename']|raw }}" class="icon" src="{{ sitebanner|raw }}"/>
+                <h2>Sign in to {{ settings['sitename']|raw }}</h2>
                 {{ openform|raw }}
                 {{ password_input|raw }}
                 {{ button|raw }}

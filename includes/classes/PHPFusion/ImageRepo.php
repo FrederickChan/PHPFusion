@@ -80,7 +80,7 @@ class ImageRepo {
         $settings = fusion_get_settings();
 
         // You need to + sign it, so setImage will work.
-        self::$image_paths += [
+        self::$image_paths += array(
             //A
             "add" => IMAGES . "icons/add.svg",
             "app_store" => IMAGES . "icons/apple.svg",
@@ -269,7 +269,7 @@ class ImageRepo {
             //Y
             //Z
             "zoom" => IMAGES . "icons/zoom.svg",
-        ];
+        );
 
         //<editor-fold desc="imagePaths">
         // You need to + sign it, so setImage will work.
